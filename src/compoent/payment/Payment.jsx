@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { CheckCircle, XCircle, UploadCloud, Loader, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Payment.css';
-import { MdCurrencyRupee } from 'react-icons/md';
+import { MdCurrencyRupee, MdOutlineCurrencyRupee } from 'react-icons/md';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import Cookies from 'js-cookie';
@@ -201,9 +201,11 @@ function Payment() {
   const [phoneDigits, setPhoneDigits] = useState(Array(10).fill(''));
   const [showOtpInputs, setShowOtpInputs] = useState(false);
   const [otpDigits, setOtpDigits] = useState(Array(6).fill(''));
+  const [otpValue, setOtpValue] = useState('');
   const [otpError, setOtpError] = useState('');
   const phoneInputsRef = useRef([]);
   const otpInputsRef = useRef([]);
+  const otpInputRef = useRef(null);
 
   // Aadhaar state
   const [aadhaarNumber, setAadhaarNumber] = useState('');
@@ -521,15 +523,15 @@ function Payment() {
       });
 
              if (response.data.success) {
-         setClientId(response.data.data.client_id);
-         setShowOtpInputs(true);
-         setOtpDigits(Array(6).fill(''));
-         setOtpError('');
-         showAlert('OTP sent successfully!');
-         setTimeout(() => {
-           if (otpInputsRef.current[0]) otpInputsRef.current[0].focus();
-         }, 0);
-       } else {
+        setClientId(response.data.data.client_id);
+        setShowOtpInputs(true);
+        setOtpValue('');
+        setOtpError('');
+        showAlert('OTP sent successfully!');
+        setTimeout(() => {
+          if (otpInputRef.current) otpInputRef.current.focus();
+        }, 0);
+      } else {
         showAlert('Failed to send OTP. Please try again.');
       }
     } catch (error) {
@@ -540,24 +542,9 @@ function Payment() {
     }
   };
 
-  const handleOtpChange = (index, value) => {
-    if (/^\d?$/.test(value)) {
-      const next = [...otpDigits];
-      next[index] = value;
-      setOtpDigits(next);
-      setOtpError('');
-      if (value && index < 5) {
-        otpInputsRef.current[index + 1]?.focus();
-      }
-      if (next.join('').length === 6) {
-        handleSubmitOtp(next.join(''));
-      }
-    }
-  };
-
   const handleSubmitOtp = async (otpValue) => {
-    if (!otpValue || otpValue.length !== 6) {
-      showAlert('Please enter the OTP.');
+    if (!otpValue || !(otpValue.length === 4 || otpValue.length === 6)) {
+      showAlert('Please enter a valid 4 or 6-digit OTP.');
       return;
     }
 
@@ -1010,28 +997,36 @@ function Payment() {
                     </button>
                   </div>
 
-                                     {showOtpInputs && !formData.phoneOtpVerified && (
-                     <div className="otp-inputs-container">
-                       <label className="digit-inputs-label">Enter 6-digit OTP</label>
-                       <div className="digit-inputs" role="group" aria-label="OTP">
-                         {otpDigits.map((d, i) => (
-                           <input
-                             key={i}
-                             type="text"
-                             inputMode="numeric"
-                             pattern="[0-9]*"
-                             maxLength={1}
-                             value={d}
-                             ref={el => otpInputsRef.current[i] = el}
-                             onChange={(e) => handleOtpChange(i, e.target.value.replace(/\D/g, ''))}
-                             onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                             className={`digit-box ${d ? 'is-filled' : ''}`}
-                           />
-                         ))}
-                       </div>
-                       {otpError && <p className="otp-error-text">{otpError}</p>}
-                     </div>
-                   )}
+                  {showOtpInputs && !formData.phoneOtpVerified && (
+                    <div className="otp-inputs-container">
+                      <label className="digit-inputs-label">Enter OTP</label>
+                      <div className="verification-action">
+                        <input
+                          ref={otpInputRef}
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          maxLength={6}
+                          value={otpValue}
+                          onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ''))}
+                          className="aadhaar-input"
+                          placeholder="Enter 4 or 6-digit OTP"
+                        />
+                        <button
+                          onClick={() => handleSubmitOtp(otpValue)}
+                          disabled={!(otpValue.length === 4 || otpValue.length === 6) || loading}
+                          className={`verification-button ${
+                            (otpValue.length === 4 || otpValue.length === 6) && !loading
+                              ? 'verification-button-default'
+                              : 'verification-button-default'
+                          }`}
+                        >
+                          {loading ? 'Verifying…' : 'Verify'}
+                        </button>
+                      </div>
+                      {otpError && <p className="otp-error-text">{otpError}</p>}
+                    </div>
+                  )}
 
                   <div className="verification-status-icon">
                     {formData.phoneOtpVerified ? (
@@ -1045,8 +1040,9 @@ function Payment() {
                 {/* Aadhaar Check */}
                 <div className="verification-card">
                   <h3 className="verification-title">Aadhaar Check</h3>
+                  <label className="digit-inputs-label">Enter Aadhaar Number</label>
                   <div className="aadhaar-inputs-container">
-                    <label className="digit-inputs-label">Enter Aadhaar Number</label>
+                   
                     <input
                       type="text"
                       inputMode="numeric"
@@ -1141,7 +1137,7 @@ function Payment() {
               <h2 className="form-step-title">Payment</h2>
               <div className="payment-container">
                 <p className="payment-price-text">
-                  Final Price: <span className="payment-price-amount">${pricing.total.toFixed(2)}</span>
+                  Final Price: <span className="payment-price-amount"><MdOutlineCurrencyRupee size={20} />{pricing.total.toFixed(2)}</span>
                 </p>
                 <button
                   onClick={handlePayNow}

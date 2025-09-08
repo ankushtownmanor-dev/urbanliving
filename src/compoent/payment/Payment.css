@@ -408,21 +408,29 @@
           }
 
           .verification-action {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+            display: flex
+            ;
+                align-items: center;
+                gap: 1rem;
+                width: 300px;
+                text-align: center;
           }
 
           /* Digit input groups (phone & OTP) */
           .phone-inputs-container,
-          .otp-inputs-container,
-          .aadhaar-inputs-container {
+          .otp-inputs-container{
             margin-top: 0.5rem;
             display: flex;
             flex-direction: column;
             gap: 0.75rem;
           }
-
+          .aadhaar-inputs-container {
+            margin-top: 0.5rem;
+            display: flex;
+            flex-direction: row;
+            gap: 0.75rem;
+            width: 500px;
+          }
           .digit-inputs-label {
             font-size: 0.875rem;
             font-weight: 500;

@@ -5,6 +5,7 @@ import './Sucess.css'
 function Sucess() {
   const [bookingId, setBookingId] = useState(localStorage.getItem('bookingId') || 6)
   const [confirmation, setConfirmation] = useState(null)
+  const [secondsLeft, setSecondsLeft] = useState(4)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -23,15 +24,29 @@ function Sucess() {
 
         // Show exactly the expected response shape
         setConfirmation({ booking_status: 'confirmed' })
-
-        // Redirect to dashboard after successful update
-        navigate('/dashboard')
       } catch (error) {
         console.error('Update booking status error:', error)
       }
     }
     patchBookingStatus()
   }, [bookingId])
+
+  // Start countdown on mount and navigate after 4 seconds
+  useEffect(() => {
+    setSecondsLeft(4)
+    const intervalId = setInterval(() => {
+      setSecondsLeft((prev) => (prev > 0 ? prev - 1 : 0))
+    }, 1000)
+
+    const timeoutId = setTimeout(() => {
+      navigate('/dashboard')
+    }, 4000)
+
+    return () => {
+      clearInterval(intervalId)
+      clearTimeout(timeoutId)
+    }
+  }, [navigate])
 
   return (
     <>
@@ -56,7 +71,7 @@ function Sucess() {
 
           <h1 className="title">Success!</h1>
           <p className="message">
-            Your action was completed successfully. You can continue or head back home.
+            Your Booking Successfully confirmed ... Redirecting to dashboard in {secondsLeft}s
           </p>
 
           {confirmation && (
@@ -66,10 +81,10 @@ function Sucess() {
           )}
 
           <div className="actions">
-            <button className="btn btn-primary" aria-label="Continue">
+            {/* <button className="btn btn-primary" aria-label="Continue">
               Continue
-            </button>
-            <button className="btn btn-secondary" aria-label="Go back to home">
+            </button> */}
+            <button className="btn btn-secondary" aria-label="Go back to home" onClick={()=>navigate('/')}>
               Back to Home
             </button>
           </div>

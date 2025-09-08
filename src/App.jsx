@@ -13,11 +13,13 @@ import Dashboard from './compoent/Dashboard/Dashboard';
 import Navbar from './compoent/Homepage/Navbar';
 import Sucess from './compoent/payment/Sucess';
 import Failure from './compoent/payment/Failure';
+import { AuthProvider } from './compoent/Login/AuthContext';
 
 
 
 function App() {
   return (
+    <AuthProvider>
     <Router>
      <Navbar/>
       <Routes>
@@ -33,6 +35,7 @@ function App() {
       </Routes>
       <HoomieFooter/>
     </Router>
+    </AuthProvider>
   );
 }
 

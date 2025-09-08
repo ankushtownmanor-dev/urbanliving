@@ -139,3 +139,40 @@
   color: #db4437;
   font-size: 18px;
 }
+
+/* Password input with toggle */
+.password-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input input {
+  width: 100%;
+  padding-right: 40px; /* room for the eye icon */
+}
+
+.toggle-visibility {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-visibility:hover {
+  color: #000;
+}
+
+.toggle-visibility:focus {
+  outline: 2px solid #b60000;
+  border-radius: 4px;
+  outline-offset: 2px;
+}

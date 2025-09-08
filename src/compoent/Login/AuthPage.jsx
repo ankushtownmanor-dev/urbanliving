@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-
+import React, { useState, useContext } from "react";
 import "./AuthPage.css";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
+import { AuthContext } from "./AuthContext"; // ✅ import context
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -10,16 +11,16 @@ const AuthPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const navigate = useNavigate();
-  const API_BASE ="https://townmanor.ai/api";
+  const [showPassword, setShowPassword] = useState(false);
 
-  const persistUser = (user) => {
-    try {
-      localStorage.setItem("user", JSON.stringify(user));
-    } catch (_) {
-      // ignore storage errors
-    }
-  };
+  const navigate = useNavigate();
+  const location = useLocation();
+  const API_BASE = "https://townmanor.ai/api";
+
+  const { login } = useContext(AuthContext); // ✅ use login from context
+
+  // ✅ Redirect back to where user came from (default: home)
+  const redirectTo = location.state?.from || "/";
 
   const handleSignup = async () => {
     setSubmitting(true);
@@ -34,15 +35,16 @@ const AuthPage = () => {
           phone_number: phone || null,
         }),
       });
+
       const data = await response.json();
       if (!response.ok) {
         console.error("Signup failed", data);
         alert(data?.message || "Signup failed");
         return;
       }
-      persistUser(data?.user);
-      navigate("/");
-      console.log("User signed up:", data?.user);
+
+      login(data?.user); // ✅ update context + localStorage
+      navigate(redirectTo); // ✅ go back to previous page
     } catch (error) {
       console.error("Signup Error:", error);
     } finally {
@@ -58,14 +60,16 @@ const AuthPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+
       const data = await response.json();
       if (!response.ok) {
         console.error("Login failed", data);
         alert(data?.message || "Invalid credentials");
         return;
       }
-      persistUser(data?.user);
-      navigate("/");
+
+      login(data?.user); // ✅ update context + localStorage
+      navigate(redirectTo); // ✅ go back to previous page
     } catch (error) {
       console.error("Login Error:", error);
     } finally {
@@ -87,10 +91,7 @@ const AuthPage = () => {
     <div className="auth-container">
       {/* Left Illustration */}
       <div className="auth-illustration">
-        <img
-          src="/ill.webp"
-          alt="illustration"
-        />
+        <img src="/ill.webp" alt="illustration" />
       </div>
 
       {/* Right Form */}
@@ -128,6 +129,7 @@ const AuthPage = () => {
                 placeholder="Enter your name"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                required
               />
 
               <label>Phone</label>
@@ -146,15 +148,32 @@ const AuthPage = () => {
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
 
           <label>Password</label>
-          <input
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="password-input">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              className="toggle-visibility"
+              onClick={() => setShowPassword((prev) => !prev)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              title={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? (
+                <AiOutlineEyeInvisible size={20} />
+              ) : (
+                <AiOutlineEye size={20} />
+              )}
+            </button>
+          </div>
 
           {isLogin && (
             <div className="auth-options">
@@ -169,11 +188,15 @@ const AuthPage = () => {
           )}
 
           <button type="submit" className="auth-submit" disabled={submitting}>
-            {submitting ? (isLogin ? "Signing In..." : "Signing Up...") : isLogin ? "Sign In" : "Sign Up"}
+            {submitting
+              ? isLogin
+                ? "Signing In..."
+                : "Signing Up..."
+              : isLogin
+              ? "Sign In"
+              : "Sign Up"}
           </button>
         </form>
-
-        
       </div>
     </div>
   );

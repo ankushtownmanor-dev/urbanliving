@@ -12,7 +12,7 @@ export default function TranquilPerch({ title, pricePerNight, mainImage, sideIma
   
     if (!user) {
       // If user not logged in, redirect to login page
-      navigate("/login");
+      navigate("/login", { state: { from: `/tmluxespecific/${id}` } });
       return;
     }
   

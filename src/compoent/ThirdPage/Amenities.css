@@ -15,7 +15,7 @@
 
 .amenities-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 39px 123px;
 }
 
@@ -23,14 +23,14 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 20px;
+  font-size: 16px;
   color: #111;
   font-weight: 500;
 }
 
 .amenity-icon {
-  color: #b60000; /* same deep red as screenshot */
-  font-size: 35px;
+  color: #615757;/* same deep red as screenshot */
+  font-size: 25px;
   flex-shrink: 0;
   margin: 0px 10px;
 }
