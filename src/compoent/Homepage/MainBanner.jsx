@@ -1,6 +1,7 @@
 import React from 'react'
 import Banner from './Banner'
 import BannerMobile from './BannerMobile'
+import './MainBanner.css'
 
 function MainBanner() {
   return (

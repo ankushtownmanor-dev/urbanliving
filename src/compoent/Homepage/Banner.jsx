@@ -15,7 +15,21 @@ function Banner() {
   return (
     <div className='banner_container'>
       <div className='banner_left'>
-
+           {/* TM Luxe */}
+           <div className='category_box luxe_box'>
+          <div className='image-luxe'>
+            <img src="/4.png" alt='TM Luxe' />
+          </div>
+          <div id='categoryright'>
+            <h3>
+              <span className="tm">TM</span> <span className="luxe">Luxe</span>
+            </h3>
+            <p>For Luxury apartments</p>
+            <span id='left_arrow' onClick={() => navigate('/tmluxe')}>
+              <IoArrowForwardSharp size={25} />
+            </span>
+          </div>
+        </div>
         {/* TM Stay */}
         <div className='category_box'>
           <div className='image-stay'>
@@ -48,21 +62,7 @@ function Banner() {
           </div>
         </div>
 
-        {/* TM Luxe */}
-        <div className='category_box luxe_box'>
-          <div className='image-luxe'>
-            <img src="/4.png" alt='TM Luxe' />
-          </div>
-          <div id='categoryright'>
-            <h3>
-              <span className="tm">TM</span> <span className="luxe">Luxe</span>
-            </h3>
-            <p>For Luxury apartments</p>
-            <span id='left_arrow' onClick={() => navigate('/tmluxe')}>
-              <IoArrowForwardSharp size={25} />
-            </span>
-          </div>
-        </div>
+     
 
       </div>
 

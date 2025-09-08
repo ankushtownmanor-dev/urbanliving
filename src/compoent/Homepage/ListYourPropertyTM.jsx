@@ -3,6 +3,7 @@ import "./ListYourPropertyTM.css";
 import { MdBedroomParent, MdOutlineLocationCity } from "react-icons/md";
 import { PiCityLight } from "react-icons/pi";
 import { FaTreeCity } from "react-icons/fa6";
+import { IoArrowForward } from "react-icons/io5";
 
 const ListYourPropertyTM = () => {
   return (
@@ -16,11 +17,13 @@ const ListYourPropertyTM = () => {
           <div className="tm-list-desc">Share your apartment with Townmanor</div>
           <a href="#" className="tm-list-sub-link">Earn money by renting out your apartment to guests</a>
           <br></br>
-          <button className="tm-list-btn">List your Apartment</button>
+          <button className="tm-feature-button list-property" >
+                       Know more <IoArrowForward className="arrow-icon" />
+                     </button>
         </div>
 
         <div className="tm-list-img-wrap">
-          <img src="/image 92.png" alt="Apartment" className="tm-list-img" />
+          <img src="/image 86.png" alt="Apartment" className="tm-list-img" />
         </div>
       </div>
       <div className="tm-list-section">
@@ -33,7 +36,9 @@ const ListYourPropertyTM = () => {
         <div className="tm-list-desc">Share your apartment with Townmanor</div>
         <a href="#" className="tm-list-sub-link">Provide Your lavish apartment for Luxury Stays</a>
         <br></br>
-        <button className="tm-list-btn">List your Apartment</button>
+        <button className="tm-feature-button list-property" >
+                       Know more <IoArrowForward className="arrow-icon" />
+                     </button>
         </div>
       </div>
 
@@ -44,7 +49,9 @@ const ListYourPropertyTM = () => {
         <div className="tm-list-desc">Share your apartment with Townmanor</div>
         <a href="#" className="tm-list-sub-link">Provide Your lavish apartment for Luxury Stays</a>
         <br></br>
-        <button className="tm-list-btn">List your Apartment</button>
+        <button className="tm-feature-button list-property" >
+                       Know more <IoArrowForward className="arrow-icon" />
+                     </button>
          </div>
       <div className="tm-list-img-wrap">
         <img src="/Luxe.png" alt="Luxury" className="tm-list-img" />

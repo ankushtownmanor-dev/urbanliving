@@ -9,8 +9,8 @@ const HoomieFooter = () => {
         <div className="hoomie-footer-col hoomie-footer-brand">
           <div className="hoomie-footer-logo">
             <img 
-              src="/logo.png" 
-              alt="TownManor Logo" 
+              src="/ovika.png" 
+              alt="ovika Logo" 
               className="hoomie-logo-image"
             />
           </div>
@@ -36,9 +36,9 @@ const HoomieFooter = () => {
         <div className="hoomie-footer-col">
           <div className="hoomie-footer-heading">RESOURCES</div>
           <ul>
-            <li>Food</li>
-            <li>Travel</li>
-            <li>near by</li>
+            <li>PG</li>
+            <li>Coliving</li>
+            <li>Luxury Apartment</li>
           </ul>
         </div>
         <div className="hoomie-footer-col hoomie-footer-connect">
@@ -54,7 +54,7 @@ const HoomieFooter = () => {
             </div>
             <div>
               <div className="hoomie-footer-contact-label">EMAIL US</div>
-              <div className="hoomie-footer-contact-bold">support@TownManor.in</div>
+              <div className="hoomie-footer-contact-bold">enquiry@ovikaliving.com</div>
             </div>
           </div>
         </div>

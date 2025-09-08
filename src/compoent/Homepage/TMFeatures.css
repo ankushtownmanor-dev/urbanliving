@@ -23,8 +23,7 @@
 /* Header */
 .tm-features-header {
   text-align: center;
-  max-width: 600px;
-  margin: 0 auto 60px;
+ 
   padding: 0 20px;
 }
 
@@ -38,11 +37,11 @@
 }
 
 .tm-features-subtitle {
-  font-size: 1rem;
+  font-size: 16px;
   color: var(--secondary-text);
-  line-height: 1;
+  /* line-height: 1; */
   margin: 0 auto;
-  font-weight: 200;
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -62,7 +61,7 @@
 .tm-feature-row {
   display: flex;
   align-items: center;
-  margin: 5rem 0;
+  margin: 1.5rem 0;
   gap: 4rem;
 }
 

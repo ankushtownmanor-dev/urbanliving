@@ -7,6 +7,7 @@ import ListYourPropertyTM from './ListYourPropertyTM'
 import HoomieFooter from './HoomieFooter'
 import Navbar from './Navbar'
 import MainBanner from './MainBanner'
+import MainTmFeature from './MainTmFeature'
 
 
 function Home() {
@@ -15,7 +16,7 @@ function Home() {
    {/* <Navbar/> */}
    <MainBanner/>
    {/* <HowItWorks/> */}
-   <TMFeatures/>
+ <MainTmFeature/>
    <BookingSteps/>
    <ListYourPropertyTM/>
    {/* <HoomieFooter/> */}

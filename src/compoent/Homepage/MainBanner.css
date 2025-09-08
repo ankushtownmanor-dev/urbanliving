@@ -1,4 +1,4 @@
-/* Show desktop only on screens wider than 768px */
+/* Desktop visible by default; Mobile hidden */
 .desktop-banner {
     display: block;
   }
@@ -6,7 +6,8 @@
     display: none;
   }
   
-  @media (max-width: 768px) {
+  /* On small screens, hide desktop and show mobile */
+  @media (max-width: 767px) {
     .desktop-banner {
       display: none;
     }
@@ -14,4 +15,3 @@
       display: block;
     }
   }
-  
