@@ -19,9 +19,9 @@ function BannerMobile() {
   
   return (
     <div className='tm-banner-container'>
-    <div className='tm-banner-left'>
+    {/* <div className='tm-banner-left'>
 
-      {/* TM Stay */}
+    
       <div className='tm-category-box'>
         <div className='tm-image-stay'>
           <img src="/1.png" alt='TM Stay' />
@@ -37,7 +37,7 @@ function BannerMobile() {
         </div>
       </div>
 
-      {/* TM Hive */}
+      
       <div className='tm-category-box tm-hive-box'>
         <div className='tm-image-hive'>
           <img src="/2.png" alt='TM Hive' />
@@ -53,7 +53,7 @@ function BannerMobile() {
         </div>
       </div>
 
-      {/* TM Luxe */}
+      
       <div className='tm-category-box tm-luxe-box'>
         <div className='tm-image-luxe'>
           <img src="/4.png" alt='TM Luxe' />
@@ -69,7 +69,7 @@ function BannerMobile() {
         </div>
       </div>
 
-    </div>
+    </div> */}
 
     <div className='tm-banner-right'>
       <div className='tm-banner-content'>
@@ -80,7 +80,7 @@ function BannerMobile() {
           <span className='tm-heading-sub'>Your Freedom!</span>
         </h1>
         <p className='tm-banner-text'>From shared to stylish - living spaces for every lifestyle</p>
-
+{/* 
         <div className="tm-search-bar">
           <div className="tm-search-container">
             <span className="tm-search-input-wrapper">
@@ -89,7 +89,7 @@ function BannerMobile() {
             </span>
           </div>
           <button className="tm-search-btn">Search</button>
-        </div>
+        </div> */}
       </div>
 
       <div className='tm-banner-bg'>

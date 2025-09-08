@@ -26,6 +26,7 @@
 .tm-banner-left {
   padding: 20px;
   margin-top: -160px;
+  display: none;
 }
 
 /* Category Box */

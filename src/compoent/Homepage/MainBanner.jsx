@@ -8,7 +8,7 @@ function MainBanner() {
     <div className="main_banner_container">
       <div className="desktop-banner">
         <Banner />
-      </div>
+      </div> 
       <div className="mobile-banner">
         <BannerMobile />
       </div>

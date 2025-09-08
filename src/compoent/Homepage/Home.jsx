@@ -9,6 +9,7 @@ import Navbar from './Navbar'
 import MainBanner from './MainBanner'
 import MainTmFeature from './MainTmFeature'
 import EliteProperties from './EliteProperties'
+import FloatingSearch from './FloatingSearch'
 
 
 function Home() {
@@ -20,7 +21,7 @@ function Home() {
  <MainTmFeature/>
    <BookingSteps/>
  <EliteProperties/>
-
+  <FloatingSearch/>
    <ListYourPropertyTM/>
    {/* <HoomieFooter/> */}
    </>
