@@ -15,21 +15,7 @@ function Banner() {
   return (
     <div className='banner_container'>
       <div className='banner_left'>
-           {/* TM Luxe */}
-           <div className='category_box luxe_box'>
-          <div className='image-luxe'>
-            <img src="/4.png" alt='TM Luxe' />
-          </div>
-          <div id='categoryright'>
-            <h3>
-              <span className="tm">TM</span> <span className="luxe">Luxe</span>
-            </h3>
-            <p>For Luxury apartments</p>
-            <span id='left_arrow' onClick={() => navigate('/tmluxe')}>
-              <IoArrowForwardSharp size={25} />
-            </span>
-          </div>
-        </div>
+
         {/* TM Stay */}
         <div className='category_box'>
           <div className='image-stay'>
@@ -62,7 +48,21 @@ function Banner() {
           </div>
         </div>
 
-     
+        {/* TM Luxe */}
+        <div className='category_box luxe_box'>
+          <div className='image-luxe'>
+            <img src="/4.png" alt='TM Luxe' />
+          </div>
+          <div id='categoryright'>
+            <h3>
+              <span className="tm">TM</span> <span className="luxe">Luxe</span>
+            </h3>
+            <p>For Luxury apartments</p>
+            <span id='left_arrow' onClick={() => navigate('/tmluxe')}>
+              <IoArrowForwardSharp size={25} />
+            </span>
+          </div>
+        </div>
 
       </div>
 
@@ -72,19 +72,14 @@ function Banner() {
           <span className='heading_design3'>Smart Living Simplified.</span> <br />Your Space!<br></br><span id='heading_design'>Your Comfort!</span>  <br></br><span id='heading_design2'>Your Freedom!</span>
           </h1>
           <p className='banner_content_p'>From shared to stylish - living spaces for every lifestyle</p>
-          <div className="search-bar">
+          {/* <div className="search-bar">
             <div className="search-container">
-              {/* <span className="search-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-              </span> */}
+            
               <span className="search-bar-icon"> <input type="text" placeholder="Search your location" /><IoSearch size={25} id='search-icon'/></span>
              
             </div>
             <button>Search</button>
-          </div>
+          </div> */}
         </div>
 
         <div className='backpart'>

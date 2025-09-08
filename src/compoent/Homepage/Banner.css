@@ -36,6 +36,7 @@
   border-radius: 90px;
   width: 480px;
   margin: 40px 0px;
+  box-shadow: 0px 1px 3px 2px #cdcdcd;
 }
 
 /* Separate Image Containers */
@@ -75,7 +76,8 @@
     border-radius: 108px;
 }
 .luxe_box{
-  height: 28vh;
+  height: 27vh;
+  border-radius: 100px;
 }
 .hive_box{
   height: 26vh;

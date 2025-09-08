@@ -8,6 +8,7 @@ import HoomieFooter from './HoomieFooter'
 import Navbar from './Navbar'
 import MainBanner from './MainBanner'
 import MainTmFeature from './MainTmFeature'
+import EliteProperties from './EliteProperties'
 
 
 function Home() {
@@ -18,6 +19,8 @@ function Home() {
    {/* <HowItWorks/> */}
  <MainTmFeature/>
    <BookingSteps/>
+ <EliteProperties/>
+
    <ListYourPropertyTM/>
    {/* <HoomieFooter/> */}
    </>
