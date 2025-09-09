@@ -2,6 +2,8 @@ import React, { useContext, useRef, useState, useEffect } from "react";
 import "./Navbar.css";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../Login/AuthContext"; // ✅ import context
+import { IoHomeOutline } from "react-icons/io5";
+import { PiBuildingApartment } from "react-icons/pi";
 
 function Navbar() {
   const [showMenu, setShowMenu] = useState(false);
@@ -12,7 +14,39 @@ function Navbar() {
   // ✅ get user + logout directly from context
   const { user, logout } = useContext(AuthContext);
 
-  const navItems = ["Dashboard", "Properties", "Leads", "Reports", "Settings"];
+  const navItems = [
+    {name: "Brand Story",
+      link: "/",
+      Content:"this is about ovika which is short term rental",
+      icon:"/hicon5.png",
+     },
+    {name: "Home",
+     link: "/",
+     Content:"This is main page of Okiva",
+     icon:"/hicon1.png",
+    },
+    {name: "TmLuxe",
+      link: "/Tmluxe",
+      Content:"This Section for luxury Studio & appartment ",
+      icon:"/hicon2.png",
+     },
+     {name: "Coliving",
+      link: "/",
+      Content:"This Section is for who like to live in coliving", 
+      icon:"/hicon3.png",
+     },
+     {name: "TM Stay ",
+      link: "/",
+      Content:"This Section is for Payguest for working professional & student",
+      icon:"/hicon4.png",
+     },
+    
+     {name: "Contact us ",
+      link: "/",
+      Content:"Email : info@ovika.in , phone number : +91 9876543210",
+      icon:"/hicon6.png",
+     },
+  ]
 
   const toggleMenu = () => setShowMenu(!showMenu);
 
@@ -92,11 +126,33 @@ function Navbar() {
       <div className={`dropdown-menu ${showMenu ? "show" : ""}`}>
         {navItems.map((item, index) => (
           <div
-            key={index}
-            className="menu-item"
-            onClick={() => setShowMenu(false)}
+            key={item.name}
+            className={`menu-item ${index === 0 ? "featured" : ""}`}
+            role="button"
+            tabIndex={0}
+            onClick={() => {
+              setShowMenu(false);
+              if (item.link) navigate(item.link);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                setShowMenu(false);
+                if (item.link) navigate(item.link);
+              }
+            }}
           >
-            {item}
+            {index === 0 && <span className="menu-feature-badge" aria-hidden>★</span>}
+            <div className="menu-card-inner">
+              {item.icon && (
+                <img src={item.icon} alt="" className="menu-thumb" />
+              )}
+              <div className="menu-texts">
+                <h4 className="menu-title">{item.name}</h4>
+                {item.Content && (
+                  <p className="menu-subtitle">{item.Content}</p>
+                )}
+              </div>
+            </div>
           </div>
         ))}
       </div>

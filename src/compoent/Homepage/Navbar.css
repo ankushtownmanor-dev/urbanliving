@@ -99,25 +99,29 @@
 
 /* Dropdown Menu */
 .dropdown-menu {
+  /* mega dropdown container */
   position: fixed;
   top: 100px;
   left: 0;
   right: 0;
-  max-height: 60vh;
-  overflow-y: auto;
-  background: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   z-index: 99;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-20px);
-  transition: all 0.3s ease;
-  padding: 1rem 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  transform: translateY(-12px);
+  transition: all 0.25s ease;
+
+  /* grid like the reference */
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 12px;
+  grid-auto-rows: 140px;
 }
 
 .dropdown-menu.show {
@@ -127,21 +131,28 @@
 }
 
 .menu-item {
-  padding: 1rem 2rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  width: 100%;
-  text-align: center;
-  font-size: 1.1rem;
-  color: #333;
+  /* card */
+  background: #fbf8f4; /* soft neutral */
+  border: 1px solid #ece6df;
+  border-radius: 14px;
+  padding: 18px 20px;
+  min-height: 130px;
+  color: #222;
+  text-align: left;
+  font-size: 1rem;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  position: relative;
+  cursor: pointer;
 }
 
 .menu-item:hover {
-  background: #f8f9fa;
-  color: #c5393a;
+  border-color: rgba(197, 57, 58, 0.35);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+  transform: translateY(-2px);
 }
 
 .menu-icon {
@@ -163,16 +174,25 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.menu-item {
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 1.5rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
+/* duplicate old rule overridden above intentionally */
+
+/* handled above */
+
+/* special styling for the first (featured) card like the reference */
+.dropdown-menu .menu-item:first-child {
+  background: linear-gradient(
+      0deg,
+      rgba(197, 57, 58, 0.06),
+      rgba(197, 57, 58, 0.06)
+    ), #fdeceb;
+  border-color: rgba(197, 57, 58, 0.35);
+  box-shadow: 0 8px 18px rgba(197, 57, 58, 0.15);
+  min-height: auto;
 }
 
-.menu-item:hover {
-  background-color: #f8f8f8;
+.dropdown-menu .menu-item:first-child:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 10px 20px rgba(197, 57, 58, 0.22);
 }
 
 .menu-icon {
@@ -279,5 +299,66 @@
   .dropdown-menu {
     width: calc(100% - 2rem);
     left: 1rem;
+    right: 1rem;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    grid-auto-rows: unset;
   }
+
+  .menu-item {
+    min-height: 110px;
+    padding: 16px;
+  }
+}
+
+/* Inner layout for cards */
+.menu-card-inner {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.menu-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #eadfda;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  object-fit: cover;
+  padding: 8px;
+}
+
+.menu-texts { display: flex; flex-direction: column; gap: 6px; }
+
+.menu-title {
+  font-size: 16px;
+  line-height: 1.2;
+  color: #222;
+  font-weight: 700;
+  margin: 0;
+}
+
+.menu-subtitle {
+  font-size: 13px;
+  color: #6b6b6b;
+  margin: 0;
+}
+
+/* Featured badge (top-left) */
+.menu-feature-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(197,57,58,0.25);
 }

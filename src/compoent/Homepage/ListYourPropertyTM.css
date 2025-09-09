@@ -77,8 +77,8 @@ color: black;
      margin-left: 71px;
     margin-top: 11px;
     box-shadow: 1px 2px 2px 1px #c3c1c1;
-    background-color: #e7e7e7;
-        color: #000000c9;
+    background: #e7e7e7 !important;
+        color: #000000c9 !important;
     border: 1.5px solid #930a0c;
 }
 .tm-list-btn:hover {
