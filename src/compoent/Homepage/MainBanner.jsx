@@ -2,6 +2,7 @@ import React from 'react'
 import Banner from './Banner'
 import BannerMobile from './BannerMobile'
 import './MainBanner.css'
+import SmartLiving from './SmartLiving'
 
 function MainBanner() {
   return (
@@ -10,7 +11,8 @@ function MainBanner() {
         <Banner />
       </div> 
       <div className="mobile-banner">
-        <BannerMobile />
+        {/* <BannerMobile /> */}
+        <SmartLiving/>
       </div>
     </div>
   )
