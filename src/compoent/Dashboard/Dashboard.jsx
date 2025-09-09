@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaHome, FaBookmark, FaGift, FaBuilding, FaCommentDots, FaBell } from "react-icons/fa";
 import "./Dashboard.css";
 import Navbar from "../Homepage/Navbar";
+import BookingDashboard from "./BookingDashboard";
 
 const Dashboard = () => {
   const [showMore, setShowMore] = useState(false);
@@ -141,8 +142,8 @@ const Dashboard = () => {
           </div>
         </main>
       </div>
-      {/* Booking Section */}
-      <div className="dashboard-booking-section">
+      
+      {/* <div className="dashboard-booking-section">
         <h2 className="dashboard-booking-heading">Booking Details</h2>
 
         {loading && <p>Loading bookings...</p>}
@@ -196,7 +197,7 @@ const Dashboard = () => {
           </div>
         ))}
       </div>
-      {/* Notification Section */}
+      
       <div className="dashboard-notification-section">
         <h2 className="dashboard-notification-heading">Notification</h2>
 
@@ -224,7 +225,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      {/* Support & Help Section */}
+      
       <div className="dashboard-support-section">
         <h2 className="dashboard-support-heading">Support & Help</h2>
 
@@ -244,8 +245,8 @@ const Dashboard = () => {
             <p className="support-text">Call Us</p>
           </div>
         </div>
-      </div>
-
+      </div> */}
+      <BookingDashboard/>
     </>
   );
 };
