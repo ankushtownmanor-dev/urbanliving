@@ -13,15 +13,16 @@
   font-weight: bold;
   font-weight: 600;
   margin-bottom: 32px;
+  color: black;
 }
 
 .tm-list-section {
      display: flex
 ;
     flex-direction: row;
-    gap: 10px 18vw;
+    /* gap: 10px 18vw; */
     padding: 2px 159px;
-    /* justify-content: space-around; */
+    justify-content: space-around;
     margin: 34px 5px;
 }
 .tm-list-section-2 {
@@ -31,6 +32,8 @@
     font-weight: 600;
     font-size: 20px;
     margin-bottom: 13px;
+    color: black;
+  
 }
 .tm-list-link {
 color: black;
@@ -71,8 +74,12 @@ color: black;
     transition: background 0.2s, box-shadow 0.2s;
 }
 .list-property{
-  margin-left: 71px;
-  margin-top: 11px;
+     margin-left: 71px;
+    margin-top: 11px;
+    box-shadow: 1px 2px 2px 1px #c3c1c1;
+    background-color: #e7e7e7;
+        color: #000000c9;
+    border: 1.5px solid #930a0c;
 }
 .tm-list-btn:hover {
   background: #f5f7fa;
@@ -122,13 +129,24 @@ color: black;
     margin: 34px 5px;
     gap: 10px !important;
 }
+.list-property {
+    margin-left: 3px;
+    margin-top: 11px;
+    box-shadow: 1px 2px 2px 1px #c3c1c1;
+    background-color: #e7e7e7;
+    color: #000000c9;
+    border: 1.5px solid #930a0c;
+    font-size: 13px !important; 
+    padding: 5px 7px !important;
+    text-transform: capitalize;
+}
 .tm-list-question {
     font-weight: 600;
     font-size: 14px;
     margin-bottom: 13px;
 }
 .tm-list-link {
-    color: #0064ff;
+    color: black;
     font-size: 15px;
     font-weight: 600;
     text-decoration: none;
@@ -139,13 +157,13 @@ color: black;
     text-transform: capitalize;
     color: #222;
     font-weight: 600;
-    margin-bottom: 8px;
+ 
 }
 .tm-list-sub-link {
-    color: #0347f1;
+    color: black;
     font-size: 13px;
     text-decoration: none;
-    margin-bottom: 12px;
+    
     font-weight: 500;
 }
 .tm-list-btn {

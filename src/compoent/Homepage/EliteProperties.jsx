@@ -2,12 +2,18 @@ import React, { useEffect, useState } from 'react';
 import './tmxelite-prop.css';
 import { useNavigate } from 'react-router';
 import { FaHeart } from 'react-icons/fa';
+import { useMediaQuery } from 'react-responsive';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 function EliteProperties() {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   // Dummy properties for filling empty space
   const dummyProperties = [
@@ -76,66 +82,139 @@ function EliteProperties() {
           </div>
         )}
         {!loading && !error && (
-          <div className="tmxelite-prop-grid">
-            {properties.map((prop) => {
-              const isDummy = prop.id?.toString().startsWith('dummy');
+          <>
+            {isMobile ? (
+              <Swiper
+                modules={[Autoplay, Pagination]}
+                slidesPerView={1.2}
+                spaceBetween={16}
+                autoplay={{ delay: 4000, disableOnInteraction: false }}
+                loop
+                pagination={{ clickable: true }}
+                centeredSlides={true}  
+              >
+                {properties.map((prop) => {
+                  const isDummy = prop.id?.toString().startsWith('dummy');
 
-              const imageArray = Array.isArray(prop.images)
-                ? prop.images
-                : Array.isArray(prop.IMAGES)
-                ? prop.IMAGES
-                : [];
-              const imageSrc = imageArray.length > 0 ? imageArray[0] : '/p1.png';
+                  const imageArray = Array.isArray(prop.images)
+                    ? prop.images
+                    : Array.isArray(prop.IMAGES)
+                    ? prop.IMAGES
+                    : [];
+                  const imageSrc = imageArray.length > 0 ? imageArray[0] : '/p1.png';
 
-              let priceText = '';
-              if (isDummy) {
-                const priceNumber = prop.monthly_price;
-                priceText = priceNumber
-                  ? `₹ ${priceNumber.toLocaleString('en-IN')} per month`
-                  : '';
-              } else {
-                const rawPrice = prop.per_night_price ?? prop.PER_NIGHT_PRICE;
-                const priceNumber =
-                  typeof rawPrice === 'string'
-                    ? parseFloat(rawPrice)
-                    : rawPrice;
-                priceText = priceNumber
-                  ? `₹ ${priceNumber.toLocaleString('en-IN')} per night`
-                  : '';
-              }
+                  let priceText = '';
+                  if (isDummy) {
+                    const priceNumber = prop.monthly_price;
+                    priceText = priceNumber
+                      ? `₹ ${priceNumber.toLocaleString('en-IN')} per month`
+                      : '';
+                  } else {
+                    const rawPrice = prop.per_night_price ?? prop.PER_NIGHT_PRICE;
+                    const priceNumber =
+                      typeof rawPrice === 'string'
+                        ? parseFloat(rawPrice)
+                        : rawPrice;
+                    priceText = priceNumber
+                      ? `₹ ${priceNumber.toLocaleString('en-IN')} per night`
+                      : '';
+                  }
 
-              const id = prop.id ?? prop.ID;
-              const name = prop.name ?? prop.NAME;
+                  const id = prop.id ?? prop.ID;
+                  const name = prop.name ?? prop.NAME;
 
-              return (
-                <article
-                  key={id}
-                  className="tmxelite-prop-card"
-                  onClick={() => {
-                    // Prevent navigation for dummy properties
-                    if (isDummy) return;
-                    navigate(`/tmluxespecific/${id}`, { state: { propertyId: id } });
-                  }}
-                >
-                  <div className="tmxelite-prop-media">
-                    <img src={imageSrc} alt={name} />
-                    <span className="tmxelite-prop-badge">
-                      {isDummy ? 'Coming Soon' : 'Guest Favorite'}
-                    </span>
-                    <button className="tmxelite-prop-like" aria-label="save">
-                      <FaHeart color="white" />
-                    </button>
-                  </div>
-                  <div className="tmxelite-prop-body">
-                    <h3 className="tmxelite-prop-name">{name}</h3>
-                    <div className="tmxelite-prop-meta">
-                      <span className="tmxelite-prop-price">{priceText}</span>
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+                  return (
+                    <SwiperSlide key={id}>
+                      <article
+                        className="tmxelite-prop-card"
+                        onClick={() => {
+                          if (isDummy) return;
+                          navigate(`/tmluxespecific/${id}`, { state: { propertyId: id } });
+                        }}
+                      >
+                        <div className="tmxelite-prop-media">
+                          <img src={imageSrc} alt={name} />
+                          <span className="tmxelite-prop-badge">
+                            {isDummy ? 'Coming Soon' : 'Guest Favorite'}
+                          </span>
+                          <button className="tmxelite-prop-like" aria-label="save">
+                            <FaHeart color="white" />
+                          </button>
+                        </div>
+                        <div className="tmxelite-prop-body">
+                          <h3 className="tmxelite-prop-name">{name}</h3>
+                          <div className="tmxelite-prop-meta">
+                            <span className="tmxelite-prop-price">{priceText}</span>
+                          </div>
+                        </div>
+                      </article>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+            ) : (
+              <div className="tmxelite-prop-grid">
+                {properties.map((prop) => {
+                  const isDummy = prop.id?.toString().startsWith('dummy');
+
+                  const imageArray = Array.isArray(prop.images)
+                    ? prop.images
+                    : Array.isArray(prop.IMAGES)
+                    ? prop.IMAGES
+                    : [];
+                  const imageSrc = imageArray.length > 0 ? imageArray[0] : '/p1.png';
+
+                  let priceText = '';
+                  if (isDummy) {
+                    const priceNumber = prop.monthly_price;
+                    priceText = priceNumber
+                      ? `₹ ${priceNumber.toLocaleString('en-IN')} per month`
+                      : '';
+                  } else {
+                    const rawPrice = prop.per_night_price ?? prop.PER_NIGHT_PRICE;
+                    const priceNumber =
+                      typeof rawPrice === 'string'
+                        ? parseFloat(rawPrice)
+                        : rawPrice;
+                    priceText = priceNumber
+                      ? `₹ ${priceNumber.toLocaleString('en-IN')} per night`
+                      : '';
+                  }
+
+                  const id = prop.id ?? prop.ID;
+                  const name = prop.name ?? prop.NAME;
+
+                  return (
+                    <article
+                      key={id}
+                      className="tmxelite-prop-card"
+                      onClick={() => {
+                        // Prevent navigation for dummy properties
+                        if (isDummy) return;
+                        navigate(`/tmluxespecific/${id}`, { state: { propertyId: id } });
+                      }}
+                    >
+                      <div className="tmxelite-prop-media">
+                        <img src={imageSrc} alt={name} />
+                        <span className="tmxelite-prop-badge">
+                          {isDummy ? 'Coming Soon' : 'Guest Favorite'}
+                        </span>
+                        <button className="tmxelite-prop-like" aria-label="save">
+                          <FaHeart color="white" />
+                        </button>
+                      </div>
+                      <div className="tmxelite-prop-body">
+                        <h3 className="tmxelite-prop-name">{name}</h3>
+                        <div className="tmxelite-prop-meta">
+                          <span className="tmxelite-prop-price">{priceText}</span>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>

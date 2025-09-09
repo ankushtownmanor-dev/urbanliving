@@ -1,10 +1,11 @@
 .smart-container {
-  font-family: "Poppins", sans-serif;
+  font-family: "Lato";
   background: #fff;
   text-align: center;
   padding: 15px;
   max-width: 420px;
   margin: auto;
+   font-family: Arial, Helvetica, sans-serif !important;
 }
 .header-text{
         position: absolute;
@@ -112,6 +113,7 @@
     flex-direction: row;
     justify-content: space-evenly;
         margin: 12px 0px;
+      
 }
 .mid-card{
     flex-direction: row-reverse;
@@ -141,7 +143,7 @@
 
 }
 #coliving-text{
-    margin-left: -7px !important;
+    margin-left: -5px !important;
 }
 .smart-living-category-right {
  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -153,26 +155,35 @@
     justify-content: center;
     width: 93px;
 }
-
+.smart-luxe{
+    width: 109px;
+}
 .smart-living-category-right h3 {
-    font-size: 14px;
+    font-size: 15px;
     letter-spacing: 1px;
     font-weight: 500;
     margin: 2px;
     display: flex
 ;
     gap: 5px;
+    color: #000;
 }
 
 .smart-living-category-right p {
     font-size: 12px;
     /* line-height: 22px; */
     font-weight: 400;
+    color: #000;
     /* margin-bottom: 19px; */
-    margin-top: -9px;
-    margin-left: -28px;
+    margin-top: -7px;
+    margin-left: -29px;
 }
-
+.luxury-p{
+    margin-left: -2px !important;
+}
+.smart-living-stay{
+  font-family: 'Salsa', cursive;
+}
 /* Arrow Circle */
 .smart-living-left-arrow {
         display: flex

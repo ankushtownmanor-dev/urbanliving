@@ -77,11 +77,11 @@ const SmartLiving = () => {
   <div className='smart-living-image-stay'>
     <img src="/4.png" alt='TM Stay' />
   </div>
-  <div className='smart-living-category-right'>
+  <div className='smart-living-category-right smart-luxe'>
     <h3>
       <span className="smart-living-tm">TM</span> <span className="smart-living-stay">Luxe</span>
     </h3>
-    <p>For Luxury Stay</p>
+    <p className="luxury-p">For Luxury Stay</p>
     
   </div>
 </div>
