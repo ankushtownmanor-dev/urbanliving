@@ -259,5 +259,34 @@
 .support-text {
   font-size: 16px;
 }
-
+@media (max-width: 600px) {
+  .dashboard-container {
+    display: flex
+;
+    /* height: 100vh; */
+    font-family: Arial, sans-serif;
+    color: #333;
+    background: #fff;
+    margin-left: 0px !important;
+    flex-direction: column-reverse;
+}
+.dashboard-profile-image {
+  width: 77px;
+  height: 77px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+.sidebar-menu {
+  display: grid
+;
+  grid-template-columns: repeat(3, 1fr);
+  list-style: none;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+}
+.sidebar-profile {
+  display: none;
+}
+}
 

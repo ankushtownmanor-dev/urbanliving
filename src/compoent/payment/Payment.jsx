@@ -777,7 +777,7 @@ function Payment() {
       const paymentData = {
         key: 'UvTrjC',
         txnid: txnid,
-        amount: 1.00,
+        amount: pricing.total,
         productinfo: 'Room Booking',
         firstname: userData.name || username || '',
         email: userData.email || '',

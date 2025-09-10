@@ -8,8 +8,13 @@ import { LuBuilding } from "react-icons/lu";
 import { PiBuildingLight } from "react-icons/pi";
 import { TbBuildingEstate } from "react-icons/tb";
 import { BsFillDoorOpenFill } from "react-icons/bs";
+import { useNavigate } from "react-router";
 
 const SmartLiving = () => {
+  const navigate = useNavigate();
+  const comingsoon = ()=>{
+    alert("this part is Coming Soon Stay updated with us")
+  }
   return (
     <div className="smart-container">
       {/* Header Section */}
@@ -93,7 +98,9 @@ const SmartLiving = () => {
             <p>Cities</p>
             <h3>15+</h3>
          </div>
-      <span className='smart-living-left-arrow'>
+      <span className='smart-living-left-arrow' onClick={()=>{
+        navigate('/tmluxe')
+      }}>
       <IoArrowForwardSharp size={15} />
     </span>
       </div>
@@ -112,7 +119,9 @@ const SmartLiving = () => {
     
   </div>
 </div>
-  <span className='smart-living-left-arrow'>
+  <span className='smart-living-left-arrow' onClick={()=>{
+    comingsoon();
+  }}>
       <IoArrowForwardSharp size={15} />
     </span>
        
@@ -147,7 +156,9 @@ const SmartLiving = () => {
             <p>Residence</p>
             <h3>450+</h3>
          </div>
-      <span className='smart-living-left-arrow'>
+      <span className='smart-living-left-arrow' onClick={()=>{
+    comingsoon();
+  }}>
       <IoArrowForwardSharp size={15} />
     </span>
       </div>
