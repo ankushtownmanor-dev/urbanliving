@@ -6,6 +6,7 @@ import LocationMap from './LocationMap'
 import GuestReviews from './GuestReviews'
 import ReviewsSurroundings from './ReviewsSurroundings'
 import { useParams } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 
 
 function ThirdMain() {
@@ -66,6 +67,9 @@ function ThirdMain() {
 
   return (
     <>
+     <Helmet> 
+     <title>{name}</title>
+     </Helmet>
       <TranquilPerch
         title={name}
         pricePerNight={pricePerNight}
