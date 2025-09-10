@@ -1,0 +1,180 @@
+body {
+    font-family: "Arial", sans-serif;
+    background: #fff;
+    color: #212121;
+  }
+  
+  .profilePage__container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  .profilePage__card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  }
+  
+  .profilePage__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .profilePage__title {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  .profilePage__editBtn {
+    background: #b71c1c;
+    color: #fff;
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .profilePage__editBtn:hover {
+    background: #9a0007;
+  }
+  
+  .profilePage__formGroup {
+    margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .profilePage__label {
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  .profilePage__input {
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    outline: none;
+    background: #f9f9f9;
+  }
+  
+  .profilePage__passwordField {
+    position: relative;
+  }
+  
+  .profilePage__passwordField .profilePage__input {
+    padding-right: 40px;
+  }
+  
+  .profilePage__icon {
+    position: absolute;
+    right: 12px;
+    top: 38px;
+    cursor: pointer;
+    color: #555;
+  }
+  
+  .profilePage__note {
+    font-size: 13px;
+    color: #555;
+    margin: 10px 0;
+  }
+  
+  .profilePage__updateBtn {
+    width: 100%;
+    background: #b71c1c;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .profilePage__updateBtn:hover {
+    background: #9a0007;
+  }
+  
+  /* Modal */
+  .profilePage__modalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .profilePage__modal {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 450px;
+  }
+  
+  .profilePage__modalTitle {
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  .profilePage__modalActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .profilePage__cancelBtn {
+    background: #ccc;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .profilePage__saveBtn {
+    background: #b71c1c;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  /* Mobile Responsive */
+  @media (max-width: 600px) {
+    .profilePage__container {
+      padding: 10px;
+    }
+  
+    .profilePage__card {
+      padding: 15px;
+    }
+  
+    .profilePage__editBtn {
+      font-size: 12px;
+      padding: 6px 12px;
+    }
+  
+    .profilePage__input {
+      font-size: 13px;
+      padding: 10px;
+    }
+  
+    .profilePage__updateBtn {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }

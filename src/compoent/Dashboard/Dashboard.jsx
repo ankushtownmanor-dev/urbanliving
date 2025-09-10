@@ -3,6 +3,9 @@ import { FaHome, FaBookmark, FaGift, FaBuilding, FaCommentDots, FaBell } from "r
 import "./Dashboard.css";
 import Navbar from "../Homepage/Navbar";
 import BookingDashboard from "./BookingDashboard";
+import BookingDetail from "./BookingDetail";
+import { useNavigate } from "react-router";
+import ProfilePage from "./ProfilePage";
 
 const Dashboard = () => {
   const [showMore, setShowMore] = useState(false);
@@ -10,7 +13,8 @@ const Dashboard = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+  const [ navigation , setnavigation]=useState("dashboard");
+  const itemClass = (key) => (navigation === key ? "sidebar-menu-item active" : "sidebar-menu-item");
   useEffect(() => {
     // Load user from localStorage
     try {
@@ -24,7 +28,7 @@ const Dashboard = () => {
       console.error("Failed to parse user from localStorage", e);
     }
   }, []);
-
+  const navigate  = useNavigate();
   useEffect(() => {
     // Fetch bookings when user is available
     const fetchBookings = async () => {
@@ -96,20 +100,20 @@ const Dashboard = () => {
           </div>
 
           <ul className="sidebar-menu">
-            <li className="sidebar-menu-item active">
-              <FaHome className="sidebar-menu-icon" /> Dashboard
+            <li className={itemClass('dashboard')} onClick={()=>setnavigation('dashboard')}>
+              <FaHome className="sidebar-menu-icon"  size={20}/> Dashboard
             </li>
-            <li className="sidebar-menu-item">
-              <FaBookmark className="sidebar-menu-icon" /> Bookings
+            <li className={itemClass('booking')} onClick={() => setnavigation('booking')}>
+              <FaBookmark className="sidebar-menu-icon" size={20} /> Bookings
             </li>
-            <li className="sidebar-menu-item">
-              <FaGift className="sidebar-menu-icon" /> Rewards
+            <li className="sidebar-menu-item" onClick={() => alert("This functionality is coming soon") }>
+              <FaGift className="sidebar-menu-icon" size={20} /> Rewards
             </li>
-            <li className="sidebar-menu-item">
-              <FaBuilding className="sidebar-menu-icon" /> Properties
+            <li className="sidebar-menu-item" onClick={()=>navigate('/tmluxe')}>
+              <FaBuilding className="sidebar-menu-icon" size={20} /> Explore Properties
             </li>
-            <li className="sidebar-menu-item">
-              <FaCommentDots className="sidebar-menu-icon" /> Edit
+            <li className={itemClass('profile')} onClick={()=>setnavigation('profile')}>
+              <FaCommentDots className="sidebar-menu-icon" size={20} /> Update profile
             </li>
           </ul>
         </aside>
@@ -119,8 +123,8 @@ const Dashboard = () => {
           {/* Top Bar */}
           <div className="dashboard-topbar">
             <h1 className="dashboard-welcome">Welcome Back ! {user?.username || "Guest"}</h1>
-            <div className="dashboard-bell">
-              <FaBell />
+            <div className="">
+              <FaBell className="dot" color="#6E0B0C" size={35} />
             </div>
           </div>
 
@@ -135,7 +139,7 @@ const Dashboard = () => {
               <h2 className="dashboard-profile-heading">Profile</h2>
               <p className="dashboard-profile-name">{user?.username || "Guest"}</p>
               <p className="dashboard-profile-role">TM Member</p>
-              <p className="dashboard-profile-actions">
+              <p className="dashboard-profile-actions" onClick={()=>setnavigation('profile')}>
                 Quick Actions : Edit Profile | Setting
               </p>
             </div>
@@ -143,60 +147,7 @@ const Dashboard = () => {
         </main>
       </div>
       
-      {/* <div className="dashboard-booking-section">
-        <h2 className="dashboard-booking-heading">Booking Details</h2>
-
-        {loading && <p>Loading bookings...</p>}
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        {!loading && !error && bookings.length === 0 && (
-          <p>No bookings found.</p>
-        )}
-
-        {!loading && !error && bookings.map((b) => (
-          <div key={b.id} className="booking-card">
-            <p><strong>Property:</strong> {b.property_name}</p>
-            <p><strong>Address:</strong> {b.property_address}</p>
-            <p><strong>Price:</strong> ₹{Number(b.price).toFixed(2)}</p>
-            <p>
-              <strong>Stay:</strong>{" "}
-              {new Date(b.start_date).toLocaleDateString()} - {new Date(b.end_date).toLocaleDateString()}
-            </p>
-            <p><strong>Status:</strong> {b.booking_status}</p>
-
-            {showMore && (
-              <div className="booking-more-details">
-                <p><strong>Booked By:</strong> {b.username}</p>
-                <p><strong>Phone:</strong> {b.phone_number}</p>
-                <p><strong>Phone Verified:</strong> {b.phone_verified ? "Yes" : "No"}</p>
-                <p><strong>Aadhar:</strong> {b.aadhar_number}</p>
-                <p><strong>Aadhar Verified:</strong> {b.aadhar_verified ? "Yes" : "No"}</p>
-                <p><strong>Terms Accepted:</strong> {b.terms_verified ? "Yes" : "No"}</p>
-                <p><strong>Cancelled:</strong> {b.cancelled ? "Yes" : "No"}</p>
-                <p><strong>Created:</strong> {new Date(b.created_at).toLocaleString()}</p>
-                <p><strong>Updated:</strong> {new Date(b.updated_at).toLocaleString()}</p>
-              </div>
-            )}
-
-            <div style={{ display: "flex", gap: 12, marginTop: 12 }}>
-              <button
-                className="booking-more-btn"
-                onClick={() => setShowMore(!showMore)}
-              >
-                {showMore ? "Hide Information" : "More Information"}
-              </button>
-              {!(b.cancelled || b.booking_status === "cancelled") && (
-                <button
-                  className="booking-more-btn"
-                  style={{ backgroundColor: "#ff4d4f", borderColor: "#ff4d4f" }}
-                  onClick={() => cancelBooking(b.id)}
-                >
-                  Cancel Booking
-                </button>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
+      {/* 
       
       <div className="dashboard-notification-section">
         <h2 className="dashboard-notification-heading">Notification</h2>
@@ -246,7 +197,21 @@ const Dashboard = () => {
           </div>
         </div>
       </div> */}
-      <BookingDashboard/>
+      { navigation === 'dashboard' && (
+        <>
+        <BookingDashboard/>
+         </>
+      )}
+        { navigation === 'booking' && (
+        <>
+        <BookingDetail/>
+         </>
+      )}
+      { navigation === 'profile' && (
+        <>
+        <ProfilePage/>
+         </>
+      )}
     </>
   );
 };

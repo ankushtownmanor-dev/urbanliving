@@ -147,6 +147,7 @@
     border: 1px solid grey;
     border-radius: 50px;
     box-shadow: 1px 1px 1px 1px #adacac;
+    background: white;
   }
   .notification-content{
 text-align: left; 
@@ -161,10 +162,11 @@ margin-left: 20px;
     flex-wrap: wrap;
   }
   .trip-gallery img {
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     border-radius: 12px;
     object-fit: cover;
+    box-shadow: 1px 2px 3px 1px #8d8d8d;
   }
   .trip-text {
     text-align: center;

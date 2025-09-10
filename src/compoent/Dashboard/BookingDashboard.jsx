@@ -9,8 +9,10 @@ import {
   FaBell,
 } from "react-icons/fa";
 import "./BookingDashboard.css";
+import { useNavigate } from "react-router";
 
 const BookingDashboard = () => {
+  const navigate  = useNavigate();
   return (
     <div className="booking-container">
 
@@ -97,13 +99,15 @@ const BookingDashboard = () => {
         <img src="/b4.jpg" alt="trip4" />
         <img src="/b5.jpg" alt="trip5" />
       </div>
+     
+
       <div className="trip-text">
-        <h4>No trips booked.... yet!</h4>
+        <h4>Explore more properties</h4>
         <p>
           Time to dust off your bags and start planning your next stay, we have
           a world of destinations waiting for you.
         </p>
-        <button className="start-btn">Start Searching</button>
+        <button className="start-btn" onClick={()=>navigate('/tmluxe')}>Start Searching</button>
       </div>
 
       {/* Support */}
