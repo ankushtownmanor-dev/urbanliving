@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import axios from 'axios';
 
 function EliteProperties() {
   const [properties, setProperties] = useState([]);
@@ -14,7 +15,7 @@ function EliteProperties() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const isMobile = useMediaQuery({ maxWidth: 767 });
-
+  const [data,setData] = useState();
   // Dummy properties for filling empty space
   const dummyProperties = [
     {
@@ -62,7 +63,22 @@ function EliteProperties() {
     };
     fetchProperties();
   }, []);
-
+//axios api call
+//   useEffect(()=>{
+//    const fetchdata =  async ()=>{
+//     try{
+//       const apifetch = await axios.get('https://townmanor.ai/api/properties/all');
+//      setData(apifetch.data.properties || []);
+     
+//     }
+//     catch(err){
+//       console.log(err);
+//       alert(err);
+//     }
+//    }
+//    fetchdata();
+//   },[])
+//  console.log(data);
   return (
     <section className="tmxelite-prop">
       <div className="tmxelite-prop-container">

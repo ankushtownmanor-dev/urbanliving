@@ -12,6 +12,13 @@ const AuthPage = () => {
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  // Forgot Password modal states
+  const [forgotOpen, setForgotOpen] = useState(false);
+  const [forgotStep, setForgotStep] = useState(1); // 1 = email, 2 = new password
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [newPwd, setNewPwd] = useState("");
+  const [newPwd2, setNewPwd2] = useState("");
+  const [forgotSubmitting, setForgotSubmitting] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -84,6 +91,69 @@ const AuthPage = () => {
       handleLogin();
     } else {
       handleSignup();
+    }
+  };
+
+  const openForgot = (e) => {
+    e.preventDefault();
+    setForgotOpen(true);
+    setForgotStep(1);
+    setForgotEmail("");
+    setNewPwd("");
+    setNewPwd2("");
+  };
+
+  const closeForgot = () => {
+    if (forgotSubmitting) return;
+    setForgotOpen(false);
+  };
+
+  const proceedForgotStep1 = () => {
+    // basic email validation
+    const emailTrim = (forgotEmail || "").trim();
+    if (!emailTrim || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailTrim)) {
+      alert("Please enter a valid email address");
+      return;
+    }
+    setForgotStep(2);
+  };
+
+  const submitForgot = async () => {
+    const pwd = (newPwd || "").trim();
+    const pwd2 = (newPwd2 || "").trim();
+    if (pwd.length < 6) {
+      alert("New password must be at least 6 characters");
+      return;
+    }
+    if (pwd !== pwd2) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    setForgotSubmitting(true);
+    try {
+      const res = await fetch(`${API_BASE}/auth/forgot-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: forgotEmail.trim(), newPassword: pwd }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        const msg = data?.message || (data?.errors && data.errors[0]?.msg) || "Password reset failed";
+        alert(msg);
+        return;
+      }
+      alert(data?.message || "Password has been reset successfully");
+      setForgotOpen(false);
+      // Pre-fill email into main form and focus password for convenience
+      setEmail(forgotEmail.trim());
+      setPassword("");
+      setIsLogin(true);
+    } catch (err) {
+      console.error("Forgot password error", err);
+      alert("Server error during password reset");
+    } finally {
+      setForgotSubmitting(false);
     }
   };
 
@@ -181,9 +251,9 @@ const AuthPage = () => {
                 <input type="checkbox" id="remember" />
                 <label htmlFor="remember">Remember me</label>
               </div>
-              <a href="/" className="auth-forgot">
+              <button type="button" className="auth-forgot btn-link" onClick={openForgot}>
                 Forgot password?
-              </a>
+              </button>
             </div>
           )}
 
@@ -197,6 +267,71 @@ const AuthPage = () => {
               : "Sign Up"}
           </button>
         </form>
+        {/* Forgot Password Modal */}
+        {forgotOpen && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="forgot-title"
+            className="modal-overlay"
+            onClick={(e) => {
+              // close when clicking backdrop only
+              if (e.target === e.currentTarget) closeForgot();
+            }}
+          >
+            <div className="modal">
+              <div className="modal-header">
+                <h3 id="forgot-title" style={{ margin: 0 }}>
+                  {forgotStep === 1 ? "Reset your password" : "Set a new password"}
+                </h3>
+                <button type="button" onClick={closeForgot} className="modal-close" aria-label="Close">×</button>
+              </div>
+
+              {forgotStep === 1 && (
+                <div>
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    placeholder="Enter your account email"
+                    value={forgotEmail}
+                    onChange={(e) => setForgotEmail(e.target.value)}
+                    style={{ width: "100%", marginTop: 6, marginBottom: 14 }}
+                    className="auth-password-input"
+                  />
+                  <button type="button" onClick={proceedForgotStep1} disabled={forgotSubmitting} className="auth-submit" style={{ width: "100%" }}>
+                    Continue
+                  </button>
+                </div>
+              )}
+
+              {forgotStep === 2 && (
+                <div>
+                  <label>New Password</label>
+                  <input
+                    type="password"
+                    placeholder="Enter new password"
+                    value={newPwd}
+                    onChange={(e) => setNewPwd(e.target.value)}
+                    style={{ width: "100%", marginTop: 6, marginBottom: 12 }}
+                     className="auth-password-input"
+                  />
+                  <label>Confirm New Password</label>
+                  <input
+                    type="password"
+                    placeholder="Re-enter new password"
+                    value={newPwd2}
+                    onChange={(e) => setNewPwd2(e.target.value)}
+                    style={{ width: "100%", marginTop: 6, marginBottom: 14 }}
+                     className="auth-password-input"
+                  />
+                  <button type="button" onClick={submitForgot} disabled={forgotSubmitting} className="auth-submit" style={{ width: "100%" }}>
+                    {forgotSubmitting ? "Submitting..." : "Reset Password"}
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
