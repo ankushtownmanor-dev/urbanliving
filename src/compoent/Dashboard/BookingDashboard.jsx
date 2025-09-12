@@ -22,18 +22,18 @@ const BookingDashboard = () => {
         <div className="card">
           <img src="/dicon.png" alt="upcoming" />
           <p className="card-title">Upcoming Booking:</p>
-          <h4 className="card-subtitle">Cozy Cabins</h4>
+          {/* <h4 className="card-subtitle">Cozy Cabins</h4> */}
           
         </div>
         <div className="card">
           <img src="/dicon3.png" alt="completed" />
           <p className="card-title">Completed :</p>
-          <h4 className="card-subtitle">Modern Apartment</h4>
+          {/* <h4 className="card-subtitle">Modern Apartment</h4> */}
         </div>
         <div className="card">
           <img src="/dicon2.png" alt="canceled" />
           <p className="card-title">Canceled Booking:</p>
-          <h4 className="card-subtitle">Luxury Villa</h4>
+          {/* <h4 className="card-subtitle">Luxury Villa</h4> */}
         </div>
       </div>
 

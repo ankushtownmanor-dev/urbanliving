@@ -1,9 +1,10 @@
 .booking-container {
-    font-family: "Poppins", sans-serif;
-    max-width: 1200px;
-    margin: auto;
+   font-family: Poppins, sans-serif;
+    max-width: 1399px;
+    margin: 0 auto;
     padding: 20px;
     background: #fff;
+    margin-left: 20vw;
   }
   
   .section-title {
@@ -29,7 +30,7 @@
     background: #f9f9f9;
     border-radius: 12px;
     align-items: flex-start;
-    height: 16vh;
+    height: 18vh;
     padding: 12px;
     max-width: 272px;
     text-align: center;

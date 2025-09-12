@@ -50,7 +50,7 @@ const HoomieFooter = () => {
           <div className="hoomie-footer-contact-row">
             <div>
               <div className="hoomie-footer-contact-label">CALL US</div>
-              <div className="hoomie-footer-contact-bold">(+91) 68707 68329</div>
+              <div className="hoomie-footer-contact-bold">(+91) 70428 88903</div>
             </div>
             <div>
               <div className="hoomie-footer-contact-label">EMAIL US</div>
