@@ -11,6 +11,7 @@ import MainTmFeature from './MainTmFeature'
 import EliteProperties from './EliteProperties'
 import FloatingSearch from './FloatingSearch'
 import { Helmet } from 'react-helmet'
+import MainHow from './MainHow'
 
 function Home() {
   return (
@@ -37,7 +38,8 @@ function Home() {
    <MainBanner/>
    {/* <HowItWorks/> */}
  <MainTmFeature/>
-   <BookingSteps/>
+   {/* <BookingSteps/> */}
+   <MainHow/>
  <EliteProperties/>
   <FloatingSearch/>
    <ListYourPropertyTM/>

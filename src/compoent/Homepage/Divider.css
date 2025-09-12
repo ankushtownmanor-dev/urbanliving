@@ -19,4 +19,13 @@
     white-space: nowrap;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   }
-  
+  @media (max-width: 450px) {
+.divider-text {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0 15px;
+    color: #000;
+    white-space: nowrap;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+   }
