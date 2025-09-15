@@ -56,7 +56,7 @@ const TMFeaturesMobile = () => {
 
     <div className="tm-section__content">
       <h3 className="tm-subtitle">
-        <span className="tm-subtitle-text">Live together, <span className="highlight">grow together</span>.</span>
+        <span className="tm-subtitle-text">Live together, <span className="highlight">grow </span> together.</span>
       </h3>
       <p className="tm-desc">
         TM Hive brings together vibrant communities in thoughtfully designed shared spaces.

@@ -96,7 +96,7 @@
 }
 
 .highlight { 
-  color: var(--blue); 
+  color: gray; 
   font-weight: 600; 
 }
 

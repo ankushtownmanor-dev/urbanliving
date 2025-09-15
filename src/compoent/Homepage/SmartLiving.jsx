@@ -1,20 +1,20 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
-import { FaArrowRight } from "react-icons/fa";
-
-import "./SmartLiving.css";
 import { IoArrowForwardSharp } from "react-icons/io5";
-import { LuBuilding } from "react-icons/lu";
 import { PiBuildingLight } from "react-icons/pi";
 import { TbBuildingEstate } from "react-icons/tb";
 import { BsFillDoorOpenFill } from "react-icons/bs";
+import { GoHome } from "react-icons/go";   // ✅ watermark
 import { useNavigate } from "react-router";
+
+import "./SmartLiving.css";
 
 const SmartLiving = () => {
   const navigate = useNavigate();
-  const comingsoon = ()=>{
-    alert("this part is Coming Soon Stay updated with us")
-  }
+  const comingsoon = () => {
+    alert("this part is Coming Soon Stay updated with us");
+  };
+
   return (
     <div className="smart-container">
       {/* Header Section */}
@@ -25,142 +25,102 @@ const SmartLiving = () => {
         <p>From Shared To Stylish - Living Spaces For Every Lifestyle</p>
       </div>
 
-      {/* Hero Image Section */}
+      {/* Hero Section */}
       <div className="hero">
         <img src="/mobile-banner.png" alt="student" className="hero-img" />
-        {/* <div className="search-box">
-          <input type="text" placeholder="Find your stay" />
-          <button>
-            <FaSearch /> Search
-          </button>
-        </div> */}
       </div>
 
-      {/* Features Section */}
-      {/* <div className="features">
-        <div className="card">
-          <div className="card-left">
-            <img src="https://placehold.co/60x60" alt="TM Stay" />
-          </div>
-          <div className="card-body">
-            <h3>TM Stay</h3>
-            <p>For PG</p>
-          </div>
-          <div className="card-arrow">
-            <p>Residence 450+ →</p>
-          </div>
+      {/* ✅ Watermark Background + Features */}
+      <div className="features-section">
+        {/* Watermark Behind */}
+        <div className="watermark">
+          <GoHome className="watermark-icon" />
         </div>
 
-        <div className="card">
-          <div className="card-left">
-            <img src="https://placehold.co/60x60" alt="TM Hive" />
+        {/* Feature Card 1 - Luxe */}
+        <div className="feature-card">
+          <div className="smart-living-category-box">
+            <div className="smart-living-image-stay">
+              <img src="/4.png" alt="TM Luxe" />
+            </div>
+            <div className="smart-living-category-right smart-luxe">
+              <h3>
+                <span className="smart-living-tm">TM</span>{" "}
+                <span className="smart-living-stay">Luxe</span>
+              </h3>
+              <p className="luxury-p">For Luxury Stay</p>
+            </div>
           </div>
-          <div className="card-body">
-            <h3>TM Hive</h3>
-            <p>For Co Living</p>
-          </div>
-          <div className="card-arrow">
-            <p>Rooms 40,000+ →</p>
-          </div>
-        </div>
 
-        <div className="card">
-          <div className="card-left">
-            <img src="https://placehold.co/60x60" alt="TM Luxe" />
+          <div className="building_icon">
+            <TbBuildingEstate className="iconx" size={35} />
           </div>
-          <div className="card-body">
-            <h3>TM Luxe</h3>
-            <p>For Luxury Stay</p>
-          </div>
-          <div className="card-arrow">
-            <p>Cities 15+ →</p>
-          </div>
-        </div>
-      </div> */}
-      <div className="feature-card">
-        <div className='smart-living-category-box'>
-  <div className='smart-living-image-stay'>
-    <img src="/4.png" alt='TM Stay' />
-  </div>
-  <div className='smart-living-category-right smart-luxe'>
-    <h3>
-      <span className="smart-living-tm">TM</span> <span className="smart-living-stay">Luxe</span>
-    </h3>
-    <p className="luxury-p">For Luxury Stay</p>
-    
-  </div>
-</div>
-
-        <div className="building_icon">
-          <TbBuildingEstate className="iconx" size={35}/>
-        </div>
-         <div className="card-text">
+          <div className="card-text">
             <p>Cities</p>
             <h3>15+</h3>
-         </div>
-      <span className='smart-living-left-arrow' onClick={()=>{
-        navigate('/tmluxe')
-      }}>
-      <IoArrowForwardSharp size={15} />
-    </span>
-      </div>
+          </div>
+          <span
+            className="smart-living-left-arrow"
+            onClick={() => navigate("/tmluxe")}
+          >
+            <IoArrowForwardSharp size={15} />
+          </span>
+        </div>
 
+        {/* Feature Card 2 - Hive */}
+        <div className="feature-card mid-card">
+          <div className="smart-living-category-box mid-box">
+            <div className="smart-living-image-stay">
+              <img src="/2.png" alt="TM Hive" />
+            </div>
+            <div className="smart-living-category-right">
+              <h3>
+                <span className="smart-living-tm">TM</span>{" "}
+                <span className="smart-living-stay">Hive</span>
+              </h3>
+              <p id="coliving-text">For Coliving</p>
+            </div>
+          </div>
 
-       <div className="feature-card mid-card">
-        <div className='smart-living-category-box mid-box'>
-  <div className='smart-living-image-stay'>
-    <img src="/2.png" alt='TM Stay' />
-  </div>
-  <div className='smart-living-category-right'>
-    <h3>
-      <span className="smart-living-tm">TM</span> <span className="smart-living-stay">Hive</span>
-    </h3>
-    <p id="coliving-text">For Coliving</p>
-    
-  </div>
-</div>
-  <span className='smart-living-left-arrow' onClick={()=>{
-    comingsoon();
-  }}>
-      <IoArrowForwardSharp size={15} />
-    </span>
-       
-         <div className="card-text">
+          <span className="smart-living-left-arrow" onClick={comingsoon}>
+            <IoArrowForwardSharp size={15} />
+          </span>
+
+          <div className="card-text">
             <p>Rooms</p>
             <h3>40000+</h3>
-         </div>
-    
-     <div className="building_icon">
-        
-          <BsFillDoorOpenFill className="iconx" size={35}/>
+          </div>
+          <div className="building_icon">
+            <BsFillDoorOpenFill className="iconx" size={35} />
+          </div>
         </div>
-      </div>
-      <div className="feature-card">
-        <div className='smart-living-category-box'>
-  <div className='smart-living-image-stay'>
-    <img src="/1.png" alt='TM Stay' />
-  </div>
-  <div className='smart-living-category-right'>
-    <h3>
-      <span className="smart-living-tm">TM</span> <span className="smart-living-stay">Stay</span>
-    </h3>
-    <p>For PG</p>
-    
-  </div>
-</div>
 
-        <div className="building_icon">
-          <PiBuildingLight className="iconx" size={35}/>  
-        </div>
-         <div className="card-text">
+        {/* Feature Card 3 - Stay */}
+        <div className="feature-card">
+          <div className="smart-living-category-box">
+            <div className="smart-living-image-stay">
+              <img src="/1.png" alt="TM Stay" />
+            </div>
+            <div className="smart-living-category-right">
+              <h3>
+                <span className="smart-living-tm">TM</span>{" "}
+                <span className="smart-living-stay">Stay</span>
+              </h3>
+              <p>For PG</p>
+            </div>
+          </div>
+
+          <div className="building_icon">
+            <PiBuildingLight className="iconx" size={35} />
+          </div>
+          <div className="card-text">
             <p>Residence</p>
             <h3>450+</h3>
-         </div>
-      <span className='smart-living-left-arrow' onClick={()=>{
-    comingsoon();
-  }}>
-      <IoArrowForwardSharp size={15} />
-    </span>
+          </div>
+          <span className="smart-living-left-arrow" onClick={comingsoon}>
+            <IoArrowForwardSharp size={15} />
+          </span>
+        </div>
       </div>
     </div>
   );

@@ -187,7 +187,7 @@
     ), #fdeceb;
   border-color: rgba(197, 57, 58, 0.35);
   box-shadow: 0 8px 18px rgba(197, 57, 58, 0.15);
-  min-height: auto;
+  min-height: 150px;
 }
 
 .dropdown-menu .menu-item:first-child:hover {
