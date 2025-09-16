@@ -116,7 +116,7 @@
   .tmxelite-prop-name {
     margin: 4px 0 10px;
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 500;
     color: var(--tmxelite-prop-text);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
@@ -131,7 +131,7 @@
   
   .tmxelite-prop-price {
     color: #111;
-    font-weight: 600;
+    font-weight: 300;
     font-size: 13.5px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
