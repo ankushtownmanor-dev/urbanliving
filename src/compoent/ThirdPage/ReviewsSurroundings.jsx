@@ -1,8 +1,8 @@
 import React from "react";
-import { FaStar, FaChild } from "react-icons/fa";
+import { FaStar, FaMapMarkerAlt } from "react-icons/fa";
 import "./ReviewsSurroundings.css";
 
-const ReviewsSurroundings = () => {
+const ReviewsSurroundings = ({ propertyName }) => {
   const reviews = [
     { label: "Staff", rating: 4.8 },
     { label: "Comfort", rating: 4.6 },
@@ -10,12 +10,101 @@ const ReviewsSurroundings = () => {
     { label: "Facilities", rating: 4.5 },
   ];
 
-  const surroundings = [
-    "DLF Mall of India & The Great India Place",
-    "Worlds of Wonder Amusement & Water Park",
-    "Okhla Bird Sanctuary & Botanical Garden",
-    "Film City & Cultural Centers",
+  // Define surroundings data for different properties
+  const tmLuxe1Data = [
+    "Pari Chowk Metro stn 4.3kms",
+    "Alpha 1 Metro stn 5kms",
+    "Jaypee Greens Golf Course 4.8kms",
+    "Grand Venice Mall 6.4kms",
+    "Sharda Hospital 3.5kms",
+    "Omaxe Connaught Place Mall 3.4kms",
+    "Ansal Plaza 4.8kms",
+    "Fortis Hospital 7.4 kms",
+    "India Expo Centre & Mart 4.7kms"
   ];
+
+  const tmLuxe2Data = [
+    "Advant office complex 0.9kms",
+    "Sector 137 Metro stn 0.5 kms",
+    "Sector 142 Metro Stn 1kms",
+    "Felix Hospital 0.3 kms",
+    "Bio Diversity Park 0.8 kms",
+    "Pari Chowk 8kms",
+    "Jaypee Greens Golf course Greater Noida 9kms",
+    "Jaypee greens Wish town golf course 5kms",
+    "Max Super speciality hospital 5kms",
+    "Sector 18 Noida Market 10kms",
+    "India TV 2kms"
+  ];
+
+  const surroundingsData = {
+    "TM Luxe 1": tmLuxe1Data,
+    "TM Luxe-1": tmLuxe1Data,
+    "TM Luxe - 1": tmLuxe1Data,
+    "TMLuxe1": tmLuxe1Data,
+    "TM LUXE 1": tmLuxe1Data,
+    "tm luxe 1": tmLuxe1Data,
+    "TM Luxe - 2Suite": tmLuxe2Data,
+    "TM Luxe-2Suite": tmLuxe2Data,
+    "TMLuxe2Suite": tmLuxe2Data,
+    "TM LUXE - 2SUITE": tmLuxe2Data,
+    "tm luxe - 2suite": tmLuxe2Data
+  };
+
+  // Get surroundings based on property name, fallback to default if not found
+  const getSurroundings = () => {
+    console.log("Property Name received:", propertyName);
+    console.log("Available keys:", Object.keys(surroundingsData));
+    console.log("Exact match found:", propertyName in surroundingsData);
+    
+    if (propertyName && surroundingsData[propertyName]) {
+      console.log("Using specific surroundings for:", propertyName);
+      return surroundingsData[propertyName];
+    }
+    
+    // Try case-insensitive match
+    const lowerCaseMatch = Object.keys(surroundingsData).find(key => 
+      propertyName && key.toLowerCase() === propertyName.toLowerCase()
+    );
+    
+    if (lowerCaseMatch) {
+      console.log("Using case-insensitive match:", lowerCaseMatch);
+      return surroundingsData[lowerCaseMatch];
+    }
+    
+    // Check if it's TM Luxe 2Suite variant first (more specific)
+    if (propertyName && (
+      propertyName.toLowerCase().includes('2suite') ||
+      propertyName.toLowerCase().includes('2 suite') ||
+      (propertyName.toLowerCase().includes('tm luxe') && propertyName.toLowerCase().includes('2'))
+    )) {
+      console.log("Using TM Luxe 2Suite data for:", propertyName);
+      return tmLuxe2Data;
+    }
+    
+    // Check if it's TM Luxe 1 variant
+    if (propertyName && (
+      propertyName.toLowerCase().includes('tm luxe 1') ||
+      propertyName.toLowerCase().includes('tmluxe1') ||
+      propertyName.toLowerCase().includes('tm luxe-1') ||
+      propertyName.toLowerCase().includes('tm luxe - 1') ||
+      (propertyName.toLowerCase().includes('tm luxe') && propertyName.toLowerCase().includes('1'))
+    )) {
+      console.log("Using TM Luxe 1 data for:", propertyName);
+      return tmLuxe1Data;
+    }
+    
+    // Default surroundings if property name doesn't match
+    console.log("Using default surroundings - no match found");
+    return [
+      "DLF Mall of India & The Great India Place",
+      "Worlds of Wonder Amusement & Water Park",
+      "Okhla Bird Sanctuary & Botanical Garden",
+      "Film City & Cultural Centers",
+    ];
+  };
+
+  const surroundings = getSurroundings();
 
   return (
     <div className="reviews-container">
@@ -39,13 +128,29 @@ const ReviewsSurroundings = () => {
 
       {/* Right Section - Surroundings */}
       <div className="surroundings-section">
-        <h2 className="surroundings-title">Our surroundings</h2>
-        <FaChild className="surroundings-icon" />
-        <ul className="surroundings-list">
-          {surroundings.map((place, index) => (
-            <li key={index}>{place}</li>
-          ))}
-        </ul>
+        <div className="surroundings-header">
+          <h2 className="surroundings-title">Nearby Locations</h2>
+          <p className="surroundings-subtitle">Explore what's around you</p>
+        </div>
+        <div className="surroundings-container">
+          {surroundings.map((place, index) => {
+            const parts = place.split(' ');
+            const distance = parts[parts.length - 1];
+            const locationName = parts.slice(0, -1).join(' ');
+            
+            return (
+              <div key={index} className="location-card">
+                <div className="location-icon-wrapper">
+                  <FaMapMarkerAlt className="location-icon" />
+                </div>
+                <div className="location-details">
+                  <h4 className="location-name">{locationName}</h4>
+                  <span className="location-distance">{distance}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

@@ -85,7 +85,7 @@ function ThirdMain() {
       />
       <Amenities amenities={amenities} />
       <LocationMap latitude={latitude ? String(latitude) : ''} longitude={longitude ? String(longitude) : ''} address={address} />
-      <ReviewsSurroundings />
+      <ReviewsSurroundings propertyName={name} />
       <GuestReviews />
     </>
   )
