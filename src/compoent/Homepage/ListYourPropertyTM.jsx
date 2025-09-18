@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ListYourPropertyTM.css";
 import { IoArrowForward } from "react-icons/io5";
-import emailjs from '@emailjs/browser';
 
 const ListYourPropertyTM = () => {
   const navigate = useNavigate();
@@ -17,6 +16,9 @@ const ListYourPropertyTM = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(''); // 'success', 'error', or ''
   const [captchaCode] = useState('3bcfh'); // Static captcha for now
+
+  // Replace with your WhatsApp number (with country code, no + sign)
+  const whatsappNumber = " 7784949767"; // Example: 919876543210 for Indian number
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -68,32 +70,33 @@ const ListYourPropertyTM = () => {
     setSubmitStatus('');
 
     try {
-      // EmailJS configuration
-      const serviceId = 'YOUR_SERVICE_ID'; // Replace with your EmailJS service ID
-      const templateId = 'YOUR_TEMPLATE_ID'; // Replace with your EmailJS template ID
-      const publicKey = 'YOUR_PUBLIC_KEY'; // Replace with your EmailJS public key
+      // Create WhatsApp message
+      const whatsappMessage = `🏠 *New Property Listing Inquiry - Ovika Living*
 
-      // Template parameters for EmailJS
-      const templateParams = {
-        from_name: formData.fullName,
-        from_email: formData.email,
-        phone: formData.phone,
-        message: formData.message,
-        to_email: 'your-email@example.com', // Replace with your email
-        subject: 'New Property Listing Inquiry from Ovika Living'
-      };
+👤 *Name:* ${formData.fullName}
+📞 *Phone:* ${formData.phone}
+📧 *Email:* ${formData.email}
 
-      // Send email using EmailJS
-      const response = await emailjs.send(
-        serviceId,
-        templateId,
-        templateParams,
-        publicKey
-      );
+💬 *Message:*
+${formData.message}
 
-      if (response.status === 200) {
-        setSubmitStatus('success');
-        // Reset form after successful submission
+---
+*Sent from Ovika Living Contact Form*`;
+
+      // Encode the message for URL
+      const encodedMessage = encodeURIComponent(whatsappMessage);
+      
+      // Create WhatsApp URL
+      const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+      
+      // Open WhatsApp in new tab
+      window.open(whatsappURL, '_blank');
+      
+      // Set success status
+      setSubmitStatus('success');
+      
+      // Reset form after successful submission
+      setTimeout(() => {
         setFormData({
           fullName: '',
           phone: '',
@@ -101,12 +104,10 @@ const ListYourPropertyTM = () => {
           message: '',
           enterCode: ''
         });
-      } else {
-        throw new Error('Failed to send email');
-      }
+      }, 2000);
 
     } catch (error) {
-      console.error('Email sending failed:', error);
+      console.error('WhatsApp message failed:', error);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
