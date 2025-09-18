@@ -13,14 +13,20 @@ const ListPropertyPage = () => {
       </div>
 
       {/* How It Works Section */}
-      <div className="how-it-works-section">
+      {/* Title and Subtitle Section */}
+      <div className="how-it-works-header-section">
         <div className="container">
           <h2 className="how-it-works-title">How It Works</h2>
           <p className="how-it-works-subtitle">
-            Listing your property on Ovika is a simple and straight forward process follow
-            these four easy steps to get started
+            Listing your property on Ovika is a simple and straightforward process. Follow
+            these four easy steps to get started.
           </p>
-          
+        </div>
+      </div>
+      
+      {/* Steps Section */}
+      <div className="how-it-works-steps-section">
+        <div className="container">
           <div className="steps-grid">
             <div className="step-card step-register">
               <div className="step-icon">
@@ -35,7 +41,7 @@ const ListPropertyPage = () => {
                 <FaCamera />
               </div>
               <h3 className="step-title">2. Add photos & info</h3>
-              <p className="step-description">Upload high quality images and provide details description</p>
+              <p className="step-description">Upload high quality images and provide detailed description</p>
             </div>
             
             <div className="step-card step-verified">
@@ -51,7 +57,7 @@ const ListPropertyPage = () => {
                 <FaPlay />
               </div>
               <h3 className="step-title">4. Go Live & Earn</h3>
-              <p className="step-description">Thousand of potential rentals and buyers instantly</p>
+              <p className="step-description">Thousands of potential renters and buyers instantly</p>
             </div>
           </div>
         </div>

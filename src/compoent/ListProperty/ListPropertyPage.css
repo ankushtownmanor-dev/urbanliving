@@ -14,7 +14,7 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  margin-bottom: -27px;
 }
 
 /* Hero Section */
@@ -31,6 +31,7 @@
   color: white;
   position: relative;
   width: 100%;
+  margin-bottom: -37px;
 }
 
 .hero-content {
@@ -78,18 +79,27 @@
   box-shadow: 0 8px 25px rgba(197, 57, 58, 0.3);
 }
 
-/* How It Works Section */
-.how-it-works-section {
-  padding: 80px 0;
-  background: #e8e8e8;
+/* How It Works Header Section */
+.how-it-works-header-section {
+  padding: 60px 0 40px 0;
+  
+  background: transparent;
+  margin-bottom: -31px;
+}
+
+/* How It Works Steps Section */
+.how-it-works-steps-section {
+  padding: 10px 0 10px 0;
+  background: rgb(237 237 237);
 }
 
 .how-it-works-title {
+  background: transparent;
   font-size: 2.5rem;
-  font-weight: 700;
+  font-weight: 600;
   text-align: center;
-  margin-bottom: 16px;
-  color: #333;
+  margin-bottom: 1px;
+  color: #000000;
 }
 
 .how-it-works-subtitle {
@@ -107,7 +117,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 30px;
-  margin-top: 60px;
+  margin-top: 0;
 }
 
 .step-card {
@@ -186,13 +196,13 @@
 
 /* Benefits Section */
 .benefits-section {
-  padding: 80px 0;
+  padding: 20px 0;
   background: white;
 }
 
 .benefits-section h2 {
   font-size: 2.5rem;
-  font-weight: 700;
+  font-weight: 600;
   text-align: center;
   margin-bottom: 16px;
   color: #333;
@@ -323,16 +333,16 @@
 
 /* Property Types Section */
 .property-types-section {
-  padding: 80px 0;
-  background: #f8f9fa;
+  background:transparent;
 }
 
 .property-types-section h2 {
   font-size: 2.5rem;
-  font-weight: 700;
+  font-weight: 600;
   text-align: center;
   margin-bottom: 16px;
   color: #333;
+  padding: 33px;
 }
 
 .property-types-grid {
@@ -405,7 +415,7 @@
 
 .testimonials-section h2 {
   font-size: 2.5rem;
-  font-weight: 700;
+  font-weight: 600;
   text-align: center;
   margin-bottom: 16px;
   color: #333;
@@ -468,6 +478,17 @@
   line-height: 1.6;
   font-style: italic;
 }
+.section-subtitle {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #666;                /* text color */
+  text-align: center;         /* ✅ content center me */
+  max-width: 700px;           /* ✅ readability ke liye */
+  margin: 0 auto 40px auto;   /* ✅ center aur neeche gap */
+  line-height: 1.6;           /* ✅ spacing improve */
+  opacity: 0.9;               /* halki styling */
+}
+
 
 /* Responsive Design */
 @media (max-width: 1024px) {
@@ -524,11 +545,15 @@
     gap: 20px;
   }
   
-  .how-it-works-section,
+  .how-it-works-header-section {
+    padding: 20px 0 20px 0;
+  }
+  
+  .how-it-works-steps-section,
   .benefits-section,
   .property-types-section,
   .testimonials-section {
-    padding: 60px 0;
+    padding: 30px 0 60px 0;
   }
   
   .container {
