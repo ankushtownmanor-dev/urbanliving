@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ListYourPropertyTM.css";
 import { IoArrowForward } from "react-icons/io5";
+import emailjs from '@emailjs/browser';
 
 const ListYourPropertyTM = () => {
   const navigate = useNavigate();
@@ -13,15 +14,103 @@ const ListYourPropertyTM = () => {
     enterCode: ''
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(''); // 'success', 'error', or ''
+  const [captchaCode] = useState('3bcfh'); // Static captcha for now
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear status when user starts typing
+    if (submitStatus) setSubmitStatus('');
   };
 
-  const handleSubmit = (e) => {
+  const validateForm = () => {
+    // Check if all fields are filled
+    if (!formData.fullName.trim() || !formData.phone.trim() || 
+        !formData.email.trim() || !formData.message.trim() || 
+        !formData.enterCode.trim()) {
+      setSubmitStatus('error');
+      return false;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setSubmitStatus('error');
+      return false;
+    }
+
+    // Validate phone number (basic validation)
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(formData.phone.replace(/\s+/g, ''))) {
+      setSubmitStatus('error');
+      return false;
+    }
+
+    // Validate captcha
+    if (formData.enterCode !== captchaCode) {
+      setSubmitStatus('error');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // ✔️ Backend API / Email service integration here
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus('');
+
+    try {
+      // EmailJS configuration
+      const serviceId = 'YOUR_SERVICE_ID'; // Replace with your EmailJS service ID
+      const templateId = 'YOUR_TEMPLATE_ID'; // Replace with your EmailJS template ID
+      const publicKey = 'YOUR_PUBLIC_KEY'; // Replace with your EmailJS public key
+
+      // Template parameters for EmailJS
+      const templateParams = {
+        from_name: formData.fullName,
+        from_email: formData.email,
+        phone: formData.phone,
+        message: formData.message,
+        to_email: 'your-email@example.com', // Replace with your email
+        subject: 'New Property Listing Inquiry from Ovika Living'
+      };
+
+      // Send email using EmailJS
+      const response = await emailjs.send(
+        serviceId,
+        templateId,
+        templateParams,
+        publicKey
+      );
+
+      if (response.status === 200) {
+        setSubmitStatus('success');
+        // Reset form after successful submission
+        setFormData({
+          fullName: '',
+          phone: '',
+          email: '',
+          message: '',
+          enterCode: ''
+        });
+      } else {
+        throw new Error('Failed to send email');
+      }
+
+    } catch (error) {
+      console.error('Email sending failed:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleListPropertyClick = () => {
@@ -63,20 +152,83 @@ const ListYourPropertyTM = () => {
           <div className="tm-list-hero-right">
             <div className="tm-contact-form">
               <h3 className="tm-contact-title">Contact us</h3>
+              
+              {/* Status Messages */}
+              {submitStatus === 'success' && (
+                <div className="tm-form-message tm-form-success">
+                  ✅ Message sent successfully! We'll get back to you soon.
+                </div>
+              )}
+              {submitStatus === 'error' && (
+                <div className="tm-form-message tm-form-error">
+                  ❌ Please check all fields and try again.
+                </div>
+              )}
+
               <form onSubmit={handleSubmit}>
-                <input type="text" name="fullName" placeholder="Full name" value={formData.fullName} onChange={handleInputChange} className="tm-form-input" required />
-                <input type="tel" name="phone" placeholder="Phone" value={formData.phone} onChange={handleInputChange} className="tm-form-input" required />
-                <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleInputChange} className="tm-form-input" required />
-                <textarea name="message" placeholder="Message..." value={formData.message} onChange={handleInputChange} className="tm-form-textarea" rows="4" required></textarea>
+                <input 
+                  type="text" 
+                  name="fullName" 
+                  placeholder="Full name" 
+                  value={formData.fullName} 
+                  onChange={handleInputChange} 
+                  className="tm-form-input" 
+                  required 
+                  disabled={isSubmitting}
+                />
+                <input 
+                  type="tel" 
+                  name="phone" 
+                  placeholder="Phone (10 digits)" 
+                  value={formData.phone} 
+                  onChange={handleInputChange} 
+                  className="tm-form-input" 
+                  required 
+                  disabled={isSubmitting}
+                />
+                <input 
+                  type="email" 
+                  name="email" 
+                  placeholder="Email" 
+                  value={formData.email} 
+                  onChange={handleInputChange} 
+                  className="tm-form-input" 
+                  required 
+                  disabled={isSubmitting}
+                />
+                <textarea 
+                  name="message" 
+                  placeholder="Message..." 
+                  value={formData.message} 
+                  onChange={handleInputChange} 
+                  className="tm-form-textarea" 
+                  rows="4" 
+                  required
+                  disabled={isSubmitting}
+                ></textarea>
 
                 {/* Captcha */}
                 <div className="tm-form-row">
-                  <div className="tm-form-captcha-box">3bcfh</div>
-                  <input type="text" name="enterCode" placeholder="Enter code" value={formData.enterCode} onChange={handleInputChange} className="tm-form-input tm-form-code" required />
+                  <div className="tm-form-captcha-box">{captchaCode}</div>
+                  <input 
+                    type="text" 
+                    name="enterCode" 
+                    placeholder="Enter code" 
+                    value={formData.enterCode} 
+                    onChange={handleInputChange} 
+                    className="tm-form-input tm-form-code" 
+                    required 
+                    disabled={isSubmitting}
+                  />
                 </div>
 
-                <button type="submit" className="tm-form-submit">
-                  Send Message <IoArrowForward className="arrow-icon" />
+                <button 
+                  type="submit" 
+                  className={`tm-form-submit ${isSubmitting ? 'tm-form-submitting' : ''}`}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Sending...' : 'Send Message'} 
+                  <IoArrowForward className="arrow-icon" />
                 </button>
               </form>
             </div>
@@ -86,4 +238,5 @@ const ListYourPropertyTM = () => {
     </div>
   );
 };
+
 export default ListYourPropertyTM;
