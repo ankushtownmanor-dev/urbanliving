@@ -9,16 +9,14 @@ const ListYourPropertyTM = () => {
     fullName: '',
     phone: '',
     email: '',
-    message: '',
-    enterCode: ''
+    message: ''
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(''); // 'success', 'error', or ''
-  const [captchaCode] = useState('3bcfh'); // Static captcha for now
 
   // Replace with your WhatsApp number (with country code, no + sign)
-  const whatsappNumber = " 7784949767"; // Example: 919876543210 for Indian number
+  const whatsappNumber = "917784949767"; // Fixed: Added country code 91 and removed space
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -30,8 +28,7 @@ const ListYourPropertyTM = () => {
   const validateForm = () => {
     // Check if all fields are filled
     if (!formData.fullName.trim() || !formData.phone.trim() || 
-        !formData.email.trim() || !formData.message.trim() || 
-        !formData.enterCode.trim()) {
+        !formData.email.trim() || !formData.message.trim()) {
       setSubmitStatus('error');
       return false;
     }
@@ -46,12 +43,6 @@ const ListYourPropertyTM = () => {
     // Validate phone number (basic validation)
     const phoneRegex = /^[0-9]{10}$/;
     if (!phoneRegex.test(formData.phone.replace(/\s+/g, ''))) {
-      setSubmitStatus('error');
-      return false;
-    }
-
-    // Validate captcha
-    if (formData.enterCode !== captchaCode) {
       setSubmitStatus('error');
       return false;
     }
@@ -101,8 +92,7 @@ ${formData.message}
           fullName: '',
           phone: '',
           email: '',
-          message: '',
-          enterCode: ''
+          message: ''
         });
       }, 2000);
 
@@ -207,21 +197,6 @@ ${formData.message}
                   required
                   disabled={isSubmitting}
                 ></textarea>
-
-                {/* Captcha */}
-                <div className="tm-form-row">
-                  <div className="tm-form-captcha-box">{captchaCode}</div>
-                  <input 
-                    type="text" 
-                    name="enterCode" 
-                    placeholder="Enter code" 
-                    value={formData.enterCode} 
-                    onChange={handleInputChange} 
-                    className="tm-form-input tm-form-code" 
-                    required 
-                    disabled={isSubmitting}
-                  />
-                </div>
 
                 <button 
                   type="submit" 

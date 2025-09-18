@@ -102,18 +102,6 @@
 .tm-form-textarea { border-radius: 16px; resize: vertical; min-height: 100px; }
 .tm-form-input:focus,.tm-form-textarea:focus { border-color: #a02d2f; }
 
-/* Captcha */
-.tm-form-row { display: flex; gap: 12px; margin-bottom: 16px; }
-.tm-form-captcha-box {
-  flex: 1; background: #f3f3f3; color: #333;
-  border: 2px solid #C5393A; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: bold;
-  padding: 12px 16px;
-  font-size: 0.95rem;
-}
-.tm-form-code { flex: 1; }
-
 /* Button */
 .tm-form-submit {
   width: 70%; margin-left: 15%;
