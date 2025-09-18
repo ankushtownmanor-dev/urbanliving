@@ -27,7 +27,7 @@
 /* Hero */
 .tm-list-hero {
   background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-              url("public/Group 64.png");
+              url("/Group 64.png");
   background-size: cover;
   background-position: center;
   min-height: 600px;
