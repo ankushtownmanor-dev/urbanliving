@@ -13,6 +13,7 @@ import Dashboard from './compoent/Dashboard/Dashboard';
 import Navbar from './compoent/Homepage/Navbar';
 import Sucess from './compoent/payment/Sucess';
 import Failure from './compoent/payment/Failure';
+import ListPropertyPage from './compoent/ListProperty/ListPropertyPage';
 import { AuthProvider } from './compoent/Login/AuthContext';
 
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/login" element={<AuthPage />} />
          <Route path="/about" element={<About />} />
          <Route path="/dashboard" element={<Dashboard />} />
+         <Route path="/list-property" element={<ListPropertyPage />} />
          <Route path="/success" element={<Sucess />} />
          <Route path="/failure" element={<Failure />} />
       </Routes>
