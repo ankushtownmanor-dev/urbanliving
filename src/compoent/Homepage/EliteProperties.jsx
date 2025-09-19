@@ -23,12 +23,14 @@ function EliteProperties() {
       name: 'TM Stay - 1',
       images: ['/tmluxe.png'],
       monthly_price: 12000,
+      pricing_type: 'month/bed'
     },
     {
       id: 'dummy-2',
       name: 'TM Stay - 2',
       images: ['/tmluxe2.png'],
       monthly_price: 9500,
+      pricing_type: 'month/bed'
     },
   ];
 
@@ -122,8 +124,9 @@ function EliteProperties() {
                   let priceText = '';
                   if (isDummy) {
                     const priceNumber = prop.monthly_price;
+                    const pricingType = prop.pricing_type;
                     priceText = priceNumber
-                      ? `₹ ${priceNumber.toLocaleString('en-IN')} per month`
+                      ? `₹ ${priceNumber.toLocaleString('en-IN')} / ${pricingType}`
                       : '';
                   } else {
                     const rawPrice = prop.per_night_price ?? prop.PER_NIGHT_PRICE;
@@ -132,7 +135,7 @@ function EliteProperties() {
                         ? parseFloat(rawPrice)
                         : rawPrice;
                     priceText = priceNumber
-                      ? `₹ ${priceNumber.toLocaleString('en-IN')} per night`
+                      ? `₹ ${priceNumber.toLocaleString('en-IN')} / night`
                       : '';
                   }
 
@@ -183,8 +186,9 @@ function EliteProperties() {
                   let priceText = '';
                   if (isDummy) {
                     const priceNumber = prop.monthly_price;
+                    const pricingType = prop.pricing_type;
                     priceText = priceNumber
-                      ? `₹ ${priceNumber.toLocaleString('en-IN')} per month`
+                      ? `₹ ${priceNumber.toLocaleString('en-IN')} per ${pricingType}`
                       : '';
                   } else {
                     const rawPrice = prop.per_night_price ?? prop.PER_NIGHT_PRICE;
