@@ -37,6 +37,36 @@ export default function TranquilPerch({ title, pricePerNight, mainImage, sideIma
     }
   };
 
+  // Function to get location based on property ID and title
+  const getPropertyLocation = () => {
+    // Check by ID first (more reliable)
+    if (id === 2 || id === "2") {
+      return "Greater Noida"; // TM Luxe 1
+    } else if (id === 1 || id === "1") {
+      return "Noida"; // TM Luxe 2
+    }
+    
+    // Fallback: Check by title if ID doesn't match
+    if (title) {
+      const titleLower = title.toLowerCase();
+      if (titleLower.includes('tm luxe 1') || 
+          titleLower.includes('tmluxe1') || 
+          titleLower.includes('tm luxe-1') || 
+          titleLower.includes('tm luxe - 1')) {
+        return "Greater Noida";
+      } else if (titleLower.includes('tm luxe 2') || 
+                 titleLower.includes('tmluxe2') || 
+                 titleLower.includes('tm luxe-2') || 
+                 titleLower.includes('tm luxe - 2') ||
+                 titleLower.includes('2suite')) {
+        return "Noida";
+      }
+    }
+    
+    // Default fallback
+    return "Taxes included • Free cancellation available";
+  };
+
   return (
     <>
     <div className="tranquil-perch-container">
@@ -84,7 +114,7 @@ export default function TranquilPerch({ title, pricePerNight, mainImage, sideIma
     <div className="property-price-section">
       <div className="price-details">
         <h2>{pricePerNight ? `₹${pricePerNight}` : '₹4,999'} <span>/ per night</span></h2>
-        <p>Taxes included • Free cancellation available</p>
+        <p>{getPropertyLocation()}</p>
       </div>
       <div className="book-button">
         <button className="book-now-btn" onClick={()=>{
