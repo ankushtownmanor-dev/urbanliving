@@ -7,6 +7,7 @@ import { Navigate, useNavigate } from "react-router";
 
 export default function TranquilPerch({ title, pricePerNight, mainImage, sideImages = [],id }) {
   const navigate = useNavigate();
+  
   const handleBookNow = () => {
     const user = localStorage.getItem("user");
   
@@ -20,6 +21,22 @@ export default function TranquilPerch({ title, pricePerNight, mainImage, sideIma
     localStorage.setItem("property_id", id);
     navigate("/payment");
   };
+
+  const handleShowMore = () => {
+    console.log("Show more clicked! Property ID:", id); // Debug log
+    // Navigate to external URLs based on property ID
+    if (id === 1 || id === "1") {
+      // TM Luxe - 2 (ID: 1) -> colivingsecond/10
+      window.open("https://townmanor.ai/colivingsecond/10", "_blank");
+    } else if (id === 2 || id === "2") {
+      // TM Luxe - 1 (ID: 2) -> colivingsecond/9
+      window.open("https://townmanor.ai/colivingsecond/9", "_blank");
+    } else {
+      // Default fallback - you can customize this based on your needs
+      console.log("Show more clicked for property ID:", id);
+    }
+  };
+
   return (
     <>
     <div className="tranquil-perch-container">
@@ -53,22 +70,28 @@ export default function TranquilPerch({ title, pricePerNight, mainImage, sideIma
           {/* <img src="/l3.png" alt="Window Seat" /> */}
           <div className="tranquil-perch-last-img">
             <img src={(sideImages[1]) || "/image 121.png"} alt="Workspace" />
-            <div className="tranquil-perch-showmore"><MdOutlineContentCopy size={20} />Show more</div>
+            <div 
+              className="tranquil-perch-showmore" 
+              onClick={handleShowMore}
+              style={{cursor: 'pointer'}}
+            >
+              <MdOutlineContentCopy size={20} />Show more
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="property-price-section">
-  <div class="price-details">
-    <h2>{pricePerNight ? `₹${pricePerNight}` : '₹4,999'} <span>/ per night</span></h2>
-    <p>Taxes included • Free cancellation available</p>
-  </div>
-  <div class="book-button">
-    <button class="book-now-btn" onClick={()=>{
-      handleBookNow()
-    }}>Book Now</button>
-  </div>
-</div>
+    <div className="property-price-section">
+      <div className="price-details">
+        <h2>{pricePerNight ? `₹${pricePerNight}` : '₹4,999'} <span>/ per night</span></h2>
+        <p>Taxes included • Free cancellation available</p>
+      </div>
+      <div className="book-button">
+        <button className="book-now-btn" onClick={()=>{
+          handleBookNow()
+        }}>Book Now</button>
+      </div>
+    </div>
 
     </>
   );
