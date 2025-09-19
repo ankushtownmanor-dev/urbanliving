@@ -21,7 +21,7 @@
   margin: 0 auto;
   max-width: 650px;
   line-height: 1.5;
-  white-space: normal;   /* ✅ Fix truncation issue */
+  white-space: normal;   /* Fix truncation issue */
 }
 
 /* Hero */
@@ -39,7 +39,7 @@
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between; /* ✅ keep left+right edges */
+  justify-content: space-between; /* keep left+right edges */
   align-items: flex-start;
   gap: 60px;
   width: 100%;
@@ -214,5 +214,8 @@
 }
 @media (max-width: 768px) {
   .tm-list-main-title { font-size: 2rem; }
-  .tm-list-hero-title { font-size: 2rem; }
+  .tm-list-hero-title { 
+    font-size: 2rem; 
+    display: none; /* Hide the hero title text in mobile view */
+  }
 }
