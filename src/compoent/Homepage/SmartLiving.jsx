@@ -57,7 +57,7 @@ const SmartLiving = () => {
           </div>
           <div className="card-text">
             <p>Cities</p>
-            <h3>15+</h3>
+            <h3>2+</h3>
           </div>
           <span
             className="smart-living-left-arrow"
@@ -88,7 +88,7 @@ const SmartLiving = () => {
 
           <div className="card-text">
             <p>Rooms</p>
-            <h3>40000+</h3>
+            <h3>5+</h3>
           </div>
           <div className="building_icon">
             <BsFillDoorOpenFill className="iconx" size={35} />
@@ -115,7 +115,7 @@ const SmartLiving = () => {
           </div>
           <div className="card-text">
             <p>Residence</p>
-            <h3>450+</h3>
+            <h3>3+</h3>
           </div>
           <span className="smart-living-left-arrow" onClick={comingsoon}>
             <IoArrowForwardSharp size={15} />
