@@ -523,6 +523,8 @@
   .property-types-section h2,
   .testimonials-section h2 {
     font-size: 2rem;
+    margin-top: 28px;
+
   }
   
   .steps-grid {

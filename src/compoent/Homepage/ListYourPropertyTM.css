@@ -275,10 +275,10 @@
   
   .tm-list-hero {
     background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-                url("/Group 64.png");
-    background-size: cover;
+                url("/Group 64.png") no-repeat center center;
+    background-size: cover; /* fills but may crop */
     background-position: center;
-    min-height: auto;
+    min-height: 100vh;      /* full viewport height */
     padding: 30px 16px;
   }
   

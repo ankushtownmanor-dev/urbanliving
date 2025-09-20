@@ -32,9 +32,9 @@ function EliteProperties() {
     },
     {
       id: 'dummy-3',
-      name: 'TM Stay - 3',
+      name: 'TM Hive',
       images: ['/TMhive1.png'],
-      monthly_price: 12000,
+      monthly_price: 15000,
       pricing_type: 'month/bed'
     },
   ];
