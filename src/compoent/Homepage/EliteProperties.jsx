@@ -21,14 +21,14 @@ function EliteProperties() {
     {
       id: 'dummy-1',
       name: 'TM Stay - 1',
-      images: ['/tmluxe.png'],
+      images: ['/12000.png'],
       monthly_price: 12000,
       pricing_type: 'month/bed'
     },
     {
       id: 'dummy-2',
       name: 'TM Stay - 2',
-      images: ['/tmluxe2.png'],
+      images: ['/9000.png'],
       monthly_price: 9500,
       pricing_type: 'month/bed'
     },

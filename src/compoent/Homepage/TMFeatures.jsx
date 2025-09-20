@@ -43,7 +43,7 @@ const TMFeatures = () => {
         {/* TM Hive */}
         <div className="tm-feature-row">
           <div className="tm-feature-image">
-            <img src="image 91.png" alt="TM Hive" />
+            <img src="TMhive1.png" alt="TM Hive" />
           </div>
           <div className="tm-feature-text">
             <h2 className="tm-feature-title">
