@@ -13,7 +13,7 @@
   }
   
   .tmxelite-prop-container {
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
   }
   
@@ -39,11 +39,59 @@
     user-select: none;
   }
   
-  /* Grid */
+  /* Desktop Container with Slider */
+  .tmxelite-prop-desktop-container {
+    position: relative;
+  }
+
+  .tmxelite-prop-swiper {
+    padding: 0 50px;
+  }
+
+  .tmxelite-prop-swiper .swiper-slide {
+    height: auto;
+  }
+
+  /* Navigation Buttons */
+  .tmxelite-prop-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+  }
+
+  .tmxelite-prop-nav-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .tmxelite-prop-prev {
+    left: 10px;
+  }
+
+  .tmxelite-prop-next {
+    right: 10px;
+  }
+
+  /* Grid (Fallback - not used with slider) */
   .tmxelite-prop-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 18px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
   }
   
   /* Card */
@@ -208,17 +256,35 @@
   }
   
   /* Responsive */
-  @media (max-width: 1400px) {
-    .tmxelite-prop-grid {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+  @media (max-width: 768px) {
+    .tmxelite-prop-swiper {
+      padding: 0 30px;
+    }
+    
+    .tmxelite-prop-nav-btn {
+      width: 35px;
+      height: 35px;
+      font-size: 14px;
+    }
+    
+    .tmxelite-prop-prev {
+      left: 5px;
+    }
+    
+    .tmxelite-prop-next {
+      right: 5px;
     }
   }
-  
-  @media (max-width: 1100px) {
-    .tmxelite-prop-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 22px;
+
+  @media (max-width: 480px) {
+    .tmxelite-prop-swiper {
+      padding: 0 25px;
+    }
+    
+    .tmxelite-prop-nav-btn {
+      width: 30px;
+      height: 30px;
+      font-size: 12px;
     }
   }
   
