@@ -40,10 +40,10 @@ function EliteProperties() {
     },
     {
       id: 'dummy-4',
-      name: 'TM Hive',
+      name: 'TM Luxe -3',
       images: ['/tmluxe3.png'],
       monthly_price: 5000,
-      pricing_type: 'per night'
+      pricing_type: ' night'
     },
   ];
 
@@ -250,7 +250,7 @@ function EliteProperties() {
                           <div className="tmxelite-prop-media">
                             <img src={imageSrc} alt={name} />
                             <span className="tmxelite-prop-badge">
-                              {isDummy ? 'Coming Soon' : 'Guest Favorite'}
+                              {isDummy ? 'Coming Soon' : 'Available'}
                             </span>
                             <button className="tmxelite-prop-like" aria-label="save">
                               <FaHeart color="white" />
