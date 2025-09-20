@@ -7,7 +7,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import axios from 'axios';
 
 function EliteProperties() {
   const [properties, setProperties] = useState([]);
@@ -15,7 +14,6 @@ function EliteProperties() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const isMobile = useMediaQuery({ maxWidth: 767 });
-  const [data,setData] = useState();
   // Dummy properties for filling empty space
   const dummyProperties = [
     {
@@ -30,6 +28,13 @@ function EliteProperties() {
       name: 'TM Stay - 2',
       images: ['/9000.png'],
       monthly_price: 9500,
+      pricing_type: 'month/bed'
+    },
+    {
+      id: 'dummy-3',
+      name: 'TM Stay - 3',
+      images: ['/TMhive1.png'],
+      monthly_price: 12000,
       pricing_type: 'month/bed'
     },
   ];
@@ -50,9 +55,9 @@ function EliteProperties() {
           setError('Invalid response format');
         }
 
-        // Append dummy properties if less than 4
-        if (fetchedProps.length < 4) {
-          const needed = 4 - fetchedProps.length;
+        // Append dummy properties if less than 5
+        if (fetchedProps.length < 5) {
+          const needed = 5 - fetchedProps.length;
           fetchedProps = [...fetchedProps, ...dummyProperties.slice(0, needed)];
         }
 
@@ -65,22 +70,6 @@ function EliteProperties() {
     };
     fetchProperties();
   }, []);
-//axios api call
-//   useEffect(()=>{
-//    const fetchdata =  async ()=>{
-//     try{
-//       const apifetch = await axios.get('https://townmanor.ai/api/properties/all');
-//      setData(apifetch.data.properties || []);
-     
-//     }
-//     catch(err){
-//       console.log(err);
-//       alert(err);
-//     }
-//    }
-//    fetchdata();
-//   },[])
-//  console.log(data);
   return (
     <section className="tmxelite-prop">
       <div className="tmxelite-prop-container">
@@ -126,7 +115,7 @@ function EliteProperties() {
                     const priceNumber = prop.monthly_price;
                     const pricingType = prop.pricing_type;
                     priceText = priceNumber
-                      ? `₹ ${priceNumber.toLocaleString('en-IN')} / ${pricingType}`
+                      ? `₹ ${priceNumber.toLocaleString('en-IN')} per ${pricingType}`
                       : '';
                   } else {
                     const rawPrice = prop.per_night_price ?? prop.PER_NIGHT_PRICE;
@@ -135,7 +124,7 @@ function EliteProperties() {
                         ? parseFloat(rawPrice)
                         : rawPrice;
                     priceText = priceNumber
-                      ? `₹ ${priceNumber.toLocaleString('en-IN')} / night`
+                      ? `₹ ${priceNumber.toLocaleString('en-IN')} per night`
                       : '';
                   }
 
