@@ -113,10 +113,12 @@ ${formData.message}
       {/* Header Section */}
       <div className="tm-list-header">
         <h1 className="tm-list-main-title">
-          Elevate Your Property into a Premium Rental with Ovika Living
+        Elevate Your Property into a Premium Rental with Ovika Living
         </h1>
         <p className="tm-list-subtitle">
-          Showcase your property to the right audience with Ovika – simple, fast, and effective.
+        Partner with us to design smart, stylish living spaces. From transformation to tenant experience, we handle everything-seamlessly, together.
+
+
         </p>
       </div>
 
@@ -170,7 +172,7 @@ ${formData.message}
                 <input 
                   type="tel" 
                   name="phone" 
-                  placeholder="Phone (10 digits)" 
+                  placeholder="Phone" 
                   value={formData.phone} 
                   onChange={handleInputChange} 
                   className="tm-form-input" 
@@ -197,6 +199,7 @@ ${formData.message}
                   required
                   disabled={isSubmitting}
                 ></textarea>
+
 
                 <button 
                   type="submit" 
