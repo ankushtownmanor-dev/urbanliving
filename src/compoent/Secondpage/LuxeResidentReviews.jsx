@@ -1,7 +1,8 @@
 import React from 'react'
 import './tmxluxe-resident.css'
 import { AiOutlineLike } from 'react-icons/ai';
-import { FaRegComment, FaRegStar, FaStar, FaStarAndCrescent } from 'react-icons/fa6';
+import { FaRegComment, FaStar, FaCircleUser } from 'react-icons/fa6';
+
 function LuxeResidentReviews() {
   const Star = ({ filled = true }) => (
     <span className={`tmxluxe-resi-star ${filled ? "is-filled" : ""}`}>★</span>
@@ -27,23 +28,24 @@ function LuxeResidentReviews() {
         <div className="tmxluxe-resi-box">
           {/* Review 1 */}
           <article className="tmxluxe-resi-item">
-            <img
-              className="tmxluxe-resi-avatar"
-              src="/r4.png"
-              alt="avatar"
-            />
+            <FaCircleUser className="tmxluxe-resi-avatar" size={56} />
+
             <div className="tmxluxe-resi-content">
               <div className="tmxluxe-resi-row">
-                <h3 className="tmxluxe-resi-name">shreya Mishra</h3>
-                <span className="tmxluxe-resi-date">April 2025</span>
+                <h3 className="tmxluxe-resi-name">Akshay</h3>
+                <span className="tmxluxe-resi-date">August 2025 • 9 months on Airbnb</span>
               </div>
 
               <div className="tmxluxe-resi-stars">
-               <FaStar size={20} color='red' /><FaStar size={20} color='red' /> <FaStar size={20} color='red' /> <FaStar size={20} color='red' /> <FaRegStar color='grey' size={20} />
+                <FaStar size={20} color='red' />
+                <FaStar size={20} color='red' />
+                <FaStar size={20} color='red' />
+                <FaStar size={20} color='red' />
+                <FaStar size={20} color='red' />
               </div>
 
               <p className="tmxluxe-resi-text">
-               "Townmanor is truly exceptional. The host was welcoming and attentive, the interiors were beautifully designed, and the atmosphere throughout the stay was calm and relaxing. It genuinely felt like a second home, and I look forward to visiting again soon"
+              "We had an amazing experience at Townmanor, and a big thank you to the owner for making it feel like our second home. The place is beautifully designed, peaceful, and thoughtfully maintained. We were the very first guests to stay here, which made our visit even more special. The owner was extremely kind and accommodating — allowing us an early check-in which made our arrival smooth and comfortable. Every corner of the home reflects warmth and care. Truly a hidden gem and a perfect getaway spot. Highly recommended for anyone looking for a cozy, welcoming stay!"
               </p>
 
               <div className="tmxluxe-resi-actions">
@@ -59,24 +61,24 @@ function LuxeResidentReviews() {
 
           {/* Review 2 */}
           <article className="tmxluxe-resi-item">
-            <img
-              className="tmxluxe-resi-avatar"
-              src="/r3.png"
-              alt="avatar"
-            />
+            <FaCircleUser className="tmxluxe-resi-avatar" size={56} />
+
             <div className="tmxluxe-resi-content">
               <div className="tmxluxe-resi-row">
-                <h3 className="tmxluxe-resi-name">Riya Malhotra</h3>
-                <span className="tmxluxe-resi-date">June 2025</span>
+                <h3 className="tmxluxe-resi-name">pradeep</h3>
+                <span className="tmxluxe-resi-date">1 week ago</span>
               </div>
 
               <div className="tmxluxe-resi-stars">
-                {/* <FaStarAndCrescent size={20} color='green' /><FaStarAndCrescent size={20} color='green' /><FaStarAndCrescent size={20} color='green' /><FaStarAndCrescent size={20} color='green' /><FaStarAndCrescent size={20} color='green' /> */}
-                 <FaStar size={20} color='red' /><FaStar size={20} color='red' /> <FaStar size={20} color='red' /> <FaStar size={20} color='red' /> <FaRegStar color='grey' size={20} />
+                <FaStar size={20} color='red' />
+                <FaStar size={20} color='red' />
+                <FaStar size={20} color='red' />
+                <FaStar size={20} color='red' />
+                <FaStar size={20} color='red' />
               </div>
 
               <p className="tmxluxe-resi-text">
-                “I've stayed in luxury hotels before, but TM Luxe has a soul. The private balcony overlooked the city skyline, the aroma of fresh flowers welcomed me daily, and every meal was an experience in itself. It wasn’t just a stay—it was a story I’ll tell for years.”
+                "I had an amazing two-night stay at this beautiful property! The space was spotless, very comfortable, and exactly as described in the listing. The host was incredibly welcoming and responsive throughout. I especially loved the cozy ambiance and thoughtful touches like fresh towels and tea coffee supplies and breakfast. The location is ideal for everyone because it is near the metro and offers easy access to Ola, Uber, and a variety of restaurants and shopping malls. I would absolutely recommend this place to anyone visiting, and I'd love to come back again!"
               </p>
 
               <div className="tmxluxe-resi-actions">
