@@ -34,7 +34,7 @@ function LuxeResidentReviews() {
             />
             <div className="tmxluxe-resi-content">
               <div className="tmxluxe-resi-row">
-                <h3 className="tmxluxe-resi-name">Roshan Mishra</h3>
+                <h3 className="tmxluxe-resi-name">shreya Mishra</h3>
                 <span className="tmxluxe-resi-date">April 2025</span>
               </div>
 
@@ -43,7 +43,7 @@ function LuxeResidentReviews() {
               </div>
 
               <p className="tmxluxe-resi-text">
-                “From the moment I walked into TM Luxe, I felt like I had stepped into a magazine spread. The interiors were stunning, the linens felt like clouds, and the staff anticipated my needs before I even voiced them. I came for a weekend getaway and left feeling completely renewed.”
+               "Townmanor is truly exceptional. The host was welcoming and attentive, the interiors were beautifully designed, and the atmosphere throughout the stay was calm and relaxing. It genuinely felt like a second home, and I look forward to visiting again soon"
               </p>
 
               <div className="tmxluxe-resi-actions">

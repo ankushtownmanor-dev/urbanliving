@@ -75,10 +75,10 @@ function ThirdMain() {
   const luxe2Reviews = [
     { 
       id: 1, 
-      name: 'Sakshi Mehta', 
+      name: 'pradeep', 
       time: '1 week ago', 
       img: '/r1.png', 
-      review: `Townmanor was beyond our expectations. The interiors are elegant yet homely, and the host went out of the way to make sure we felt comfortable. The early check-in was a blessing after a long journey. I will definitely recommend it to my friends.`
+      review: `I had an amazing two-night stay at this beautiful property! The space was spotless, very comfortable, and exactly as described in the listing. The host was incredibly welcoming and responsive throughout. I especially loved the cozy ambiance and thoughtful touches like fresh towels and tea coffee supplies and breakfast. The location is ideal for everyone because it is near the metro and offers easy access to Ola, Uber, and a variety of restaurants and shopping malls. I would absolutely recommend this place to anyone visiting, and I'd love to come back again!`
     },
     { 
       id: 2, 
