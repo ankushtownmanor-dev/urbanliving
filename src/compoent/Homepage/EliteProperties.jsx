@@ -250,7 +250,7 @@ function EliteProperties() {
                           <div className="tmxelite-prop-media">
                             <img src={imageSrc} alt={name} />
                             <span className="tmxelite-prop-badge">
-                              {isDummy ? 'Coming Soon' : 'Available'}
+                              {isDummy ? 'Coming Soon' : 'ready-to-book'}
                             </span>
                             <button className="tmxelite-prop-like" aria-label="save">
                               <FaHeart color="white" />
