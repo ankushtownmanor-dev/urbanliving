@@ -1,9 +1,72 @@
-import React from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import './ListPropertyPage.css';
 import { IoArrowForward } from 'react-icons/io5';
 import { FaUser, FaCamera, FaCheckCircle, FaPlay, FaShieldAlt, FaCreditCard, FaUsers, FaGlobe } from 'react-icons/fa';
 
 const ListPropertyPage = () => {
+  // Mobile carousel state/refs for Property Types
+  const [isMobile, setIsMobile] = useState(false);
+  const ptContainerRef = useRef(null);
+
+  const baseCards = [
+    { img: '/image 189.png', title: 'PG', desc: 'Affordable share leaving spaces' },
+    { img: '/image 190.png', title: 'Co-living', desc: 'community-focused shared residences' },
+    { img: '/image 191.png', title: 'Apartments', desc: 'Affordable share leaving spaces' },
+    { img: '/image 192.png', title: 'Villa', desc: 'Independent living units spacious' },
+  ];
+
+  const renderCards = isMobile
+    ? [baseCards[baseCards.length - 1], ...baseCards, baseCards[0]]
+    : baseCards;
+
+  // Detect mobile to enable looping carousel
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobile(mql.matches);
+    update();
+    if (mql.addEventListener) mql.addEventListener('change', update);
+    else mql.addListener(update);
+    return () => {
+      if (mql.removeEventListener) mql.removeEventListener('change', update);
+      else mql.removeListener(update);
+    };
+  }, []);
+
+  // On mount or when switching to mobile, center on the first real slide
+  useEffect(() => {
+    if (!isMobile || !ptContainerRef.current) return;
+    const container = ptContainerRef.current;
+    const padLeft = parseInt(getComputedStyle(container).paddingLeft || '0', 10) || 0;
+    const firstReal = container.children[1]; // after prepended clone
+    if (firstReal) {
+      container.scrollLeft = firstReal.offsetLeft - padLeft;
+    }
+  }, [isMobile]);
+
+  // Looping behavior: when hitting clones, jump to corresponding real slide
+  const handlePTScroll = useCallback(() => {
+    const container = ptContainerRef.current;
+    if (!isMobile || !container) return;
+    const padLeft = parseInt(getComputedStyle(container).paddingLeft || '0', 10) || 0;
+    const firstClone = container.children[0];
+    const firstReal = container.children[1];
+    const lastReal = container.children[baseCards.length];
+    const lastClone = container.children[baseCards.length + 1];
+    if (!firstClone || !firstReal || !lastReal || !lastClone) return;
+
+    const sl = container.scrollLeft;
+    const near = 10; // threshold to trigger jump
+
+    // If user scrolls to the very beginning (clone before first real), jump to last real
+    if (sl <= (firstClone.offsetLeft - padLeft + near)) {
+      container.scrollLeft = lastReal.offsetLeft - padLeft;
+    }
+    // If user scrolls beyond the last real into the trailing clone, jump to first real
+    else if (sl >= (lastClone.offsetLeft - padLeft - near)) {
+      container.scrollLeft = firstReal.offsetLeft - padLeft;
+    }
+  }, [isMobile]);
+
   return (
     <div className="list-property-page">
       {/* Hero Section */}
@@ -115,46 +178,21 @@ const ListPropertyPage = () => {
             From cozy PGs to luxurious Villas, Ovika is a perfect platform to showcase your property
           </p>
           
-          <div className="property-types-grid">
-            <div className="property-type-card">
-              <div className="property-image">
-                <img src="/image 189.png" alt="PG" />
+          <div className="property-types-grid" ref={ptContainerRef} onScroll={handlePTScroll}>
+            {renderCards.map((card, idx) => (
+              <div
+                key={`${card.title}-${idx}`}
+                className={`property-type-card${isMobile && (idx === 0 || idx === renderCards.length - 1) ? ' is-clone' : ''}`}
+              >
+                <div className="property-image">
+                  <img src={card.img} alt={card.title} />
+                </div>
+                <div className="property-overlay">
+                  <h3>{card.title}</h3>
+                  <p>{card.desc}</p>
+                </div>
               </div>
-              <div className="property-overlay">
-                <h3>PG</h3>
-                <p>Affordable share leaving spaces</p>
-              </div>
-            </div>
-            
-            <div className="property-type-card">
-              <div className="property-image">
-                <img src="/image 190.png" alt="Co-living" />
-              </div>
-              <div className="property-overlay">
-                <h3>Co-living</h3>
-                <p>community-focused shared residences</p>
-              </div>
-            </div>
-            
-            <div className="property-type-card">
-              <div className="property-image">
-                <img src="/image 191.png" alt="Apartments" />
-              </div>
-              <div className="property-overlay">
-                <h3>Apartments</h3>
-                <p>Affordable share leaving spaces</p>
-              </div>
-            </div>
-            
-            <div className="property-type-card">
-              <div className="property-image">
-                <img src="/image 192.png" alt="Villa" />
-              </div>
-              <div className="property-overlay">
-                <h3>Villa</h3>
-                <p>Independent living units spacious</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

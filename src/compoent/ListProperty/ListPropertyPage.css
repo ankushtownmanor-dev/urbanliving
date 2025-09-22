@@ -538,10 +538,18 @@
     gap: 20px;
   }
   
+  /* Property types: horizontal scroll with snap and side peeks on mobile */
   .property-types-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    display: flex;
+    gap: 14px;
+    margin-top: 24px;
+    overflow-x: auto;
+    padding: 8px 16px; /* side padding for peek */
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
   }
+  .property-types-grid::-webkit-scrollbar { height: 0; }
+  .property-types-grid { scrollbar-width: none; }
   
   .testimonials-grid {
     grid-template-columns: 1fr;
@@ -569,8 +577,20 @@
   }
   
   .property-type-card {
-    height: 180px;
+    flex: 0 0 70%; /* side peeks */
+    height: 280px;
+    border-radius: 22px;
+    box-shadow: 0 18px 44px rgba(0,0,0,0.22);
+    scroll-snap-align: center;
+    overflow: hidden;
   }
+
+  .property-image,
+  .property-image img { border-radius: 22px; }
+
+  .property-overlay { padding: 20px 16px 16px; }
+  .property-overlay h3 { font-size: 1.6rem; line-height: 1.1; }
+  .property-overlay p { font-size: 0.95rem; opacity: 0.95; }
   
   .property-image img {
     object-fit: cover;
@@ -608,24 +628,26 @@
   }
   
   .property-types-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
+    gap: 12px;
+    padding: 8px 14px;
   }
   
   .property-type-card {
-    height: 200px;
-    margin-bottom: 10px;
+    flex: 0 0 78%; /* side peeks similar to mock */
+    height: 320px;
+    border-radius: 26px;
+    box-shadow: 0 22px 50px rgba(0,0,0,0.24);
   }
   
   .property-overlay {
-    padding: 15px 10px 10px;
+    padding: 22px 16px 16px;
   }
   
   .property-overlay h3 {
-    font-size: 1.1rem;
+    font-size: 1.8rem;
   }
   
   .property-overlay p {
-    font-size: 0.75rem;
+    font-size: 1rem;
   }
 }
