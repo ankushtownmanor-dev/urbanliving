@@ -334,6 +334,7 @@
 /* Property Types Section */
 .property-types-section {
   background:transparent;
+  padding-bottom: 80px; /* ensure space above footer when testimonials are hidden */
 }
 
 .property-types-section h2 {

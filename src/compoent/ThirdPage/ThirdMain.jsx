@@ -65,6 +65,51 @@ function ThirdMain() {
   const address = property.address ?? property.ADDRESS;
   const area = property.area ?? property.AREA;
 
+  const luxe1Reviews = [
+    { id: 1, name: 'Akshay', time: 'August 2025 • 9 months on Airbnb', img: '/r4.png', review: 'We had an amazing experience at Townmanor, and a big thank you to the owner for making it feel like our second home. The place is beautifully designed, peaceful, and thoughtfully maintained. We were the very first guests to stay here, which made our visit even more special. The owner was extremely kind and accommodating — allowing us an early check-in which made our arrival smooth and comfortable. Every corner of the home reflects warmth and care. Truly a hidden gem and a perfect getaway spot. Highly recommended for anyone looking for a cozy, welcoming stay!' },
+    { id: 5, name: 'Riya Tanwar', time: '2 weeks ago', img: '/r1.png', review: 'We had an amazing experience at Townmanor — it truly felt like our second home. The interiors are beautifully designed, peaceful, and thoughtfully maintained. The owner was extremely kind and even allowed us an early check-in which made everything easy. Every corner of the home reflects warmth and care. Highly recommended!' },
+    { id: 2, name: 'Parvesh Verma', time: '2 days ago', img: '/r2.png', review: 'Townmanor is a hidden gem! The vibe is so cozy and welcoming, and the attention to detail is visible everywhere. From spotless rooms to the peaceful neighborhood — everything exceeded expectations. Definitely a place I’d love to return to soon' },
+    { id: 3, name: 'Anil Kumar', time: '1 month ago', img: '/r3.png', review: 'Staying at Townmanor was one of the best travel decisions I’ve made. The host’s hospitality, quick responses, and little touches around the house made the stay super comfortable. The beds were amazing, and it really felt like home away from home.' },
+  ];
+
+  const luxe2Reviews = [
+    { 
+      id: 1, 
+      name: 'Sakshi Mehta', 
+      time: '1 week ago', 
+      img: '/r1.png', 
+      review: `Townmanor was beyond our expectations. The interiors are elegant yet homely, and the host went out of the way to make sure we felt comfortable. The early check-in was a blessing after a long journey. I will definitely recommend it to my friends.`
+    },
+    { 
+      id: 2, 
+      name: 'Rahul Aggarwal', 
+      time: '3 days ago', 
+      img: '/r2.png', 
+      review: `Such a peaceful and relaxing stay! The house is maintained so beautifully, and the attention to detail is commendable. It felt like a boutique hotel with the warmth of a family home. I would love to come back soon.`
+    },
+    { 
+      id: 3, 
+      name: 'Neha Kapoor', 
+      time: '2 weeks ago', 
+      img: '/r3.png', 
+      review: `From the moment we entered, Townmanor felt so welcoming. The greenery around, the calm vibe, and the well-kept interiors made the stay memorable. The owner was responsive and made everything smooth for us.`
+    },
+    { 
+      id: 4, 
+      name: 'Arjun Malhotra', 
+      time: '4 weeks ago', 
+      img: '/r4.png', 
+      review: `Townmanor is a true hidden gem! It gave us the perfect weekend getaway. The rooms were spotless, beds very comfortable, and the entire place had a luxurious yet cozy feel. Highly recommend for couples or families.`
+    },
+  ];
+
+  const lowerName = (name || '').toLowerCase();
+  const selectedReviews = lowerName.includes('tm luxe - 2')
+    ? luxe2Reviews
+    : lowerName.includes('tm luxe - 1')
+      ? luxe1Reviews
+      : undefined; // falls back to default in GuestReviews
+
   return (
     <>
      <Helmet> 
@@ -86,7 +131,7 @@ function ThirdMain() {
       <Amenities amenities={amenities} />
       <LocationMap latitude={latitude ? String(latitude) : ''} longitude={longitude ? String(longitude) : ''} address={address} />
       <ReviewsSurroundings propertyName={name} />
-      <GuestReviews />
+      <GuestReviews reviews={selectedReviews} />
     </>
   )
 }

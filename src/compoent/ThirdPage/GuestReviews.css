@@ -40,6 +40,19 @@
   object-fit: cover;
 }
 
+/* Icon avatar when no image is used */
+.guestreview-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  color: #9aa0a6;              /* neutral gray */
+  background: #f1f3f4;         /* light background circle */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;             /* FaUserCircle scales by font-size */
+}
+
 .guestreview-name {
   font-family:'Segoe UI', Arial, Helvetica, sans-serif;
   font-size: 17px;

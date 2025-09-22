@@ -1,9 +1,9 @@
 import React from "react";
 import "./GuestReviews.css";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaUserCircle } from "react-icons/fa";
 
-export default function GuestReviews() {
-  const reviews = [
+// Default reviews fallback
+const DEFAULT_REVIEWS = [
     {
       id: 1,
       name: "Riya Tanwar",
@@ -35,7 +35,9 @@ Would definitely recommend staying here when you’re in noida!`
       img: "/r4.png",
       review: `I had an amazing stay at this Tanmore! The place was absolutely beautiful and spotless, making it a very comfortable experience. The host was incredibly sweet, kind, and super responsive, always ensuring everything was perfect. Their calm and polite nature made the stay even more pleasant. The locality was fantastic – safe, convenient, and truly enjoyable.`
     }
-  ];
+];
+
+export default function GuestReviews({ reviews = DEFAULT_REVIEWS }) {
 
   return (
     <div className="guestreviews-container">
@@ -44,7 +46,7 @@ Would definitely recommend staying here when you’re in noida!`
         {reviews.map((item) => (
           <div key={item.id} className="guestreview-card">
             <div className="guestreview-header">
-              <img src={item.img} alt={item.name} className="guestreview-img" />
+              <FaUserCircle className="guestreview-avatar" aria-hidden="true" />
               <div>
                 <h3 className="guestreview-name">{item.name}</h3>
                 <p className="guestreview-time">{item.time}</p>

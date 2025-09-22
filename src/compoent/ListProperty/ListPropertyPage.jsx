@@ -159,7 +159,8 @@ const ListPropertyPage = () => {
         </div>
       </div>
 
-      {/* Testimonials Section */}
+      {/* Testimonials Section (commented out) */}
+      {false && (
       <div className="testimonials-section">
         <div className="container">
           <h2>Join our happy clients</h2>
@@ -218,6 +219,7 @@ const ListPropertyPage = () => {
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 };
