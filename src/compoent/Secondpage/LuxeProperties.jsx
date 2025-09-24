@@ -63,7 +63,7 @@ function LuxeProperties() {
                 }}>
                   <div className="tmxluxe-prop-media">
                     <img src={imageSrc} alt={name} />
-                    <span className="tmxluxe-prop-badge">Guest Favorite</span>
+                    <span className="tmxluxe-prop-badge">Ready-to-book</span>
                     <button className="tmxluxe-prop-like" aria-label="save">
                       ♥
                     </button>
