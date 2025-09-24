@@ -56,8 +56,8 @@ function LuxeBanner() {
                             <div className="tmxluxe-feature-icon">
                                 <FaBellConcierge />
                             </div>
-                            <h3>Exceptional Services</h3>
-                            <p>24/7 personalized service to anticipate and fulfill your every need.</p>
+                            <h3>Hospitality with a Personal Touch</h3>
+                            <p>A blend of hotel-like services and homely warmth, tailored for business and leisure guests</p>
                         </div>
                     </div>
                 </div>

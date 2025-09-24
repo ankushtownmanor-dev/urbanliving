@@ -33,7 +33,7 @@ function LuxeResidentReviews() {
             <div className="tmxluxe-resi-content">
               <div className="tmxluxe-resi-row">
                 <h3 className="tmxluxe-resi-name">Akshay</h3>
-                <span className="tmxluxe-resi-date">August 2025 • 9 months on Airbnb</span>
+                <span className="tmxluxe-resi-date">August 2025</span>
               </div>
 
               <div className="tmxluxe-resi-stars">
@@ -49,12 +49,6 @@ function LuxeResidentReviews() {
               </p>
 
               <div className="tmxluxe-resi-actions">
-                <div className="tmxluxe-resi-act">
-                  <AiOutlineLike size={20} /> <span>25</span>
-                </div>
-                <div className="tmxluxe-resi-act">
-                 <FaRegComment size={20} /> <span>2</span>
-                </div>
               </div>
             </div>
           </article>
@@ -82,12 +76,7 @@ function LuxeResidentReviews() {
               </p>
 
               <div className="tmxluxe-resi-actions">
-              <div className="tmxluxe-resi-act">
-                  <AiOutlineLike size={20} /> <span>25</span>
-                </div>
-                <div className="tmxluxe-resi-act">
-                 <FaRegComment size={20} /> <span>2</span>
-                </div>
+
               </div>
             </div>
           </article>
