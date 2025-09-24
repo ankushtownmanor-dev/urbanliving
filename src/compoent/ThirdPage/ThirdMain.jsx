@@ -66,7 +66,7 @@ function ThirdMain() {
   const area = property.area ?? property.AREA;
 
   const luxe1Reviews = [
-    { id: 1, name: 'Akshay', time: 'August 2025 • 9 months on Airbnb', img: '/r4.png', review: 'We had an amazing experience at Townmanor, and a big thank you to the owner for making it feel like our second home. The place is beautifully designed, peaceful, and thoughtfully maintained. We were the very first guests to stay here, which made our visit even more special. The owner was extremely kind and accommodating — allowing us an early check-in which made our arrival smooth and comfortable. Every corner of the home reflects warmth and care. Truly a hidden gem and a perfect getaway spot. Highly recommended for anyone looking for a cozy, welcoming stay!' },
+    { id: 1, name: 'Akshay', time: 'August 2025 ', img: '/r4.png', review: 'We had an amazing experience at Townmanor, and a big thank you to the owner for making it feel like our second home. The place is beautifully designed, peaceful, and thoughtfully maintained. We were the very first guests to stay here, which made our visit even more special. The owner was extremely kind and accommodating — allowing us an early check-in which made our arrival smooth and comfortable. Every corner of the home reflects warmth and care. Truly a hidden gem and a perfect getaway spot. Highly recommended for anyone looking for a cozy, welcoming stay!' },
     { id: 5, name: 'Riya Tanwar', time: '2 weeks ago', img: '/r1.png', review: 'We had an amazing experience at Townmanor — it truly felt like our second home. The interiors are beautifully designed, peaceful, and thoughtfully maintained. The owner was extremely kind and even allowed us an early check-in which made everything easy. Every corner of the home reflects warmth and care. Highly recommended!' },
     { id: 2, name: 'Parvesh Verma', time: '2 days ago', img: '/r2.png', review: 'Townmanor is a hidden gem! The vibe is so cozy and welcoming, and the attention to detail is visible everywhere. From spotless rooms to the peaceful neighborhood — everything exceeded expectations. Definitely a place I’d love to return to soon' },
     { id: 3, name: 'Anil Kumar', time: '1 month ago', img: '/r3.png', review: 'Staying at Townmanor was one of the best travel decisions I’ve made. The host’s hospitality, quick responses, and little touches around the house made the stay super comfortable. The beds were amazing, and it really felt like home away from home.' },
@@ -76,7 +76,7 @@ function ThirdMain() {
     { 
       id: 1, 
       name: 'pradeep', 
-      time: '1 week ago', 
+      time: 'August 2025', 
       img: '/r1.png', 
       review: `I had an amazing two-night stay at this beautiful property! The space was spotless, very comfortable, and exactly as described in the listing. The host was incredibly welcoming and responsive throughout. I especially loved the cozy ambiance and thoughtful touches like fresh towels and tea coffee supplies and breakfast. The location is ideal for everyone because it is near the metro and offers easy access to Ola, Uber, and a variety of restaurants and shopping malls. I would absolutely recommend this place to anyone visiting, and I'd love to come back again!`
     },
