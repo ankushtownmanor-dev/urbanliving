@@ -13,22 +13,22 @@ const TMFeaturesMobile = () => {
   <div className="tm-features-mobile">
     <h1 className="tm-features-mobile__title">TM Features</h1>
     <p className="tm-features-mobile__subtitle">
-      Our doors are open to every kind of traveler. No judgments. Just cozy rooms and kind service
+      Where luxury, comfort, and community come together.
     </p>
      {/* ===== TM Luxe (Image Left) ===== */}
      <section className="tm-section left">
-      <div className="tm-section__label">
-        <span className="tm-watermark">TM</span>
-        <span className="tm-small">Luxe</span>
-      </div>
-      <div className="tm-section__image">
-        <img src="image 87.png" alt="Luxe" />
-      </div>
-    </section>
+       <div className="tm-section__label">
+         <span className="tm-watermark">TM</span>
+         <span className="tm-small">Luxe</span>
+       </div>
+       <div className="tm-section__image">
+         <img src="image 87.png" alt="Luxe" />
+       </div>
+     </section>
 
     <div className="tm-section__content">
       <h3 className="tm-subtitle">
-        More Than <span className="highlight">Service</span> — We Offer Care
+      Luxury <span className="highlight">crafted —</span>for modern living
       </h3>
       <p className="tm-desc">
         TM Luxe offers high-end, fully serviced apartments for those who value elegance, comfort, and privacy. 
@@ -82,7 +82,7 @@ const TMFeaturesMobile = () => {
 
     <div className="tm-section__content">
       <h3 className="tm-subtitle">
-        A Space That <span className="highlight">Holds</span> You <span className="highlight">Gently</span>
+      Flexible <span className="highlight">stays,</span> seamless<span className="highlight"> comfort</span>
       </h3>
       <p className="tm-desc">
         TM Stay offers fully managed and affordable PG rentals tailored for students and working professionals. 
