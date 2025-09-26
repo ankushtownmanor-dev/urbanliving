@@ -163,6 +163,17 @@
   text-align: left;
   margin-bottom: -2px;  /* aligns text to the right side */
 }
+.banner_content a,
+.banner_content a:hover,
+.banner_content a:focus,
+.banner_content em,
+.banner_content strong,
+.banner_content span {
+  text-decoration: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
 .banner_content_p{
   font-weight: 500;
   font-size: 25px;
