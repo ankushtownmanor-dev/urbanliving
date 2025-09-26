@@ -4,7 +4,7 @@
   padding: 15px;
   max-width: 420px;
   margin: auto;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+  font-family: 'segoe ui' !important;
 }
 .header-text{
     position: absolute;
@@ -12,13 +12,13 @@
     text-align: center;
     left: 22px;
     font-weight: 900px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    font-family: 'segoe ui' !important;
 }
 .header-text h2 {
   font-size: 22px;
   font-weight: 549;
-  margin-left: -15px;
-  font-family: 'lato', serif;
+  margin-left: 30px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-top: -2px;  
 }
 
@@ -26,7 +26,8 @@
   font-size: 13px;
   color: rgb(0, 0, 0);
   margin-top: -1px;
-  margin-left: 9px;
+  margin-left: 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .hero {
   position: relative;
