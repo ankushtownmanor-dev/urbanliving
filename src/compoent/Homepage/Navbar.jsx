@@ -17,7 +17,7 @@ function Navbar() {
   const navItems = [
     {name: "Brand Story",
       link: "/",
-      Content:"OVIKA is the new-age urban living brand from Townmanor Technologies. Designed for the modern city dweller, OKIVA blends technology, style, and comfort into every space. Whether it’s short-term stays, community living, or luxury studios, OKIVA redefines how people experience city life. With a focus on convenience, design, and smart solutions, OKIVA creates homes that feel effortless yet inspiring.",
+      Content:"OVIKA is the new-age urban living brand from Townmanor Technologies. Designed for the modern city dweller, Ovika blends technology, style, and comfort into every space. Whether it’s short-term stays, community living, or luxury studios, Ovika redefines how people experience city life. With a focus on convenience, design, and smart solutions, Ovika creates homes that feel effortless yet inspiring.",
       icon:"/hicon5.png",
      },
     {name: "Home",
