@@ -110,11 +110,34 @@ function ThirdMain() {
       ? luxe1Reviews
       : undefined; // falls back to default in GuestReviews
 
+  const seoDescription = `Experience luxury co-living at ${name} in Noida. ${(description || '').substring(0, 155)}...`;
+  const seoKeywords = `Co-living spaces Noida, Shared accommodation Greater Noida, Modern co-living Noida, Community living Noida, Flexible co-living Noida, Co-working and living Noida, Luxury serviced apartments Noida, Premium stay Noida, High-end short-term rentals Greater Noida, Executive accommodation Noida, Corporate serviced apartments Noida, Best serviced apartments Noida for business, Noida staycation luxury, Furnished PG Noida, PG accommodation Noida, Paying guest Greater Noida, Student accommodation Noida, Affordable PG Noida with amenities, Best PG in Noida Sector, ${name}`;
+
   return (
     <>
-     <Helmet> 
-     <title>{name}</title>
-     </Helmet>
+      <Helmet>
+        <title>{name} | Premium Co-Living & Serviced Apartments in Noida</title>
+        <meta name="description" content={seoDescription} />
+        <meta name="keywords" content={seoKeywords} />
+        <meta name="robots" content="index, follow" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`${name} | Premium Co-Living in Noida`} />
+        <meta property="og:description" content={seoDescription} />
+        <meta property="og:image" content={images[0] || '/default-og-image.jpg'} />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:site_name" content="Town Manor" />
+        
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${name} | Premium Co-Living in Noida`} />
+        <meta name="twitter:description" content={seoDescription} />
+        <meta name="twitter:image" content={images[0] || '/default-twitter-image.jpg'} />
+        
+        {/* Canonical URL */}
+        <link rel="canonical" href={`https://townmanor.ai/property/${id}`} />
+      </Helmet>
       <TranquilPerch
         title={name}
         pricePerNight={pricePerNight}
