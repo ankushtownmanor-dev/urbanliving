@@ -5,336 +5,735 @@ import { MdCurrencyRupee, MdOutlineCurrencyRupee } from 'react-icons/md';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import Cookies from 'js-cookie';
-import { format } from 'date-fns';
+import { format, differenceInDays } from 'date-fns';
 
-// ---------- Surepass config (dev only) ----------
-const SUREPASS_BEARER =
-  'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg';
-
-const spHeaders = (json = true) => ({
-  ...(json ? { 'Content-Type': 'application/json' } : {}),
-  Authorization: SUREPASS_BEARER,
-});
-
-// Endpoints used
-const TELECOM_GEN = 'https://kyc-api.surepass.io/api/v1/telecom/generate-otp';
-const TELECOM_SUB = 'https://kyc-api.surepass.io/api/v1/telecom/submit-otp';
-const AADHAAR_GEN_OTP = 'https://kyc-api.surepass.io/api/v1/aadhaar-v2/generate-otp';
-const AADHAAR_SUBMIT_OTP = 'https://kyc-api.surepass.io/api/v1/aadhaar-v2/submit-otp';
-const AADHAAR_VALIDATION = 'https://kyc-api.surepass.io/api/v1/aadhaar-validation/aadhaar-validation';
-const ASYNC_SUBMIT = 'https://kyc-api.surepass.io/api/v1/async/submit';
-const ASYNC_STATUS = (clientId) => `https://kyc-api.surepass.io/api/v1/async/status/${clientId}`;
-
-// ---------- Calendar ----------
+// Calendar Component
 const Calendar = ({ selectedDates, onDateSelect, minDate = new Date(), disabledDateSet = new Set(), onInvalidRange }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [view, setView] = useState('calendar'); // 'calendar' or 'checkout'
   const [checkInDate, setCheckInDate] = useState(selectedDates.checkInDate ? new Date(selectedDates.checkInDate) : null);
   const [checkOutDate, setCheckOutDate] = useState(selectedDates.checkOutDate ? new Date(selectedDates.checkOutDate) : null);
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const daysOfWeek = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
   const getDaysInMonth = (date) => {
-    const y = date.getFullYear(), m = date.getMonth();
-    const first = new Date(y, m, 1), last = new Date(y, m + 1, 0);
-    const startingDay = first.getDay(), daysInMonth = last.getDate();
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDay = firstDay.getDay();
+    
     const days = [];
-    for (let i = 0; i < startingDay; i++) days.push(null);
-    for (let i = 1; i <= daysInMonth; i++) days.push(new Date(y, m, i));
+    
+    // Add empty cells for days before the first day of the month
+    for (let i = 0; i < startingDay; i++) {
+      days.push(null);
+    }
+    
+    // Add all days of the month
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(new Date(year, month, i));
+    }
+    
     return days;
   };
+
   const isDateDisabled = (date) => {
     if (!date) return true;
-    const ds = date.toISOString().split('T')[0];
-    const min = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
-    return date < min || disabledDateSet.has(ds);
+    const dateStr = date.toISOString().split('T')[0];
+    return date < minDate || disabledDateSet.has(dateStr);
   };
+
   const isDateSelected = (date) => {
     if (!date) return false;
-    const ds = date.toISOString().split('T')[0];
-    return (checkInDate && ds === checkInDate.toISOString().split('T')[0]) ||
-           (checkOutDate && ds === checkOutDate.toISOString().split('T')[0]);
+    const dateStr = date.toISOString().split('T')[0];
+    return (checkInDate && dateStr === checkInDate.toISOString().split('T')[0]) ||
+           (checkOutDate && dateStr === checkOutDate.toISOString().split('T')[0]);
   };
+
   const isDateInRange = (date) => {
     if (!date || !checkInDate || !checkOutDate) return false;
-    const ds = date.toISOString().split('T')[0];
-    const a = checkInDate.toISOString().split('T')[0];
-    const b = checkOutDate.toISOString().split('T')[0];
-    return ds > a && ds < b;
+    const dateStr = date.toISOString().split('T')[0];
+    const checkInStr = checkInDate.toISOString().split('T')[0];
+    const checkOutStr = checkOutDate.toISOString().split('T')[0];
+    return dateStr > checkInStr && dateStr < checkOutStr;
   };
-  const hasBlockedInRange = (start, end) => {
-    if (!start || !end) return false;
-    const s = new Date(start.getFullYear(), start.getMonth(), start.getDate());
-    const e = new Date(end.getFullYear(), end.getMonth(), end.getDate());
-    for (let d = new Date(s); d <= e; d.setDate(d.getDate() + 1)) {
-      const ds = d.toISOString().split('T')[0];
-      if (disabledDateSet.has(ds)) return true;
-    }
-    return false;
-  };
+
   const handleDateClick = (date) => {
     if (!date || isDateDisabled(date)) return;
+
+    const hasBlockedDateInRange = (start, end) => {
+      if (!start || !end) return false;
+      const s = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+      const e = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+      // iterate from start to end (inclusive)
+      for (let d = new Date(s); d <= e; d.setDate(d.getDate() + 1)) {
+        const dStr = d.toISOString().split('T')[0];
+        if (disabledDateSet.has(dStr)) return true;
+      }
+      return false;
+    };
+
     if (!checkInDate || (checkInDate && checkOutDate)) {
+      // Start new selection
       setCheckInDate(date);
       setCheckOutDate(null);
     } else {
+      // Complete selection
       if (date > checkInDate) {
-        if (hasBlockedInRange(checkInDate, date)) {
-          onInvalidRange && onInvalidRange('Selected range includes unavailable dates. Choose different dates.');
+        // Validate range does not include disabled dates
+        if (hasBlockedDateInRange(checkInDate, date)) {
+          onInvalidRange && onInvalidRange('Selected range includes unavailable dates. Please choose different dates.');
           return;
         }
         setCheckOutDate(date);
-        onDateSelect({ checkInDate: checkInDate.toISOString().split('T')[0], checkOutDate: date.toISOString().split('T')[0] });
+        onDateSelect({
+          checkInDate: checkInDate.toISOString().split('T')[0],
+          checkOutDate: date.toISOString().split('T')[0]
+        });
       } else {
-        if (hasBlockedInRange(date, checkInDate)) {
-          onInvalidRange && onInvalidRange('Selected range includes unavailable dates. Choose different dates.');
+        // If selected date is before check-in, validate and swap them
+        if (hasBlockedDateInRange(date, checkInDate)) {
+          onInvalidRange && onInvalidRange('Selected range includes unavailable dates. Please choose different dates.');
           return;
         }
-        setCheckOutDate(checkInDate);
         setCheckInDate(date);
-        onDateSelect({ checkInDate: date.toISOString().split('T')[0], checkOutDate: checkInDate.toISOString().split('T')[0] });
+        setCheckOutDate(checkInDate);
+        onDateSelect({
+          checkInDate: date.toISOString().split('T')[0],
+          checkOutDate: checkInDate.toISOString().split('T')[0]
+        });
       }
     }
   };
+
+  const nextMonth = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
+  };
+
+  const prevMonth = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
+  };
+
   const days = getDaysInMonth(currentMonth);
+
   return (
     <div className="calendar-container">
       <div className="calendar-header">
-        <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))} className="calendar-nav-button"><ChevronLeft size={20}/></button>
-        <h3 className="calendar-title">{months[currentMonth.getMonth()]} {currentMonth.getFullYear()}</h3>
-        <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))} className="calendar-nav-button"><ChevronRight size={20}/></button>
+        <button onClick={prevMonth} className="calendar-nav-button">
+          <ChevronLeft size={20} />
+        </button>
+        <h3 className="calendar-title">
+          {months[currentMonth.getMonth()]} {currentMonth.getFullYear()}
+        </h3>
+        <button onClick={nextMonth} className="calendar-nav-button">
+          <ChevronRight size={20} />
+        </button>
       </div>
+
       <div className="calendar-grid">
-        {daysOfWeek.map(d => <div key={d} className="calendar-day-header">{d}</div>)}
-        {days.map((date, i) => (
-          <button key={i} onClick={() => handleDateClick(date)} disabled={!date || isDateDisabled(date)}
-            className={`calendar-day ${!date ? 'calendar-day-empty' : isDateDisabled(date) ? 'calendar-day-disabled' : isDateSelected(date) ? 'calendar-day-selected' : isDateInRange(date) ? 'calendar-day-in-range' : 'calendar-day-available'}`}>
+        {/* Days of week header */}
+        {daysOfWeek.map(day => (
+          <div key={day} className="calendar-day-header">
+            {day}
+          </div>
+        ))}
+        
+        {/* Calendar days */}
+        {days.map((date, index) => (
+          <button
+            key={index}
+            onClick={() => handleDateClick(date)}
+            disabled={!date || isDateDisabled(date)}
+            className={`calendar-day ${
+              !date ? 'calendar-day-empty' :
+              isDateDisabled(date) ? 'calendar-day-disabled' :
+              isDateSelected(date) ? 'calendar-day-selected' :
+              isDateInRange(date) ? 'calendar-day-in-range' :
+              'calendar-day-available'
+            }`}
+          >
             {date ? date.getDate() : ''}
           </button>
         ))}
       </div>
+
+      {/* Selected dates display */}
       <div className="calendar-selection">
-        <div className="calendar-selection-item"><span className="calendar-selection-label">Check-in:</span><span className="calendar-selection-date">{checkInDate ? checkInDate.toLocaleDateString() : 'Not selected'}</span></div>
-        <div className="calendar-selection-item"><span className="calendar-selection-label">Check-out:</span><span className="calendar-selection-date">{checkOutDate ? checkOutDate.toLocaleDateString() : 'Not selected'}</span></div>
+        <div className="calendar-selection-item">
+          <span className="calendar-selection-label">Check-in:</span>
+          <span className="calendar-selection-date">
+            {checkInDate ? checkInDate.toLocaleDateString() : 'Not selected'}
+          </span>
+        </div>
+        <div className="calendar-selection-item">
+          <span className="calendar-selection-label">Check-out:</span>
+          <span className="calendar-selection-date">
+            {checkOutDate ? checkOutDate.toLocaleDateString() : 'Not selected'}
+          </span>
+        </div>
       </div>
     </div>
   );
 };
 
-// ---------- Main ----------
 function Payment() {
-  const [step, setStep] = useState(1);
+    const [step, setStep] = useState(1);
   const [property, setProperty] = useState(null);
-  const [formData, setFormData] = useState({ termsAgreed:false, checkInDate:'', checkOutDate:'', phoneOtpVerified:false, aadhaarVerified:false, uploadedPhoto:null });
+  const [propertyLoading, setPropertyLoading] = useState(true);
+  const [propertyError, setPropertyError] = useState('');
+  const [formData, setFormData] = useState({
+    termsAgreed: false,
+    checkInDate: '',
+    checkOutDate: '',
+    phoneOtpVerified: false,
+    aadhaarVerified: false,
+    uploadedPhoto: null,
+  });
 
-  // Phone
+  // Phone & OTP state
   const [phoneDigits, setPhoneDigits] = useState(Array(10).fill(''));
   const [showOtpInputs, setShowOtpInputs] = useState(false);
+  const [otpDigits, setOtpDigits] = useState(Array(6).fill(''));
   const [otpValue, setOtpValue] = useState('');
+  const [otpError, setOtpError] = useState('');
   const phoneInputsRef = useRef([]);
+  const otpInputsRef = useRef([]);
   const otpInputRef = useRef(null);
-  const [clientId, setClientId] = useState('');
-  const [loading, setLoading] = useState(false);
 
-  // Aadhaar
+  // Aadhaar state
   const [aadhaarNumber, setAadhaarNumber] = useState('');
   const [isAadhaarLoading, setIsAadhaarLoading] = useState(false);
-  const [aadhaarClientId, setAadhaarClientId] = useState('');
-  const [aadhaarOtp, setAadhaarOtp] = useState('');
-  const [aadhaarOtpStep, setAadhaarOtpStep] = useState('idle'); // idle | sent
 
-  // Pricing etc.
-  const [pricing, setPricing] = useState({ subtotal:0, gst:0, total:0 });
+  // Calculate pricing dynamically based on dates
+  const [pricing, setPricing] = useState({
+    subtotal: 0,
+    gst: 0,
+    total: 0,
+  });
+
   const [isPayNowEnabled, setIsPayNowEnabled] = useState(false);
   const [isPhotoUploading, setIsPhotoUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [disabledDateSet, setDisabledDateSet] = useState(new Set());
-  const [bookingsLoading, setBookingsLoading] = useState(false);
+
+  // References for file upload
   const fileInputRef = useRef(null);
 
-  // Alerts
-  const [alertMessage, setAlertMessage] = useState(null);
-  const showAlert = (m) => setAlertMessage(m);
-  const closeAlert = () => setAlertMessage(null);
+  // Additional state for API integration
+  const [clientId, setClientId] = useState('');
+  const [phoneVerificationData, setPhoneVerificationData] = useState(null);
+  const [bookingId, setBookingId] = useState(null);
+  const [photoUploaded, setPhotoUploaded] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
-  // User context
-  const propertyId = localStorage.getItem('property_id') || '2';
+  // Booking availability state
+  const [disabledDateSet, setDisabledDateSet] = useState(new Set());
+  const [bookingsLoading, setBookingsLoading] = useState(false);
+
+  // Persist step-wise progress in localStorage
+  const STORAGE_KEYS = {
+    step: 'payment_step',
+    formData: 'payment_formData',
+    phoneDigits: 'payment_phoneDigits',
+    otpDigits: 'payment_otpDigits',
+    aadhaar: 'payment_aadhaarNumber',
+  };
+  const hasLoadedFromStorageRef = useRef(false);
+
+  // Load saved progress on mount
+  useEffect(() => {
+    try {
+      const savedStepRaw = localStorage.getItem(STORAGE_KEYS.step);
+      const savedStep = savedStepRaw ? parseInt(savedStepRaw, 10) : null;
+      const savedFormData = JSON.parse(localStorage.getItem(STORAGE_KEYS.formData) || '{}');
+      const savedPhoneDigits = JSON.parse(localStorage.getItem(STORAGE_KEYS.phoneDigits) || '[]');
+      const savedOtpDigits = JSON.parse(localStorage.getItem(STORAGE_KEYS.otpDigits) || '[]');
+      const savedAadhaar = localStorage.getItem(STORAGE_KEYS.aadhaar) || '';
+
+      if (!Number.isNaN(savedStep) && savedStep && savedStep >= 1 && savedStep <= 6) {
+        setStep(savedStep);
+      }
+      if (savedFormData && typeof savedFormData === 'object') {
+        setFormData(prev => ({ ...prev, ...savedFormData }));
+      }
+      if (Array.isArray(savedPhoneDigits) && savedPhoneDigits.length === 10) {
+        setPhoneDigits(savedPhoneDigits);
+      }
+      if (Array.isArray(savedOtpDigits) && savedOtpDigits.length === 6) {
+        setOtpDigits(savedOtpDigits);
+      }
+      if (savedAadhaar) {
+        setAadhaarNumber(savedAadhaar);
+      }
+    } catch (e) {
+      console.warn('Failed to restore payment progress from storage', e);
+    } finally {
+      hasLoadedFromStorageRef.current = true;
+    }
+  }, []);
+
+  // Persist progress whenever it changes
+  useEffect(() => {
+    if (!hasLoadedFromStorageRef.current) return;
+    localStorage.setItem(STORAGE_KEYS.step, String(step));
+  }, [step]);
+
+  useEffect(() => {
+    if (!hasLoadedFromStorageRef.current) return;
+    try {
+      localStorage.setItem(STORAGE_KEYS.formData, JSON.stringify(formData));
+    } catch {}
+  }, [formData]);
+
+  useEffect(() => {
+    if (!hasLoadedFromStorageRef.current) return;
+    try {
+      localStorage.setItem(STORAGE_KEYS.phoneDigits, JSON.stringify(phoneDigits));
+    } catch {}
+  }, [phoneDigits]);
+
+  useEffect(() => {
+    if (!hasLoadedFromStorageRef.current) return;
+    try {
+      localStorage.setItem(STORAGE_KEYS.otpDigits, JSON.stringify(otpDigits));
+    } catch {}
+  }, [otpDigits]);
+
+  useEffect(() => {
+    if (!hasLoadedFromStorageRef.current) return;
+    localStorage.setItem(STORAGE_KEYS.aadhaar, aadhaarNumber);
+  }, [aadhaarNumber]);
+
+  // Get user data from localStorage and cookies
+  const roomId = localStorage.getItem('roomId');
+  const userId = localStorage.getItem('propertyid');
+  const propertyId = localStorage.getItem('property_id');
   const token = Cookies.get('jwttoken');
   let username = '';
-  try { if (token) username = jwtDecode(token).username; } catch {}
+  
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      username = decodedToken.username;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+    }
+  }
 
-  // Property + availability
-  useEffect(() => { (async()=>{
-    try{
-      const r=await fetch(`https://townmanor.ai/api/properties/${propertyId}`); const j=await r.json();
-      if (j?.success) setProperty(j.property);
-    }catch{}
-  })(); }, [propertyId]);
+  // Progress bar steps
+  const steps = [
+    'Property',
+    'Terms',
+    'Dates & Pricing',
+    'Verification',
+    'Photo Upload',
+    'Payment',
+  ];
 
+  // Logic to handle next step
+  const handleNext = () => {
+    // Validate each step before moving forward
+    if (step === 2 && !formData.termsAgreed) return;
+    if (step === 3 && (!formData.checkInDate || !formData.checkOutDate || pricing.total <= 0)) return;
+    if (step === 4 && (!formData.phoneOtpVerified || !formData.aadhaarVerified)) return;
+    if (step === 5 && !formData.uploadedPhoto) return;
+
+    if (step < steps.length) {
+      setStep(step + 1);
+    }
+  };
+
+  // Logic to handle previous step
+  const handlePrev = () => {
+    if (step > 1) {
+      setStep(step - 1);
+    }
+  };
+
+  // Calculate price whenever dates change
   useEffect(() => {
-    if (step !== 3) return;
-    (async()=>{
-      try{
-        setBookingsLoading(true);
-        const r=await fetch('https://townmanor.ai/api/booking/dates'); const j=await r.json();
-        const pid = Number(propertyId);
-        const bookings = Array.isArray(j?.bookings)?j.bookings:[];
-        const filtered = bookings.filter(b=>Number(b.property_id)===pid && Number(b.cancelled)===0);
-        const s=new Set();
-        filtered.forEach(b=>{
-          const start=new Date(b.start_date); const end=new Date(b.end_date);
-          for (let d=new Date(start); d<end; d.setDate(d.getDate()+1)) s.add(d.toISOString().split('T')[0]);
-        });
-        setDisabledDateSet(s);
-      } finally { setBookingsLoading(false); }
-    })();
-  }, [step, propertyId]);
+    if (formData.checkInDate && formData.checkOutDate) {
+      const checkIn = new Date(formData.checkInDate);
+      const checkOut = new Date(formData.checkOutDate);
+      const diffTime = Math.abs(checkOut - checkIn);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      const pricePerNight = property?.per_night_price ? Number(property.per_night_price) : 0;
+      const subtotal = diffDays * pricePerNight;
+      const gst = subtotal * 0.05; // 18% GST
+      const total = subtotal + gst;
 
-  // Pricing
-  useEffect(() => {
-    if (formData.checkInDate && formData.checkOutDate && property?.per_night_price) {
-      const a = new Date(formData.checkInDate), b = new Date(formData.checkOutDate);
-      const nights = Math.ceil((b-a)/(1000*60*60*24));
-      const subtotal = Math.max(0,nights) * Number(property.per_night_price);
-      const gst = subtotal * 0.05;
-      setPricing({ subtotal, gst, total: subtotal+gst });
-    } else setPricing({ subtotal:0, gst:0, total:0 });
+      setPricing({ subtotal, gst, total });
+    } else {
+      setPricing({ subtotal: 0, gst: 0, total: 0 });
+    }
   }, [formData.checkInDate, formData.checkOutDate, property]);
 
+  // Enable Pay Now button only when all steps are valid
   useEffect(() => {
-    const ok = formData.termsAgreed && formData.checkInDate && formData.checkOutDate && pricing.total>0 && formData.phoneOtpVerified && formData.aadhaarVerified && formData.uploadedPhoto;
-    setIsPayNowEnabled(ok);
+    const allStepsComplete =
+      formData.termsAgreed &&
+      (formData.checkInDate && formData.checkOutDate && pricing.total > 0) &&
+      formData.phoneOtpVerified &&
+      formData.aadhaarVerified &&
+      formData.uploadedPhoto;
+    setIsPayNowEnabled(allStepsComplete);
   }, [formData, pricing]);
 
-  // Phone OTP
-  const handlePhoneChange = (i, v) => {
-    if (!/^\d?$/.test(v)) return;
-    const next=[...phoneDigits]; next[i]=v; setPhoneDigits(next);
-    if (v && i<9) phoneInputsRef.current[i+1]?.focus();
-  };
-  const handlePhoneKeyDown = (i, e) => { if (e.key==='Backspace' && !phoneDigits[i] && i>0) phoneInputsRef.current[i-1]?.focus(); };
+  // Fetch property details from API using property_id in localStorage
+  useEffect(() => {
+    const id = propertyId || '2';
+    const fetchProperty = async () => {
+      setPropertyLoading(true);
+      setPropertyError('');
+      try {
+        const res = await fetch(`https://townmanor.ai/api/properties/${id}`);
+        const json = await res.json();
+        if (json && json.success && json.property) {
+          setProperty(json.property);
+        } else {
+          setPropertyError('Failed to load property');
+        }
+      } catch (e) {
+        setPropertyError('Failed to load property');
+      } finally {
+        setPropertyLoading(false);
+      }
+    };
+    fetchProperty();
+  }, [propertyId]);
 
+  // Fetch booked dates (disabled) when on Step 3
+  useEffect(() => {
+    const fetchBookedDates = async () => {
+      try {
+        setBookingsLoading(true);
+        const res = await fetch('https://townmanor.ai/api/booking/dates');
+        const json = await res.json();
+        const pid = Number(propertyId || '2');
+        const bookings = Array.isArray(json?.bookings) ? json.bookings : [];
+        const filtered = bookings.filter(b => Number(b.property_id) === pid && Number(b.cancelled) === 0);
+        const dates = new Set();
+        // Disable from start_date through day before end_date (treat end as checkout)
+        filtered.forEach(b => {
+          const start = new Date(b.start_date);
+          const end = new Date(b.end_date);
+          for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+            const dStr = d.toISOString().split('T')[0];
+            dates.add(dStr);
+          }
+        });
+        setDisabledDateSet(dates);
+      } catch (e) {
+        console.error('Failed to load booked dates', e);
+      } finally {
+        setBookingsLoading(false);
+      }
+    };
+
+    if (step === 3) {
+      fetchBookedDates();
+    }
+  }, [step, propertyId]);
+
+  // Handle file drop for photo upload
+  const handleFileDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      handleFile(files[0]);
+    }
+  };
+
+  // Handle file selection from input
+  const handleFileChange = (e) => {
+    const files = e.target.files;
+    if (files.length > 0) {
+      handleFile(files[0]);
+    }
+  };
+
+  // Process the uploaded file
+  const handleFile = async (file) => {
+    if (file.type.startsWith('image/')) {
+      setIsPhotoUploading(true);
+      setUploading(true);
+      
+      const formData = new FormData();
+      formData.append('images', file);
+      
+      try {
+        const response = await fetch('https://www.townmanor.ai/api/image/aws-upload-owner-images', {
+          method: 'POST',
+          body: formData,
+        });
+        
+        const data = await response.json();
+        console.log(data);
+        
+        if (!data || !data.fileUrls || data.fileUrls.length === 0) {
+          throw new Error('Image URL not found in upload response.');
+        }
+
+        const imageUrl = data.fileUrls[0];
+        const photoUrl = imageUrl;
+        
+        setFormData(prev => ({ ...prev, uploadedPhoto: photoUrl }));
+        setPhotoUploaded(true);
+        showAlert('Photo uploaded successfully!');
+
+      } catch (error) {
+        console.error('Error uploading photo:', error);
+        showAlert('Failed to upload photo. ' + (error.message || 'An unknown error occurred.'));
+      } finally {
+        setIsPhotoUploading(false);
+        setUploading(false);
+      }
+    } else {
+      showAlert('Please upload a valid image file.');
+    }
+  };
+
+  // Handle verification logic
   const handleSendOtp = async () => {
     const phone = phoneDigits.join('');
-    if (!/^\d{10}$/.test(phone)) return showAlert('Enter valid 10‑digit phone number.');
+    if (!phone || !/^\d{10}$/.test(phone)) {
+      showAlert('Please enter a valid 10-digit phone number.');
+      return;
+    }
+
     setLoading(true);
+
     try {
-      const { data } = await axios.post(TELECOM_GEN, { id_number: phone }, { headers: spHeaders(true) });
-      if (data?.success) {
-        setClientId(data?.data?.client_id || '');
-        setShowOtpInputs(true); setOtpValue('');
-        showAlert('Phone OTP sent.');
-        setTimeout(()=>otpInputRef.current?.focus(),0);
-      } else showAlert(data?.message || 'Failed to send OTP.');
-    } catch(e){ showAlert(e?.response?.data?.message || e.message || 'Failed to send OTP.'); }
-    finally{ setLoading(false); }
+      const response = await axios.post('https://kyc-api.surepass.io/api/v1/telecom/generate-otp', {
+        id_number: phone
+      }, {
+        headers: {
+          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg'
+        }
+      });
+
+             if (response.data.success) {
+        setClientId(response.data.data.client_id);
+        setShowOtpInputs(true);
+        setOtpValue('');
+        setOtpError('');
+        showAlert('OTP sent successfully!');
+        setTimeout(() => {
+          if (otpInputRef.current) otpInputRef.current.focus();
+        }, 0);
+      } else {
+        showAlert('Failed to send OTP. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error generating OTP:', error);
+      showAlert('An error occurred while sending OTP. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSubmitOtp = async (otp) => {
-    if (!(otp?.length===4 || otp?.length===6)) return showAlert('Enter 4 or 6‑digit OTP.');
+  const handleSubmitOtp = async (otpValue) => {
+    if (!otpValue || !(otpValue.length === 4 || otpValue.length === 6)) {
+      showAlert('Please enter a valid 4 or 6-digit OTP.');
+      return;
+    }
+
     setLoading(true);
+
     try {
-      const { data } = await axios.post(TELECOM_SUB, { client_id: clientId, otp }, { headers: spHeaders(true) });
-      if (data?.success) {
-        setFormData(p=>({...p, phoneOtpVerified:true})); setShowOtpInputs(false);
-        showAlert('Phone verified.');
-      } else showAlert(data?.message || 'Invalid OTP.');
-    } catch(e){ showAlert(e?.response?.data?.message || e.message || 'Failed to verify OTP.'); }
-    finally{ setLoading(false); }
+      const response = await axios.post('https://kyc-api.surepass.io/api/v1/telecom/submit-otp', {
+        client_id: clientId,
+        otp: otpValue
+      }, {
+        headers: {
+          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg'
+        }
+      });
+
+      if (response.data.success) {
+        setFormData(prev => ({ ...prev, phoneOtpVerified: true }));
+        setShowOtpInputs(false);
+        setPhoneVerificationData(response.data);
+        showAlert('Phone number verified successfully!');
+      } else {
+        setOtpError('Invalid OTP. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting OTP:', error);
+      setOtpError('An error occurred while verifying OTP. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Aadhaar flows
-  const generateAadhaarOtp = async () => {
-    const id = aadhaarNumber.trim();
-    if (!/^\d{12}$/.test(id)) return showAlert('Enter valid 12‑digit Aadhaar.');
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === 'Backspace' && !otpDigits[index] && index > 0) {
+      otpInputsRef.current[index - 1]?.focus();
+    }
+  };
+
+  const handlePhoneChange = (index, value) => {
+    if (/^\d?$/.test(value)) {
+      const next = [...phoneDigits];
+      next[index] = value;
+      setPhoneDigits(next);
+      if (value && index < 9) {
+        phoneInputsRef.current[index + 1]?.focus();
+      }
+    }
+  };
+
+  const handlePhoneKeyDown = (index, e) => {
+    if (e.key === 'Backspace' && !phoneDigits[index] && index > 0) {
+      phoneInputsRef.current[index - 1]?.focus();
+    }
+  };
+
+  const handleVerifyAadhaar = async () => {
+    // Clear any previous verification status
+    setFormData(prev => ({ ...prev, aadhaarVerified: false }));
+    
+    // Basic validation
+    if (!aadhaarNumber || !/^\d{12}$/.test(aadhaarNumber)) {
+      showAlert('Please enter a valid 12-digit Aadhaar number (digits only, no spaces or dashes).');
+      return;
+    }
+  
+    // Check for test numbers or known invalid patterns
+    if (/^[0-1]{12}$/.test(aadhaarNumber) || /^(\d)\1{11}$/.test(aadhaarNumber)) {
+      showAlert('The Aadhaar number appears to be invalid. Please check and try again.');
+      return;
+    }
+  
     setIsAadhaarLoading(true);
+    showAlert('Verifying Aadhaar number. This may take a moment...');
+  
+    const pollAadhaarStatus = async (clientId, retries = 5) => {
+      if (retries === 0) {
+        showAlert('Aadhaar verification is taking longer than expected. Please try again in a moment.');
+        setIsAadhaarLoading(false);
+        return;
+      }
+  
+      try {
+        const statusResponse = await axios.get(
+          `https://kyc-api.surepass.io/api/v1/async/status/${clientId}`,
+          {
+            headers: {
+              'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg',
+            },
+          }
+        );
+  
+        const statusData = statusResponse.data;
+        console.log('Aadhaar verification status:', statusData);
+  
+        if (!statusData || !statusData.data) {
+          throw new Error('Invalid response from verification service');
+        }
+  
+        if (statusData.data.status === 'success') {
+          if (statusData.data.api_resp?.success) {
+            setFormData(prev => ({ ...prev, aadhaarVerified: true }));
+            showAlert('Aadhaar verified successfully!');
+          } else {
+            const errorMessage = statusData.data.api_resp?.message || 'Verification failed';
+            showAlert(`Aadhaar verification failed: ${errorMessage}. Please ensure the number is correct and try again.`);
+          }
+          setIsAadhaarLoading(false);
+        } else if (statusData.data.status === 'pending') {
+          setTimeout(() => pollAadhaarStatus(clientId, retries - 1), 3000);
+        } else {
+          showAlert('Aadhaar verification failed. Please check the number and try again later.');
+          setIsAadhaarLoading(false);
+        }
+      } catch (error) {
+        console.error('Error during Aadhaar verification:', error);
+        showAlert('An error occurred while verifying Aadhaar. Please try again in a moment.');
+        setIsAadhaarLoading(false);
+      }
+    };
+  
     try {
-      const { data } = await axios.post(AADHAAR_GEN_OTP, { id_number:id }, { headers: spHeaders(true) });
-      if (data?.success) {
-        setAadhaarClientId(data?.data?.client_id || '');
-        setAadhaarOtpStep('sent');
-        showAlert('Aadhaar OTP sent to linked mobile.');
+      const submitResponse = await axios.post(
+        'https://kyc-api.surepass.io/api/v1/async/submit',
+        {
+          type: 'aadhaar_validation',
+          body: {
+            id_number: aadhaarNumber,
+          },
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg',
+          },
+        }
+      );
+  
+      if (submitResponse.data?.success && submitResponse.data?.data?.client_id) {
+        pollAadhaarStatus(submitResponse.data.data.client_id);
       } else {
-        showAlert(data?.message || 'Failed to send Aadhaar OTP.');
+        throw new Error('Failed to start Aadhaar verification');
       }
-    } catch(e){
-      const status = e?.response?.status;
-      const msg = e?.response?.data?.message || e.message;
-      // If 410 (backend discontinued) -> fallback to validation-only
-      if (status === 410) {
-        showAlert('Aadhaar OTP backend disabled on this account. Falling back to validation without OTP.');
-        await validateAadhaarSimple(); // fallback
-      } else {
-        showAlert(`Aadhaar OTP error (${status || 'ERR'}): ${msg}`);
-      }
-    } finally { setIsAadhaarLoading(false); }
+    } catch (error) {
+      console.error('Error submitting Aadhaar for verification:', error);
+      showAlert('Failed to start Aadhaar verification. Please try again in a moment.');
+      setIsAadhaarLoading(false);
+    }
+  };
+  
+  // Custom styled alert box to replace native alert()
+  const CustomAlert = ({ message, onClose }) => {
+    return (
+      <div className="alert__overlay">
+        <div className="alert__box">
+          <p className="alert__message">{message}</p>
+          <button onClick={onClose} className="alert__button">OK</button>
+        </div>
+      </div>
+    );
+  };
+  
+  const [alertMessage, setAlertMessage] = useState(null);
+
+  const showAlert = (message) => {
+    setAlertMessage(message);
+  };
+  const closeAlert = () => {
+    setAlertMessage(null);
   };
 
-  const submitAadhaarOtp = async () => {
-    if (!/^\d{6}$/.test(aadhaarOtp)) return showAlert('Enter 6‑digit OTP.');
-    if (!aadhaarClientId) return showAlert('Client ID missing. Send OTP again.');
-    setIsAadhaarLoading(true);
-    try {
-      const { data } = await axios.post(AADHAAR_SUBMIT_OTP, { client_id: aadhaarClientId, otp: aadhaarOtp }, { headers: spHeaders(true) });
-      const success = data?.success === true;
-      const valid = data?.data?.valid_aadhaar === true || data?.message_code === 'success';
-      if (success && valid) {
-        setFormData(p=>({...p, aadhaarVerified:true}));
-        setAadhaarOtpStep('idle');
-        showAlert('Aadhaar verified successfully.');
-      } else {
-        showAlert(data?.message || 'Aadhaar verification failed.');
-      }
-    } catch(e){
-      const status = e?.response?.status;
-      const msg = e?.response?.data?.message || e.message;
-      showAlert(`Aadhaar submit error (${status || 'ERR'}): ${msg}`);
-    } finally { setIsAadhaarLoading(false); }
-  };
-
-  // Validation-only endpoint (no OTP)
-  const validateAadhaarSimple = async () => {
-    const id = aadhaarNumber.trim();
-    if (!/^\d{12}$/.test(id)) return showAlert('Enter valid 12‑digit Aadhaar.');
-    setIsAadhaarLoading(true);
-    try {
-      const { data } = await axios.post(AADHAAR_VALIDATION, { id_number:id }, { headers: spHeaders(true) });
-      const ok = data?.success === true && (data?.data?.valid_aadhaar || data?.data?.is_valid || data?.message_code === 'success' || data?.data?.remarks === 'success');
-      if (ok) {
-        setFormData(p=>({...p, aadhaarVerified:true}));
-        showAlert('Aadhaar validated.');
-      } else {
-        showAlert(data?.message || 'Aadhaar not valid.');
-      }
-    } catch(e){
-      const status = e?.response?.status;
-      const msg = e?.response?.data?.message || e.message;
-      showAlert(`Aadhaar validation error (${status || 'ERR'}): ${msg}`);
-    } finally { setIsAadhaarLoading(false); }
-  };
-
-  // File upload (unchanged)
-  const handleFile = async (file) => {
-    if (!file?.type?.startsWith('image/')) return showAlert('Please upload an image file.');
-    setIsPhotoUploading(true);
-    const fd = new FormData(); fd.append('images', file);
-    try {
-      const r = await fetch('https://www.townmanor.ai/api/image/aws-upload-owner-images', { method:'POST', body: fd });
-      const j = await r.json();
-      const url = j?.fileUrls?.[0];
-      if (!url) throw new Error('Image URL not found.');
-      setFormData(prev => ({...prev, uploadedPhoto: url}));
-      showAlert('Photo uploaded successfully!');
-    } catch(e){ showAlert(e?.message || 'Upload failed.'); }
-    finally { setIsPhotoUploading(false); }
-  };
-  const handleFileDrop = (e)=>{ e.preventDefault(); e.stopPropagation(); if (e.dataTransfer.files?.[0]) handleFile(e.dataTransfer.files[0]); };
-  const handleFileChange = (e)=>{ if (e.target.files?.[0]) handleFile(e.target.files[0]); };
-
-  // Payment (kept same as your logic)
   const handlePayNow = async () => {
     if (!isPayNowEnabled || isSubmitting) return;
     setIsSubmitting(true);
+  
     try {
-      const userLocal = (()=>{ try { return JSON.parse(localStorage.getItem('user')||'{}'); } catch { return {}; }})();
+      // Verify Aadhaar & Phone first
+      if (!formData.phoneOtpVerified || !formData.aadhaarVerified) {
+        showAlert('Please verify your Aadhar and Phone number.');
+        return;
+      }
+  
+      // Collect required details
+      const userLocal = (() => {
+        try {
+          return JSON.parse(localStorage.getItem('user') || '{}');
+        } catch {
+          return {};
+        }
+      })();
+
       const bookingDetails = {
         property_id: String(propertyId || '2'),
         start_date: format(new Date(formData.checkInDate), 'yyyy-MM-dd'),
@@ -346,250 +745,456 @@ function Payment() {
         terms_verified: !!formData.termsAgreed,
         email: userLocal.email || '',
       };
+      console.log('Booking details:', bookingDetails);
+      // Create booking
       const { data } = await axios.post('https://townmanor.ai/api/booking', bookingDetails);
-      const bookingId = data?.booking?.id || data?.booking_id || data?.id || data?.bookingId;
-      if (bookingId) {
-        localStorage.setItem('paymentType','coliving');
-        localStorage.setItem('bookingId', String(bookingId));
+      const newBookingId =
+        data?.booking?.id || data?.booking_id || data?.id || data?.bookingId || null;
+
+      // Handle the expected response showing pricing summary
+      if (data?.success && data?.booking) {
+        const b = data.booking;
+        showAlert(`Booking created successfully. Total: ${b.total_price}, Nights: ${b.nights}, From ${b.start_date} to ${b.end_date}`);
       }
-      const userResp = await fetch(`https://www.townmanor.ai/api/user/${username}`);
-      if (!userResp.ok) throw new Error('Failed to fetch user data');
-      const user = await userResp.json();
+  
+      if (newBookingId) {
+        setBookingId(newBookingId);
+        try {
+          localStorage.setItem('bookingId', String(newBookingId));
+        } catch {}
+      }
+  
+      // Always proceed to payment
+      await handleProceedToPayment(newBookingId);
+  
+    } catch (error) {
+      console.error('Error creating booking:', error);
+      showAlert('Failed to create booking. ' + (error.response?.data?.message || error.message));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
+
+  const handleProceedToPayment = async (bookingIdParam) => {
+    console.log('Proceeding to payment for booking ID:', bookingIdParam);
+    try {
+      localStorage.setItem('paymentType', 'coliving');
+      if (bookingIdParam) localStorage.setItem('bookingId', bookingIdParam);
+      
+      const userResponse = await fetch(`https://www.townmanor.ai/api/user/${username}`);
+      if (!userResponse.ok) {
+        throw new Error('Failed to fetch user data');
+      }
+      const userData = await userResponse.json();
+
       const txnid = 'OID' + Date.now();
-      const payload = {
-        key: 'UvTrjC', txnid, amount: pricing.total, productinfo: 'Room Booking',
-        firstname: user.name || username || '', email: user.email || '', phone: user.phone || '',
+
+      const paymentData = {
+        key: 'UvTrjC',
+        txnid: txnid,
+        amount: pricing.total,
+        productinfo: 'Room Booking',
+        firstname: userData.name || username || '',
+        email: userData.email || '',
+        phone: userData.phone || '',
         surl: `https://townmanor.ai/api/boster/payu/success?redirectUrl=https://www.ovika.co.in/success`,
         furl: `https://townmanor.ai/api/boster/payu/failure?redirectUrl=https://www.ovika.co.in/failure`,
-        udf1: bookingId || '', service_provider: 'payu_paisa'
+        udf1: bookingIdParam || '',
+        service_provider: 'payu_paisa'
       };
-      const resp = await axios.post('https://townmanor.ai/api/payu/payment', payload);
-      if (!resp.data?.paymentUrl || !resp.data?.params) throw new Error('Invalid payment response');
-      const form = document.createElement('form'); form.method='POST'; form.action=resp.data.paymentUrl;
-      Object.entries(resp.data.params).forEach(([k,v]) => { if (v!==undefined && v!==null) { const input=document.createElement('input'); input.type='hidden'; input.name=String(k); input.value=String(v); form.appendChild(input); }});
-      document.body.appendChild(form); form.submit(); document.body.removeChild(form);
-    } catch(e){ showAlert(e?.response?.data?.message || e.message || 'Failed to initiate payment.'); }
-    finally { setIsSubmitting(false); }
-  };
 
-  // UI
-  const steps = ['Property','Terms','Dates & Pricing','Verification','Photo Upload','Payment'];
-  const handleNext = () => {
-    if (step===2 && !formData.termsAgreed) return;
-    if (step===3 && (!formData.checkInDate || !formData.checkOutDate || pricing.total<=0)) return;
-    if (step===4 && (!formData.phoneOtpVerified || !formData.aadhaarVerified)) return;
-    if (step===5 && !formData.uploadedPhoto) return;
-    if (step<6) setStep(step+1);
+      const response = await axios.post('https://townmanor.ai/api/payu/payment', paymentData);
+
+      if (!response.data || !response.data.paymentUrl || !response.data.params) {
+        throw new Error('Invalid payment response received');
+      }
+
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = response.data.paymentUrl;
+
+      Object.entries(response.data.params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = value.toString();
+          form.appendChild(input);
+        }
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+
+    } catch (error) {
+      console.error('Payment initiation failed:', error);
+      showAlert(error.response?.data?.message || error.message || 'Failed to initiate payment. Please try again.');
+    }
   };
-  const handlePrev = () => { if (step>1) setStep(step-1); };
 
   return (
-    <div className="booking-form-wrapper">
+   <>
+     <div className="booking-form-wrapper">
+   
       <div className="booking-form-container">
+        {/* Progress Bar */}
         <div className="progress-bar-container">
-          {steps.map((name, index)=>(
+          {steps.map((stepName, index) => (
             <div key={index} className="progress-bar-step">
-              <div className={`progress-bar-line ${index < step ? 'is-active':''}`}></div>
-              <span className={`progress-bar-step-name ${index+1===step?'is-active':''}`}>{name}</span>
+              <div
+                className={`progress-bar-line ${
+                  index < step ? 'is-active' : ''
+                }`}
+              ></div>
+              <span
+                className={`progress-bar-step-name ${
+                  index + 1 === step ? 'is-active' : ''
+                }`}
+              >
+                {stepName}
+              </span>
             </div>
           ))}
         </div>
 
-        {/* Step 1: Property */}
-        {step===1 && (
-          <div>
-            <h2 className="form-step-title">Property Details</h2>
-            <div className="form-step-card">
-              <img src={(property?.images?.[0]) || '/image 71.png'} alt="Property" className="form-step-card-image"/>
-              <div className="form-step-card-content">
-                <h3 className="form-step-card-title">{property?.name || '—'}</h3>
-                <p className="form-step-card-location">{property?.address || ''}</p>
-                <p className="form-step-card-description">{property?.description || ''}</p>
-                <p className="form-step-card-price"><MdCurrencyRupee/>{property?.per_night_price || 0}<span className="form-step-card-price-per-night">/night</span></p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 2: Terms */}
-        {step===2 && (
-          <div>
-            <h2 className="form-step-title">Terms & Conditions</h2>
-            <div className="terms-container">
-              <p className="mb-2 font-bold">1. Booking Agreement</p>
-              <p className="mb-4">By confirming this booking, you agree to abide by house rules...</p>
-              <p className="mb-2 font-bold">2. Cancellation Policy</p>
-              <p className="mb-4">Refund rules...</p>
-              <p className="mb-2 font-bold">3. Damage & Liability</p>
-              <p className="mb-4">Guests are responsible for damages...</p>
-              <p className="mb-2 font-bold">4. Payment & Pricing</p>
-              <p className="mb-4">All prices are final...</p>
-              <p className="mb-2 font-bold">5. Privacy</p>
-              <p className="mb-4">Your information will be used solely for booking...</p>
-            </div>
-            <label className="terms-agreement-label">
-              <input type="checkbox" className="hidden" checked={formData.termsAgreed} onChange={(e)=>setFormData({...formData, termsAgreed:e.target.checked})}/>
-              <span className={`custom-checkbox ${formData.termsAgreed?'is-checked':''}`}>{formData.termsAgreed && <CheckCircle size={16} color="white"/>}</span>
-              <span className="custom-checkbox-text">I have read and agree to the Terms & Conditions.</span>
-            </label>
-          </div>
-        )}
-
-        {/* Step 3: Dates & Pricing */}
-        {step===3 && (
-          <div>
-            <h2 className="form-step-title">Dates & Pricing</h2>
-            <div className="dates-pricing-container">
-              <div className="calendar-section">
-                <Calendar
-                  selectedDates={{ checkInDate: formData.checkInDate, checkOutDate: formData.checkOutDate }}
-                  onDateSelect={(d)=>setFormData({...formData, ...d})}
-                  minDate={new Date()}
-                  disabledDateSet={disabledDateSet}
-                  onInvalidRange={showAlert}
+        {/* Form Content based on current step */}
+        <div>
+          {/* Step 1: Property Details */}
+          {step === 1 && (
+            <div>
+              <h2 className="form-step-title">Property Details</h2>
+              <div className="form-step-card">
+                <img
+                  src={(property && property.images && property.images[0]) ? property.images[0] : '/image 71.png'}
+                  alt="Property"
+                  className="form-step-card-image"
                 />
-                {bookingsLoading && <p style={{marginTop:8,color:'#666'}}>Loading availability…</p>}
-              </div>
-              <div className="pricing-summary-card">
-                <h3 className="pricing-summary-title">Pricing Summary</h3>
-                <div className="pricing-item-list">
-                  <div className="pricing-item"><span>Subtotal</span><span><MdCurrencyRupee/>{pricing.subtotal.toFixed(2)}</span></div>
-                  <div className="pricing-item"><span>Taxes & GST (5%)</span><span><MdCurrencyRupee/>{pricing.gst.toFixed(2)}</span></div>
-                  <div className="pricing-total"><span>Total Price</span><span><MdCurrencyRupee/>{pricing.total.toFixed(2)}</span></div>
+                <div className="form-step-card-content">
+                  <h3 className="form-step-card-title">{property?.name || '—'}</h3>
+                  <p className="form-step-card-location">{property?.address || ''}</p>
+                  <p className="form-step-card-description">
+                    {property?.description || ''}
+                  </p>
+                  {/* <ul className="form-step-card-amenities">
+                    {(property?.amenities || []).map((a, i) => (
+                      <li key={i}>{a}</li>
+                    ))}
+                  </ul> */}
+                  <p className="form-step-card-price">
+                    <MdCurrencyRupee />{property?.per_night_price || 0}<span className="form-step-card-price-per-night">/night</span>
+                  </p>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Step 4: Verification */}
-        {step===4 && (
-          <div>
-            <h2 className="form-step-title">Verification</h2>
-            <div className="verification-container">
-              {/* Phone */}
-              <div className="verification-card">
-                <h3 className="verification-title">Phone OTP</h3>
-                <label className="digit-inputs-label">Enter Mobile Number</label>
-                <div className="digit-inputs" role="group" aria-label="Mobile number">
-                  {phoneDigits.map((d,i)=>(
-                    <input key={i} type="text" inputMode="numeric" pattern="[0-9]*" maxLength={1}
-                      value={d} ref={el=>phoneInputsRef.current[i]=el}
-                      onChange={(e)=>handlePhoneChange(i, e.target.value.replace(/\D/g,''))}
-                      onKeyDown={(e)=>handlePhoneKeyDown(i, e)}
-                      className={`digit-box ${d?'is-filled':''}`} disabled={formData.phoneOtpVerified}/>
-                  ))}
-                </div>
-                <button onClick={handleSendOtp} disabled={formData.phoneOtpVerified || phoneDigits.join('').length!==10}
-                  className={`verification-button ${formData.phoneOtpVerified?'verification-button-verified':'verification-button-default'} send-otp-button`}>
-                  {formData.phoneOtpVerified ? 'Verified' : 'Send OTP'}
-                </button>
-
-                {showOtpInputs && !formData.phoneOtpVerified && (
-                  <div className="otp-inputs-container">
-                    <label className="digit-inputs-label">Enter OTP</label>
-                    <div className="verification-action">
-                      <input ref={otpInputRef} type="text" inputMode="numeric" pattern="[0-9]*" maxLength={6}
-                        value={otpValue} onChange={(e)=>setOtpValue(e.target.value.replace(/\D/g,''))}
-                        className="aadhaar-input" placeholder="Enter 4 or 6-digit OTP"/>
-                      <button onClick={()=>handleSubmitOtp(otpValue)} disabled={!(otpValue.length===4 || otpValue.length===6) || loading}
-                        className="verification-button verification-button-default">{loading?'Verifying…':'Verify'}</button>
-                    </div>
-                  </div>
-                )}
-
-                <div className="verification-status-icon">
-                  {formData.phoneOtpVerified ? <CheckCircle size={24} color="#8b0000"/> : <XCircle size={24} color="gray"/>}
-                </div>
+          {/* Step 2: Terms & Conditions */}
+          {step === 2 && (
+            <div>
+              <h2 className="form-step-title">Terms & Conditions</h2>
+              <div className="terms-container">
+                <p className="font-bold mb-2">1. Booking Agreement</p>
+                <p className="mb-4">
+                  By confirming this booking, you agree to abide by all house rules, including check-in/check-out times, noise restrictions, and guest limits. Violation of these terms may result in a fine or cancellation of your reservation without a refund.
+                </p>
+                <p className="font-bold mb-2">2. Cancellation Policy</p>
+                <p className="mb-4">
+                  A full refund will be provided for cancellations made within 48 hours of booking, if the check-in date is at least 14 days away. 50% refund for cancellations made 7 days before check-in. No refund for cancellations within 7 days of check-in.
+                </p>
+                <p className="font-bold mb-2">3. Damage & Liability</p>
+                <p className="mb-4">
+                  Guests are responsible for any damage caused to the property and its contents during their stay. The host reserves the right to charge the guest for repair or replacement costs.
+                </p>
+                <p className="font-bold mb-2">4. Payment & Pricing</p>
+                <p className="mb-4">
+                  All prices are final and non-negotiable. Additional taxes and service fees are included in the final price. Payment must be completed in full before the reservation is confirmed.
+                </p>
+                <p className="font-bold mb-2">5. Privacy</p>
+                <p className="mb-4">
+                  Your personal information will be used solely for the purpose of this booking and will not be shared with third parties.
+                </p>
               </div>
+              <label className="terms-agreement-label">
+                <input
+                  type="checkbox"
+                  className="hidden"
+                  checked={formData.termsAgreed}
+                  onChange={(e) => setFormData({ ...formData, termsAgreed: e.target.checked })}
+                />
+                <span className={`custom-checkbox ${formData.termsAgreed ? 'is-checked' : ''}`}>
+                  {formData.termsAgreed && <CheckCircle size={16} color="white" />}
+                </span>
+                <span className="custom-checkbox-text">I have read and agree to the Terms & Conditions.</span>
+              </label>
+            </div>
+          )}
 
-              {/* Aadhaar */}
-              <div className="verification-card">
-                <h3 className="verification-title">Aadhaar Check</h3>
-                <label className="digit-inputs-label">Enter Aadhaar Number</label>
-                <div className="aadhaar-inputs-container">
-                  <input type="text" inputMode="numeric" pattern="[0-9]*" maxLength={12} value={aadhaarNumber}
-                    onChange={(e)=>setAadhaarNumber(e.target.value.replace(/\D/g,''))}
-                    className="aadhaar-input" disabled={formData.aadhaarVerified || aadhaarOtpStep==='sent'} placeholder="12-digit Aadhaar"/>
-                  {aadhaarOtpStep==='idle' && !formData.aadhaarVerified && (
-                    <button onClick={generateAadhaarOtp} disabled={!aadhaarNumber || isAadhaarLoading}
-                      className="verification-button verification-button-default">
-                      {isAadhaarLoading?'Sending…':'Send Aadhaar OTP'}
-                    </button>
+          {/* Step 3: Date Selection & Pricing */}
+          {step === 3 && (
+            <div>
+              <h2 className="form-step-title">Dates & Pricing</h2>
+              <div className="dates-pricing-container">
+                <div className="calendar-section">
+                  <Calendar
+                    selectedDates={{
+                      checkInDate: formData.checkInDate,
+                      checkOutDate: formData.checkOutDate
+                    }}
+                    onDateSelect={(dates) => setFormData({ ...formData, ...dates })}
+                    minDate={new Date()}
+                    disabledDateSet={disabledDateSet}
+                    onInvalidRange={showAlert}
+                  />
+                  {bookingsLoading && (
+                    <p style={{ marginTop: '8px', color: '#666' }}>Loading availability…</p>
                   )}
                 </div>
 
-                {aadhaarOtpStep==='sent' && !formData.aadhaarVerified && (
-                  <div className="otp-inputs-container">
-                    <label className="digit-inputs-label">Enter Aadhaar OTP</label>
-                    <div className="verification-action">
-                      <input type="text" inputMode="numeric" pattern="[0-9]*" maxLength={6}
-                        value={aadhaarOtp} onChange={(e)=>setAadhaarOtp(e.target.value.replace(/\D/g,''))}
-                        className="aadhaar-input" placeholder="6-digit OTP"/>
-                      <button onClick={submitAadhaarOtp} disabled={!/^\d{6}$/.test(aadhaarOtp) || isAadhaarLoading}
-                        className="verification-button verification-button-default">{isAadhaarLoading?'Verifying…':'Verify'}</button>
+                <div className="pricing-summary-card">
+                  <h3 className="pricing-summary-title">Pricing Summary</h3>
+                  <div className="pricing-item-list">
+                    <div className="pricing-item">
+                      <span>Subtotal</span>
+                      <span><MdCurrencyRupee/>{pricing.subtotal.toFixed(2)}</span>
+                    </div>
+                    <div className="pricing-item">
+                      <span>Taxes & GST (5%)</span>
+                      <span><MdCurrencyRupee/>{pricing.gst.toFixed(2)}</span>
+                    </div>
+                    <div className="pricing-total">
+                      <span>Total Price</span>
+                      <span><MdCurrencyRupee/>{pricing.total.toFixed(2)}</span>
                     </div>
                   </div>
-                )}
-
-                <div className="verification-status-icon">
-                  {formData.aadhaarVerified ? <CheckCircle size={24} color="#8b0000"/> : (isAadhaarLoading ? <Loader size={24} className="animate-spin text-gray-400"/> : <XCircle size={24} color="gray"/>)}
                 </div>
+              </div>
+            </div>
+          )}
 
-                {/* Optional manual validation button if you prefer no OTP */}
-                {!formData.aadhaarVerified && aadhaarOtpStep==='idle' && (
-                  <div style={{marginTop:8}}>
-                    <button className="verification-button verification-button-default" onClick={validateAadhaarSimple} disabled={!aadhaarNumber || isAadhaarLoading}>
-                      Use Validation Only (No OTP)
+          {/* Step 4: Verification */}
+          {step === 4 && (
+            <div>
+              <h2 className="form-step-title">Verification</h2>
+              <div className="verification-container">
+                {/* Phone OTP Verification */}
+                <div className="verification-card">
+                  <h3 className="verification-title">Phone OTP</h3>
+                  <div className="phone-inputs-container">
+                    <label className="digit-inputs-label">Enter Mobile Number</label>
+                    <div className="digit-inputs" role="group" aria-label="Mobile number">
+                      {phoneDigits.map((d, i) => (
+                        <input
+                          key={i}
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          maxLength={1}
+                          value={d}
+                          ref={el => phoneInputsRef.current[i] = el}
+                          onChange={(e) => handlePhoneChange(i, e.target.value.replace(/\D/g, ''))}
+                          onKeyDown={(e) => handlePhoneKeyDown(i, e)}
+                          className={`digit-box ${d ? 'is-filled' : ''}`}
+                          disabled={formData.phoneOtpVerified}
+                        />
+                      ))}
+                    </div>
+                    <button
+                      onClick={handleSendOtp}
+                      disabled={formData.phoneOtpVerified || phoneDigits.join('').length !== 10}
+                      className={`verification-button ${
+                        formData.phoneOtpVerified
+                          ? 'verification-button-verified'
+                          : 'verification-button-default'
+                      } send-otp-button`}
+                    >
+                      {formData.phoneOtpVerified ? 'Verified' : 'Send OTP'}
                     </button>
                   </div>
+
+                  {showOtpInputs && !formData.phoneOtpVerified && (
+                    <div className="otp-inputs-container">
+                      <label className="digit-inputs-label">Enter OTP</label>
+                      <div className="verification-action">
+                        <input
+                          ref={otpInputRef}
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          maxLength={6}
+                          value={otpValue}
+                          onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ''))}
+                          className="aadhaar-input"
+                          placeholder="Enter 4 or 6-digit OTP"
+                        />
+                        <button
+                          onClick={() => handleSubmitOtp(otpValue)}
+                          disabled={!(otpValue.length === 4 || otpValue.length === 6) || loading}
+                          className={`verification-button ${
+                            (otpValue.length === 4 || otpValue.length === 6) && !loading
+                              ? 'verification-button-default'
+                              : 'verification-button-default'
+                          }`}
+                        >
+                          {loading ? 'Verifying…' : 'Verify'}
+                        </button>
+                      </div>
+                      {otpError && <p className="otp-error-text">{otpError}</p>}
+                    </div>
+                  )}
+
+                  <div className="verification-status-icon">
+                    {formData.phoneOtpVerified ? (
+                      <CheckCircle size={24} color="#8b0000" />
+                    ) : (
+                      <XCircle size={24} color="gray" />
+                    )}
+                  </div>
+                </div>
+
+                {/* Aadhaar Check */}
+                <div className="verification-card">
+                  <h3 className="verification-title">Aadhaar Check</h3>
+                  <label className="digit-inputs-label">Enter Aadhaar Number</label>
+                  <div className="aadhaar-inputs-container">
+                   
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxLength={12}
+                      value={aadhaarNumber}
+                      onChange={(e) => setAadhaarNumber(e.target.value.replace(/\D/g, ''))}
+                      className="aadhaar-input"
+                      disabled={formData.aadhaarVerified}
+                      placeholder="12-digit Aadhaar"
+                    />
+                    <button
+                      onClick={handleVerifyAadhaar}
+                      disabled={formData.aadhaarVerified || !aadhaarNumber || isAadhaarLoading}
+                      className={`verification-button ${
+                        formData.aadhaarVerified
+                          ? 'verification-button-verified'
+                          : 'verification-button-default'
+                      }`}
+                    >
+                      {formData.aadhaarVerified ? 'Verified' : (isAadhaarLoading ? 'Verifying…' : 'Verify Aadhaar')}
+                    </button>
+                  </div>
+                  <div className="verification-status-icon">
+                    {formData.aadhaarVerified ? (
+                      <CheckCircle size={24} color="#8b0000" />
+                    ) : (
+                      isAadhaarLoading ? (
+                        <Loader size={24} className="animate-spin text-gray-400" />
+                      ) : (
+                        <XCircle size={24} color="gray" />
+                      )
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Step 5: Photo Upload */}
+          {step === 5 && (
+            <div>
+              <h2 className="form-step-title">Photo Upload</h2>
+              <div
+                className={`upload-container ${isPhotoUploading ? 'is-uploading' : ''}`}
+                onDragOver={(e) => e.preventDefault()}
+                onDragLeave={(e) => e.preventDefault()}
+                onDrop={handleFileDrop}
+                onClick={() => fileInputRef.current.click()}
+              >
+                {isPhotoUploading ? (
+                  <div className="flex flex-col items-center space-y-2">
+                    <Loader size={48} className="animate-spin text-gray-400" />
+                    <p className="upload-text">Uploading...</p>
+                  </div>
+                ) : (
+                  <>
+                    <UploadCloud size={48} className="upload-icon" />
+                    <p className="upload-text">
+                      Drag and drop your photo here, or
+                      <br />
+                      <span>click to browse</span>
+                    </p>
+                  </>
+                )}
+              </div>
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                onChange={handleFileChange}
+                accept="image/*"
+              />
+
+              {/* Photo Preview */}
+              {formData.uploadedPhoto && (
+                <div className="photo-preview-container">
+                  <h3 className="photo-preview-title">Preview</h3>
+                  <img
+                    src={formData.uploadedPhoto}
+                    alt="Uploaded Preview"
+                    className="photo-preview-image"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Step 6: Payment */}
+          {step === 6 && (
+            <div>
+              <h2 className="form-step-title">Payment</h2>
+              <div className="payment-container">
+                <p className="payment-price-text">
+                  Final Price: <span className="payment-price-amount"><MdOutlineCurrencyRupee size={20} />{pricing.total.toFixed(2)}</span>
+                </p>
+                <button
+                  onClick={handlePayNow}
+                  disabled={!isPayNowEnabled || isSubmitting}
+                  className={`pay-now-button ${isPayNowEnabled && !isSubmitting ? 'is-enabled' : 'is-disabled'}`}
+                >
+                  {isSubmitting ? 'Processing…' : 'Pay Now'}
+                </button>
+                {!isPayNowEnabled && (
+                  <p className="disabled-message">
+                    Please complete all previous steps to enable payment.
+                  </p>
                 )}
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
-        {/* Step 5: Photo Upload */}
-        {step===5 && (
-          <div>
-            <h2 className="form-step-title">Photo Upload</h2>
-            <div className={`upload-container ${isPhotoUploading?'is-uploading':''}`} onDragOver={(e)=>e.preventDefault()} onDrop={handleFileDrop} onClick={()=>fileInputRef.current?.click()}>
-              {isPhotoUploading ? <div className="flex flex-col items-center space-y-2"><Loader size={48} className="animate-spin text-gray-400"/><p className="upload-text">Uploading...</p></div> :
-                (<><UploadCloud size={48} className="upload-icon"/><p className="upload-text">Drag and drop your photo here, or<br/><span>click to browse</span></p></>)}
-            </div>
-            <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileChange} accept="image/*"/>
-            {formData.uploadedPhoto && (<div className="photo-preview-container"><h3 className="photo-preview-title">Preview</h3><img src={formData.uploadedPhoto} alt="Uploaded Preview" className="photo-preview-image"/></div>)}
-          </div>
-        )}
-
-        {/* Step 6: Payment */}
-        {step===6 && (
-          <div>
-            <h2 className="form-step-title">Payment</h2>
-            <div className="payment-container">
-              <p className="payment-price-text">Final Price: <span className="payment-price-amount"><MdOutlineCurrencyRupee size={20}/>{pricing.total.toFixed(2)}</span></p>
-              <button onClick={handlePayNow} disabled={!isPayNowEnabled || isSubmitting} className={`pay-now-button ${isPayNowEnabled && !isSubmitting ? 'is-enabled':'is-disabled'}`}>{isSubmitting?'Processing…':'Pay Now'}</button>
-              {!isPayNowEnabled && <p className="disabled-message">Please complete all previous steps to enable payment.</p>}
-            </div>
-          </div>
-        )}
-
+        {/* Navigation Buttons */}
         <div className="navigation-container">
-          <button onClick={handlePrev} disabled={step===1} className="navigation-button prev-button">Prev</button>
-          <button onClick={handleNext} disabled={step===6 || (step===2 && !formData.termsAgreed)} className="navigation-button next-button">Next</button>
+          <button
+            onClick={handlePrev}
+            disabled={step === 1}
+            className="navigation-button prev-button"
+          >
+            Prev
+          </button>
+          <button
+            onClick={handleNext}
+            disabled={step === steps.length || (step === 2 && !formData.termsAgreed)}
+            className="navigation-button next-button"
+          >
+            Next
+          </button>
         </div>
       </div>
-
-      {alertMessage && (
-        <div className="alert__overlay">
-          <div className="alert__box">
-            <p className="alert__message">{alertMessage}</p>
-            <button onClick={closeAlert} className="alert__button">OK</button>
-          </div>
-        </div>
-      )}
+      {alertMessage && <CustomAlert message={alertMessage} onClose={closeAlert} />}
     </div>
-  );
+
+   </>
+  )
 }
 
-export default Payment;
+export default Payment
