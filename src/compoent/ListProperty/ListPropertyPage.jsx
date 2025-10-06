@@ -196,6 +196,71 @@ const ListPropertyPage = () => {
           </div>
         </div>
       </div>
+      {/* Working Model Section - Fixed alignment (text left, image right) */}
+<div className="working-model">
+  <div className="container">
+    <h2 className="wm-title">Our working Model</h2>
+    <p className="wm-subtitle">
+      List your property your way — renovate and earn, let Ovika manage it, or take full control by uploading yourself.
+    </p>
+
+    <div className="wm-row">
+      <div className="wm-text">
+        <h3>Share your property - we renovate & share profit</h3>
+        <p>
+          Have an unused or old property that's losing its charm or sitting idle? With Ovika, you can turn it into
+          a profitable investment without lifting a finger. Simply share your property with us, and our expert team will
+          take care of everything — from renovation and furnishing to marketing and tenant management. We transform your
+          space into a modern, desirable rental property that attracts the right tenants and ensures consistent earnings.
+          Once it's rented, you receive a fair share of the profits, making it a hassle-free way to earn passive income
+          while increasing your property's overall value.
+        </p>
+        <button className="wm-cta">
+          Check out process
+        </button>
+      </div>
+      <div className="wm-image">
+        <img src="public/home1.png" alt="Renovate and share profit" />
+      </div>
+    </div>
+
+    <div className="wm-row">
+      <div className="wm-text">
+        <h3>Don’t want to manage listings? we will handle it for you</h3>
+        <p>
+          If you don’t have the time or experience to handle property listings, Ovika is here to do it for you.
+          Share your property details with us — photos, location, rent preferences — and our team will professionally
+          list it on the Ovika platform, verify details, and showcase it to thousands of potential tenants. Start earning
+          without the hassle.
+        </p>
+        <button className="wm-cta">
+          Check out process
+        </button>
+      </div>
+      <div className="wm-image">
+        <img src="public/home2.png" alt="We handle listings" />
+      </div>
+    </div>
+
+    <div className="wm-row">
+      <div className="wm-text">
+        <h3>List your property your way</h3>
+        <p>
+          Prefer full control? Easily add photos, set rent, write descriptions, and publish instantly on Ovika. Reach
+          potential tenants directly, track inquiries, and update details anytime. Perfect for hands-on owners with the
+          reach of a trusted platform.
+        </p>
+        <button className="wm-cta">
+          Check out process
+        </button>
+      </div>
+      <div className="wm-image">
+        <img src="public/home3.png" alt="List your way" />
+      </div>
+    </div>
+  </div>
+</div>
+      
 
       {/* Testimonials Section (commented out) */}
       {false && (
