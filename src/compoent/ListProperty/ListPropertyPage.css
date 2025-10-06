@@ -198,6 +198,7 @@
 .benefits-section {
   padding: 20px 0;
   background: white;
+  margin-bottom: 60px;
 }
 
 .benefits-section h2 {
@@ -492,7 +493,7 @@
 /* Working Model - fixed side-by-side alignment */
 .working-model {
   background: #fff;
-  padding: 48px 0 80px;
+  padding: 48px 0 64px;
 }
 
 .wm-title {

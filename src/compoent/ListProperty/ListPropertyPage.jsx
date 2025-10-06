@@ -126,49 +126,7 @@ const ListPropertyPage = () => {
         </div>
       </div>
 
-      {/* Benefits Section */}
-      <div className="benefits-section">
-        <div className="container">
-          <h2>Benefit of Listing with Ovika</h2>
-          <p className="section-subtitle">
-            Experience the advantage of listing your property with Ovika and unlock world of opportunity
-          </p>
-          
-          <div className="benefits-grid">
-            <div className="benefit-card">
-              <div className="benefit-icon">
-                <FaGlobe />
-              </div>
-              <h3>Wide Reach</h3>
-              <p>Connect with a bath network of potential tenants and buyers across the country</p>
-            </div>
-            
-            <div className="benefit-card">
-              <div className="benefit-icon">
-                <FaUsers />
-              </div>
-              <h3>Trusted tenants</h3>
-              <p>Access pool of verified and reliable tenants and sharing secure rental experience</p>
-            </div>
-            
-            <div className="benefit-card">
-              <div className="benefit-icon">
-                <FaShieldAlt />
-              </div>
-              <h3>Easy management</h3>
-              <p>manager listings in acquire and agreements spotlessly from one dashboard</p>
-            </div>
-            
-            <div className="benefit-card">
-              <div className="benefit-icon">
-                <FaCreditCard />
-              </div>
-              <h3>Secure payments</h3>
-              <p>Ensure safe and secure for your piece of mind with integrity payment data</p>
-            </div>
-          </div>
-        </div>
-      </div>
+     
 
       {/* Property Types Section */}
       <div className="property-types-section">
@@ -260,6 +218,49 @@ const ListPropertyPage = () => {
     </div>
   </div>
 </div>
+ {/* Benefits Section */}
+ <div className="benefits-section">
+        <div className="container">
+          <h2>Benefit of Listing with Ovika</h2>
+          <p className="section-subtitle">
+            Experience the advantage of listing your property with Ovika and unlock world of opportunity
+          </p>
+          
+          <div className="benefits-grid">
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <FaGlobe />
+              </div>
+              <h3>Wide Reach</h3>
+              <p>Connect with a bath network of potential tenants and buyers across the country</p>
+            </div>
+            
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <FaUsers />
+              </div>
+              <h3>Trusted tenants</h3>
+              <p>Access pool of verified and reliable tenants and sharing secure rental experience</p>
+            </div>
+            
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <FaShieldAlt />
+              </div>
+              <h3>Easy management</h3>
+              <p>manager listings in acquire and agreements spotlessly from one dashboard</p>
+            </div>
+            
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <FaCreditCard />
+              </div>
+              <h3>Secure payments</h3>
+              <p>Ensure safe and secure for your piece of mind with integrity payment data</p>
+            </div>
+          </div>
+        </div>
+      </div>
       
 
       {/* Testimonials Section (commented out) */}
