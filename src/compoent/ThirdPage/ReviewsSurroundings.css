@@ -1,14 +1,11 @@
 .reviews-container {
-      margin: 0 auto;
-    max-width: 1400px;
-    display: flex
-;
-    justify-content: space-between;
-    gap: 40px;
-    font-family: Arial, sans-serif;
-    /* margin: 20px; */
-    margin-top: 20px;
-
+  margin: 0 auto;
+  max-width: 1400px;
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  font-family: Arial, sans-serif;
+  margin-top: 20px;
 }
 
 /* Left side - Reviews */
@@ -173,9 +170,14 @@
   .reviews-container {
     flex-direction: column;
     gap: 30px;
+    max-width: 90%; /* Reduced width on mobile */
+    margin: 0 auto;
+    padding: 0 10px;
   }
   
+  /* Hide nearby locations section on mobile */
   .surroundings-section {
+    display: none;
     padding-left: 0;
   }
   
@@ -203,5 +205,17 @@
   
   .location-distance {
     font-size: 12px;
+  }
+
+  .review-label {
+    width: 80px;
+  }
+
+  .review-bar {
+    height: 8px;
+  }
+
+  .surroundings-title {
+    font-size: 20px;
   }
 }

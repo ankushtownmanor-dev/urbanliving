@@ -22,13 +22,14 @@
 
 .aboutplace-content {
   line-height: 1.6;
- 
 }
-.content_left{
-    display: flex;
-    flex-basis: 80%;
-    justify-content: space-between;
+
+.content_left {
+  display: flex;
+  flex-basis: 80%;
+  justify-content: space-between;
 }
+
 .aboutplace-subtitle {
   font-size: 16px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -39,10 +40,10 @@
 
 .aboutplace-text {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 900 px;
   font-size: 15px;
+  /* font-weight: 900; */
   margin-bottom: 12px;
-  min-width: 1100px
+  min-width: 1100px;
 }
 
 .aboutplace-list {
@@ -73,4 +74,11 @@
 
 .aboutplace-button:hover {
   opacity: 0.9;
+}
+
+/* Hide AboutPlace on mobile devices (max-width 768px) */
+@media (max-width: 768px) {
+  .aboutplace-container {
+    display: none;
+  }
 }

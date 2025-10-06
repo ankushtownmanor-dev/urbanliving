@@ -250,3 +250,168 @@
     width: 100%;
   }
 }
+
+/* ================= MOBILE VERSION (PDF Layout) ================= */
+@media (max-width: 768px) {
+  .tranquil-mobile-container {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    padding: 12px;
+    background: #fff;
+  }
+
+  .mobile-image-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  .mobile-slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    position: relative;
+  }
+
+  .mobile-slide img {
+    width: 100%;
+    height: 330px;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+
+  .tranquil-mobile-showmore {
+    position: absolute;
+    bottom: 16px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+
+  .mobile-dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 6px;
+    gap: 5px;
+  }
+
+  .mobile-dots .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ccc;
+  }
+
+  .mobile-dots .dot.active {
+    background: #b60000;
+  }
+
+  .mobile-details {
+    margin-top: 16px;
+  }
+
+  .mobile-title {
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  .mobile-location {
+    color: #555;
+    margin-top: 4px;
+    font-size: 14px;
+  }
+
+  .mobile-price {
+    margin-top: 10px;
+  }
+
+  .mobile-price h3 {
+    font-size: 20px;
+    color: #b60000;
+  }
+
+  .mobile-price span {
+    font-size: 15px;
+    color: #333;
+  }
+
+  .mobile-reserve-btn {
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px 0;
+    background: linear-gradient(to right, #b60000, #8b0000);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .mobile-about,
+  .mobile-amenities,
+  .mobile-reviews {
+    margin-top: 22px;
+  }
+
+  .mobile-about h3,
+  .mobile-amenities h3,
+  .mobile-reviews h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .mobile-about p {
+    color: #555;
+    font-size: 14px;
+  }
+
+  .readmore-btn {
+    margin-top: 8px;
+    background: none;
+    color: #b60000;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .amenity-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .amenity-list span {
+    background: #f5f5f5;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+  }
+
+  .review-card {
+    background: #f8f8f8;
+    border-radius: 10px;
+    padding: 12px;
+    margin-top: 10px;
+  }
+
+  .review-card p {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 6px;
+  }
+
+  .review-card h4 {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .review-date {
+    font-size: 12px;
+    color: #777;
+  }
+}

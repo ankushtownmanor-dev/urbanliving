@@ -1,82 +1,148 @@
-.guestreviews-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: 'Segoe UI', Arial, sans-serif;
+.guestreviews-maincontainer {
+  width: 100%;
+  padding: 0 0 30px 0;
   background: #fff;
 }
 
 .guestreviews-heading {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
-  font-size: 22px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 21px;
   font-weight: 600;
-  margin-bottom: 30px;
+  margin-bottom: 18px;
 }
 
-.guestreviews-grid {
+.guestreviews-container {
+  background: #fff;
+  max-width: 1200px; /* Desktop width badha diya */
+  margin: 0 auto;
+  border-radius: 23px;
+  padding: 23px 19px 24px 19px;
+  position: relative;
+  transition: box-shadow 0.9s;
+  display: flex;
+  flex-direction: column;
+  /* Grey shadow for desktop */
+  box-shadow:
+    0 16px 36px rgba(117, 114, 114, 0.2),  /* bottom */
+    10px 0 24px rgba(199, 198, 198, 0.1),   /* right */
+    -10px 0 24px rgba(50, 50, 50, 0.1);  /* left */
+}
+
+.guestreviews-grid.desktop {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px 30px;
 }
 
+.guestreviews-grid.mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 0 10px;
+  border-radius: 23px;
+  /* Grey shadow for mobile */
+  box-shadow:
+
+  0 16px 36px rgba(117, 114, 114, 0.2),   /* bottom */
+  10px 0 24px rgba(199, 198, 198, 0.1),   /* right */
+  -10px 0 24px rgba(50, 50, 50, 0.1);     /* left */
+ 
+
+}
+
 .guestreview-card {
   font-size: 15px;
   color: #111;
-  line-height: 1.6;
+  background: #fafafa;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,130,130,0.10);
+  padding: 10px 10px 7px 10px;
+  line-height: 1.55;
 }
 
 .guestreview-header {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 6px;
 }
 
-.guestreview-img {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-/* Icon avatar when no image is used */
 .guestreview-avatar {
-  width: 60px;
-  height: 60px;
+  min-width: 44px;
+  height: 44px;
+  color: #9aa0a6;
+  background: #f1f3f4;
   border-radius: 50%;
-  color: #9aa0a6;              /* neutral gray */
-  background: #f1f3f4;         /* light background circle */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 60px;             /* FaUserCircle scales by font-size */
+  font-size: 38px;
 }
 
 .guestreview-name {
-  font-family:'Segoe UI', Arial, Helvetica, sans-serif;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 600;
   margin: 0;
 }
 
 .guestreview-time {
-  font-size: 13px;
-  color: #666;
-  margin: 2px 0;
+  font-size: 12px;
+  color: #888;
+  margin: 1px 0 0 0;
 }
 
 .guestreview-stars {
   display: flex;
-  gap: 2px;
+  gap: 1px;
 }
 
 .guestreview-star {
-  color: #b60000; /* same red from screenshot */
+  color: #b60000;
   font-size: 14px;
 }
 
 .guestreview-text {
-  margin-top: 6px;
+  margin-top: 4px;
+  font-size: 14px;
   white-space: pre-line;
+}
+
+.guestreviews-readmore-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.guestreviews-readmore-btn {
+  background: linear-gradient(90deg, #de2121 0%, #bf0000 100%);
+  color: #fff;
+  padding: 11px 40px;
+  border: none;
+  border-radius: 22px;
+  font-size: 15px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  /* box-shadow: 0 1px 14px rgba(126, 124, 124, 0.23); */
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.guestreviews-readmore-btn:hover {
+  background: linear-gradient(90deg, #bf0000 5%, #de2121 95%);
+  box-shadow: 0 4px 24px rgba(104, 102, 102, 0.26);
+}
+
+@media (max-width: 599px) {
+  .guestreviews-container {
+    max-width: 100%;
+    padding: 10px 3vw 13px 3vw;
+    /* Same grey shadow for mobile */
+    box-shadow:
+      0 7px 19px rgba(110, 110, 110, 0.15),   /* bottom */
+      5px 0 15px rgba(110, 110, 110, 0.12),   /* right */
+      -5px 0 15px rgba(110, 110, 110, 0.12);  /* left */
+  }
 }
