@@ -1,30 +1,32 @@
-:root{
-  --tmxluxe-prop-text:#1b1f23;
-  --tmxluxe-prop-muted:#6a7078;
-  --tmxluxe-prop-border:#e9ebef;
-  --tmxluxe-prop-shadow:0 10px 26px rgba(9, 20, 40, 0.08);
-  --tmxluxe-prop-red:#e6392e;
-  --tmxluxe-prop-like:#ffffff;
+:root {
+  --tmxluxe-prop-text: #1b1f23;
+  --tmxluxe-prop-muted: #6a7078;
+  --tmxluxe-prop-border: #e9ebef;
+  --tmxluxe-prop-shadow: 0 10px 26px rgba(9, 20, 40, 0.08);
+  --tmxluxe-prop-red: #e6392e;
+  --tmxluxe-prop-like: #ffffff;
 }
 
-.tmxluxe-prop{
+/* Section base */
+.tmxluxe-prop {
   padding: 22px 16px 32px;
-  background:#fff;
+  background: #fff;
 }
 
-.tmxluxe-prop-container{
+.tmxluxe-prop-container {
   max-width: 1160px;
   margin: 0 auto;
 }
 
-.tmxluxe-prop-head{
-  display:flex;
-  align-items:center;
+/* Heading */
+.tmxluxe-prop-head {
+  display: flex;
+  align-items: center;
   gap: 10px;
   margin: 8px 0 18px;
 }
 
-.tmxluxe-prop-title{
+.tmxluxe-prop-title {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 28px;
   font-weight: 500;
@@ -32,65 +34,66 @@
   margin: 0px;
 }
 
-.tmxluxe-prop-chevron{
-  color:#111;
+.tmxluxe-prop-chevron {
+  color: #111;
   font-size: 24px;
   line-height: 1;
-  user-select:none;
+  user-select: none;
 }
 
-/* Grid */
-.tmxluxe-prop-grid{
-  display:grid;
+/* Grid (desktop default) */
+.tmxluxe-prop-grid {
+  display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 22px;
 }
 
-/* Card */
-.tmxluxe-prop-card{
-  background:#fff;
+/* Card base */
+.tmxluxe-prop-card {
+  background: #fff;
   border: 1px solid var(--tmxluxe-prop-border);
   border-radius: 14px;
   overflow: hidden;
   box-shadow: var(--tmxluxe-prop-shadow);
-  transition: transform .18s ease, box-shadow .18s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  cursor: pointer;
 }
 
-.tmxluxe-prop-card:hover{
+.tmxluxe-prop-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 34px rgba(9,20,40,.12);
+  box-shadow: 0 14px 34px rgba(9, 20, 40, 0.12);
 }
 
 /* Media area */
-.tmxluxe-prop-media{
+.tmxluxe-prop-media {
   position: relative;
   height: 180px;
   background: #f3f5f8;
 }
 
-.tmxluxe-prop-media img{
+.tmxluxe-prop-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display:block;
+  display: block;
 }
 
 /* Badge (top-left) */
-.tmxluxe-prop-badge{
+.tmxluxe-prop-badge {
   position: absolute;
   top: 10px;
   left: 12px;
-  background:#ffffff;
-  color:#111827;
+  background: #ffffff;
+  color: #111827;
   border-radius: 999px;
   padding: 6px 12px;
   font-size: 12px;
-  font-weight: 500px;
-  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+  font-weight: 600;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
-/* Like button (top-right) */
-.tmxluxe-prop-like{
+/* Like (top-right) */
+.tmxluxe-prop-like {
   position: absolute;
   top: 10px;
   right: 12px;
@@ -101,20 +104,18 @@
   background: var(--tmxluxe-prop-like);
   color: var(--tmxluxe-prop-red);
   font-size: 16px;
-  line-height: 1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow: 0 6px 16px rgba(0,0,0,.1);
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* Body */
-.tmxluxe-prop-body{
+/* Card Body */
+.tmxluxe-prop-body {
   padding: 12px 14px 14px;
 }
 
-.tmxluxe-prop-name{
+.tmxluxe-prop-name {
   margin: 4px 0 10px;
   font-size: 16px;
   font-weight: 700;
@@ -122,44 +123,20 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Meta row */
-.tmxluxe-prop-meta{
-  display:flex;
-  align-items:center;
+.tmxluxe-prop-meta {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 10px;
 }
 
-.tmxluxe-prop-price{
-  color:#111;
-  font-weight: 600;
+.tmxluxe-prop-price,
+.tmxluxe-prop-rating {
   font-size: 13.5px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.tmxluxe-prop-rating{
-  display:inline-flex;
-  align-items:center;
-  gap: 6px;
-  color:#111;
   font-weight: 600;
-  font-size: 13.5px;
+  color: #111;
 }
 
-.tmxluxe-prop-star{
-  width: 8px;
-  height: 8px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  background: #f7fdd9;
-  color:#6aa515;
-  border-radius: 999px;
-  padding: 8px;
-  font-size: 12px;
-  box-shadow: inset 0 0 0 1px rgba(106,165,21,.25);
-}
-/* Browse more CTA */
+/* Browse More Button */
 .tmxluxe-prop-more {
   margin-top: 16px;
   display: flex;
@@ -167,7 +144,6 @@
 }
 
 .tmxluxe-prop-cta {
-  margin: 20px;;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -178,37 +154,64 @@
   font-weight: 600;
   background: linear-gradient(90deg, #e61d23 0%, #801313 100%);
   box-shadow: 0 8px 20px rgba(230, 29, 35, 0.25);
-  transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
+  transition: transform 0.15s ease, filter 0.15s ease;
 }
 
 .tmxluxe-prop-cta:hover {
-  filter: brightness(.98);
+  filter: brightness(0.98);
   transform: translateY(-1px);
   box-shadow: 0 10px 22px rgba(230, 29, 35, 0.28);
 }
 
-.tmxluxe-prop-cta-text {
-  font-size: 16px;
-  letter-spacing: .2px;
+/* Responsive - Tablets */
+@media (max-width: 1100px) {
+  .tmxluxe-prop-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.tmxluxe-prop-cta-arrow {
-  font-size: 16px;
-  line-height: 1;
-}
-
-/* Mobile tweaks */
+/* ✅ Mobile View - Horizontal Scroll Layout */
 @media (max-width: 560px) {
-  .tmxluxe-prop-cta { padding: 10px 16px; }
-  .tmxluxe-prop-cta-text { font-size: 16px; }
-}
-/* Responsive */
-@media (max-width: 1100px){
-  .tmxluxe-prop-grid{ grid-template-columns: repeat(2, 1fr); }
-}
+  .tmxluxe-prop-title {
+    font-size: 18px;
+  }
 
-@media (max-width: 560px){
-  .tmxluxe-prop-title{ font-size: 18px; }
-  .tmxluxe-prop-grid{ grid-template-columns: 1fr; }
-  .tmxluxe-prop-media{ height: 170px; }
+  .tmxluxe-prop-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 14px;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+  }
+
+  .tmxluxe-prop-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tmxluxe-prop-card {
+    flex: 0 0 80%;
+    scroll-snap-align: start;
+    min-width: 260px;
+  }
+
+  .tmxluxe-prop-media {
+    height: 180px;
+  }
+
+  .tmxluxe-prop-body {
+    padding: 10px 12px 14px;
+  }
+
+  .tmxluxe-prop-name {
+    font-size: 15px;
+  }
+
+  .tmxluxe-prop-price {
+    font-size: 13px;
+  }
+
+  .tmxluxe-prop-cta {
+    padding: 10px 16px;
+  }
 }

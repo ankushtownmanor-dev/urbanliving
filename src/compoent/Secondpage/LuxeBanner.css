@@ -38,7 +38,6 @@ body {
   position: relative;
   background: 
   url('/Group 37.png') no-repeat center center / cover;
-
   display: flex;
   align-items: center;
   color: white;
@@ -57,17 +56,18 @@ body {
   margin-left: 40px;
   padding-right: 20px;
 }
+
 #cta_button{
   border-radius: 90px;
   display: flex;
-    width: 100%;
-    align-items: center;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-content: stretch;
-    border-bottom-color: #f5f2ee;
-  
+  width: 100%;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: stretch;
+  border-bottom-color: #f5f2ee;
 }
+
 /* Logo */
 .tmxluxe-logo-row {
   display: flex;
@@ -97,7 +97,6 @@ body {
   max-width: 100%;
   letter-spacing: 6px;
   text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  
   padding: 20px;
   padding-top: 35px;
 }
@@ -114,7 +113,6 @@ body {
 .tmxluxe-accent {
   color: var(--tmxluxe-red);
   position: relative;
-
   text-shadow: 0 0px 0px rgba(0,0,0,0.2);
 }
 
@@ -152,7 +150,6 @@ body {
   box-shadow: 0 10px 20px rgba(248, 248, 248, 0.2);
   border: 12px solid rgba(233, 239, 241, 0.4);
 }
-
 
 .tmxluxe-cta:hover {
   transform: translateY(-3px);
@@ -306,6 +303,136 @@ body {
   }
 }
 
+/* ===================== MOBILE VIEW CHANGES ===================== */
+@media (max-width: 640px) {
+  /* Hero Background - Remove on mobile */
+  .tmxluxe-hero {
+    background: #f5f5f5 !important;
+    padding: 30px 0 20px;
+    min-height: auto;
+  }
+
+  .tmxluxe-container {
+    padding: 0 16px;
+  }
+
+  .tmxluxe-hero-content {
+    margin-left: 0;
+    padding-right: 0;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  /* Logo - Hide on mobile */
+  .tmxluxe-logo-row {
+    display: none;
+  }
+
+  /* Heading - Hide on mobile */
+  .tmxluxe-heading {
+    display: none;
+  }
+
+  /* Subtext - Hide on mobile */
+  .tmxluxe-subtext {
+    display: none;
+  }
+
+  /* CTA Button - Hide on mobile */
+  #cta_button {
+    display: none;
+  }
+
+  /* Section Title */
+  .tmxluxe-section-title {
+        font-size: 24px;
+        font-weight: 550;
+        color: #1a1a1a;
+        margin-top: 0;
+        margin-bottom: 24px;
+        padding-bottom: 0;
+        TEXT-ALIGN: CENTER;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .tmxluxe-section-title::after {
+    display: none;
+  }
+
+  /* Why Choose Section */
+  .tmxluxe-why-choose {
+    background: #f5f5f5;
+    padding: 0;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  /* Features Grid */
+  .tmxluxe-features {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 0;
+    max-width: 360px;
+    padding: 0;
+  }
+
+  /* Feature Cards */
+  .tmxluxe-feature {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px 20px;
+           box-shadow: 1px 1px 9px 8px rgba(0, 0, 0, 0.12);
+    text-align: center;
+    border: 1px solid #e8e8e8;
+  }
+
+  .tmxluxe-feature:hover {
+    transform: none;
+           box-shadow: 1px 1px 9px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Feature Icons */
+  .tmxluxe-feature-icon {
+    width: 48px;
+    height: 48px;
+    background-color: #ffe5e5;
+    border-radius: 10px;
+    margin: 0 auto 14px;
+    font-size: 24px;
+    border: none;
+  }
+
+  .tmxluxe-feature:hover .tmxluxe-feature-icon {
+    background-color: #ffe5e5;
+    color: var(--tmxluxe-red);
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Feature Text */
+  .tmxluxe-feature h3 {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .tmxluxe-feature p {
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: #666666;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* Remove animations on mobile */
+  .tmxluxe-feature {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 /* Animation */
 @keyframes fadeInUp {
   from {
@@ -351,26 +478,5 @@ body {
   }
   .tmxluxe-logo-mark {
     font-size: 64px;
-  }
-}
-
-@media (max-width: 640px) {
-  .tmxluxe-heading {
-    font-size: 22px;
-  }
-  .tmxluxe-subtext {
-    font-size: 15px;
-  }
-  .tmxluxe-stats {
-    gap: 24px;
-  }
-  .tmxluxe-stat-value {
-    font-size: 32px;
-  }
-  .tmxluxe-logo-text {
-    font-size: 40px;
-  }
-  .tmxluxe-logo-mark {
-    font-size: 56px;
   }
 }
