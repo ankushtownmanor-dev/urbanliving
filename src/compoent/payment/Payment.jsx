@@ -618,77 +618,30 @@ function Payment() {
     setIsAadhaarLoading(true);
     showAlert('Verifying Aadhaar number. This may take a moment...');
   
-    const pollAadhaarStatus = async (clientId, retries = 5) => {
-      if (retries === 0) {
-        showAlert('Aadhaar verification is taking longer than expected. Please try again in a moment.');
-        setIsAadhaarLoading(false);
-        return;
-      }
-  
-      try {
-        const statusResponse = await axios.get(
-          `https://kyc-api.surepass.io/api/v1/async/status/${clientId}`,
-          {
-            headers: {
-              'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg',
-            },
-          }
-        );
-  
-        const statusData = statusResponse.data;
-        console.log('Aadhaar verification status:', statusData);
-  
-        if (!statusData || !statusData.data) {
-          throw new Error('Invalid response from verification service');
-        }
-  
-        if (statusData.data.status === 'success') {
-          if (statusData.data.api_resp?.success) {
-            setFormData(prev => ({ ...prev, aadhaarVerified: true }));
-            showAlert('Aadhaar verified successfully!');
-          } else {
-            const errorMessage = statusData.data.api_resp?.message || 'Verification failed';
-            showAlert(`Aadhaar verification failed: ${errorMessage}. Please ensure the number is correct and try again.`);
-          }
-          setIsAadhaarLoading(false);
-        } else if (statusData.data.status === 'pending') {
-          setTimeout(() => pollAadhaarStatus(clientId, retries - 1), 3000);
-        } else {
-          showAlert('Aadhaar verification failed. Please check the number and try again later.');
-          setIsAadhaarLoading(false);
-        }
-      } catch (error) {
-        console.error('Error during Aadhaar verification:', error);
-        showAlert('An error occurred while verifying Aadhaar. Please try again in a moment.');
-        setIsAadhaarLoading(false);
-      }
-    };
-  
     try {
-      const submitResponse = await axios.post(
-        'https://kyc-api.surepass.io/api/v1/async/submit',
-        {
-          type: 'aadhaar_validation',
-          body: {
-            id_number: aadhaarNumber,
-          },
-        },
+      const response = await axios.post(
+        'https://kyc-api.surepass.app/api/v1/aadhaar-validation/aadhaar-validation',
+        { id_number: aadhaarNumber },
         {
           headers: {
-            'Content-Type': 'application/json',
             'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg',
-          },
+            'Content-Type': 'application/json'
+          }
         }
       );
   
-      if (submitResponse.data?.success && submitResponse.data?.data?.client_id) {
-        pollAadhaarStatus(submitResponse.data.data.client_id);
+      if (response.data && response.data.success) {
+        setFormData(prev => ({ ...prev, aadhaarVerified: true }));
+        showAlert('Aadhaar verified successfully!');
       } else {
-        throw new Error('Failed to start Aadhaar verification');
+        const errorMessage = response.data?.message || 'Verification failed';
+        showAlert(`Aadhaar verification failed: ${errorMessage}. Please ensure the number is correct and try again.`);
       }
     } catch (error) {
-      console.error('Error submitting Aadhaar for verification:', error);
-      showAlert('Failed to start Aadhaar verification. Please try again in a moment.');
+      console.error('Aadhaar verification error:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Verification failed';
+      showAlert(`Aadhaar verification failed: ${errorMessage}. Please try again later.`);
+    } finally {
       setIsAadhaarLoading(false);
     }
   };
