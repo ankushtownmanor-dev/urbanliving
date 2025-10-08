@@ -9,10 +9,10 @@ const ListPropertyPage = () => {
   const ptContainerRef = useRef(null);
 
   const baseCards = [
-    { img: 'image 189.png', title: 'PG', desc: 'Affordable share leaving spaces' },
-    { img: 'image 190.png', title: 'Co-living', desc: 'community-focused shared residences' },
-    { img: 'image 191.png', title: 'Apartments', desc: 'Affordable share leaving spaces' },
-    { img: 'image 192.png', title: 'Villa', desc: 'Independent living units spacious' },
+    { img: '/image 189.png', title: 'PG', desc: 'Affordable share leaving spaces' },
+    { img: '/image 190.png', title: 'Co-living', desc: 'community-focused shared residences' },
+    { img: '/image 191.png', title: 'Apartments', desc: 'Affordable share leaving spaces' },
+    { img: '/image 192.png', title: 'Villa', desc: 'Independent living units spacious' },
   ];
 
   const renderCards = isMobile
@@ -178,7 +178,7 @@ const ListPropertyPage = () => {
         </button>
       </div>
       <div className="wm-image">
-        <img src="public/home1.png" alt="Renovate and share profit" />
+        <img src="/home1.png" alt="Renovate and share profit" />
       </div>
     </div>
 
@@ -196,7 +196,7 @@ const ListPropertyPage = () => {
         </button>
       </div>
       <div className="wm-image">
-        <img src="public/home2.png" alt="We handle listings" />
+        <img src="/home2.png" alt="We handle listings" />
       </div>
     </div>
 
@@ -213,7 +213,7 @@ const ListPropertyPage = () => {
         </button>
       </div>
       <div className="wm-image">
-        <img src="public/home3.png" alt="List your way" />
+        <img src="/home3.png" alt="List your way" />
       </div>
     </div>
   </div>
