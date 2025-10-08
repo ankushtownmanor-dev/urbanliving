@@ -156,42 +156,45 @@
 }
 
 .step-description {
-  color: #666;
+  color: #030303;
   line-height: 1.5;
   font-size: 0.9rem;
 }
 
 /* Individual Step Classes */
 .step-register .step-title {
-  color: #333;
+  color: #000000;
 }
 
 .step-register .step-description {
-  color: #666;
+  color: #000000;
+  
 }
 
 .step-photos .step-title {
-  color: #333;
+  color: #000000;
 }
 
 .step-photos .step-description {
-  color: #666;
+  color: #000000;
+  
+
 }
 
 .step-verified .step-title {
-  color: #333;
+  color: #000000;
 }
 
 .step-verified .step-description {
-  color: #666;
+  color: #000000;
 }
 
 .step-earn .step-title {
-  color: #333;
+  color: #000000;
 }
 
 .step-earn .step-description {
-  color: #666;
+  color: #000000;
 }
 
 /* Benefits Section */
@@ -307,14 +310,14 @@
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 8px;
-  color: #333;
+  color: #131313;
   line-height: 1.3;
   transition: all 0.3s ease;
   transform: translateZ(10px);
 }
 
 .benefit-card p {
-  color: #666;
+  color: #131313;
   line-height: 1.4;
   font-size: 0.85rem;
   transition: all 0.3s ease;
@@ -605,7 +608,8 @@
 @media (max-width: 600px) {
   .working-model { padding: 32px 0 48px; }
   .wm-title { font-size: 1.8rem; }
-  .wm-text h3 { font-size: 1rem; }
+  .wm-text h3 { font-weight: 500;
+    font-size: 1.1rem; }
   .wm-text p { font-size: 0.95rem; }
 }
 
@@ -643,19 +647,63 @@
   .testimonials-section h2 {
     font-size: 2rem;
     margin-top: 28px;
+    font-weight: 450;
 
   }
-  
-  .steps-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
+  .property-types-section h2{
+    margin-top: -20px;
+    color: black;
+
   }
-  
+  .steps-grid {
+    display: flex;                 /* grid -> flex row */
+    gap: 14px;                     /* cards ke beech thoda space */
+    overflow-x: auto;              /* horizontal scroll */
+    padding: 8px 16px;             /* side padding for side peek */
+    scroll-snap-type: x mandatory; /* snap behaviour */
+    -webkit-overflow-scrolling: touch;
+  }
+  .steps-grid::-webkit-scrollbar { height: 0; }
+  .steps-grid { scrollbar-width: none; }
   .benefits-grid {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  
+  .step-card {
+    text-align: left;
+    flex: 0 0 78%;                 /* har slide ki width, side peek dikhe */
+    scroll-snap-align: center;     /* center pe snap */
+    border-radius: 20px;
+    background: #efeeee;             /* halki card feel */
+      /* box-shadow: 0 14px 30px rgba(0, 0, 0, 0.10); */
+    padding: 20px 16px;            /* thoda compact */
+  }
+  .step-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.3rem;
+    margin-bottom: 14px;
+    margin-left: 1px;
+  }
+  .step-title {
+    text-align: left;
+    font-weight: 250px;
+    font-size: 1.05rem;
+    margin-bottom: 8px;
+    margin-left: -1px;
+  }
+  .step-description {
+    font-size: 0.9rem;
+  }
+  .how-it-works-subtitle{
+    font-size: 0.9rem;
+  }
+
+  /* Section spacing adjust so cards ke upar neeche acha gap rahe */
+  .how-it-works-steps-section {
+    padding: 20px 0 40px 0;
+    background: rgb(237 237 237);
+  }
   /* Property types: horizontal scroll with snap and side peeks on mobile */
   .property-types-grid {
     display: flex;
@@ -714,6 +762,86 @@
     object-fit: cover;
     object-position: center;
   }
+  .section-subtitle {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #666;
+    text-align: center;
+    max-width: 700px;
+    /* margin: 0 auto 40px auto; */
+    line-height: 1.6;
+    margin-top: -32px;
+    opacity: 0.9;
+}
+.wm-title {
+  font-size: 1.9rem;
+  font-weight: 500;
+
+}
+.wm-image {
+  margin-right: 49px;
+  order: -1;
+}
+.wm-image img {
+  display: block;
+  max-width: 115%;
+  width: 301px;
+  height: 206px;
+  padding: 10px;
+  margin: 0 auto;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  object-fit: cover;
+  border-radius: 51px;
+}
+.property-types-section h2{
+  font-size: 2rem;
+  margin-top: -33px;
+  font-weight: 450;
+
+
+}
+.section-subtitle {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #666;
+  text-align: center;
+  max-width: 700px;
+  /* margin: 0 auto 40px auto; */
+  line-height: 1.6;
+  margin-top: -13px;
+  opacity: 0.9;
+}
+.benefit-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* center horizontally */
+  justify-content: flex-start;
+}
+
+.benefit-icon {
+  width: 72px;           /* increased size */
+  height: 72px;          /* increased size */
+  font-size: 1.6rem;     /* icon glyph size */
+  margin: 0 0 16px 0;    /* remove right margin, keep bottom gap */
+  background: #f0f0f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cf1518;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  transform: translateZ(20px);
+  position: relative;
+}
+.wm-cta {
+  display: none;
+}
+
+
 }
 
 @media (max-width: 480px) {
