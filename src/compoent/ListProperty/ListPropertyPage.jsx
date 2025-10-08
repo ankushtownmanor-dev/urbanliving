@@ -9,10 +9,10 @@ const ListPropertyPage = () => {
   const ptContainerRef = useRef(null);
 
   const baseCards = [
-    { img: '/image 189.png', title: 'PG', desc: 'Affordable share leaving spaces' },
-    { img: '/image 190.png', title: 'Co-living', desc: 'community-focused shared residences' },
-    { img: '/image 191.png', title: 'Apartments', desc: 'Affordable share leaving spaces' },
-    { img: '/image 192.png', title: 'Villa', desc: 'Independent living units spacious' },
+    { img: 'image 189.png', title: 'PG', desc: 'Affordable share leaving spaces' },
+    { img: 'image 190.png', title: 'Co-living', desc: 'community-focused shared residences' },
+    { img: 'image 191.png', title: 'Apartments', desc: 'Affordable share leaving spaces' },
+    { img: 'image 192.png', title: 'Villa', desc: 'Independent living units spacious' },
   ];
 
   const renderCards = isMobile
