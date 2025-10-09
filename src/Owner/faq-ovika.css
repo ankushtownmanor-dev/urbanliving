@@ -1,0 +1,91 @@
+/* Namespace: faq-ovika- (conflict-safe) */
+:root{
+    --faq-ovika-bg:#ecefea;          /* light grey-green like screenshot */
+    --faq-ovika-white:#ffffff;
+    --faq-ovika-text:#121314;
+    --faq-ovika-dim:#5a606c;
+    --faq-ovika-border:rgba(0,0,0,0.12);
+    --faq-ovika-ring:rgba(0,0,0,0.08);
+    --faq-ovika-shadow:0 10px 24px rgba(0,0,0,0.08);
+    --faq-ovika-max:980px;
+  }
+  
+  .faq-ovika.section{
+    background:var(--faq-ovika-bg);
+    font-family:"Inter","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--faq-ovika-text);
+  }
+  
+  .faq-ovika.container{
+    max-width:var(--faq-ovika-max);
+    margin:0 auto;
+    padding:48px 18px 64px;
+  }
+  
+  .faq-ovika.heading{
+    text-align:center;
+    font-weight:800;
+    font-size:clamp(28px,4.6vw,44px);
+    letter-spacing:-0.3px;
+    margin:6px 0 28px;
+  }
+  
+  /* List wrapper */
+  .faq-ovika.list{
+    display:grid;
+    gap:18px;
+  }
+  
+  /* Each item card */
+  .faq-ovika.item{
+    background:var(--faq-ovika-white);
+    border:1px solid var(--faq-ovika-ring);
+    border-radius:14px;
+    box-shadow:var(--faq-ovika-shadow);
+    overflow:hidden;
+  }
+  
+  /* Question button row */
+  .faq-ovika.question{
+    width:100%;
+    background:transparent;
+    border:0;
+    padding:18px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:16px;
+    font-weight:700;
+    text-align:left;
+    cursor:pointer;
+  }
+  
+  .faq-ovika.chevron{
+    color:#111;
+    transition:transform .2s ease;
+  }
+  .faq-ovika.chevron.rot{
+    transform:rotate(180deg);
+  }
+  
+  /* Answer copy */
+  .faq-ovika.answer{
+    color:var(--faq-ovika-dim);
+    border-top:1px solid var(--faq-ovika-border);
+    padding:14px 18px 18px;
+    font-size:14px;
+    line-height:1.7;
+  }
+  
+  /* Open state spacing tweak */
+  .faq-ovika.item.is-open .faq-ovika.question{
+    padding-bottom:12px;
+  }
+  
+  /* Responsive */
+  @media (max-width:640px){
+    .faq-ovika.container{ padding:36px 14px 48px; }
+    .faq-ovika.heading{ font-size:28px; }
+    .faq-ovika.question{ font-size:15px; padding:16px; }
+    .faq-ovika.answer{ font-size:13px; padding:12px 16px 16px; }
+  }
