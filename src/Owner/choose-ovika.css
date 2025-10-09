@@ -1,86 +1,86 @@
 /* Namespace: choose-ovika- */
 :root{
-    --choose-ovika-bg:#ecefea;            /* light grey/greenish background */
-    --choose-ovika-text:#121212;
-    --choose-ovika-dim:#5a616d;
-    --choose-ovika-white:#ffffff;
-    --choose-ovika-border:rgba(0,0,0,0.08);
-    --choose-ovika-shadow:0 10px 24px rgba(0,0,0,0.08);
-    --choose-ovika-max:1180px;
-  }
-  
-  .choose-ovika.section{
-    background:var(--choose-ovika-bg);
-    font-family:"Inter","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    color:var(--choose-ovika-text);
-  }
-  
-  .choose-ovika.container{
-    max-width:var(--choose-ovika-max);
-    margin:0 auto;
-    padding:48px 22px 44px;
-    text-align:center;
-  }
-  
-  .choose-ovika.heading{
-    font-weight:800;
-    letter-spacing:-0.4px;
-    line-height:1.2;
-    font-size:clamp(28px,4.6vw,48px);
-    margin:4px 0 10px;
-  }
-  
-  .choose-ovika.sub{
-    color:var(--choose-ovika-dim);
-    font-size:clamp(13px,1.4vw,18px);
-    margin-bottom:28px;
-  }
-  
-  /* Cards grid */
-  .choose-ovika.grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:22px;
-  }
-  
-  /* Individual card */
-  .choose-ovika.card{
-    background:var(--choose-ovika-white);
-    border:1px solid var(--choose-ovika-border);
-    border-radius:14px;
-    min-height:150px;
-    padding:22px 20px;
-    box-shadow:var(--choose-ovika-shadow);
-    display:grid;
-    grid-template-rows:auto 1fr;
-    justify-items:center;
-    align-items:start;
-  }
-  
-  /* Icon bubble */
-  .choose-ovika.iconWrap{
-    width:56px;height:56px;border-radius:50%;
-    background:#fff;
-    display:grid;place-items:center;
-    box-shadow:0 8px 18px rgba(0,0,0,0.12);
-    margin-bottom:10px;
-  }
-  .choose-ovika.icon{
-    width:56px;height:56px;border-radius:50%;object-fit:cover;
-  }
-  
-  /* Title */
-  .choose-ovika.cardTitle{
-    font-weight:700;
-    font-size:18px;
-    line-height:1.35;
-  }
-  
-  /* Responsive */
-  @media (max-width:1024px){
-    .choose-ovika.grid{ grid-template-columns:repeat(2,1fr); }
-  }
-  @media (max-width:640px){
-    .choose-ovika.container{ padding:36px 16px 32px; }
-    .choose-ovika.grid{ grid-template-columns:1fr; }
-  }
+  --choose-ovika-bg:#ecefea;
+  --choose-ovika-text:#121212;
+  --choose-ovika-white:#ffffff;
+  --choose-ovika-border:rgba(0,0,0,0.08);
+  --choose-ovika-shadow:0 10px 24px rgba(0,0,0,0.08);
+  --choose-ovika-max:1180px;
+  --choose-ovika-red:#7b0000;
+}
+
+.choose-ovika.section{
+  background:var(--choose-ovika-bg);
+  font-family:"Inter","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--choose-ovika-text);
+}
+
+.choose-ovika.container{
+  max-width:var(--choose-ovika-max);
+  margin:0 auto;
+  padding:48px 22px 44px;
+  text-align:center;
+}
+
+.choose-ovika.heading{
+  font-weight:500;
+  letter-spacing:.1px;
+  line-height:1.2;
+  font-size:clamp(28px,4.6vw,48px);
+  margin:6px 0 10px;
+}
+
+.choose-ovika.sub{
+  color:#161616;
+  font-size:clamp(15px,1.6vw,20px);
+  font-weight:400;
+  letter-spacing:1px;
+  margin-bottom:28px;
+}
+
+/* Cards grid */
+.choose-ovika.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:30px;
+}
+
+/* Tile (white card) */
+.choose-ovika.card{
+  background:var(--choose-ovika-white);
+  border:1px solid var(--choose-ovika-border);
+  border-radius:14px;
+  min-height:160px;
+  padding:22px 20px;
+  box-shadow:var(--choose-ovika-shadow);
+  display:grid;
+  grid-template-rows:auto 1fr;
+  justify-items:center;  /* center icon + title like image */
+  align-items:start;
+}
+
+/* Plain icon — no circle */
+.choose-ovika.glyph.plain{
+  color:var(--choose-ovika-red);
+  width:40px;
+  height:40px;
+  margin-bottom:18px;   /* space between icon and title */
+}
+
+/* Title text */
+.choose-ovika.cardTitle{
+  font-weight:500;
+  font-size:18px;
+  line-height:1.35;
+  margin-bottom: 18px;
+}
+
+/* Responsive */
+@media (max-width:1024px){
+  .choose-ovika.grid{ grid-template-columns:repeat(2,1fr); gap:20px; }
+}
+@media (max-width:640px){
+  .choose-ovika.container{ padding:36px 16px 32px; }
+  .choose-ovika.grid{ grid-template-columns:1fr; gap:18px; }
+  .choose-ovika.cardTitle{ font-size:17px; }
+}

@@ -29,7 +29,7 @@
     text-align:left;
   }
   .owners-ovika.h2{
-    font-weight:800;
+    font-weight:500;
     font-size:clamp(26px,4.4vw,40px);
     letter-spacing:-0.3px;
     text-align:center;
@@ -45,7 +45,7 @@
     display:inline-flex;
     align-items:center;
     gap:10px;
-    background:linear-gradient(180deg,#cc2018 0%, var(--owners-ovika-primary) 70%);
+    background:linear-gradient(to right, rgb(207, 21, 24), rgb(27, 1, 1));
     color:#fff;
     border:none;
     border-radius:999px;
@@ -54,7 +54,8 @@
     box-shadow:var(--owners-ovika-shadow);
     font-weight:800;
     cursor:pointer;
-    margin:16px 0 0 0;
+    margin:16px;
+    margin-right: 40px;
   }
   .owners-ovika.cta:hover{ background:linear-gradient(180deg,#d8231a 0%, var(--owners-ovika-primary-dark) 70%); }
   .owners-ovika.ctaArrow{ font-size:20px; line-height:1; }
