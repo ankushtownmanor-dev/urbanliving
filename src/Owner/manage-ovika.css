@@ -1,0 +1,121 @@
+/* Namespace: manage-ovika- */
+:root {
+    --manage-ovika-text: #161616;
+    --manage-ovika-dim: #5b616e;
+    --manage-ovika-red: #7b0000;
+    --manage-ovika-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    --manage-ovika-max: 1180px;
+    --manage-ovika-bg: #ffffff;
+  }
+  
+  .manage-ovika.wrap {
+    background: var(--manage-ovika-bg);
+    color: var(--manage-ovika-text);
+    font-family: "Inter", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  
+  .manage-ovika.container {
+    max-width: var(--manage-ovika-max);
+    margin: 0 auto;
+    padding: 36px 22px 28px;
+  }
+  
+  /* Heading and subtitle */
+  .manage-ovika.heading {
+    text-align: center;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    line-height: 1.2;
+    font-size: clamp(28px, 4.5vw, 48px);
+    margin: 4px 0 8px;
+  }
+  
+  .manage-ovika.sub {
+    text-align: center;
+    color: var(--manage-ovika-dim);
+    font-size: clamp(13px, 1.4vw, 18px);
+    margin-bottom: 36px;
+  }
+  
+  /* Grid */
+  .manage-ovika.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    align-items: start;
+  }
+  
+  /* Card */
+  .manage-ovika.card {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    gap: 10px;
+  }
+  
+  /* Icon bubble with drop shadow like screenshot */
+  .manage-ovika.iconWrap {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin-bottom: 4px;
+  }
+  
+  .manage-ovika.icon {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 50%;
+    background: #eee;
+    box-shadow: var(--manage-ovika-shadow);
+  }
+  
+  /* small floor shadow */
+  .manage-ovika.iconShadow {
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 52px;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.12);
+    filter: blur(6px);
+    content: "";
+  }
+  
+  /* Titles/Text */
+  .manage-ovika.title {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  
+  .manage-ovika.text {
+    color: var(--manage-ovika-dim);
+    font-size: 13px;
+    line-height: 1.55;
+    max-width: 260px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .manage-ovika.grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .manage-ovika.text { max-width: none; }
+  }
+  
+  @media (max-width: 640px) {
+    .manage-ovika.container {
+      padding: 28px 16px 24px;
+    }
+    .manage-ovika.grid {
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+    .manage-ovika.title { font-size: 17px; }
+    .manage-ovika.text { font-size: 13px; }
+  }

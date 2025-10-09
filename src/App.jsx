@@ -15,30 +15,38 @@ import Sucess from './compoent/payment/Sucess';
 import Failure from './compoent/payment/Failure';
 import ListPropertyPage from './compoent/ListProperty/ListPropertyPage';
 import { AuthProvider } from './compoent/Login/AuthContext';
+
 import FourthMain from './compoent/FourthPage/fourthMain';
+
+
+import Ownermain from './Owner/Ownermain';
 
 
 
 function App() {
   return (
     <AuthProvider>
-    <Router>
-     <Navbar/>
-      <Routes>
-        <Route path="/" element={<Home />} />
-       <Route path="/tmluxe" element={<LuxeMain />} />
-       <Route path="/tmluxespecific/:id" element={<ThirdMain />} />
-        <Route path="/payment" element={<Payment />} />
-        <Route path="/login" element={<AuthPage />} />
-         <Route path="/about" element={<About />} />
-         <Route path="/dashboard" element={<Dashboard />} />
-         <Route path="/list-property" element={<ListPropertyPage />} />
-         <Route path="/success" element={<Sucess />} />
-         <Route path="/failure" element={<Failure />} />
-         <Route path="/selfmanage" element={<FourthMain/>}/>
-      </Routes>
-      <HoomieFooter/>
-    </Router>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/tmluxe" element={<LuxeMain />} />
+          <Route path="/tmluxespecific/:id" element={<ThirdMain />} />
+          <Route path="/payment" element={<Payment />} />
+          <Route path="/login" element={<AuthPage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/list-property" element={<ListPropertyPage />} />
+          <Route path="/success" element={<Sucess />} />
+          <Route path="/failure" element={<Failure />} />
+
+          <Route path="/selfmanage" element={<FourthMain />} />
+
+          <Route path="/ownermain" element={<Ownermain />} />
+
+        </Routes>
+        <HoomieFooter />
+      </Router>
     </AuthProvider>
   );
 }

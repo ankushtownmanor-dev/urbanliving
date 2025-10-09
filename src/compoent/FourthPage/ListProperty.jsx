@@ -14,7 +14,7 @@ function ListingSteps() {
           <div className="icon-wrapper">
             <FaHouseUser className="step-icon" />
           </div>
-          <h3 className="step-heading">Create your Listing</h3>
+          <h2 className="step-heading">Create your Listing</h2>
           <p className="step-text">
             Upload stunning photos, complete descriptions, and all the necessary details and amenities your property offers.
           </p>
