@@ -1,5 +1,7 @@
 import React from 'react';
 import './Owner.css';
+import { MdVerified, MdOutlineLoop } from 'react-icons/md';
+import { BiSupport } from 'react-icons/bi';
 
 export default function Owner() {
   return (
@@ -7,7 +9,7 @@ export default function Owner() {
       {/* Background image rendered via JSX */}
       <img
         className="ovika-hero__bg"
-        src="Group 78.png"  /* replace with your exact villa image */
+        src="Group 78.png"  /* replace with your exact villa image path if different */
         alt="Modern villa exterior"
         loading="eager"
         decoding="async"
@@ -19,15 +21,15 @@ export default function Owner() {
       {/* Top badges */}
       <div className="ovika-hero__badges">
         <div className="ovika-badge">
-          <span className="ovika-badge__dot" />
+          <MdVerified className="ovika-badge__icon" aria-hidden="true" />
           <span className="ovika-badge__text">Verified</span>
         </div>
         <div className="ovika-badge">
-          <span className="ovika-badge__dot" />
+          <BiSupport className="ovika-badge__icon" aria-hidden="true" />
           <span className="ovika-badge__text">Support</span>
         </div>
         <div className="ovika-badge">
-          <span className="ovika-badge__dot" />
+          <MdOutlineLoop className="ovika-badge__icon" aria-hidden="true" />
           <span className="ovika-badge__text">Hassle free</span>
         </div>
       </div>
