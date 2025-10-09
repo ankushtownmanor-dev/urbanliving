@@ -36,8 +36,7 @@ body {
 /* Hero Section */
 .tmxluxe-hero {
   position: relative;
-  background: 
-  url('/Group 37.png') no-repeat center center / cover;
+  background: url('/Group 37.png') no-repeat center center / cover;
   display: flex;
   align-items: center;
   color: white;
@@ -57,7 +56,7 @@ body {
   padding-right: 20px;
 }
 
-#cta_button{
+#cta_button {
   border-radius: 90px;
   display: flex;
   width: 100%;
@@ -261,12 +260,10 @@ body {
     min-height: auto;
     padding: 80px 0;
   }
-  
   .tmxluxe-heading {
     font-size: 36px;
     max-width: 100%;
   }
-  
   .tmxluxe-subtext {
     max-width: 100%;
   }
@@ -277,172 +274,143 @@ body {
     text-align: center;
     padding: 60px 0;
   }
-  
   .tmxluxe-logo-row {
     justify-content: center;
   }
-  
   .tmxluxe-heading {
     font-size: 32px;
     margin: 15px 0 20px;
   }
-  
   .tmxluxe-subtext {
     font-size: 16px;
     margin-bottom: 30px;
   }
-  
   .tmxluxe-features {
     grid-template-columns: 1fr;
     gap: 30px;
   }
-  
   .tmxluxe-section-title {
     font-size: 30px;
     margin-bottom: 50px;
   }
 }
 
-/* ===================== MOBILE VIEW CHANGES ===================== */
+/* ===================== MOBILE VIEW ===================== */
 @media (max-width: 640px) {
-  /* Hero Background - Remove on mobile */
   .tmxluxe-hero {
-    background: #f5f5f5 !important;
-    padding: 30px 0 20px;
-    min-height: auto;
+    background: url('/Group 37.png') no-repeat center center / cover !important;
+    min-height: 80vh;
+    padding: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
   }
-
+  .tmxluxe-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0.06) 75%);
+    z-index: 1;
+    pointer-events: none;
+  }
   .tmxluxe-container {
-    padding: 0 16px;
+    padding: 0 8px;
+    width: 100%;
+    padding-bottom: 165px;
   }
-
+  .tmxluxe-section-title-container {
+    margin-top: -30px;
+  }
   .tmxluxe-hero-content {
-    margin-left: 0;
-    padding-right: 0;
+    position: relative;
+    z-index: 2;
     max-width: 100%;
+    width: 100%;
     text-align: center;
+    margin: 0 auto;
+    padding: 32px 12px 0 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: none;
+    color: #fff;
+    text-shadow: 0 1.5px 10px rgba(0,0,0,.23);
+    gap: 40px;
   }
-
-  /* Logo - Hide on mobile */
   .tmxluxe-logo-row {
-    display: none;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 10px;
+    margin-bottom: 10px;
   }
-
-  /* Heading - Hide on mobile */
-  .tmxluxe-heading {
-    display: none;
-  }
-
-  /* Subtext - Hide on mobile */
-  .tmxluxe-subtext {
-    display: none;
-  }
-
-  /* CTA Button - Hide on mobile */
-  #cta_button {
-    display: none;
-  }
-
-  /* Section Title */
-  .tmxluxe-section-title {
-        font-size: 24px;
-        font-weight: 550;
-        color: #1a1a1a;
-        margin-top: 0;
-        margin-bottom: 24px;
-        padding-bottom: 0;
-        TEXT-ALIGN: CENTER;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  }
-
-  .tmxluxe-section-title::after {
-    display: none;
-  }
-
-  /* Why Choose Section */
-  .tmxluxe-why-choose {
-    background: #f5f5f5;
+  .tmxluxe-logo-mark {
+    font-size: 48px;
     padding: 0;
-    margin-top: 0;
-    padding-top: 0;
+    line-height: 1;
   }
-
-  /* Features Grid */
-  .tmxluxe-features {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    margin-top: 0;
-    max-width: 360px;
-    padding: 0;
-  }
-
-  /* Feature Cards */
-  .tmxluxe-feature {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 24px 20px;
-           box-shadow: 1px 1px 9px 8px rgba(0, 0, 0, 0.12);
-    text-align: center;
-    border: 1px solid #e8e8e8;
-  }
-
-  .tmxluxe-feature:hover {
-    transform: none;
-           box-shadow: 1px 1px 9px 8px rgba(0, 0, 0, 0.12);
-  }
-
-  /* Feature Icons */
-  .tmxluxe-feature-icon {
-    width: 48px;
-    height: 48px;
-    background-color: #ffe5e5;
-    border-radius: 10px;
-    margin: 0 auto 14px;
+  .tmxluxe-logo-text {
     font-size: 24px;
-    border: none;
+    padding: 0 0 7px 5px;
+    margin-left: 2px;
+    letter-spacing: 2.5px;
+    color: #000000;
+    text-shadow: 0 0 1px #000, 0 1px 8px rgba(0,0,0,.23);
   }
+  .tmxluxe-heading {
+    font-size: 20px;
+    color: #000000;
+    line-height: 1.25;
+  }
+  .tmxluxe-accent {
+    color: #f43a3a;
+  }
+  .tmxluxe-subtext {
+    font-size: 11.8px;
+    color: #ffffff;
+  }
+  #cta_button {
+    flex-direction: column;
+    align-items: center;
+  }
+  .tmxluxe-cta {
+    margin-top: 8px;
+    font-size: 14.8px;
+    width: 85vw;
+    max-width: 340px;
+  }
+  .tmxluxe-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  /* gap: 30px; */
+  margin-top: -162px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 2px;
+}
 
-  .tmxluxe-feature:hover .tmxluxe-feature-icon {
-    background-color: #ffe5e5;
-    color: var(--tmxluxe-red);
-    transform: none;
-    box-shadow: none;
+  .tmxluxe-section-title {
+    font-size: 30px;
+    margin-bottom: -6px;
   }
+  .tmxluxe-why-choose {
+  padding: 100px 0;
+  background: linear-gradient(75deg,(255,255,255,0) 0%, rgba(255,255,255,1) 10%);
+  position: relative;
+  z-index: 1;
+  margin-top: 20px;
+  padding-top: 180px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-  /* Feature Text */
-  .tmxluxe-feature h3 {
-    font-size: 15px;
-    font-weight: 500;
-    margin-bottom: 8px;
-    color: #1a1a1a;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  }
-
-  .tmxluxe-feature p {
-    font-size: 12.5px;
-    line-height: 1.6;
-    color: #666666;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  }
-
-  /* Remove animations on mobile */
-  .tmxluxe-feature {
-    animation: none;
-    opacity: 1;
-  }
 }
 
 /* Animation */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .tmxluxe-feature {
@@ -454,29 +422,22 @@ body {
 .tmxluxe-feature:nth-child(2) { animation-delay: 0.3s; }
 .tmxluxe-feature:nth-child(3) { animation-delay: 0.5s; }
 
-.tmxluxe-badge-title {
-  color: var(--tmxluxe-muted);
-  font-size: 12px;
-  font-weight: 600;
+/* ===================== VISIBILITY CONTROL ===================== */
+
+/* Desktop Default */
+.tmxluxe-hero .tmxluxe-section-title-container {
+  display: block; /* Show hero heading on desktop */
+}
+.tmxluxe-why-choose .tmxluxe-section-title-container {
+  display: none; /* Hide why-choose heading on desktop */
 }
 
-.tmxluxe-badge-sub {
-  color: var(--tmxluxe-text);
-  font-weight: 800;
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .tmxluxe-container {
-    grid-template-columns: 1fr;
+/* Mobile */
+@media (max-width: 768px) {
+  .tmxluxe-hero .tmxluxe-section-title-container {
+    display: none; /* Hide hero heading on mobile */
   }
-  .tmxluxe-right {
-    order: -1;
-  }
-  .tmxluxe-logo-text {
-    font-size: 48px;
-  }
-  .tmxluxe-logo-mark {
-    font-size: 64px;
+  .tmxluxe-why-choose .tmxluxe-section-title-container {
+    display: block; /* Show why-choose heading on mobile */
   }
 }

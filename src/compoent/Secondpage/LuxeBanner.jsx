@@ -29,7 +29,10 @@ function LuxeBanner() {
   ensuring an unforgettable experience from check-in to check-out.</p>
                     <a href="#" className="tmxluxe-cta">Book your Luxury stay</a>
                     </div>
-                    <h2 className="tmxluxe-section-title">Why choose TM Luxe?</h2>
+                    <div className='tmxluxe-section-title-container' >
+                          <h2  className="tmxluxe-section-title">Why choose TM Luxe?</h2>
+                    </div>
+                  
                 </div>
             </div>
 
@@ -38,7 +41,11 @@ function LuxeBanner() {
                 <div className="tmxluxe-container">
                 
                     <div className="tmxluxe-features">
+                           <div className='tmxluxe-section-title-container' >
+                          <h2  className="tmxluxe-section-title">Why choose TM Luxe?</h2>
+                    </div>
                         <div className="tmxluxe-feature">
+                           
                             <div className="tmxluxe-feature-icon">
                                 <FaHotel />
                             </div>

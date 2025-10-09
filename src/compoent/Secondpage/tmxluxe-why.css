@@ -100,7 +100,7 @@
   margin: 0;
 }
 
-/* Responsive */
+/* Responsive for medium screens */
 @media (max-width: 1100px) {
   .tmxluxe-why-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -108,20 +108,21 @@
   }
 }
 
+/* ✅ Updated Mobile View (Compact, Premium Look) */
 @media (max-width: 640px) {
   .tmxluxe-why {
-    padding: 48px 16px 40px;
+    padding: 28px 8px 32px;
     background: #fafafa;
   }
 
   .tmxluxe-why-title {
     font-size: 18px;
-    font-weight: 400;
-    margin: 0 0 32px;
-    letter-spacing: -0.01em;
+    font-weight: 500;
+    margin: 0 0 24px;
     background: #ffffff;
-    padding: 12px 0;
-    position: relative;
+    padding: 10px 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   }
 
   .tmxluxe-why-sub {
@@ -130,46 +131,55 @@
 
   .tmxluxe-why-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
-    max-width: 460px;
+    gap: 14px;
+    max-width: 330px; /* reduced width */
     margin: 0 auto;
   }
 
   .tmxluxe-why-card {
-    padding: 20px 20px;
-    border-radius: 10px;
+    padding: 16px 14px;
+    border-radius: 12px;
     text-align: center;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.2); /* Sharper & deeper shadow */
+    margin: 0 auto;
+    background: #ffffff;
+    transition: transform 0.2s ease;
+  }
+
+  /* Optional subtle lift on tap */
+  .tmxluxe-why-card:active {
+    transform: translateY(-2px);
   }
 
   .tmxluxe-why-iconwrap {
-    width: 48px;
-    height: 48px;
+    width: 46px;
+    height: 46px;
     border-radius: 10px;
-    margin: 0 auto 12px;
+    margin: 0 auto 10px;
     background: #ffe8e8;
   }
 
   .tmxluxe-why-card-title {
-    font-size: 15px;
-    font-weight: 500;
-    margin: 0 0 8px;
+    font-size: 14.5px;
+    font-weight: 600;
+    margin: 0 0 6px;
     color: #1a1a1a;
   }
 
   .tmxluxe-why-card-text {
     font-size: 12.5px;
-    line-height: 1.65;
-    color: #666666;
+    line-height: 1.55;
+    color: #555;
   }
 }
 
+/* Compact for smaller phones */
 @media (max-width: 480px) {
   .tmxluxe-why-grid {
-    max-width: 340px;
+    max-width: 300px;
   }
-  
+
   .tmxluxe-why-card {
-    padding: 18px 16px;
+    padding: 14px 12px;
   }
 }
