@@ -15,6 +15,7 @@ import Sucess from './compoent/payment/Sucess';
 import Failure from './compoent/payment/Failure';
 import ListPropertyPage from './compoent/ListProperty/ListPropertyPage';
 import { AuthProvider } from './compoent/Login/AuthContext';
+import FourthMain from './compoent/FourthPage/fourthMain';
 
 
 
@@ -34,6 +35,7 @@ function App() {
          <Route path="/list-property" element={<ListPropertyPage />} />
          <Route path="/success" element={<Sucess />} />
          <Route path="/failure" element={<Failure />} />
+         <Route path="/selfmanage" element={<FourthMain/>}/>
       </Routes>
       <HoomieFooter/>
     </Router>

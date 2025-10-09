@@ -1,0 +1,75 @@
+.listing-steps-section {
+  width: 100%;
+  padding: 60px 20px;
+  text-align: center;
+  background-color: #fff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.listing-steps-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 50px;
+  color: #111;
+}
+
+.listing-steps-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 50px;
+}
+
+.listing-step-card {
+  flex: 1 1 250px;
+  max-width: 300px;
+  text-align: center;
+}
+
+.icon-wrapper {
+  width: 70px;
+  height: 70px;
+  background-color: #fff5f5;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px auto;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.step-icon {
+  font-size: 32px;
+  color: #c91f22; /* red icon color */
+}
+
+.step-heading {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #000;
+}
+
+.step-text {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* ✅ Responsive view */
+@media (max-width: 768px) {
+  .listing-steps-title {
+    font-size: 1.6rem;
+    margin-bottom: 30px;
+  }
+
+  .listing-steps-container {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .listing-step-card {
+    max-width: 100%;
+  }
+}
