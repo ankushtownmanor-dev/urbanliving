@@ -24,7 +24,7 @@
   
   .faq-ovika.heading{
     text-align:center;
-    font-weight:800;
+    font-weight:500;
     font-size:clamp(28px,4.6vw,44px);
     letter-spacing:-0.3px;
     margin:6px 0 28px;
@@ -38,11 +38,13 @@
   
   /* Each item card */
   .faq-ovika.item{
-    background:var(--faq-ovika-white);
-    border:1px solid var(--faq-ovika-ring);
-    border-radius:14px;
-    box-shadow:var(--faq-ovika-shadow);
-    overflow:hidden;
+    background: var(--faq-ovika-white);
+    border-radius: 14px;
+    box-shadow: var(--faq-ovika-shadow);
+    overflow: hidden;
+  
+    /* solid black border */
+    border: 1px solid #6e6464;   /* or #121314 if you prefer */
   }
   
   /* Question button row */
