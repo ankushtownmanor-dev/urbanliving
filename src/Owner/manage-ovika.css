@@ -62,21 +62,21 @@
 }
 
 .manage-ovika.iconCircle {
-  width: 72px;
-  height: 72px;
+  width: 82px;
+  height: 82px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: radial-gradient(circle at 30% 30%, #ffffff, #f3f3f3);
+  background: radial-gradient(circle at 30% 30%, #dddddd, #fffefe);
   box-shadow:
-    inset 0 2px 0 rgba(255,255,255,0.9),
-    0 8px 22px rgba(0,0,0,0.12);
+    inset 0 2px 5px rgba(159, 159, 159, 0.9),
+    22px 18px 22px rgba(159, 159, 159, 0.9);
 }
 
 .manage-ovika.iconGlyph {
-  color: var(--manage-ovika-red);
-  width: 28px;
-  height: 28px;
+  color: rgb(128, 1, 1);
+  width: 40px;
+  height: 40px;
 }
 
 /* small floor shadow under the badge */
@@ -86,7 +86,7 @@
   left: 50%;
   transform: translateX(-50%);
   width: 54px;
-  height: 10px;
+  height: 20px;
   border-radius: 999px;
   background: rgba(0,0,0,0.12);
   filter: blur(6px);
@@ -97,7 +97,7 @@
 .manage-ovika.title.center {
   font-size: 12px;
   font-weight: 500;
-  margin: 2px 0 6px;
+  margin: 5px 0 6px;
   line-height: 1.35;
 }
 
@@ -109,12 +109,13 @@
 }
 .manage-ovika.title.left {
   text-align: left;
+  gap: 12px;
   font-size: 18px;        /* desktop */
   line-height: 1.35;
   font-weight: 800;       /* bold like in the mock */
   color: #161616;         /* near-black */
-  margin: 4px 5px 8px;  
-  margin-left: -20px;    /* space above/below the title */
+  margin: 12px ;  
+  margin-left: -25px;    /* space above/below the title */
 }
 
 /* Left-aligned paragraph under the title */

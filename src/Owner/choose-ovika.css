@@ -24,7 +24,7 @@
 
 .choose-ovika.heading{
   font-weight:500;
-  letter-spacing:.1px;
+  letter-spacing:.5px;
   line-height:1.2;
   font-size:clamp(28px,4.6vw,48px);
   margin:6px 0 10px;
@@ -34,7 +34,7 @@
   color:#161616;
   font-size:clamp(15px,1.6vw,20px);
   font-weight:400;
-  letter-spacing:1px;
+  letter-spacing:.5px;
   margin-bottom:28px;
 }
 
@@ -42,7 +42,7 @@
 .choose-ovika.grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:30px;
+  gap:40px;
 }
 
 /* Tile (white card) */
@@ -62,15 +62,16 @@
 /* Plain icon — no circle */
 .choose-ovika.glyph.plain{
   color:var(--choose-ovika-red);
-  width:40px;
-  height:40px;
+  width:45px;
+  height:45px;
+  gap:12px;
   margin-bottom:18px;   /* space between icon and title */
 }
 
 /* Title text */
 .choose-ovika.cardTitle{
   font-weight:500;
-  font-size:18px;
+  font-size:20px;
   line-height:1.35;
   margin-bottom: 18px;
 }
