@@ -1,8 +1,8 @@
 .property-share-container {
   width: 100%;
-  height: 100vh;
-  background-image: url('/public/image 217.png'); /* replace with your link */
-  background-size: cover;
+  height: 120vh;
+  background-image: url('/public/image 229.png'); /* replace with your link */
+  /* background-size: cover; */
   background-position: center;
   position: relative;
   display: flex;
@@ -10,6 +10,7 @@
   justify-content: center;
   color: white;
   font-family: 'Poppins', sans-serif;
+
 }
 
 .property-share-header{
@@ -29,18 +30,19 @@
 
 .property-share-content {
   text-align: center;
-  max-width: 941px;
-  padding: 20px;
+  max-width: 1841px;
+  padding-bottom: 172px;
+  padding-right: 55px;
 }
 
 .property-share-title {
   /* font-size: 3.1rem;      
       */
-      font-size: 49px;
-  font-weight: 700;
+      font-size: 59px;
+  font-weight: 550;
   line-height: 1.15;
   margin-bottom: 34px;       /* Increased gap to subheading */
-  letter-spacing: 0.9px;
+  letter-spacing: 1.3px;
 }
 
 .property-share-text {
@@ -54,10 +56,10 @@
   background: white;
   border: none;
   color: black;
-  padding: 14px 32px;
+  padding: 14px 62px;
   font-size: 1rem;
   font-weight: 600;
-  border-radius: 25px;
+  border-radius: 45px;
   cursor: pointer;
   transition: 0.3s ease-in-out;
 }

@@ -12,12 +12,14 @@
 
 .property-text-section {
   flex: 1;
-  margin-right: 315px;
+  margin-right: 45px;
   margin-left: 130px;
+  margin-bottom: 70px;
+  /* text-align: center */
 }
 
 .property-text-section h2 {
-  font-size: 22px;
+  font-size: 29px;
   color: #1c1c1c;
   font-weight: 700;
   margin-bottom: 15px;
@@ -31,7 +33,7 @@
 }
 
 .property-image-section img {
-  width: 320px;
+  width: 510px;
   height: auto;
   border-radius: 10px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);

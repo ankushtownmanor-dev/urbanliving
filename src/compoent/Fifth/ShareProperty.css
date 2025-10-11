@@ -1,0 +1,60 @@
+.property-share {
+  width: 100%;
+  height: 100vh;
+  background: url("/public/image\ 999.png") center/cover no-repeat;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: "Poppins", sans-serif;
+}
+
+.overlay {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 7%;
+}
+
+.content-box {
+  max-width: 500px;
+  color: #fff;
+}
+
+.content-box h1 {
+  font-size: 2.2rem;
+  font-weight: 460;
+  line-height: 1.3;
+  margin-bottom: 20px;
+}
+
+.content-box p {
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  color: #f0f0f0;
+}
+
+.cta-btn {
+  background: #fff;
+  color: #b91c1c;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.cta-btn:hover {
+  background: #b91c1c;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(185, 28, 28, 0.5);
+}

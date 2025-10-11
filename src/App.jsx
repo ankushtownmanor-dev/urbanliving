@@ -17,6 +17,7 @@ import ListPropertyPage from './compoent/ListProperty/ListPropertyPage';
 import { AuthProvider } from './compoent/Login/AuthContext';
 
 import FourthMain from './compoent/FourthPage/fourthMain';
+import FifthMain from './compoent/Fifth/FifthMain';
 
 
 import Ownermain from './Owner/Ownermain';
@@ -43,6 +44,7 @@ function App() {
           <Route path="/selfmanage" element={<FourthMain />} />
 
           <Route path="/ownermain" element={<Ownermain />} />
+          <Route path="/renovation" element={<FifthMain />} />
 
         </Routes>
         <HoomieFooter />

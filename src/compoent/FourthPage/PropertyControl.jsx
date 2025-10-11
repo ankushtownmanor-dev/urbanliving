@@ -9,13 +9,13 @@ const PropertyControl = () => {
         <h2>Complete Control at Your Figertips</h2>
         <p>
           Want full control over your property listing? Ovika gives you the
-          freedom to upload and manage property on your own terms. Easily add
-          photos, set rent details, write descriptions, and publish property
-          instantly on our platform. With our simple and user-friendly
+          freedom to upload <br/> and manage property on your own terms. Easily add
+          photos, set rent details, write <br/>  descriptions, and publish property
+          instantly on our platform. With our simple and <br/>  user-friendly
           interface, you can reach potential tenants, directly track enquiries,
-          and update details anytime you want. It is the perfect choice for
-          property owners who prefer independent and hands-on management while
-          benefiting from Ovika’s trusted platform and audience reach.
+          and <br/>  update details anytime you want. It is the perfect choice for
+          property owners so  <br/>  proper independent and hands-on management while
+          benefiting from Ovika’s trusted <br/>  platform and audience reach.
         </p>
       </div>
       <div className="property-image-section">

@@ -1,5 +1,5 @@
 import React from "react";
-import "./PropertyShareForm.css";
+import "./Form.css";
 
 const PropertyShareForm = () => (
   <div className="property-share-wrapper">
