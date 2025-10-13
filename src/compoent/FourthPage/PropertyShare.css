@@ -1,8 +1,8 @@
 .property-share-container {
   width: 100%;
-  height: 120vh;
+  /* min-height: 100vh; */
   background-image: url('/public/image 229.png'); /* replace with your link */
-  /* background-size: cover; */
+  background-size: cover;
   background-position: center;
   position: relative;
   display: flex;
@@ -10,45 +10,44 @@
   justify-content: center;
   color: white;
   font-family: 'Poppins', sans-serif;
-
-}
-
-.property-share-header{
-  text-align: center;
-  max-width: 1080px;
-  /* padding: 20px; */
 }
 
 .property-share-overlay {
   width: 100%;
-  height: 100%;
+  height: 110vh;
   background: rgba(0, 0, 0, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 4vw;
 }
 
 .property-share-content {
   text-align: center;
-  max-width: 1841px;
-  padding-bottom: 172px;
-  padding-right: 55px;
+  max-width: 1200px;
+  width: 100%;
+  padding: 4vw 2vw;
+  box-sizing: border-box;
+    margin-bottom: 6rem;
+}
+
+.property-share-header {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .property-share-title {
-  /* font-size: 3.1rem;      
-      */
-      font-size: 59px;
-  font-weight: 550;
-  line-height: 1.15;
-  margin-bottom: 34px;       /* Increased gap to subheading */
-  letter-spacing: 1.3px;
+  font-size: clamp(1.8rem, 3.5vw, 4rem);
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 3.9rem;
+  letter-spacing: 1.2px;
 }
 
 .property-share-text {
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 1.4vw, 1.3rem);
   line-height: 1.7;
-  margin-bottom: 35px;
+  margin-bottom: 2rem;
   color: #f0f0f0;
 }
 
@@ -56,12 +55,12 @@
   background: white;
   border: none;
   color: black;
-  padding: 14px 62px;
-  font-size: 1rem;
+  padding: 0.9rem 3rem;
+  font-size: clamp(0.9rem, 1vw, 1rem);
   font-weight: 600;
   border-radius: 45px;
   cursor: pointer;
-  transition: 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
 .property-share-button:hover {
@@ -69,21 +68,59 @@
   transform: scale(1.05);
 }
 
-/* ✅ Responsive adjustments */
-@media (max-width: 768px) {
+/* ✅ Large screen optimization (like LED screens or 2K/4K displays) */
+@media (min-width: 1600px) {
   .property-share-container {
-    height: 80vh;
+    min-height: 90vh;
   }
   .property-share-title {
-    font-size: 2.2rem;
-    margin-bottom: 22px;
+    font-size: clamp(2.5rem, 3vw, 4.5rem);
   }
   .property-share-text {
-    font-size: 1rem;
-    margin-bottom: 24px;
+    font-size: clamp(1.1rem, 1.2vw, 1.5rem);
   }
+}
+
+/* ✅ Tablet */
+@media (max-width: 1024px) {
+  .property-share-container {
+    min-height: 80vh;
+  }
+  .property-share-title {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+  }
+}
+
+/* ✅ Mobile */
+@media (max-width: 768px) {
+  .property-share-container {
+    background-position: top center;
+    min-height: 80vh;
+    padding: 2rem 1rem;
+  }
+
+  .property-share-title {
+    font-size: 1.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .property-share-text {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
   .property-share-button {
-    padding: 10px 24px;
+    padding: 10px 28px;
+    font-size: 0.95rem;
+  }
+}
+
+/* ✅ Very small screens */
+@media (max-width: 480px) {
+  .property-share-title {
+    font-size: 1.6rem;
+  }
+  .property-share-text {
     font-size: 0.9rem;
   }
 }
