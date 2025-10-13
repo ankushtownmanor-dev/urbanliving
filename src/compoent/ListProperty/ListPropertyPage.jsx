@@ -173,9 +173,10 @@ const ListPropertyPage = () => {
           Once it's rented, you receive a fair share of the profits, making it a hassle-free way to earn passive income
           while increasing your property's overall value.
         </p>
-        <button className="wm-cta">
+        <a href='/selfmanage' target='_blank'>  <button  target='_blank' className="wm-cta">
           Check out process
-        </button>
+        </button></a>
+       
       </div>
       <div className="wm-image">
         <img src="/home1.png" alt="Renovate and share profit" />
@@ -208,9 +209,9 @@ const ListPropertyPage = () => {
           potential tenants directly, track inquiries, and update details anytime. Perfect for hands-on owners with the
           reach of a trusted platform.
         </p>
-        <button className="wm-cta">
+         <a href='/renovation' target='_blank'>  <button  target='_blank' className="wm-cta">
           Check out process
-        </button>
+        </button></a>
       </div>
       <div className="wm-image">
         <img src="/home3.png" alt="List your way" />
