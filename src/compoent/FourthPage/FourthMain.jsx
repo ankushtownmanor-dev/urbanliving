@@ -1,4 +1,4 @@
-import react from "react"
+// import react from "react"
 import PropertyShare from "./PropertyShare"
 import ListProperty from "./ListProperty"
 import PropertyControl from "./PropertyControl"
