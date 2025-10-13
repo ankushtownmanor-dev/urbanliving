@@ -762,7 +762,9 @@ function Payment() {
         test: '1' // Add test flag if supported by the payment gateway
       };
 
+      console.log('Sending payment request with data:', testPaymentData);
       const response = await axios.post('https://townmanor.ai/api/payu/payment', testPaymentData);
+      console.log('Payment API response:', response.data);
 
       if (!response.data || !response.data.paymentUrl || !response.data.params) {
         throw new Error('Invalid payment response received');
@@ -770,21 +772,29 @@ function Payment() {
 
       // Create a test mode URL if possible
       let paymentUrl = response.data.paymentUrl;
-      if (paymentUrl.includes('?')) {
-        paymentUrl += '&test=1';
-      } else {
-        paymentUrl += '?test=1';
-      }
+      console.log('Original payment URL:', paymentUrl);
+      
+      // Force test mode and amount in URL
+      const url = new URL(paymentUrl);
+      url.searchParams.set('test', '1');
+      url.searchParams.set('amount', '1.00');
+      paymentUrl = url.toString();
+      console.log('Modified payment URL:', paymentUrl);
 
       const form = document.createElement('form');
       form.method = 'POST';
       form.action = paymentUrl;
 
-      // Override amount in params if it exists
-      const params = { ...response.data.params };
-      if (params.amount) {
-        params.amount = '1.00';
-      }
+      // Override amount and add test mode in form data
+      const params = { 
+        ...response.data.params,
+        amount: '1.00',
+        test: '1',
+        udf1: bookingIdParam || '',
+        udf2: 'test_payment_1_rupee' // Add a test identifier
+      };
+      
+      console.log('Final payment params:', params);
 
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
