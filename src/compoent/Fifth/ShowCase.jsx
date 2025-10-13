@@ -164,7 +164,7 @@ const data = [
   },
 ];
 
-const BeforeAfterCarousel = () => {
+const ShowCase = () => {
   const [index, setIndex] = useState(0);
 
   const nextSlide = () => {
@@ -220,4 +220,4 @@ const BeforeAfterCarousel = () => {
   );
 };
 
-export default BeforeAfterCarousel;
+export default ShowCase;
