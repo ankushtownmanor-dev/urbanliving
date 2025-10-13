@@ -20,7 +20,7 @@ const PropertyControl = () => {
       </div>
       <div className="property-image-section">
 
-        <img src="/public/image 219.png" alt="Property" />
+        <img src="/image219.png" alt="Property" />
 
         {/* <img src={process.env.PUBLIC_URL + '/image 219.png'} alt="Property" style={{ maxWidth: '100%', height: 'auto' }} /> */}
 
