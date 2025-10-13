@@ -738,10 +738,13 @@ function Payment() {
 
       const txnid = 'OID' + Date.now();
 
+      // For testing, always use 1 rupee amount
+      const testAmount = 1.00;
+      
       const paymentData = {
         key: 'UvTrjC',
         txnid: txnid,
-        amount: pricing.total,
+        amount: testAmount, // Using fixed 1 rupee for testing
         productinfo: 'Room Booking',
         firstname: userData.name || username || '',
         email: userData.email || '',
