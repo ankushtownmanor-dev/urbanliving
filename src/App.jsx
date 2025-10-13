@@ -16,7 +16,7 @@ import Failure from './compoent/payment/Failure';
 import ListPropertyPage from './compoent/ListProperty/ListPropertyPage';
 import { AuthProvider } from './compoent/Login/AuthContext';
 
-// import FourthMain from './compoent/FourthPage/fourthMain';
+import FourthMain from './compoent/FourthPage/FourthMain';
 import FifthMain from './compoent/Fifth/FifthMain';
 
 
@@ -41,7 +41,7 @@ function App() {
           <Route path="/success" element={<Sucess />} />
           <Route path="/failure" element={<Failure />} />
 
-          {/* <Route path="/selfmanage" element={<FourthMain />} /> */}
+          <Route path="/selfmanage" element={<FourthMain />} />
 
           <Route path="/ownermain" element={<Ownermain />} />
           <Route path="/renovation" element={<FifthMain />} />
