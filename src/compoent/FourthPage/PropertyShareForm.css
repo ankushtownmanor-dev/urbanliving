@@ -68,32 +68,24 @@
 }
 
 .submit-btn {
-  background: linear-gradient(to left, #000000, #e11212);
+  margin-top: 16px;
+  background: linear-gradient(to right, #cf1518, #1b0101);
   color: #fff;
-  font-size: 16px;
-  font-weight: 600;
   border: none;
-  border-radius: 40px;
-  padding: 12px 34px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
+  box-shadow: 0 6px 14px rgba(197, 45, 47, 0.25);
+  transform: translateY(-4px); /* same as hover */
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+  margin-left: 130px;
 }
-
 .submit-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-  opacity: 0.95;
+  background: linear-gradient(to right, #cf1518, #1b0101);
 }
 
-.submit-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-}
 
 .arrow {
   margin-left: 18px;
@@ -110,36 +102,6 @@
   line-height: 1.5;
 }
 
-
-/* Form Feedback Messages */
-.form-success,
-.form-error {
-  margin-top: 16px;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  width: 90%;
-  text-align: left;
-}
-
-.form-success {
-  background-color: #e6f7e6;
-  color: #2e7d32;
-  border: 1px solid #a5d6a7;
-}
-
-.form-error {
-  background-color: #ffebee;
-  color: #c62828;
-  border: 1px solid #ef9a9a;
-}
-
-/* Disabled button state */
-.submit-btn:disabled {
-  background: #cccccc;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
 
 .address-title {
   font-weight: bold;
@@ -222,24 +184,4 @@
   color: #666;
   margin-top: 20px;
   line-height: 1.4;
-}
-.auto-reply-preview {
-  background: #e8f5e9;
-  border-left: 4px solid #4caf50;
-  padding: 12px 16px;
-  margin: 12px 0;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.auto-reply-preview strong {
-  display: block;
-  margin-bottom: 8px;
-  color: #2e7d32;
-}
-
-.auto-reply-preview p {
-  margin: 0;
-  color: #1b5e20;
-  line-height: 1.5;
 }
