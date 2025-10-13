@@ -6,14 +6,14 @@ const Testimonials = () => {
       name: "Anil Kumar",
       time: "1 month ago",
       rating: 5,
-      image: "/public/r1.png",
+      image: "/r1.png",
       text: "I had an old flat sitting unused for years. The Ovika team renovated it beautifully — it looks brand new! They handled everything from design to renting, and now I get regular monthly income without any stress. Totally worth trusting their process."
     },
     {
       name: "Anshula Kapoor",
       time: "2 month ago",
       rating: 5,
-      image: "/public/r4.png",
+      image: "/r4.png",
       text: "I was skeptical at first, but Ovika's transparent process won me over. Their renovation team completely transformed my property, and within weeks it was rented out. I just receive my profit share every month. Smooth and professional experience!"
     }
   ];

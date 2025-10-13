@@ -80,14 +80,11 @@
 //       afterImg: "/public/image 224.png",
 //       label: "Hall",
 //     },
-//     {
-//       beforeImg: "/public/tmluxe.png",
-//       afterImg: "/public/tmluxe2.png",
 //       label: "PG Room",
 //     },
 //     {
-//       beforeImg: "/public/tmluxe3.png",
-//       afterImg: "/public/tmluxe41.webp",
+//       beforeImg: "/tmluxe3.png",
+//       afterImg: "/tmluxe41.webp",
 //       label: "Bedroom",
 //     },
 //   ];
@@ -146,20 +143,20 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 const data = [
   {
     id: 1,
-    before: "/public/image 221.png",
-      after: "/public/image 224.png",
+    before: "/image 221.png",
+      after: "/image 224.png",
       label: "Hall",
   },
   {
     id: 2,
-     before: "/public/tmluxe.png",
-      after: "/public/tmluxe2.png",
+     before: "/tmluxe.png",
+      after: "/tmluxe2.png",
       label: "PG Room",
   },
   {
     id: 3,
-    before: "/public/tmluxe3.png",
-      after: "/public/tmluxe41.webp",
+    before: "/tmluxe3.png",
+      after: "/tmluxe41.webp",
       label: "Bedroom",
   },
 ];
