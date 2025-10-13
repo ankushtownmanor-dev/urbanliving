@@ -361,21 +361,16 @@ function Payment() {
   // Calculate price whenever dates change
   useEffect(() => {
     if (formData.checkInDate && formData.checkOutDate) {
-      const checkIn = new Date(formData.checkInDate);
-      const checkOut = new Date(formData.checkOutDate);
-      const diffTime = Math.abs(checkOut - checkIn);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      
-      const pricePerNight = property?.per_night_price ? Number(property.per_night_price) : 0;
-      const subtotal = diffDays * pricePerNight;
-      const gst = subtotal * 0.05; // 18% GST
-      const total = subtotal + gst;
-
-      setPricing({ subtotal, gst, total });
+      // For testing purposes, set all amounts to 1 rupee
+      setPricing({ 
+        subtotal: 1, 
+        gst: 0, // No GST for 1 rupee amount
+        total: 1 // Total is 1 rupee for testing
+      });
     } else {
       setPricing({ subtotal: 0, gst: 0, total: 0 });
     }
-  }, [formData.checkInDate, formData.checkOutDate, property]);
+  }, [formData.checkInDate, formData.checkOutDate]);
 
   // Enable Pay Now button only when all steps are valid
   useEffect(() => {
