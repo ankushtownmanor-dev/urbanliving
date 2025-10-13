@@ -273,7 +273,8 @@ function Payment() {
       if (savedAadhaar) {
         setAadhaarNumber(savedAadhaar);
       }
-      console.warn('Failed to restore payment progress from storage', e);
+    } catch (error) {
+      console.warn('Failed to restore payment progress from storage', error);
     } finally {
       hasLoadedFromStorageRef.current = true;
     }
