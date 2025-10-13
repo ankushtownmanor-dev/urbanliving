@@ -273,7 +273,8 @@ function Payment() {
       if (savedAadhaar) {
         setAadhaarNumber(savedAadhaar);
       }
-      console.warn('Failed to restore payment progress from storage', e);
+    } catch (error) {
+      console.warn('Failed to restore payment progress from storage', error);
     } finally {
       hasLoadedFromStorageRef.current = true;
     }
@@ -745,7 +746,8 @@ function Payment() {
       const paymentData = {
         key: 'UvTrjC',
         txnid: txnid,
-        amount: pricing.total,
+        amount:1.00,
+        // amount: pricing.total,
         productinfo: 'Room Booking',
         firstname: userData.name || username || '',
         email: userData.email || '',
