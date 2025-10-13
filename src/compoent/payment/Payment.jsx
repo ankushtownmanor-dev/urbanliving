@@ -361,16 +361,21 @@ function Payment() {
   // Calculate price whenever dates change
   useEffect(() => {
     if (formData.checkInDate && formData.checkOutDate) {
-      // For testing purposes, set all amounts to 1 rupee
-      setPricing({ 
-        subtotal: 1, 
-        gst: 0, // No GST for 1 rupee amount
-        total: 1 // Total is 1 rupee for testing
-      });
+      const checkIn = new Date(formData.checkInDate);
+      const checkOut = new Date(formData.checkOutDate);
+      const diffTime = Math.abs(checkOut - checkIn);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      const pricePerNight = property?.per_night_price ? Number(property.per_night_price) : 0;
+      const subtotal = diffDays * pricePerNight;
+      const gst = subtotal * 0.05; // 18% GST
+      const total = subtotal + gst;
+
+      setPricing({ subtotal, gst, total });
     } else {
       setPricing({ subtotal: 0, gst: 0, total: 0 });
     }
-  }, [formData.checkInDate, formData.checkOutDate]);
+  }, [formData.checkInDate, formData.checkOutDate, property]);
 
   // Enable Pay Now button only when all steps are valid
   useEffect(() => {
@@ -738,13 +743,11 @@ function Payment() {
 
       const txnid = 'OID' + Date.now();
 
-      // For testing, always use 1 rupee amount
-      const testAmount = 1.00;
-      
       const paymentData = {
         key: 'UvTrjC',
         txnid: txnid,
-        amount: testAmount, // Using fixed 1 rupee for testing
+        amount:1.00,
+        // amount: pricing.total,
         productinfo: 'Room Booking',
         firstname: userData.name || username || '',
         email: userData.email || '',
@@ -755,48 +758,17 @@ function Payment() {
         service_provider: 'payu_paisa'
       };
 
-      // For testing, override the amount in the payment data
-      const testPaymentData = {
-        ...paymentData,
-        amount: 1.00, // Force 1 rupee for testing
-        test: '1' // Add test flag if supported by the payment gateway
-      };
-
-      console.log('Sending payment request with data:', testPaymentData);
-      const response = await axios.post('https://townmanor.ai/api/payu/payment', testPaymentData);
-      console.log('Payment API response:', response.data);
+      const response = await axios.post('https://townmanor.ai/api/payu/payment', paymentData);
 
       if (!response.data || !response.data.paymentUrl || !response.data.params) {
         throw new Error('Invalid payment response received');
       }
 
-      // Create a test mode URL if possible
-      let paymentUrl = response.data.paymentUrl;
-      console.log('Original payment URL:', paymentUrl);
-      
-      // Force test mode and amount in URL
-      const url = new URL(paymentUrl);
-      url.searchParams.set('test', '1');
-      url.searchParams.set('amount', '1.00');
-      paymentUrl = url.toString();
-      console.log('Modified payment URL:', paymentUrl);
-
       const form = document.createElement('form');
       form.method = 'POST';
-      form.action = paymentUrl;
+      form.action = response.data.paymentUrl;
 
-      // Override amount and add test mode in form data
-      const params = { 
-        ...response.data.params,
-        amount: '1.00',
-        test: '1',
-        udf1: bookingIdParam || '',
-        udf2: 'test_payment_1_rupee' // Add a test identifier
-      };
-      
-      console.log('Final payment params:', params);
-
-      Object.entries(params).forEach(([key, value]) => {
+      Object.entries(response.data.params).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           const input = document.createElement('input');
           input.type = 'hidden';
@@ -805,13 +777,6 @@ function Payment() {
           form.appendChild(input);
         }
       });
-
-      // Add test mode parameter
-      const testInput = document.createElement('input');
-      testInput.type = 'hidden';
-      testInput.name = 'test';
-      testInput.value = '1';
-      form.appendChild(testInput);
 
       document.body.appendChild(form);
       form.submit();
