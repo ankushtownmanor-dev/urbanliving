@@ -19,7 +19,7 @@ const PropertyControl = () => {
         </p>
       </div>
       <div className="property-image-section">
-        <img src={`${process.env.PUBLIC_URL}/image 219.png`} alt="Property" />
+        <img src='/public/image 219.png' alt="Property" />
       </div>
     </div>
   );
