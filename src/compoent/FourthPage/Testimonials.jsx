@@ -15,6 +15,13 @@ const Testimonials = () => {
       rating: 5,
       image: "/public/r4.png",
       text: "I was skeptical at first, but Ovika's transparent process won me over. Their renovation team completely transformed my property, and within weeks it was rented out. I just receive my profit share every month. Smooth and professional experience!"
+    },
+     {
+      name: "",
+      time: "",
+      rating: ,
+      image: "",
+      text: ""
     }
   ];
 
