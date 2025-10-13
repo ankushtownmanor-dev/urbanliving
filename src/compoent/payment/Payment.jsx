@@ -755,17 +755,38 @@ function Payment() {
         service_provider: 'payu_paisa'
       };
 
-      const response = await axios.post('https://townmanor.ai/api/payu/payment', paymentData);
+      // For testing, override the amount in the payment data
+      const testPaymentData = {
+        ...paymentData,
+        amount: 1.00, // Force 1 rupee for testing
+        test: '1' // Add test flag if supported by the payment gateway
+      };
+
+      const response = await axios.post('https://townmanor.ai/api/payu/payment', testPaymentData);
 
       if (!response.data || !response.data.paymentUrl || !response.data.params) {
         throw new Error('Invalid payment response received');
       }
 
+      // Create a test mode URL if possible
+      let paymentUrl = response.data.paymentUrl;
+      if (paymentUrl.includes('?')) {
+        paymentUrl += '&test=1';
+      } else {
+        paymentUrl += '?test=1';
+      }
+
       const form = document.createElement('form');
       form.method = 'POST';
-      form.action = response.data.paymentUrl;
+      form.action = paymentUrl;
 
-      Object.entries(response.data.params).forEach(([key, value]) => {
+      // Override amount in params if it exists
+      const params = { ...response.data.params };
+      if (params.amount) {
+        params.amount = '1.00';
+      }
+
+      Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           const input = document.createElement('input');
           input.type = 'hidden';
@@ -774,6 +795,13 @@ function Payment() {
           form.appendChild(input);
         }
       });
+
+      // Add test mode parameter
+      const testInput = document.createElement('input');
+      testInput.type = 'hidden';
+      testInput.name = 'test';
+      testInput.value = '1';
+      form.appendChild(testInput);
 
       document.body.appendChild(form);
       form.submit();
