@@ -192,9 +192,14 @@ const ListPropertyPage = () => {
           list it on the Ovika platform, verify details, and showcase it to thousands of potential tenants. Start earning
           without the hassle.
         </p>
-        <button className="wm-cta">
+        {/* <button className="wm-cta" onClick={() => window.location.href = '/ownermain'}>
+          Check out process
+        </button> */}
+        <a href='/ownermain' target='_blank'>
+          <button className="wm-cta" >
           Check out process
         </button>
+        </a>
       </div>
       <div className="wm-image">
         <img src="/home2.png" alt="We handle listings" />
