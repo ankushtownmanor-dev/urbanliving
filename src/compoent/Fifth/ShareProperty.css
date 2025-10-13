@@ -1,7 +1,7 @@
 .property-share {
   width: 100%;
   height: 100vh;
-  background-image: url("/public/image\ 999.png") center/cover no-repeat;
+  background-image: url("/public/image 999.png") center/cover no-repeat;
   position: relative;
   display: flex;
   align-items: center;
