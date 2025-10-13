@@ -139,125 +139,45 @@
 // export default BeforeAfterShowcase;
 
 
-// import React, { useState } from "react";
-// import "./ShowCase.css";
-// import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-
-// const data = [
-//   {
-//     id: 1,
-//     before: "/public/image 221.png",
-//       after: "/public/image 224.png",
-//       label: "Hall",
-//   },
-//   {
-//     id: 2,
-//      before: "/public/tmluxe.png",
-//       after: "/public/tmluxe2.png",
-//       label: "PG Room",
-//   },
-//   {
-//     id: 3,
-//     before: "/public/tmluxe3.png",
-//       after: "/public/tmluxe41.webp",
-//       label: "Bedroom",
-//   },
-// ];
-
-// const ShowCase = () => {
-//   const [index, setIndex] = useState(0);
-
-//   const nextSlide = () => {
-//     setIndex((prev) => (prev + 1) % data.length);
-//   };
-
-//   const prevSlide = () => {
-//     setIndex((prev) => (prev - 1 + data.length) % data.length);
-//   };
-
-//   return (
-//     <div className="beforeafter-section">
-//       <h2>Before and after showcase</h2>
-//       <p>See how we transform your space into profitable assets</p>
-
-//       <div className="carousel-container">
-//         <button className="nav-btn left" onClick={prevSlide}>
-//           <FaArrowLeft />
-//         </button>
-
-//         <div className="carousel-wrapper">
-//           {data.map((item, i) => {
-//             let position = "nextSlide";
-//             if (i === index) position = "activeSlide";
-//             if (i === index - 1 || (index === 0 && i === data.length - 1))
-//               position = "lastSlide";
-
-//             return (
-//               <div className={`carousel-card ${position}`} key={item.id}>
-//                 <div className="card-inner">
-//                   <div className="card-img">
-//                     <img src={item.before} alt="before" />
-//                     <span className="tag">Before</span>
-//                     <span className="label">{item.label}</span>
-//                   </div>
-
-//                   <div className="card-img">
-//                     <img src={item.after} alt="after" />
-//                     <span className="tag after">After</span>
-//                     <span className="label">{item.label}</span>
-//                   </div>
-//                 </div>
-//               </div>
-//             );
-//           })}
-//         </div>
-
-//         <button className="nav-btn right" onClick={nextSlide}>
-//           <FaArrowRight />
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ShowCase;
-
-
-
 import React, { useState } from "react";
 import "./ShowCase.css";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
-const ShowCase = () => {
-  const slides = [
-    {
-      id: 1,
-      before: "/image 221.png",
-      after: "/image 224.png",
+const data = [
+  {
+    id: 1,
+    before: "/public/image 221.png",
+      after: "/public/image 224.png",
       label: "Hall",
-    },
-    {
-      id: 2,
-      before: "/tmluxe.png",
-      after: "/tmluxe2.png",
+  },
+  {
+    id: 2,
+     before: "/public/tmluxe.png",
+      after: "/public/tmluxe2.png",
       label: "PG Room",
-    },
-    {
-      id: 3,
-      before: "/tmluxe3.png",
-      after: "/tmluxe41.webp",
+  },
+  {
+    id: 3,
+    before: "/public/tmluxe3.png",
+      after: "/public/tmluxe41.webp",
       label: "Bedroom",
-    },
-  ];
+  },
+];
 
+const ShowCase = () => {
   const [index, setIndex] = useState(0);
 
-  const nextSlide = () => setIndex((prev) => (prev + 1) % slides.length);
-  const prevSlide = () => setIndex((prev) => (prev - 1 + slides.length) % slides.length);
+  const nextSlide = () => {
+    setIndex((prev) => (prev + 1) % data.length);
+  };
+
+  const prevSlide = () => {
+    setIndex((prev) => (prev - 1 + data.length) % data.length);
+  };
 
   return (
     <div className="beforeafter-section">
-      <h2>Before and After Showcase</h2>
+      <h2>Before and after showcase</h2>
       <p>See how we transform your space into profitable assets</p>
 
       <div className="carousel-container">
@@ -266,56 +186,30 @@ const ShowCase = () => {
         </button>
 
         <div className="carousel-wrapper">
-          {index === 0 && (
-            <div className="carousel-card activeSlide">
-              <div className="card-inner">
-                <div className="card-img">
-                  <img src="/image 221.png" alt="Before Hall" />
-                  <span className="tag">Before</span>
-                  <span className="label">Hall</span>
-                </div>
-                <div className="card-img">
-                  <img src="/image 224.png" alt="After Hall" />
-                  <span className="tag after">After</span>
-                  <span className="label">Hall</span>
-                </div>
-              </div>
-            </div>
-          )}
+          {data.map((item, i) => {
+            let position = "nextSlide";
+            if (i === index) position = "activeSlide";
+            if (i === index - 1 || (index === 0 && i === data.length - 1))
+              position = "lastSlide";
 
-          {index === 1 && (
-            <div className="carousel-card activeSlide">
-              <div className="card-inner">
-                <div className="card-img">
-                  <img src="/tmluxe.png" alt="Before PG Room" />
-                  <span className="tag">Before</span>
-                  <span className="label">PG Room</span>
-                </div>
-                <div className="card-img">
-                  <img src="/tmluxe2.png" alt="After PG Room" />
-                  <span className="tag after">After</span>
-                  <span className="label">PG Room</span>
-                </div>
-              </div>
-            </div>
-          )}
+            return (
+              <div className={`carousel-card ${position}`} key={item.id}>
+                <div className="card-inner">
+                  <div className="card-img">
+                    <img src={data.before} alt="before" />
+                    <span className="tag">Before</span>
+                    <span className="label">{item.label}</span>
+                  </div>
 
-          {index === 2 && (
-            <div className="carousel-card activeSlide">
-              <div className="card-inner">
-                <div className="card-img">
-                  <img src="/tmluxe3.png" alt="Before Bedroom" />
-                  <span className="tag">Before</span>
-                  <span className="label">Bedroom</span>
-                </div>
-                <div className="card-img">
-                  <img src="/tmluxe41.webp" alt="After Bedroom" />
-                  <span className="tag after">After</span>
-                  <span className="label">Bedroom</span>
+                  <div className="card-img">
+                    <img src={data.after} alt="after" />
+                    <span className="tag after">After</span>
+                    <span className="label">{item.label}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            );
+          })}
         </div>
 
         <button className="nav-btn right" onClick={nextSlide}>
@@ -327,3 +221,109 @@ const ShowCase = () => {
 };
 
 export default ShowCase;
+
+
+
+// import React, { useState } from "react";
+// import "./ShowCase.css";
+// import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+
+// const ShowCase = () => {
+//   const slides = [
+//     {
+//       id: 1,
+//       before: "/image 221.png",
+//       after: "/image 224.png",
+//       label: "Hall",
+//     },
+//     {
+//       id: 2,
+//       before: "/tmluxe.png",
+//       after: "/tmluxe2.png",
+//       label: "PG Room",
+//     },
+//     {
+//       id: 3,
+//       before: "/tmluxe3.png",
+//       after: "/tmluxe41.webp",
+//       label: "Bedroom",
+//     },
+//   ];
+
+//   const [index, setIndex] = useState(0);
+
+//   const nextSlide = () => setIndex((prev) => (prev + 1) % slides.length);
+//   const prevSlide = () => setIndex((prev) => (prev - 1 + slides.length) % slides.length);
+
+//   return (
+//     <div className="beforeafter-section">
+//       <h2>Before and After Showcase</h2>
+//       <p>See how we transform your space into profitable assets</p>
+
+//       <div className="carousel-container">
+//         <button className="nav-btn left" onClick={prevSlide}>
+//           <FaArrowLeft />
+//         </button>
+
+//         <div className="carousel-wrapper">
+//           {index === 0 && (
+//             <div className="carousel-card activeSlide">
+//               <div className="card-inner">
+//                 <div className="card-img">
+//                   <img src="/image 221.png" alt="Before Hall" />
+//                   <span className="tag">Before</span>
+//                   <span className="label">Hall</span>
+//                 </div>
+//                 <div className="card-img">
+//                   <img src="/image 224.png" alt="After Hall" />
+//                   <span className="tag after">After</span>
+//                   <span className="label">Hall</span>
+//                 </div>
+//               </div>
+//             </div>
+//           )}
+
+//           {index === 1 && (
+//             <div className="carousel-card activeSlide">
+//               <div className="card-inner">
+//                 <div className="card-img">
+//                   <img src="/tmluxe.png" alt="Before PG Room" />
+//                   <span className="tag">Before</span>
+//                   <span className="label">PG Room</span>
+//                 </div>
+//                 <div className="card-img">
+//                   <img src="/tmluxe2.png" alt="After PG Room" />
+//                   <span className="tag after">After</span>
+//                   <span className="label">PG Room</span>
+//                 </div>
+//               </div>
+//             </div>
+//           )}
+
+//           {index === 2 && (
+//             <div className="carousel-card activeSlide">
+//               <div className="card-inner">
+//                 <div className="card-img">
+//                   <img src="/tmluxe3.png" alt="Before Bedroom" />
+//                   <span className="tag">Before</span>
+//                   <span className="label">Bedroom</span>
+//                 </div>
+//                 <div className="card-img">
+//                   <img src="/tmluxe41.webp" alt="After Bedroom" />
+//                   <span className="tag after">After</span>
+//                   <span className="label">Bedroom</span>
+//                 </div>
+//               </div>
+//             </div>
+//           )}
+//         </div>
+
+//         <button className="nav-btn right" onClick={nextSlide}>
+//           <FaArrowRight />
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ShowCase;
