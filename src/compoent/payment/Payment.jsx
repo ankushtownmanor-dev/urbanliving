@@ -504,39 +504,58 @@ function Payment() {
   };
 
   // Handle verification logic
-  const handleSendOtp = async () => {
+  const handleSendOtp = async (retryCount = 0) => {
     const phone = phoneDigits.join('');
     if (!phone || !/^\d{10}$/.test(phone)) {
       showAlert('Please enter a valid 10-digit phone number.');
       return;
     }
 
+    // Don't allow multiple simultaneous requests
+    if (loading) return;
+
     setLoading(true);
+    setOtpError('');
 
     try {
-      const response = await axios.post('https://kyc-api.surepass.io/api/v1/telecom/generate-otp', {
-        id_number: phone
-      }, {
-        headers: {
-          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg'
+      const response = await axios.post(
+        'https://kyc-api.surepass.io/api/v1/telecom/generate-otp',
+        { id_number: phone },
+        {
+          headers: {
+            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg',
+            'Content-Type': 'application/json'
+          },
+          timeout: 10000 // 10 second timeout
         }
-      });
+      );
 
-             if (response.data.success) {
+      if (response.data?.success) {
         setClientId(response.data.data.client_id);
         setShowOtpInputs(true);
         setOtpValue('');
-        setOtpError('');
         showAlert('OTP sent successfully!');
         setTimeout(() => {
           if (otpInputRef.current) otpInputRef.current.focus();
         }, 0);
       } else {
-        showAlert('Failed to send OTP. Please try again.');
+        throw new Error(response.data?.message || 'Failed to send OTP');
       }
     } catch (error) {
       console.error('Error generating OTP:', error);
-      showAlert('An error occurred while sending OTP. Please try again.');
+      
+      // Handle rate limiting with exponential backoff (max 3 retries)
+      if (error.response?.status === 429 && retryCount < 3) {
+        const delay = Math.pow(2, retryCount) * 1000; // 2^retryCount seconds
+        showAlert(`Rate limited. Retrying in ${delay/1000} seconds...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return handleSendOtp(retryCount + 1);
+      }
+      
+      const errorMessage = error.response?.data?.message || 
+                         error.message || 
+                         'An error occurred while sending OTP. Please try again later.';
+      showAlert(errorMessage);
     } finally {
       setLoading(false);
     }
