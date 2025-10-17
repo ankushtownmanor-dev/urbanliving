@@ -1,0 +1,150 @@
+:root{
+  --bg: #ffffff;
+  --text: #2b2b2b;
+  --muted: #7b7b7b;
+  --brand: #8e0b0b;          /* deep red used for icons/badges */
+  --brand-30: rgba(142,11,11,0.3);
+  --card: #ffffff;
+  --card-hover: #f6f6f6;
+  --active-bg: #ececec;      /* the light pill behind “Dashboard” */
+  --shadow: 0 2px 8px rgba(0,0,0,0.12);
+  --radius-lg: 12px;
+  --radius-md: 10px;
+}
+
+/* Container */
+.sidebar{
+  width: 320px;                  /* layout like the mock; adjust if needed */
+  min-height: 100vh;
+  background: var(--bg);
+  padding: 22px 18px;
+  box-sizing: border-box;
+  border-right: 0;               /* clean edge like screenshot */
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  color: var(--text);
+}
+
+/* Header (avatar + name + role) */
+.sidebar-header{
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  grid-template-rows: 26px 20px;
+  column-gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.profile-pic{
+  grid-row: 1 / span 2;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.profile-name{
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.profile-role{
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+/* Menu list */
+.menu{
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px; /* spacing between cards like image */
+}
+
+/* Each item is a pill/ card with left icon */
+.menu li a{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 14px 18px;
+  box-shadow: var(--shadow);
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.04s ease;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Icon style – outlined red like mock */
+.icon{
+  font-size: 18px;
+  min-width: 22px;
+  color: var(--brand);
+  background: #ffffff;
+  border: 2px solid var(--brand);
+  border-radius: 8px;
+  padding: 6px;
+  box-shadow: inset 0 0 0 1px rgba(142,11,11,0.06);
+}
+
+/* Hover */
+.menu li a:hover{
+  background: var(--card-hover);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.14);
+}
+
+/* Active route – matches the “Dashboard” pill look */
+
+/* Active icon – filled red home icon feel */
+
+
+/* Focus ring for accessibility */
+
+
+/* Documents label in image is singular; your route shows Documents – optional: keep spacing same */
+
+/* Responsive narrow widths (if sidebar used on small screens) */
+@media (max-width: 360px){
+  .sidebar{ width: 100%; padding: 18px 14px; }
+  .menu li a{ padding: 12px 14px; }
+  .icon{ font-size: 16px; padding: 5px; border-radius: 7px; }
+}
+/* Wrap to box the icon and center the glyph */
+/* Remove red border around icons */
+.icon-wrap{
+  /* display: inline-flex; */
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;             /* <- removed red boundary */
+  border-radius: 8px;       /* keep subtle rounding for active fill */
+  background: transparent;  /* no background in normal state */
+  color: var(--brand);      /* red glyph */
+  box-shadow: none;         /* remove any inner shadow */
+}
+
+/* Inner SVG size */
+.menu li a .icon-wrap svg{
+  font-size: 16px;
+}
+
+/* Active state: filled red box with white glyph (no border) */
+.menu li a.active .icon-wrap{
+  /* background: var(--brand); */
+  /* color: #fff; */
+  border: none;             /* ensure no border even when active */
+}

@@ -1,0 +1,11 @@
+.admin-dashboard-layout {
+  display: flex;
+  min-height: 80vh;
+  background-color: #f8f9fb;
+}
+
+.admin-dashboard-content {
+  flex: 1;
+  /* Adjust width according to your Sidebar */
+  overflow-y: auto;
+}
