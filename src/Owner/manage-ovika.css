@@ -1,4 +1,3 @@
-/* Namespace: manage-ovika- */
 :root {
   --manage-ovika-text: #161616;
   --manage-ovika-dim: #5b616e;
@@ -19,118 +18,97 @@
   padding: 40px 22px 60px;
 }
 
-/* Heading and subtitle */
+/* ======= Heading ======= */
 .manage-ovika.heading {
   text-align: center;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.4px;
-  line-height: 1.15;
-  font-size: clamp(28px, 4.5vw, 56px);
+  line-height: 1.2;
+  font-size: clamp(28px, 4.5vw, 48px);
   margin: 4px 0 10px;
 }
 
 .manage-ovika.sub {
   text-align: center;
-  color: #161616;            /* darker (near-black) */
-  font-size: clamp(18px, 1.6vw, 20px);  /* slightly larger */
-  font-weight: 400;          /* bolder text */
-  margin-bottom: 28px;
+  color: #444;
+  font-size: clamp(16px, 1.5vw, 18px);
+  font-weight: 400;
+  margin-bottom: 36px;
 }
 
-/* 4 equal columns — no cards */
+/* ======= Grid ======= */
 .manage-ovika.grid.noCards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 28px;
+  gap: 36px;
   align-items: start;
+  justify-items: center;
 }
 
-/* Each column block */
+/* ======= Each Block ======= */
 .manage-ovika.block {
-  display: grid;
-  grid-template-rows: auto auto 1fr;
-  justify-items: center;   /* center icon + text */
-  text-align: left;
+  text-align: center;
+  max-width: 280px;
 }
 
-/* Icon badge centered */
+/* ======= Icon ======= */
 .manage-ovika.iconWrap {
   position: relative;
-  width: 72px;
-  height: 72px;
-  margin-bottom: 8px;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 12px;
 }
 
 .manage-ovika.iconCircle {
-  width: 82px;
-  height: 82px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: radial-gradient(circle at 30% 30%, #dddddd, #fffefe);
-  box-shadow:
-    inset 0 2px 5px rgba(159, 159, 159, 0.9),
-    22px 18px 22px rgba(159, 159, 159, 0.9);
+  background: radial-gradient(circle at 30% 30%, #eaeaea, #ffffff);
+  box-shadow: inset 0 2px 5px rgba(150, 150, 150, 0.5), 0 8px 14px rgba(0, 0, 0, 0.08);
 }
 
 .manage-ovika.iconGlyph {
-  color: rgb(128, 1, 1);
-  width: 40px;
-  height: 40px;
+  color: var(--manage-ovika-red);
+  width: 36px;
+  height: 36px;
 }
 
-/* small floor shadow under the badge */
 .manage-ovika.iconShadow {
   position: absolute;
-  bottom: -8px;
+  bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
-  width: 54px;
-  height: 20px;
+  width: 48px;
+  height: 12px;
   border-radius: 999px;
-  background: rgba(0,0,0,0.12);
+  background: rgba(0, 0, 0, 0.15);
   filter: blur(6px);
-  content: "";
 }
 
-/* Title + paragraph (both belong to the same block) */
-.manage-ovika.title.center {
-  font-size: 12px;
-  font-weight: 500;
-  margin: 5px 0 6px;
-  line-height: 1.35;
+/* ======= Title & Text ======= */
+.manage-ovika.title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #161616;
+  margin-bottom: 10px;
+  line-height: 1.4;
 }
 
-.manage-ovika.text.center {
-  color: var(--manage-ovika-dim);
+.manage-ovika.text {
+  color: #5b616e;
   font-size: 14px;
-  line-height: 1.6;
-  max-width: 270px;
-}
-.manage-ovika.title.left {
-  text-align: left;
-  gap: 12px;
-  font-size: 18px;        /* desktop */
-  line-height: 1.35;
-  font-weight: 800;       /* bold like in the mock */
-  color: #161616;         /* near-black */
-  margin: 12px ;  
-  margin-left: -25px;    /* space above/below the title */
+  line-height: 1.7;
+  max-width: 260px;
+  margin: 0 auto;
 }
 
-/* Left-aligned paragraph under the title */
-.manage-ovika.text.left {
-  text-align: left;
-  color: #444;            /* darker body text */
-  font-size: 14px;
-  line-height: 1.65;
-  max-width: 420px;       /* keeps lines readable; adjust as needed */
-}
-/* Responsive */
+/* ======= Responsive ======= */
 @media (max-width: 1024px) {
   .manage-ovika.grid.noCards {
     grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
+    gap: 30px;
   }
 }
 
@@ -140,8 +118,12 @@
   }
   .manage-ovika.grid.noCards {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 24px;
   }
-  .manage-ovika.title.center { font-size: 17px; }
-  .manage-ovika.text.center { font-size: 13px; }
+  .manage-ovika.title {
+    font-size: 17px;
+  }
+  .manage-ovika.text {
+    font-size: 13px;
+  }
 }

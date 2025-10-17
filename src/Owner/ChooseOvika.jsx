@@ -6,8 +6,8 @@ import { IoPersonSharp } from 'react-icons/io5';
 
 const reasons = [
   { Icon: MdVerified, title: 'Verified Tenents Only' },
-  { Icon: FaCamera, title: 'Professional Photos' },
-  { Icon: FaCreditCard, title: 'Automated Rent Collection' },
+  { Icon: FaCamera, title: 'Professional Listing & Photos' },
+  { Icon: FaCreditCard, title: 'Automated Rent & Reports' },
   { Icon: IoPersonSharp, title: 'Dedicated Property Manager' },
 ];
 
@@ -16,10 +16,11 @@ export default function ChooseOvika() {
     <section className="choose-ovika section">
       <div className="choose-ovika container">
         <h2 className="choose-ovika heading">
-          Why choose Ovika for listing<br />managment
+          Why Choose Ovika for Property Management<br />
         </h2>
         <p className="choose-ovika sub">
-          Our simple , streamlined process ensures your property is managed efficiently
+        Our end-to-end service ensures your property earns consistently — while you enjoy complete <br/> peace of mind.
+From verified tenants to automated rent collection, Ovīka manages it all through a  <br/>  trusted commission model.
         </p>
 
         <div className="choose-ovika grid">
@@ -28,6 +29,10 @@ export default function ChooseOvika() {
               {/* plain icon (no circle) */}
               <Icon className="choose-ovika glyph plain" aria-hidden="true" />
               <div className="choose-ovika cardTitle">{title}</div>
+               <p className="choose-ovika sub">
+       
+        </p>
+
             </div>
           ))}
         </div>

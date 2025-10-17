@@ -9,12 +9,17 @@ export default function OwnersSection() {
         <div className="owners-ovika intro">
           <h2 className="owners-ovika h2">Loved by Property Owners</h2>
           <p className="owners-ovika lead">
-            With the Ovika Owner Dashboard, you stay in control — anytime, anywhere. Our
+            {/* With the Ovika Owner Dashboard, you stay in control — anytime, anywhere. Our
             smart dashboard lets you track renovation progress, monitor tenant details, view
             rental income, and check your profit share in real time. From listing updates to
             maintenance requests, everything is organized in one simple, intuitive platform.
             Managing your property has never been this transparent and hassle‑free — we
-            handle the work, and you stay informed.
+            handle the work, and you stay informed. */}
+            With the Ovīka Owner Dashboard, you stay informed while we manage everything.
+Our transparent, commission-based system keeps you updated on every step — from tenant verification to rent payouts.
+
+Track your property’s performance, monitor occupancy, view earnings in real time, and see how your home is being cared for — all in one smart dashboard.
+Managing your rental business has never been this simple — we handle the work, you enjoy the returns.
           </p>
 
           <button className="owners-ovika cta">
@@ -28,8 +33,8 @@ export default function OwnersSection() {
 
         {/* Testimonials header */}
         <div className="owners-ovika testimonialsHead">
-          <h2 className="owners-ovika h2">Loved by property owners</h2>
-          <p className="owners-ovika sub">Real stories from partner who trusts Ovika</p>
+          <h2 className="owners-ovika h2">Trusted by Homeowners Across Cities</h2>
+          <p className="owners-ovika sub">Real stories from partners who earn stress-free with Ovika</p>
         </div>
 
         {/* Testimonials grid */}

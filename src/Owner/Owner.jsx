@@ -37,14 +37,13 @@ export default function Owner() {
       {/* Content */}
       <div className="ovika-hero__content">
         <h1 className="ovika-hero__title">
-          Don’t want to mange<br />
-          listings ? We will<br />
-          <span className="ovika-hero__title--line2">handle it for you.</span>
+          Your home,<br />
+          Our management-<br />
+          <span className="ovika-hero__title--line2">Shared success</span>
         </h1>
 
         <p className="ovika-hero__subtitle">
-          Ovika takes the hassle out of property managment, We handle everything from listing and verification
-          to tenats mangment , so you can enjoy stress-free earnings.
+          We take care of your rental business end to end, so you earn without the stress
         </p>
 
         <button className="ovika-cta">
