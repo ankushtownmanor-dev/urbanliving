@@ -5,7 +5,7 @@ import PropertyControl from "./PropertyControl"
 import Testimonials from "./Testimonials"
 import FAQ from "./FAQ"
 import PropertyShareForm from "./PropertyShareForm"
-function FourthMain(){
+function SelfManage(){
     return(
         <>
         <PropertyShare/>
@@ -18,4 +18,4 @@ function FourthMain(){
         </>
     )
 }
-export default FourthMain
+export default SelfManage

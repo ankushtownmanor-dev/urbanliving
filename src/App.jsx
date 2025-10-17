@@ -86,6 +86,7 @@ import Ownermain from "./Owner/Ownermain";
 // Context
 import { AuthProvider } from "./compoent/Login/AuthContext";
 
+<<<<<<< HEAD
 // Admin Dashboard Components
 import AdminDashboardLayout from "./compoent/AdminDashBoard/AdminDashboardLayout";
 // import AdminDashBoard from "./compoent/AdminDashBoard/AdminDashBoardPages/AdminDashBoard";
@@ -96,6 +97,17 @@ import Properties from "./compoent/AdminDashBoard/AdminDashBoardPages/Properties
 import Message from "./compoent/AdminDashBoard/AdminDashBoardPages/Messages";
 import DashBoardDocuments from "./compoent/AdminDashBoard/AdminDashBoardPages/DashBoardDocuments";
 import Support from "./compoent/AdminDashBoard/AdminDashBoardPages/Support";
+=======
+
+import SelfManage from './compoent/FourthPage/SelfManage';
+
+import FifthMain from './compoent/Fifth/FifthMain';
+
+
+import Ownermain from './Owner/Ownermain';
+
+
+>>>>>>> 1936159f209eb5847998b2a4d328746f39d7d111
 
 function App() {
   return (
@@ -117,7 +129,13 @@ function App() {
           <Route path="/list-property" element={<ListPropertyPage />} />
           <Route path="/success" element={<Sucess />} />
           <Route path="/failure" element={<Failure />} />
+<<<<<<< HEAD
           <Route path="/selfmanage" element={<FourthMain />} />
+=======
+
+          <Route path="/selfmanage" element={<SelfManage />} />
+
+>>>>>>> 1936159f209eb5847998b2a4d328746f39d7d111
           <Route path="/ownermain" element={<Ownermain />} />
           <Route path="/renovation" element={<FifthMain />} />
 
