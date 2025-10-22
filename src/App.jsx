@@ -1,66 +1,4 @@
-// import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-// import './App.css';
-// import Home from './compoent/Homepage/Home';
-// import HoomieFooter from './compoent/Homepage/HoomieFooter';
-// import LuxeMain from './compoent/Secondpage/LuxeMain';
-// import ThirdMain from './compoent/ThirdPage/ThirdMain';
-// import Payment from './compoent/payment/Payment';
-// import Auth from './Auth';
-// import AuthPage from './compoent/Login/AuthPage';
-// import About from './compoent/about/About';
-// import Dashboard from './compoent/Dashboard/Dashboard';
-// import Navbar from './compoent/Homepage/Navbar';
-// import Sucess from './compoent/payment/Sucess';
-// import Failure from './compoent/payment/Failure';
-// import ListPropertyPage from './compoent/ListProperty/ListPropertyPage';
-// import { AuthProvider } from './compoent/Login/AuthContext';
-// import FourthMain from './compoent/FourthPage/fourthMain';
-// import FifthMain from './compoent/Fifth/FifthMain';
-// import Ownermain from './Owner/Ownermain';
-// // import Sidebar from './compoent/AdminDashBoard/Sidebar/Sidebar';
-// import AdminDashBoard from './compoent/AdminDashBoard/AdminDashBoardPages/AdminDashBoard';
-// import  InquiriesBookings  from './compoent/AdminDashBoard/AdminDashBoardPages/InquiriesBookings';
-// import  Financials  from './compoent/AdminDashBoard/AdminDashBoardPages/Financials';
-// import  Properties  from './compoent/AdminDashBoard/AdminDashBoardPages/Properties';
-// import Message from './compoent/AdminDashBoard/AdminDashBoardPages/Messages';
-// import  DashBoardDocuments  from './compoent/AdminDashBoard/AdminDashBoardPages/DashBoardDocuments';
-// import  Support from './compoent/AdminDashBoard/AdminDashBoardPages/Support';
-// function App() {
-//   return (
-//     <AuthProvider>
-//       <Router>
-//         <Navbar />
-       
-//         <Routes>
-//           <Route path="/" element={<Home />} />
-//           <Route path="/tmluxe" element={<LuxeMain />} />
-//           <Route path="/tmluxespecific/:id" element={<ThirdMain />} />
-//           <Route path="/payment" element={<Payment />} />
-//           <Route path="/login" element={<AuthPage />} />
-//           <Route path="/about" element={<About />} />
-//           <Route path="/dashboard" element={<Dashboard />} />
-//           <Route path="/list-property" element={<ListPropertyPage />} />
-//           <Route path="/success" element={<Sucess />} />
-//           <Route path="/failure" element={<Failure />} />
-//           <Route path="/selfmanage" element={<FourthMain />} />
-//           <Route path="/ownermain" element={<Ownermain />} />
-//           <Route path="/renovation" element={<FifthMain />} />
-//           {/* <Route path="/adminuserboard" element={<AdminDashBoadMain />} /> */}
-//           {/* <Route path="/sidebar" element={<Sidebar />} /> */}
-//           <Route path="/admindashboard" element={<AdminDashBoard />} />
-//           <Route path="/inquiriesbookings" element={<InquiriesBookings />} />
-//           <Route path="/financials" element={<Financials />} />
-//           <Route path="/properties" element={<Properties />} />
-//           <Route path="/messages" element={<Message />} />
-//           <Route path="/documents" element={<DashBoardDocuments />} />
-//           <Route path="/support" element={<Support />} />
-//         </Routes>
-//         <HoomieFooter />
-//       </Router>
-//     </AuthProvider>
-//   );
-// }
-// export default App;
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 
@@ -79,14 +17,14 @@ import Dashboard from "./compoent/Dashboard/Dashboard";
 import Sucess from "./compoent/payment/Sucess";
 import Failure from "./compoent/payment/Failure";
 import ListPropertyPage from "./compoent/ListProperty/ListPropertyPage";
-import FourthMain from "./compoent/FourthPage/fourthMain";
-import FifthMain from "./compoent/Fifth/FifthMain";
+// import FourthMain from "./compoent/FourthPage/fourthMain";
+// import FifthMain from "./compoent/Fifth/FifthMain";
 import Ownermain from "./Owner/Ownermain";
 
 // Context
 import { AuthProvider } from "./compoent/Login/AuthContext";
 
-<<<<<<< HEAD
+
 // Admin Dashboard Components
 import AdminDashboardLayout from "./compoent/AdminDashBoard/AdminDashboardLayout";
 // import AdminDashBoard from "./compoent/AdminDashBoard/AdminDashBoardPages/AdminDashBoard";
@@ -97,17 +35,17 @@ import Properties from "./compoent/AdminDashBoard/AdminDashBoardPages/Properties
 import Message from "./compoent/AdminDashBoard/AdminDashBoardPages/Messages";
 import DashBoardDocuments from "./compoent/AdminDashBoard/AdminDashBoardPages/DashBoardDocuments";
 import Support from "./compoent/AdminDashBoard/AdminDashBoardPages/Support";
-=======
+
 
 import SelfManage from './compoent/FourthPage/SelfManage';
 
 import FifthMain from './compoent/Fifth/FifthMain';
 
 
-import Ownermain from './Owner/Ownermain';
+// import Ownermain from './Owner/Ownermain';
 
 
->>>>>>> 1936159f209eb5847998b2a4d328746f39d7d111
+
 
 function App() {
   return (
@@ -129,13 +67,13 @@ function App() {
           <Route path="/list-property" element={<ListPropertyPage />} />
           <Route path="/success" element={<Sucess />} />
           <Route path="/failure" element={<Failure />} />
-<<<<<<< HEAD
-          <Route path="/selfmanage" element={<FourthMain />} />
-=======
+
+          {/* <Route path="/selfmanage" element={<FourthMain />} /> */}
+
 
           <Route path="/selfmanage" element={<SelfManage />} />
 
->>>>>>> 1936159f209eb5847998b2a4d328746f39d7d111
+
           <Route path="/ownermain" element={<Ownermain />} />
           <Route path="/renovation" element={<FifthMain />} />
 
