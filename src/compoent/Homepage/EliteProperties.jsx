@@ -57,7 +57,7 @@ function EliteProperties() {
         let fetchedProps = [];
         if (Array.isArray(data)) {
           fetchedProps = data;
-        } else if (data && Array.isArray(data.properties)) {
+        } else if (data && Array.isArray(data.properties)) { 
           fetchedProps = data.properties;
         } else {
           setError('Invalid response format');
