@@ -3,7 +3,7 @@ import "./PropertyShareForm.css";
 
 const PropertyShareForm = () => (
   <div className="property-share-wrapper">
-    <h1 className="main-heading">Start sharing your property with Ovika today !</h1>
+    <h1 className="main-heading">Start Listing your property with Ovika today !</h1>
     <p className="sub-heading">
       Ready to unlock your property potential chews your preferred <br/>way to connect with us below
     </p>
@@ -44,18 +44,17 @@ Bring your property details — our specialists will explain how we manage listi
   <div className="address-line"></div>
   <div className="address-container">
     <span className="address-title">Our Address is :</span>
-    <div>
-      2nd Floor, Tower B, Logix City Center,<br />
-      Sector 32, Noida – 201301,<br />
+    
+      <div>
+     ST-304, Eldeco Studio, Sector 93A,<br />
+      Noida India, PIN-201304<br />
       Uttar Pradesh, India
     </div>
   </div>
 </div>
 
 
-        <p className="footnote">
-          Please include your contact information, property address, a brief description of the property and any photos. If available we will get back to you within 5-7 business days.
-        </p>
+      
       </div>
     </div>
   </div>
