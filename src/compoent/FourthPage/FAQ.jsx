@@ -5,17 +5,32 @@ const data = [
   {
     q: 'Who handles renovations ?',
     a:
-      "Ovika’s experienced team manages all aspects of the renovation process , from initial design to final touches. We ensure  high quality work and complete renovation.",
+      "OVIKA’s experienced design and project team manages every aspect of the renovation — from evaluation and planning to final execution. We ensure quality upgrades that enhance your property’s value and earning potential.",
   },
   {
-    q: 'How is profit calculated ?',
+    q: 'How is the profit calculated?',
     a:
-      'Profit is calculated transparently based on rental income minus agreed service fees and maintenance costs. You can track it in real time on your dashboard.',
+      "Profits are calculated based on the net income generated from your property after deducting operational and management costs. The agreed-upon share is then distributed transparently as per the signed agreement.",
   },
-  {
-    q: 'Do I retain property Ownership ?',
+   {
+    q: 'Do I retain property ownership?',
     a:
-      'Yes. You retain 100% ownership of your property. Ovika only manages operations and returns the profit share as per the agreement.',
+      "Yes, you retain full ownership of your property. OVIKA only partners with you to renovate, manage, and share the profits generated from its use — ownership always remains with you.",
+  },
+   {
+    q: 'What types of properties are eligible?',
+    a:
+      "Residential apartments, villas, and standalone houses located in prime or high-demand areas are generally eligible. Each property is first evaluated for its renovation and income potential.",
+  },
+   {
+    q: 'How long does the renovation process take?',
+    a:
+      "The timeline depends on the scope of work and property condition, typically ranging from 30 to 90 days. You’ll receive a detailed schedule before signing the agreement.",
+  },
+   {
+    q: 'When do I start earning profit?',
+    a:
+      "Earnings begin once your renovated property goes live under OVIKA’s management and starts generating revenue. Profit distribution follows the agreed schedule outlined in your partnership contract.",
   },
 ];
 
@@ -36,7 +51,7 @@ export default function FAQOvika() {
                 className={`faq-ovika item ${isOpen ? 'is-open' : ''}`}
               >
                 <button
-                  className="faq-ovika question"
+                  className="faq-ovika-question"
                   onClick={() => setOpenIdx(isOpen ? -1 : idx)}
                   aria-expanded={isOpen}
                 >

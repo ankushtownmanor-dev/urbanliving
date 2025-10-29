@@ -28,11 +28,8 @@ const PropertyShareForm = () => (
       <div className="office-section">
         <h2 className="section-heading-two">Our visit our office</h2>
         <p className="office-desc">
-          We’d love to meet you in person and help you get started on your property’s transformation journey.
-          Visit our Ovika office to discuss your space, renovation goals, and earning potential with our expert team.
-          Bring your property details – our specialists will walk you through the process, explain profit-sharing options,
-          and show how we can turn your unused property into a consistent income source. Let’s build something beautiful
-          and profitable together!
+       We’d love to meet you in person and help you get started with listing your property for rental management. Visit our OVIKA office to discuss your ready-to-rent space and learn how our expert team can help you earn consistent rental income without the hassle of day-to-day management.
+Bring your property details — our specialists will explain how we manage listings, bookings, tenants, and maintenance, ensuring complete transparency and peace of mind. Let’s make your property work for you — easily, efficiently, and profitably!
         </p>
         {/* <div className="address-block">
           

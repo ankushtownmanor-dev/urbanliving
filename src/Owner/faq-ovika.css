@@ -48,7 +48,7 @@
   }
   
   /* Question button row */
-  .faq-ovika.question{
+  .faq-ovika-question-newup{
     width:100%;
     background:transparent;
     border:0;
@@ -57,7 +57,7 @@
     align-items:center;
     justify-content:space-between;
     font-size:16px;
-    font-weight:700;
+    font-weight:300;
     text-align:left;
     cursor:pointer;
   }

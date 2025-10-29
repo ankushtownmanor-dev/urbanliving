@@ -3,19 +3,41 @@ import './FAQ.css';
 
 const data = [
   {
-    q: 'Who handles renovations ?',
+    q: 'Who can list their property on Ovika?',
     a:
-      "Ovika’s experienced team manages all aspects of the renovation process , from initial design to final touches. We ensure  high quality work and complete renovation.",
+      "Any property owner - Whether you have an apartment, villa or studio - can list it on Ovika. Our Platform is open to homeownwers, landloards and agents" },
+  {
+    q: 'How di I list my property?',
+    a:
+      'Simply sign up on Ovika, fill in your property details, upload photos, set your rent or price and publish your listing. It takes just a few minutes',
   },
   {
-    q: 'How is profit calculated ?',
+    q: 'Is there any cost to list my property??',
     a:
-      'Profit is calculated transparently based on rental income minus agreed service fees and maintenance costs. You can track it in real time on your dashboard.',
+      'Listing your property on Ovīka is free. You can later choose premium visibility or management options if you want faster results.',
   },
   {
-    q: 'Do I retain property Ownership ?',
+    q: 'How do I find tenants through Ovīka?',
     a:
-      'Yes. You retain 100% ownership of your property. Ovika only manages operations and returns the profit share as per the agreement.',
+      'Once your property is listed, verified tenants can contact you directly through the platform. You can manage inquiries, schedule visits, and finalize rentals securely.',
+  },
+
+
+
+  {
+    q: 'Can Ovīka help manage my property after listing?',
+    a:
+      'Yes! If you opt for our property management services, Ovīka can handle tenant screening, rent collection, and maintenance on your behalf.',
+  },
+  {
+    q: 'Do I retain full ownership of my property?',
+    a:
+      'Absolutely. You remain the sole owner of your property at all times. Ovīka only facilitates listings and management — ownership never transfers.',
+  },
+  {
+    q: 'How long does my property stay listed?',
+    a:
+      'Your listing remains active as long as you choose. You can pause or update your listing anytime from your dashboard.',
   },
 ];
 
@@ -36,7 +58,7 @@ export default function FAQOvika() {
                 className={`faq-ovika item ${isOpen ? 'is-open' : ''}`}
               >
                 <button
-                  className="faq-ovika question"
+                  className="faq-ovika-question-setout"
                   onClick={() => setOpenIdx(isOpen ? -1 : idx)}
                   aria-expanded={isOpen}
                 >

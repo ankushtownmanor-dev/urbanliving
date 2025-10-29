@@ -19,7 +19,7 @@ const ShareProperty = () => {
       <div className="overlay">
         <div className="content-box">
           <h1>
-            Share your property - <br /> we renovate & share profit
+             Your property, Your control - <br /> rent, manage and earn effortlessly
           </h1>
           <p>
             Turn your unused property into a profitable rental. We handle

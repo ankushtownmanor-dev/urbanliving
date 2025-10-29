@@ -9,7 +9,7 @@ const WorkFlow = () => {
       <div className="tmwf-container">
         <h2 className="tmwf-title">How It Works</h2>
         <p className="tmwf-subtitle">
-          A simple, transparent process to maximize your property's potential
+       A seamless, transparent process — share your property, we renovate and <br/> manage it, and you earn from shared profits.
         </p>
 
         <div className="tmwf-steps">
@@ -23,8 +23,7 @@ const WorkFlow = () => {
             <div className="tmwf-text-box">
               <h3>Share your property details</h3>
               <p>
-                To redefine hospitality by creating inclusive, comfortable, and
-                community-driven spaces where everyone feels at home.
+                Submit your property details and let us evaluate its potential. After the evaluation, our team presents a detailed proposal outlining renovation plans and profit-sharing terms. Once the agreement is mutually signed, we move ahead to transform your property.
               </p>
             </div>
           </div>
@@ -39,9 +38,7 @@ const WorkFlow = () => {
             <div className="tmwf-text-box">
               <h3>We renovate and manage</h3>
               <p>
-                To be the most trusted name in modern hospitality — connecting
-                people, places, and experiences through care, comfort, and
-                innovation.
+                Our experts redesign, renovate, and fully manage your property to enhance its appeal and earning potential. From interiors to operations, everything is handled end-to-end by OVIKA to ensure quality, consistency, and superior guest experience.
               </p>
             </div>
           </div>
@@ -55,9 +52,7 @@ const WorkFlow = () => {
             <div className="tmwf-text-box">
               <h3>Earn and share profit</h3>
               <p>
-                Our values are built on comfort, inclusivity, community, trust,
-                and innovation — the pillars that shape every stay with us.
-                
+               Once the property goes live, you start earning a share of the generated profits. Enjoy regular updates, transparent reporting, and steady returns — while we take care of everything else.
               </p>
             </div>
           </div>

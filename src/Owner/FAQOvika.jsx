@@ -3,20 +3,32 @@ import './faq-ovika.css';
 
 const data = [
   {
-    q: 'Who handles renovations ?',
+    q: 'Who manages the property?',
     a:
-      "Ovika’s experienced team manages all aspects of the renovation process , from initial design to final touches. We ensure  high quality work and complete renovation.",
+      "OVIKA’s professional property management team takes care of everything — from tenant onboarding and rent collection to maintenance and guest support — so you can earn without the daily hassles.",
   },
   {
-    q: 'How is profit calculated ?',
+    q: 'How is the commission structured?',
     a:
-      'Profit is calculated transparently based on rental income minus agreed service fees and maintenance costs. You can track it in real time on your dashboard.',
+      'We charge a transparent commission on the rent or income generated from your property. The exact percentage depends on the property type and services included, all clearly stated in the agreement.',
   },
   {
-    q: 'Do I retain property Ownership ?',
+    q: 'Do I retain property ownership?',
     a:
-      'Yes. You retain 100% ownership of your property. Ovika only manages operations and returns the profit share as per the agreement.',
+      'Yes, you remain the full and legal owner of your property. OVIKA only manages the property on your behalf under a management agreement.',
   },
+    {
+    q: "How do I receive my earnings?",
+    a: "Your rental income is transferred directly to your registered bank account after deducting OVIKA’s commission. You also receive detailed monthly statements for full transparency."
+  },
+  {
+    q: "How are tenants verified?",
+    a: "Every tenant is thoroughly screened and verified through background and ID checks to ensure security, reliability, and peace of mind."
+  },
+  {
+    q: "What if there are maintenance issues?",
+    a: "Our team handles tenant-reported issues promptly through trusted service partners, keeping your property well-maintained and guests satisfied."
+  }
 ];
 
 export default function FAQOvika() {
@@ -36,7 +48,7 @@ export default function FAQOvika() {
                 className={`faq-ovika item ${isOpen ? 'is-open' : ''}`}
               >
                 <button
-                  className="faq-ovika question"
+                  className="faq-ovika-question-newup"
                   onClick={() => setOpenIdx(isOpen ? -1 : idx)}
                   aria-expanded={isOpen}
                 >

@@ -30,7 +30,7 @@
   box-sizing: border-box;
 }
 
-.form-section, .office-section {
+.form-section-newsection, .office-section {
   width: 48%;
 }
 
@@ -57,7 +57,7 @@
   border-radius: 18px;
   padding: 12px 16px;
   font-size: 1rem;
-  width: 90%;
+  width: 100%;
   margin-bottom: 16px;
   outline: none;
 }
