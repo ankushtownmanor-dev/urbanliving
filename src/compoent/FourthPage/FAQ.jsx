@@ -3,34 +3,41 @@ import './FAQ.css';
 
 const data = [
   {
-    q: 'Who handles renovations ?',
+    q: 'Who can list their property on Ovika?',
     a:
-      "OVIKA’s experienced design and project team manages every aspect of the renovation — from evaluation and planning to final execution. We ensure quality upgrades that enhance your property’s value and earning potential.",
+      "Any property owner - Whether you have an apartment, villa or studio - can list it on Ovika. Our Platform is open to homeownwers, landloards and agents" },
+  {
+    q: 'How do I list my property?',
+    a:
+      'Simply sign up on Ovika, fill in your property details, upload photos, set your rent or price and publish your listing. It takes just a few minutes',
   },
   {
-    q: 'How is the profit calculated?',
+    q: 'Is there any cost to list my property??',
     a:
-      "Profits are calculated based on the net income generated from your property after deducting operational and management costs. The agreed-upon share is then distributed transparently as per the signed agreement.",
+      'Listing your property on Ovīka is free. You can later choose premium visibility or management options if you want faster results.',
   },
-   {
-    q: 'Do I retain property ownership?',
+  {
+    q: 'How do I find tenants through Ovīka?',
     a:
-      "Yes, you retain full ownership of your property. OVIKA only partners with you to renovate, manage, and share the profits generated from its use — ownership always remains with you.",
+      'Once your property is listed, verified tenants can contact you directly through the platform. You can manage inquiries, schedule visits, and finalize rentals securely.',
   },
-   {
-    q: 'What types of properties are eligible?',
+
+
+
+  {
+    q: 'Can Ovīka help manage my property after listing?',
     a:
-      "Residential apartments, villas, and standalone houses located in prime or high-demand areas are generally eligible. Each property is first evaluated for its renovation and income potential.",
+      'Yes! If you opt for our property management services, Ovīka can handle tenant screening, rent collection, and maintenance on your behalf.',
   },
-   {
-    q: 'How long does the renovation process take?',
+  {
+    q: 'Do I retain full ownership of my property?',
     a:
-      "The timeline depends on the scope of work and property condition, typically ranging from 30 to 90 days. You’ll receive a detailed schedule before signing the agreement.",
+      'Absolutely. You remain the sole owner of your property at all times. Ovīka only facilitates listings and management — ownership never transfers.',
   },
-   {
-    q: 'When do I start earning profit?',
+  {
+    q: 'How long does my property stay listed?',
     a:
-      "Earnings begin once your renovated property goes live under OVIKA’s management and starts generating revenue. Profit distribution follows the agreed schedule outlined in your partnership contract.",
+      'Your listing remains active as long as you choose. You can pause or update your listing anytime from your dashboard.',
   },
 ];
 
