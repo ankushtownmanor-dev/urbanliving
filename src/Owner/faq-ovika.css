@@ -22,9 +22,9 @@
     padding:48px 18px 64px;
   }
   
-  .faq-ovika.heading{
+  .faq-ovika-heading-ownerpage{
     text-align:center;
-    font-weight:500;
+    font-weight:300;
     font-size:clamp(28px,4.6vw,44px);
     letter-spacing:-0.3px;
     margin:6px 0 28px;

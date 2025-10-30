@@ -35,7 +35,7 @@ const steps = [
 
 const BookingSteps = () => (
   <div className="booking-steps-container">
-    <Divider text="How We Work" />
+    <Divider  text="How We Work" />
     <p className="booking-steps-subtitle">
       Book your stay in 4 easy steps using our seamless online process.
     </p>

@@ -129,7 +129,7 @@ ${formData.message}
           <div className="tm-list-hero-left">
             <h2 className="tm-list-hero-title">
               List with Ovika,<br />
-              Earn with Ease –<br />
+              Earn with Ease –
               Begin Your Journey<br />
               Today
             </h2>
@@ -144,7 +144,7 @@ ${formData.message}
           {/* Right */}
           <div className="tm-list-hero-right">
             <div className="tm-contact-form">
-              <h3 className="tm-contact-title">Contact us</h3>
+              <h3 style={{fontWeight:"480"}} className="tm-contact-title">Contact us</h3>
               
               {/* Status Messages */}
               {submitStatus === 'success' && (
