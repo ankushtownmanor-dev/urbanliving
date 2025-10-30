@@ -1,103 +1,121 @@
 .beforeafter-section {
   text-align: center;
   padding: 60px 0;
-  background: #fff;
   font-family: "Poppins", sans-serif;
+  /* background: #fff; */
 }
 
 .beforeafter-section h2 {
-  font-size: 2.5rem;
-  font-weight:400;
-  margin-bottom: 6px;
+  font-size: 2.3rem;
+  font-weight: 500;
+  margin-bottom: 8px;
   color: #111;
 }
 
 .beforeafter-section p {
-  color: #666;
+  color: #555;
   font-size: 15px;
   margin-bottom: 40px;
 }
 
+/* ------------ Carousel Layout ------------ */
 .carousel-container {
   position: relative;
+  width: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   overflow: hidden;
-
 }
 
 .carousel-wrapper {
-  display: flex;
   position: relative;
-  width: 64%;
-  height: 510px;
+  width: 60%;
+  height: 650px;
+  max-width: 750px;
+  /* max-height: 1650px; Total height for 2 stacked images */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+/* ------------ Cards ------------ */
 .carousel-card {
   position: absolute;
   top: 0;
-  left: 130px;
-  width: 70%;
-  height: 100%;
+  left: 60px;
+  width: 90%;
   opacity: 0;
-  transform: scale(0.8);
+  transform: scale(0.85);
   transition: all 0.6s ease;
   filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .carousel-card.activeSlide {
   opacity: 1;
-  transform: translateX(0) scale(1);
+  transform: scale(1);
   filter: blur(0);
   z-index: 3;
 }
 
 .carousel-card.lastSlide {
-  transform: translateX(-50%) scale(0.85);
-  opacity: 0.6;
+  transform: translateX(-60%) scale(0.85);
+  opacity: 0.5;
   z-index: 2;
 }
 
 .carousel-card.nextSlide {
-  transform: translateX(50%) scale(0.85);
-  opacity: 0.6;
+  transform: translateX(60%) scale(0.85);
+  opacity: 0.5;
   z-index: 2;
 }
 
+/* ------------ Inner Card ------------ */
 .card-inner {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.1);
+  gap: 20px;
+  border-radius: 16px;
   overflow: hidden;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.15);
+  /* background: #fff; */
+  padding: 10px;
+  box-sizing: border-box;
 }
 
+/* ------------ Image Box ------------ */
 .card-img {
   position: relative;
-  border-radius: 14px;
+  width: 100%;
+  height: 300px; /* Equal height for both images */
+  border-radius: 12px;
   overflow: hidden;
+  /* background: #f8f8f8; */
 }
 
 .card-img img {
   width: 100%;
-  height: 230px;
-  object-fit: cover;
+  height: 100%;
+  object-fit: cover; /* Fit perfectly without distortion */
+  display: block;
 }
 
+/* ------------ Tag + Label ------------ */
 .tag {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  background: #fff;
-  color: #000;
+  top: 12px;
+  left: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #111;
   font-size: 13px;
-  padding: 4px 10px;
-  border-radius: 12px;
+  padding: 5px 12px;
+  border-radius: 14px;
   font-weight: 500;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .tag.after {
@@ -108,13 +126,14 @@
 .label {
   position: absolute;
   bottom: 10px;
-  right: 10px;
+  right: 14px;
   color: #fff;
+  font-size: 15px;
   font-weight: 500;
-  font-size: 16px;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
+/* ------------ Navigation Buttons ------------ */
 .nav-btn {
   background: #fff;
   border: none;
@@ -126,7 +145,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   transition: all 0.3s ease;
   z-index: 5;
 }
@@ -138,10 +157,26 @@
 
 .nav-btn.left {
   position: absolute;
-  left: 5%;
+  left: 6%;
 }
 
 .nav-btn.right {
   position: absolute;
-  right: 5%;
+  right: 6%;
+}
+
+/* ------------ Responsive ------------ */
+@media (max-width: 768px) {
+  .carousel-wrapper {
+    width: 90%;
+    height: 520px;
+  }
+
+  .card-img {
+    height: 240px;
+  }
+
+  .beforeafter-section h2 {
+    font-size: 1.8rem;
+  }
 }

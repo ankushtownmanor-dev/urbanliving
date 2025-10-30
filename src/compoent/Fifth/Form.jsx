@@ -28,8 +28,14 @@ const PropertyShareForm = () => (
       <div className="office-section">
         <h2 className="section-heading-two">Or visit our office</h2>
         <p className="office-desc">
-        We’d love to meet you in person and help you get started with listing your property for rental management. Visit our OVIKA office to discuss your ready-to-rent space and learn how our expert team can help you earn consistent rental income without the hassle of day-to-day management.
-Bring your property details — our specialists will explain how we manage listings, bookings, tenants, and maintenance, ensuring complete transparency and peace of mind. Let’s make your property work for you — easily, efficiently, and profitably!
+    We’d love to meet you in person and help you get started with transforming and listing your property for rental income. Visit our OVIKA office to discuss your property requirements — whether it’s ready-to-rent or needs renovation and setup before listing. <br/>
+
+Our team will guide you through the complete process: from <b>renovation and furnishing</b> to <b>tenant management, bookings, and maintenance.</b>
+  We ensure your property is managed professionally with full transparency, ensuring you earn consistent returns without the day-to-day hassle.<br/>
+
+Bring your property details — our specialists will explain how we handle <b>renovate, list, and manage</b> under one roof for complete peace of mind. Let’s make your property work smarter for you — <b>efficiently, transparently, and profitably!</b>
+        {/* We’d love to meet you in person and help you get started with listing your property for rental management. Visit our OVIKA office to discuss your ready-to-rent space and learn how our expert team can help you earn consistent rental income without the hassle of day-to-day management.
+Bring your property details — our specialists will explain how we manage listings, bookings, tenants, and maintenance, ensuring complete transparency and peace of mind. Let’s make your property work for you — easily, efficiently, and profitably! */}
         </p>
         {/* <div className="address-block">
           

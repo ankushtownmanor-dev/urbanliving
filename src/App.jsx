@@ -1,41 +1,119 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import './App.css';
-import Home from './compoent/Homepage/Home';
+// import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+// import './App.css';
+// import Home from './compoent/Homepage/Home';
 
-import HoomieFooter from './compoent/Homepage/HoomieFooter';
-import LuxeMain from './compoent/Secondpage/LuxeMain';
-import ThirdMain from './compoent/ThirdPage/ThirdMain';
-import Payment from './compoent/payment/Payment';
-import Auth from './Auth';
-import AuthPage from './compoent/Login/AuthPage';
-import About from './compoent/about/About';
-import Dashboard from './compoent/Dashboard/Dashboard';
-import Navbar from './compoent/Homepage/Navbar';
-import Sucess from './compoent/payment/Sucess';
-import Failure from './compoent/payment/Failure';
-import ListPropertyPage from './compoent/ListProperty/ListPropertyPage';
-import { AuthProvider } from './compoent/Login/AuthContext';
-
-
+// import HoomieFooter from './compoent/Homepage/HoomieFooter';
+// import LuxeMain from './compoent/Secondpage/LuxeMain';
+// import ThirdMain from './compoent/ThirdPage/ThirdMain';
+// import Payment from './compoent/payment/Payment';
+// import Auth from './Auth';
+// import AuthPage from './compoent/Login/AuthPage';
+// import About from './compoent/about/About';
+// import Dashboard from './compoent/Dashboard/Dashboard';
+// import Navbar from './compoent/Homepage/Navbar';
+// import Sucess from './compoent/payment/Sucess';
+// import Failure from './compoent/payment/Failure';
+// import ListPropertyPage from './compoent/ListProperty/ListPropertyPage';
+// import { AuthProvider } from './compoent/Login/AuthContext';
 
 
-import SelfManage from './compoent/FourthPage/SelfManage';
-
-import FifthMain from './compoent/Fifth/FifthMain';
 
 
-import Ownermain from './Owner/Ownermain';
-import PropertyListingForm from './compoent/PropertyListingForm/PropertyListingForm';
-import PropertyPage from './compoent/PropertyListingForm/PropertyPage';
+// import SelfManage from './compoent/FourthPage/SelfManage';
+
+// import FifthMain from './compoent/Fifth/FifthMain';
 
 
+// import Ownermain from './Owner/Ownermain';
+// import PropertyListingForm from './compoent/PropertyListingForm/PropertyListingForm';
+// import PropertyPage from './compoent/PropertyListingForm/PropertyPage';
+// import AdminDashboardLayout from './compoent/AdminDashBoard/AdminDashboardLayout';
+
+
+
+// function App() {
+//   return (
+//     <AuthProvider>
+//       <Router>
+//         <Navbar />
+//         <Routes>
+//           <Route path="/" element={<Home />} />
+//           <Route path="/tmluxe" element={<LuxeMain />} />
+//           <Route path="/tmluxespecific/:id" element={<ThirdMain />} />
+//           <Route path="/payment" element={<Payment />} />
+//           <Route path="/login" element={<AuthPage />} />
+//           <Route path="/about" element={<About />} />
+//           <Route path="/dashboard" element={<Dashboard />} />
+//           <Route path="/list-property" element={<ListPropertyPage />} />
+//           <Route path="/success" element={<Sucess />} />
+//           <Route path="/failure" element={<Failure />} />
+
+//           <Route path="/selfmanage" element={<SelfManage />} />
+
+//           <Route path="/ownermain" element={<Ownermain />} />
+//           <Route path="/renovation" element={<FifthMain />} />
+//           <Route path="/listed" element={<PropertyListingForm />} />
+//           <Route path="/pg"element={<PropertyPage/>}/>
+//           {/* <Route path="/admindashboard/*" element={<AdminDashboardLayout />}> */}
+
+          
+
+
+//         </Routes>
+//         <HoomieFooter />
+//       </Router>
+//     </AuthProvider>
+//   );
+// }
+
+// export default App;
+
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
+
+// Common components
+import Navbar from "./compoent/Homepage/Navbar";
+import HoomieFooter from "./compoent/Homepage/HoomieFooter";
+
+// Homepage & other main pages
+import Home from "./compoent/Homepage/Home";
+import LuxeMain from "./compoent/Secondpage/LuxeMain";
+import ThirdMain from "./compoent/ThirdPage/ThirdMain";
+import Payment from "./compoent/payment/Payment";
+import AuthPage from "./compoent/Login/AuthPage";
+import About from "./compoent/about/About";
+import Dashboard from "./compoent/Dashboard/Dashboard";
+import Sucess from "./compoent/payment/Sucess";
+import Failure from "./compoent/payment/Failure";
+import ListPropertyPage from "./compoent/ListProperty/ListPropertyPage";
+import SelfManage from "./compoent/FourthPage/SelfManage";
+import FifthMain from "./compoent/Fifth/FifthMain";
+import Ownermain from "./Owner/Ownermain";
+
+// Context
+import { AuthProvider } from "./compoent/Login/AuthContext";
+
+// Admin Dashboard Components
+import AdminDashboardLayout from "./compoent/AdminDashBoard/AdminDashboardLayout";
+import AdminDashBoard from "./compoent/AdminDashBoard/AdminDashBoardPages/DashBoardAdmin";
+import InquiriesBookings from "./compoent/AdminDashBoard/AdminDashBoardPages/InquiriesBookings";
+import Financials from "./compoent/AdminDashBoard/AdminDashBoardPages/Financials";
+import Properties from "./compoent/AdminDashBoard/AdminDashBoardPages/Properties";
+import Message from "./compoent/AdminDashBoard/AdminDashBoardPages/Messages";
+import DashBoardDocuments from "./compoent/AdminDashBoard/AdminDashBoardPages/DashBoardDocuments";
+import Support from "./compoent/AdminDashBoard/AdminDashBoardPages/Support";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
+        {/* Top Navbar */}
         <Navbar />
+
+        {/* All Routes */}
         <Routes>
+          {/* Main Website Pages */}
           <Route path="/" element={<Home />} />
           <Route path="/tmluxe" element={<LuxeMain />} />
           <Route path="/tmluxespecific/:id" element={<ThirdMain />} />
@@ -46,17 +124,25 @@ function App() {
           <Route path="/list-property" element={<ListPropertyPage />} />
           <Route path="/success" element={<Sucess />} />
           <Route path="/failure" element={<Failure />} />
-
           <Route path="/selfmanage" element={<SelfManage />} />
-
           <Route path="/ownermain" element={<Ownermain />} />
           <Route path="/renovation" element={<FifthMain />} />
-          <Route path="/listed" element={<PropertyListingForm />} />
-          <Route path="/pg"element={<PropertyPage/>}/>
-          
 
-
+          {/* =========================
+              ADMIN DASHBOARD SECTION
+          ========================== */}
+          <Route path="/admindashboard" element={<AdminDashboardLayout />}>
+            <Route index    element={<AdminDashBoard />} />
+            <Route path="inquiriesbookings" element={<InquiriesBookings />} />
+            <Route path="financials" element={<Financials />} />
+            <Route path="properties" element={<Properties />} />
+            <Route path="messages" element={<Message />} />
+            <Route path="documents" element={<DashBoardDocuments />} />
+            <Route path="support" element={<Support />} />
+          </Route>
         </Routes>
+
+        {/* Bottom Footer */}
         <HoomieFooter />
       </Router>
     </AuthProvider>

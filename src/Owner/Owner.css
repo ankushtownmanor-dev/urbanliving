@@ -88,8 +88,8 @@
 
 /* Title mimicking the screenshot (large, three lines) */
 .ovika-hero__title{
-  font-weight:580;
-  font-size:clamp(36px,6vw,72px);
+  font-weight:410;
+  font-size:4em;
   line-height:1.07;
   margin:8px 0 16px;
   text-shadow:0 10px 28px rgba(0,0,0,0.35);
@@ -124,7 +124,7 @@
   border-radius:999px;
   background:#ffffff;
   color:var(--ovika-cta-text);
-  font-weight:800;
+  font-weight:550;
   font-size:16px;
   letter-spacing:0.2px;
   box-shadow:var(--ovika-shadow-soft);

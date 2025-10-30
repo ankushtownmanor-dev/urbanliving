@@ -36,12 +36,12 @@ const ShowCase = () => {
           >
             <div className="card-inner">
               <div className="card-img">
-                <img src="/image 221.png" alt="Before Hall" />
+                <img src="/before_new.png" alt="Before Hall" />
                 <span className="tag">Before</span>
                 <span className="label">Hall</span>
               </div>
               <div className="card-img">
-                <img src="/image 224.png" alt="After Hall" />
+                <img src="/after_new.png" alt="After Hall" />
                 <span className="tag after">After</span>
                 <span className="label">Hall</span>
               </div>
@@ -60,14 +60,14 @@ const ShowCase = () => {
           >
             <div className="card-inner">
               <div className="card-img">
-                <img src="/tmluxe.png" alt="Before PG Room" />
+                <img src="/washroom_before.png" alt="Before washroom" />
                 <span className="tag">Before</span>
-                <span className="label">PG Room</span>
+                <span className="label">Washroom</span>
               </div>
               <div className="card-img">
-                <img src="/tmluxe2.png" alt="After PG Room" />
+                <img src="/washroom_after.png" alt="After washroom" />
                 <span className="tag after">After</span>
-                <span className="label">PG Room</span>
+                <span className="label">Washroom</span>
               </div>
             </div>
           </div>
@@ -84,12 +84,12 @@ const ShowCase = () => {
           >
             <div className="card-inner">
               <div className="card-img">
-                <img src="/tmluxe3.png" alt="Before Bedroom" />
+                <img src="/before_bedroom.png" alt="Before Bedroom" />
                 <span className="tag">Before</span>
                 <span className="label">Bedroom</span>
               </div>
               <div className="card-img">
-                <img src="/tmluxe41.webp" alt="After Bedroom" />
+                <img src="/after_bedroom.png" alt="After Bedroom" />
                 <span className="tag after">After</span>
                 <span className="label">Bedroom</span>
               </div>

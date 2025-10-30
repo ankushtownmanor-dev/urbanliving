@@ -21,7 +21,7 @@
 /* ======= Heading ======= */
 .manage-ovika.heading {
   text-align: center;
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: -0.4px;
   line-height: 1.2;
   font-size: clamp(28px, 4.5vw, 48px);
@@ -90,7 +90,7 @@
 /* ======= Title & Text ======= */
 .manage-ovika.title {
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 600;
   color: #161616;
   margin-bottom: 10px;
   line-height: 1.4;

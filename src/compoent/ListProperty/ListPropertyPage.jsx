@@ -131,7 +131,7 @@ const ListPropertyPage = () => {
       {/* Property Types Section */}
       <div className="property-types-section">
         <div className="container">
-          <h2>List any Property type</h2>
+          <h2 style={{fontWeight:"400" , color:"black"}}>List any Property type</h2>
           <p className="section-subtitle">
             From cozy PGs to luxurious Villas, Ovika is a perfect platform to showcase your property
           </p>
@@ -227,7 +227,7 @@ const ListPropertyPage = () => {
  {/* Benefits Section */}
  <div className="benefits-section">
         <div className="container">
-          <h2>Benefit of Listing with Ovika</h2>
+          <h2 style={{fontWeight:"400", color:"black"}}>Benefit of Listing with Ovika</h2>
           <p className="section-subtitle">
             Experience the advantage of listing your property with Ovika and unlock world of opportunity
           </p>
