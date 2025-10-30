@@ -6,7 +6,7 @@
 }
 
 .main-heading {
-  font-size: 2.5rem;
+  font-size: 2.6rem;
   font-weight: 530;
   margin-bottom: 8px;
 }
@@ -30,7 +30,7 @@
   box-sizing: border-box;
 }
 
-.form-section-newsection, .office-section {
+.form-section, .office-section {
   width: 48%;
 }
 
@@ -40,8 +40,8 @@
   margin-bottom: 18px;
 }
 .section-heading-two{
-    font-size: 2.5rem;
-  font-weight: 400;
+    /* font-size: 2.6rem; */
+  font-weight: 530;
   margin-bottom: 18px; 
   text-align: center;
 }
@@ -57,7 +57,7 @@
   border-radius: 18px;
   padding: 12px 16px;
   font-size: 1rem;
-  width: 100%;
+  width: 90%;
   margin-bottom: 16px;
   outline: none;
 }
@@ -67,14 +67,14 @@
   resize: none;
 }
 
-.submit-btn-renovation {
+.submit-btn {
   margin-top: 16px;
   background: linear-gradient(to right, #cf1518, #1b0101);
   color: #fff;
-  border: none; 
+  border: none;
   border-radius: 999px;
-  padding: 8px 32px;
-  font-weight: 400;
+  padding: 10px 16px;
+  font-weight: 600;
   cursor: pointer;
   box-shadow: 0 6px 14px rgba(197, 45, 47, 0.25);
   transform: translateY(-4px); /* same as hover */
@@ -85,6 +85,8 @@
   transform: translateY(-2px);
   background: linear-gradient(to right, #cf1518, #1b0101);
 }
+
+
 .arrow {
   margin-left: 18px;
   font-size: 1.2rem;

@@ -8,7 +8,8 @@ function FourthMain() {
         <div className="property-share-content">
           <div className="property-share-header">
             <p className="property-share-title">
-              Share your property - we renovate <br /> & share profit
+            Your property, Your control -
+rent,<br /> manage and earn effortlessly
             </p>
           </div>
           <p className="property-share-text">

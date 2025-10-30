@@ -74,9 +74,9 @@ const items = [
   },
   {
     Icon: MdVerified,
-    title: 'We Upgrade and Manage',
+    title: 'We List and Maintain',
     text:
-      'We enhance the space with modern amenities and ensure it meets our Ovika standards — maintaining it regularly for a better guest experience.',
+      'We create and attractive listing, manage inquiries, and ensure your property is stay well-maintained and guest-ready at all times.',
   },
   {
     Icon: AiFillSound,
@@ -96,10 +96,9 @@ export default function ManageListings() {
   return (
     <section className="manage-ovika wrap">
       <div className="manage-ovika container">
-        <h2 className="manage-ovika heading"> We List and Maintain</h2>
+        <h2 className="manage-ovika heading">How We Manage Listings</h2>
         <p className="manage-ovika sub">
-         We create an attractive listing, manage inquiries and ensure your property stays <br/> well-maintained and guest-ready at all times 
-          {/* Simply hand over your ready-to-rent property — we’ll handle the listing, tenant management, <br/> and rent collection while you enjoy effortless  monthly income. */}
+          Our simple, streamlined process ensures your property is managed efficiently.
         </p>
 
         <div className="manage-ovika grid noCards">

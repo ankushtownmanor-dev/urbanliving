@@ -1,23 +1,24 @@
 import React from "react";
-import "./Form.css";
+import "./OwnerForm.css";
 
-const PropertyShareForm = () => (
+const OwnerForm = () => (
   <div className="property-share-wrapper">
-    <h1 className="main-heading">Start Listing your property with Ovika today !</h1>
+    <h1 className="main-heading">Start Sharing your property with Ovika today !</h1>
     <p className="sub-heading">
-    Ready to rent out your home or investment property? Connect with us below — our team <br/>will help you list your property, attract verified tenants, and start earning faster.
+  Simply hand over your ready-to-rent property — we’ll handle the listing, tenant management, <br/> and rent collection while you enjoy effortless monthly income.
+    {/* Ready to rent out your home or investment property? Connect with us below — our team <br/>will help you list your property, attract verified tenants, and start earning faster. */}
     </p>
 
     <div className="form-office-container">
       {/* Form Section */}
-      <div className="form-section-newsection">
+      <div className="form-section">
         <h2 className="section-heading">Fill out the form</h2>
         <form className="share-form">
           <input type="text" placeholder="Full name" className="input-field" />
           <input type="text" placeholder="Property address" className="input-field" />
           <input type="email" placeholder="Email address" className="input-field" />
           <textarea placeholder="Message..." className="input-field textarea-field" />
-          <button className="submit-btn-renovation">
+          <button className="submit-btn">
             Submit Details
             <span className="arrow">{'>'}</span>
           </button>
@@ -28,8 +29,7 @@ const PropertyShareForm = () => (
       <div className="office-section">
         <h2 className="section-heading-two">Or visit our office</h2>
         <p className="office-desc">
-        We’d love to meet you in person and help you get started with listing your property for rental management. Visit our OVIKA office to discuss your ready-to-rent space and learn how our expert team can help you earn consistent rental income without the hassle of day-to-day management.
-Bring your property details — our specialists will explain how we manage listings, bookings, tenants, and maintenance, ensuring complete transparency and peace of mind. Let’s make your property work for you — easily, efficiently, and profitably!
+   We’d love to meet you in person and help you get started with listing your property for rental management. Visit our OVIKA office to discuss your ready-to-rent space and learn how our expert team can help you earn consistent rental income without the hassle of day-to-day management. Bring your property details — our specialists will explain how we manage listings, bookings, tenants, and maintenance, ensuring complete transparency and peace of mind. Let’s make your property work for you — easily, efficiently, and profitably!
         </p>
         {/* <div className="address-block">
           
@@ -44,7 +44,8 @@ Bring your property details — our specialists will explain how we manage listi
   <div className="address-line"></div>
   <div className="address-container">
     <span className="address-title">Our Address is :</span>
-    <div>
+    
+      <div>
      ST-304, Eldeco Studio, Sector 93A,<br />
       Noida India, PIN-201304<br />
       Uttar Pradesh, India
@@ -53,10 +54,10 @@ Bring your property details — our specialists will explain how we manage listi
 </div>
 
 
-        
+      
       </div>
     </div>
   </div>
 );
 
-export default PropertyShareForm;
+export default OwnerForm;

@@ -4,7 +4,7 @@ import ManageListings from './ManageListings.jsx'
 import ChooseOvika from './ChooseOvika.jsx'
 import OwnersSection from './OwnersSection.jsx'
 import FAQOvika from './FAQOvika.jsx'
-import PropertyShareForm from '../compoent/FourthPage/PropertyShareForm.jsx'
+import OwnweForm from './OwnerForm.jsx'
 function Ownermain() {
   return (
     <>
@@ -13,7 +13,7 @@ function Ownermain() {
     <ChooseOvika/>
     <OwnersSection/>
     <FAQOvika/>
-    <PropertyShareForm/>
+    <OwnweForm/>
 
 
     </>
