@@ -82,7 +82,7 @@ function EliteProperties() {
     <section className="tmxelite-prop">
       <div className="tmxelite-prop-container">
         <div className="tmxelite-prop-head">
-          <h2 className="tmxelite-prop-title">Trending Properties</h2>
+          <h2 style={{fontWeight:"400" , fontSize:"32px"}} className="tmxelite-prop-title">Trending Properties</h2>
           <span className="tmxelite-prop-chevron">›</span>
         </div>
 
@@ -158,7 +158,7 @@ function EliteProperties() {
                           </button>
                         </div>
                         <div className="tmxelite-prop-body">
-                          <h3 className="tmxelite-prop-name">{name}</h3>
+                          <h4 style={{fontWeight:"300"}} className="tmxelite-prop-name">{name}</h4>
                           <div className="tmxelite-prop-meta">
                             <span className="tmxelite-prop-price">{priceText}</span>
                           </div>

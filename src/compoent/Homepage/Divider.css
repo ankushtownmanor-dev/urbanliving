@@ -13,7 +13,7 @@
   
   .divider-text {
     font-size: 2.5rem;
-    font-weight: 500;
+    /* font-weight: 500; */
     margin: 0 15px;
     color: #000;
     white-space: nowrap;

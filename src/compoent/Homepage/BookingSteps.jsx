@@ -44,7 +44,7 @@ const BookingSteps = () => (
         <div className={`booking-step ${step.down}`} key={step.title}>
           <div className="booking-step-icon">{step.icon}</div>
           <div className="booking-step-content">
-            <h3 className="booking-step-title">{step.title}</h3>
+            <div className="titlemain-wcrrr">{step.title}</div>
             <p className="booking-step-desc">{step.desc}</p>
           </div>
           {idx < steps.length - 1 && (
