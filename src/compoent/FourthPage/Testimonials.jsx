@@ -29,8 +29,8 @@ const Testimonials = () => {
         margin: '0 auto'
       }}>
         <h2 style={{
-          fontSize: '48px',
-          fontWeight: '550',
+          fontSize: "clamp(28px, 4.5vw, 48px)",
+          fontWeight: '400',
           textAlign: 'center',
           marginBottom: '8px',
           color: '#000',
@@ -79,7 +79,7 @@ const Testimonials = () => {
                 <div>
                   <h3 style={{
                     fontSize: '22px',
-                    fontWeight: '600',
+                    fontWeight: '400',
                     margin: '0 0 4px 0',
                     color: '#000'
                   }}>

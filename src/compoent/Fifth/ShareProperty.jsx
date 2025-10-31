@@ -17,7 +17,7 @@ const ShareProperty = () => {
       }}
     >
       <div className="overlay">
-        <div className="content-box">
+        <div className="content-box-renovation">
           <h1>
             Share your property - <br /> we renovate & share profit
           </h1>

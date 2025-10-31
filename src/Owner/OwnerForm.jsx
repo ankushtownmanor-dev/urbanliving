@@ -3,7 +3,7 @@ import "./OwnerForm.css";
 
 const OwnerForm = () => (
   <div className="property-share-wrapper">
-    <h1 className="main-heading">Start Sharing your property with Ovika today !</h1>
+    <h1 className="main-heading-ownwemain">Start Sharing your property with Ovika today !</h1>
     <p className="sub-heading">
   Simply hand over your ready-to-rent property — we’ll handle the listing, tenant management, <br/> and rent collection while you enjoy effortless monthly income.
     {/* Ready to rent out your home or investment property? Connect with us below — our team <br/>will help you list your property, attract verified tenants, and start earning faster. */}
@@ -12,13 +12,13 @@ const OwnerForm = () => (
     <div className="form-office-container">
       {/* Form Section */}
       <div className="form-section">
-        <h2 className="section-heading">Fill out the form</h2>
+        <h2 className="section-heading-ownermain">Fill out the form</h2>
         <form className="share-form">
           <input type="text" placeholder="Full name" className="input-field" />
           <input type="text" placeholder="Property address" className="input-field" />
           <input type="email" placeholder="Email address" className="input-field" />
           <textarea placeholder="Message..." className="input-field textarea-field" />
-          <button className="submit-btn">
+          <button className="submit-btn-ownermain">
             Submit Details
             <span className="arrow">{'>'}</span>
           </button>

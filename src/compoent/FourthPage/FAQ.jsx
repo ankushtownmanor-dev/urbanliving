@@ -47,7 +47,7 @@ export default function FAQOvika() {
   return (
     <section className="faq-ovika section">
       <div className="faq-ovika container">
-        <h2 className="faq-heading">Frequently asked questions</h2>
+        <h2 className="faq-heading-selfmanage">Frequently asked questions</h2>
 
         <div className="faq-ovika list">
           {data.map((item, idx) => {

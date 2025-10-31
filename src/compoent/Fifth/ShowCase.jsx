@@ -15,8 +15,8 @@ const ShowCase = () => {
 
   return (
     <div className="beforeafter-section">
-      <h2>Before and after showcase</h2>
-      <p>See how we transform your space into profitable assets</p>
+      <h2 style={{fontWeight:"200" ,fontSize: "clamp(28px, 4.5vw, 42px)"}}>Before and after showcase</h2>
+      <p style={{fontSize:"17px"}}>See how we transform your space into profitable assets</p>
 
       <div className="carousel-container">
         <button className="nav-btn left" onClick={prevSlide}>
@@ -43,7 +43,7 @@ const ShowCase = () => {
               <div className="card-img">
                 <img src="/after_new.png" alt="After Hall" />
                 <span className="tag after">After</span>
-                <span className="label">Hall</span>
+                <span className="label-2">Hall</span>
               </div>
             </div>
           </div>
@@ -67,7 +67,7 @@ const ShowCase = () => {
               <div className="card-img">
                 <img src="/washroom_after.png" alt="After washroom" />
                 <span className="tag after">After</span>
-                <span className="label">Washroom</span>
+                <span className="label-2">Washroom</span>
               </div>
             </div>
           </div>
@@ -91,7 +91,7 @@ const ShowCase = () => {
               <div className="card-img">
                 <img src="/after_bedroom.png" alt="After Bedroom" />
                 <span className="tag after">After</span>
-                <span className="label">Bedroom</span>
+                <span className="label-2">Bedroom</span>
               </div>
             </div>
           </div>

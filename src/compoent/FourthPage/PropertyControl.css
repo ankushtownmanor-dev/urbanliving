@@ -20,9 +20,9 @@
 }
 
 .property-text-section h2 {
-  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+  font-size: clamp(28px, 4.5vw, 32px);
   color: #1c1c1c;
-  font-weight: 700;
+  font-weight: 410;
   margin-bottom: 1rem;
 }
 

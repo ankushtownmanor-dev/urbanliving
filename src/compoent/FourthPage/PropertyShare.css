@@ -1,3 +1,7 @@
+*{
+   font-family:"Inter","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
 .property-share-container {
   width: 100%;
   /* min-height: 100vh; */
@@ -37,8 +41,9 @@
 }
 
 .property-share-title {
-  font-size: clamp(1.8rem, 3.5vw, 4rem);
-  font-weight: 600;
+  /* font-size: clamp(1.8rem, 3.5vw, 4rem); */
+  font-size: clamp(28px, 4.5vw, 48px);
+  font-weight: 400;
   line-height: 1.2;
   margin-bottom: 3.9rem;
   letter-spacing: 1.2px;
@@ -49,6 +54,7 @@
   line-height: 1.7;
   margin-bottom: 2rem;
   color: #f0f0f0;
+  font-weight: 200;
 }
 
 .property-share-button {

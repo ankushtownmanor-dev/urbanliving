@@ -12,8 +12,8 @@ function ListingSteps() {
       fontFamily: "'Poppins', sans-serif"
     }}>
       <h2 style={{
-        fontSize: '2.8rem',
-        fontWeight: '480',
+       fontSize: "clamp(28px, 4.5vw, 48px)",
+        fontWeight: '400',
         marginBottom: '50px',
         color: '#111'
       }}>
@@ -51,7 +51,7 @@ function ListingSteps() {
           </div>
           <h3 style={{
             fontSize: '1.6rem',
-            fontWeight: '460',
+            fontWeight: '400',
             marginBottom: '10px',
             color: '#000'
           }}>
@@ -91,7 +91,7 @@ function ListingSteps() {
           </div>
           <h3 style={{
             fontSize: '1.6rem',
-            fontWeight: '460',
+            fontWeight: '400',
             marginBottom: '10px',
             color: '#000'
           }}>
@@ -131,7 +131,7 @@ function ListingSteps() {
           </div>
           <h3 style={{
             fontSize: '1.6rem',
-            fontWeight: '460',
+            fontWeight: '400',
             marginBottom: '10px',
             color: '#000'
           }}>

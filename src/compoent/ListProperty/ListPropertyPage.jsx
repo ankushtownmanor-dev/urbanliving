@@ -237,32 +237,32 @@ const ListPropertyPage = () => {
               <div className="benefit-icon">
                 <FaGlobe />
               </div>
-              <h3>Wide Reach</h3>
-              <p>Connect with a bath network of potential tenants and buyers across the country</p>
+              <h3 style={{fontWeight:"380" ,color:"black"}} >Wide Reach</h3>
+              <p style={{color:"#666"}}>Connect with a bath network of potential tenants and buyers across the country</p>
             </div>
             
             <div className="benefit-card">
               <div className="benefit-icon">
                 <FaUsers />
               </div>
-              <h3>Trusted tenants</h3>
-              <p>Access pool of verified and reliable tenants and sharing secure rental experience</p>
+              <h3  style={{fontWeight:"380",color:"black"}} >Trusted tenants</h3>
+              <p  style={{color:"#666"}}>Access pool of verified and reliable tenants and sharing secure rental experience</p>
             </div>
             
             <div className="benefit-card">
               <div className="benefit-icon">
                 <FaShieldAlt />
               </div>
-              <h3>Easy management</h3>
-              <p>manager listings in acquire and agreements spotlessly from one dashboard</p>
+              <h3  style={{fontWeight:"380" ,color:"black"}} >Easy management</h3>
+              <p  style={{color:"#666"}}>manager listings in acquire and agreements spotlessly from one dashboard</p>
             </div>
             
             <div className="benefit-card">
               <div className="benefit-icon">
                 <FaCreditCard />
               </div>
-              <h3>Secure payments</h3>
-              <p>Ensure safe and secure for your piece of mind with integrity payment data</p>
+              <h3  style={{fontWeight:"380",color:"black"}} >Secure payments</h3>
+              <p  style={{color:"#666"}}>Ensure safe and secure for your piece of mind with integrity payment data</p>
             </div>
           </div>
         </div>

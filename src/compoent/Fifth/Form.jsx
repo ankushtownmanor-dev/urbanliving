@@ -3,7 +3,7 @@ import "./Form.css";
 
 const PropertyShareForm = () => (
   <div className="property-share-wrapper">
-    <h1 className="main-heading">Start Listing your property with Ovika today !</h1>
+    <h1 className="main-heading-renovation">Start Listing your property with Ovika today !</h1>
     <p className="sub-heading">
     Ready to rent out your home or investment property? Connect with us below — our team <br/>will help you list your property, attract verified tenants, and start earning faster.
     </p>
@@ -11,7 +11,7 @@ const PropertyShareForm = () => (
     <div className="form-office-container">
       {/* Form Section */}
       <div className="form-section-newsection">
-        <h2 className="section-heading">Fill out the form</h2>
+        <h2 className="section-heading-renovation">Fill out the form</h2>
         <form className="share-form">
           <input type="text" placeholder="Full name" className="input-field" />
           <input type="text" placeholder="Property address" className="input-field" />

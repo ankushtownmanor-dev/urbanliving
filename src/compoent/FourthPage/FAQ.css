@@ -22,10 +22,10 @@
     padding:48px 18px 64px;
   }
   
-  .faq-heading{
+  .faq-heading-selfmanage{
     text-align:center;
-    font-weight:380;
-    font-size:clamp(18px,3.8vw,35px);
+    font-weight:400;
+    font-size: clamp(28px, 4.5vw, 48px);
     /* font-size: 30px; */
     letter-spacing:-0.3px;
     margin:6px 0 28px;

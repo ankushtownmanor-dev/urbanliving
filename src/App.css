@@ -5,3 +5,6 @@
 #root{
      overflow-x: hidden !important;
 }
+*{
+   font-family:"Inter","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}

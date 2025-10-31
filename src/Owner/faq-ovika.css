@@ -24,10 +24,14 @@
   
   .faq-ovika-heading-ownerpage{
     text-align:center;
-    font-weight:300;
-    font-size:clamp(28px,4.6vw,44px);
+    font-weight:200;
+    /* font-size:clamp(28px,4.6vw,44px); */
+    /* font-size: 30px; */
     letter-spacing:-0.3px;
     margin:6px 0 28px;
+  }
+.faq-ovika.container h2{
+font-size: clamp(26px, 4.4vw, 40px);
   }
   
   /* List wrapper */
