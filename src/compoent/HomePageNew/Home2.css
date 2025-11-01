@@ -1,0 +1,118 @@
+
+*{
+   font-family:"Inter","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.living-container {
+  text-align: center;
+  padding: 60px 20px;
+  background: #fff;
+  /* font-family: "Poppins", sans-serif; */
+    box-shadow: 0 1px 1px 1px rgba(50, 48, 48, 0.2); /* ✅ soft & spread-out */
+  transition: all 0.3s ease;
+
+}
+
+.living-heading {
+  font-size: 32px;
+  color: #000;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.highlight {
+  color: #c2772b;
+}
+
+.living-subtext {
+  color: #444;
+  font-size: 15px;
+  margin-bottom: 50px;
+  line-height: 1.6;
+}
+
+.living-card-container {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  align-items: stretch;
+   /* ✅ ensures all cards stretch equally */
+}
+
+.living-card {
+  width: 300px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+   box-shadow: 0 2px 6px  rgba(50, 48, 48, 0.6); /* ✅ soft & spread-out */
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column; /* ✅ enables flexible layout inside */
+  transition: all 0.3s ease;
+}
+
+.living-content {
+  padding: 18px 16px 25px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* ✅ pushes button to bottom */
+  flex-grow: 1; /* ✅ ensures it takes full height */
+  text-align: center;
+}
+
+
+.living-card:hover {
+  transform: translateY(-5px);
+}
+
+.living-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+
+
+
+.living-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #000;
+  text-align: left;
+}
+
+
+.living-text {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+  flex-grow: 1; /* ✅ makes text take remaining space equally */
+  margin-bottom: 20px;
+  text-align: left;
+}
+.living-btn {
+background: linear-gradient(to right, #cf1518, #1b0101);
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 25px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  margin: 0 auto; /* ✅ centers button */
+}
+
+
+.living-btn:hover {
+  background-color: #8d1414;
+}
+
+.arrow {
+  font-size: 16px;
+}

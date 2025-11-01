@@ -103,6 +103,7 @@ import Properties from "./compoent/AdminDashBoard/AdminDashBoardPages/Properties
 import Message from "./compoent/AdminDashBoard/AdminDashBoardPages/Messages";
 import DashBoardDocuments from "./compoent/AdminDashBoard/AdminDashBoardPages/DashBoardDocuments";
 import Support from "./compoent/AdminDashBoard/AdminDashBoardPages/Support";
+import { HomeMain } from "./compoent/HomePageNew/HomeMain";
 
 function App() {
   return (
@@ -115,6 +116,7 @@ function App() {
         <Routes>
           {/* Main Website Pages */}
           <Route path="/" element={<Home />} />
+          <Route path="/homemain" element={<HomeMain />} />
           <Route path="/tmluxe" element={<LuxeMain />} />
           <Route path="/tmluxespecific/:id" element={<ThirdMain />} />
           <Route path="/payment" element={<Payment />} />
