@@ -24,7 +24,7 @@ and thrive with Ovika
           </button>
           
           <button className="ovika-urban-hero-btn ovika-urban-btn-orange">
-            Ovika
+            Townmanor
           </button>
         </div>
       </div>

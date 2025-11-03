@@ -64,14 +64,14 @@
 
 .featured-title {
   font-size: 17px;
-  font-weight: 600;
+  font-weight: 500;
   color: #000;
   margin-bottom: 10px;
 }
 
 .featured-text {
-  font-size: 14px;
-  color: #555;
+  font-size: 10px;
+  color: #000000;
   line-height: 1.5;
   flex-grow: 1;
   margin-bottom: 15px;
@@ -82,14 +82,14 @@
 }
 
 .featured-rating {
-  color: #333;
+  color: #5e5b5b;
   font-size: 13px;
   margin-bottom: 6px;
 }
 
 .featured-price {
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 400;
   color: #000;
   margin-bottom: 15px;
 }
