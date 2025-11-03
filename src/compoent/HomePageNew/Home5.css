@@ -24,7 +24,8 @@
 .why-card-97 {
   background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 3px 20px rgba(0, 0, 0, 0.08);
+   box-shadow: 0 2px 1px 1px rgba(50, 48, 48, 0.2), 
+              0 0px 1px rgba(50, 48, 48, 0.2); 
   width: 240px;
   padding: 40px 25px;
   transition: all 0.3s ease;

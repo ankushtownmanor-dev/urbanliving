@@ -18,7 +18,7 @@
   width: calc(100% - 3rem);
   height: calc(100% - 3rem);
   background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url('https://images.unsplash.com/photo-1600210492493-0946911123ea?w=1920&q=80');
+    url('/public/Group 165.png');
   background-size: cover;
   background-position: center;
   border-radius: 1.5rem;

@@ -4,22 +4,22 @@ import "./Home3.css";
 const Home3 = () => {
   const steps = [
     {
-      icon: "https://i.ibb.co/vVXL8pZ/location-icon.png", // replace with your icon
+      icon: "/novi1.png", // replace with your icon
       title: "Select Property",
       text: "Browse and choose from our curated list of stays.",
     },
     {
-      icon: "https://i.ibb.co/NjzSf4s/check-icon.png", // replace with your icon
+      icon: "/novi2.png", // replace with your icon
       title: "Confirm & Book",
       text: "Secure your spot with our simple and fast booking process.",
     },
     {
-      icon: "https://i.ibb.co/3FwfwJb/house-icon.png", // replace with your icon
+      icon: "/novi3.png", // replace with your icon
       title: "Move In Hassle-free",
       text: "Enjoy a smooth move-in experience with our support.",
     },
     {
-      icon: "https://i.ibb.co/HB2r3yX/smart-living.png", // replace with your icon
+      icon: "/novi4.png", // replace with your icon
       title: "Live Smart",
       text: "Experience the best of urban living with Ovika.",
     },

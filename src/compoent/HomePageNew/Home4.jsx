@@ -4,7 +4,7 @@ import "./Home4.css";
 const Home4 = () => {
   const properties = [
     {
-      img: "https://i.ibb.co/bF7FvGt/urban-nest.jpg", // replace with your real image
+      img: "/image 199.png", // replace with your real image
       city: "Noida",
       title: "Urban Nest Co-Living",
       text: "Urban Nest Co-Living offers thoughtfully designed shared spaces that blend privacy with social connection. Perfect for students and young professionals, each room comes fully furnished with modern amenities, high-speed Wi-Fi, and access to vibrant community zones.",
@@ -12,7 +12,7 @@ const Home4 = () => {
       price: "₹15,000 / Month",
     },
     {
-      img: "https://i.ibb.co/N6qQ7qf/silicon-valley.jpg", // replace with your real image
+      img: "/image 291.png", // replace with your real image
       city: "Bengaluru",
       title: "Silicon Valley Stays",
       text: "Located in the heart of the tech district, Silicon Valley Stays redefines urban living for working professionals and digital creators. With dedicated co-working spaces, contemporary interiors, and 24/7 access to facilities, it's designed for productivity and comfort.",
@@ -20,7 +20,7 @@ const Home4 = () => {
       price: "₹22,000 / Month",
     },
     {
-      img: "https://i.ibb.co/SNDKHv8/hitech-homes.jpg", // replace with your real image
+      img: "/image 203.png", // replace with your real image
       city: "Hyderabad",
       title: "Hitech Homes",
       text: "Hitech Homes brings elegance and sophistication to everyday living. Each residence features premium furnishings, smart home technology, and exclusive amenities like fitness studios and rooftop lounges. Ideal for executives and families seeking refined living.",

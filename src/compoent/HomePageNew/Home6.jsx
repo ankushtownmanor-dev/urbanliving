@@ -38,7 +38,7 @@ function Home6() {
               className="ovika-input"
               placeholder="Select Property"
             />
-            <button className="ovika-submit-btn">List With Ovika</button>
+            <button className="ovika-submit-btn-homepage">List With Ovika</button>
           </form>
         </div>
       </div>

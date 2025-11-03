@@ -1,16 +1,20 @@
+*{
+   font-family:"Inter","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
 .ovika-connect-main {
   background: #fff;
   padding: 40px 0 0 0;
   border-radius: 18px;
   margin: 0 auto;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1100px;
 }
 
 .ovika-connect-title {
   text-align: center;
   font-size: 2rem;
-  font-weight: 500;
+  font-weight: 300;
   margin-bottom: 26px;
   color: #111;
   letter-spacing: 0.2px;
@@ -24,10 +28,12 @@
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  background: linear-gradient(103deg, #334145 36%, #292830 100%);
+  /* background: linear-gradient(103deg, #334145 36%, #292830 100%); */
+   background: url('/Group 167.png') no-repeat center center/cover;
   border-radius: 32px;
-  padding: 24px 40px;
+  padding: 64px 30px;
   position: relative;
+    /* background-size: 90% auto; */
 }
 
 .ovika-connect-left {
@@ -47,14 +53,14 @@
   left: 16px;
   width: 390px;
   height: 215px;
-  background: url('/your-image-path.jpg') no-repeat center center/cover;
+  /* */
   opacity: 1;
   z-index: 1;
   pointer-events: none;
 }
 .ovika-property-heading {
   font-size: 3rem;
-  font-weight: 600;
+  font-weight: 400;
   margin-top: 42px;
   margin-bottom: 22px;
   line-height: 1.08;
@@ -63,8 +69,8 @@
 }
 
 .ovika-property-desc {
-  font-size: 1.24rem;
-  font-weight: 400;
+  font-size: 1.18rem;
+  font-weight: 300;
   letter-spacing: 0.1px;
   margin-top: 0;
   max-width: 405px;
@@ -93,30 +99,34 @@
 
 .ovika-input {
   margin-bottom: 18px;
-  padding: 14px 18px;
+  padding: 8px 44px 10px 25px; /* reduced left padding */
   border-radius: 24px;
   border: none;
   outline: none;
   font-size: 1.12rem;
   background: #fff;
-  box-shadow: 0 2px 6px 0 rgba(65,65,65,0.15);
+  box-shadow: 0 2px 1px 1px rgba(50, 48, 48, 0.2), 
+              0 0px 1px rgba(50, 48, 48, 0.2); 
 }
+
 
 .ovika-input::placeholder {
   color: #888;
   font-size: 1.13rem;
   letter-spacing: 0.01em;
+  /* margin-left: -10px; */
+  /* padding-left: -10px; */
 }
 
-.ovika-submit-btn {
-  background: linear-gradient(90deg, #bb1818 55%, #0c0608 120%);
+.ovika-submit-btn-homepage {
+  background: linear-gradient(to right, #cf1518, #1b0101);;
   color: #fff;
   font-size: 1.2rem;
-  padding: 14px 0;
+  padding: 10px 0;
   border: none;
   border-radius: 28px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 300;
   margin-top: 0px;
   transition: opacity 0.22s;
 }

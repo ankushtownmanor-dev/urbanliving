@@ -5,22 +5,22 @@ import { ShieldCheck, Users, Headphones, CalendarClock } from "lucide-react";
 const Home5 = () => {
   const data = [
     {
-      icon: <ShieldCheck size={35} color="#c2772b" />,
+      icon:"/siki1.png",
       title: "Verified Properties",
       text: "Every property is hand-picked and verified for quality and safety",
     },
     {
-      icon: <Users size={35} color="#c2772b" />,
+      icon: "/siki2.png",
       title: "100+ Happy Residence",
       text: "Join a vibrant community of professionals and students",
     },
     {
-      icon: <Headphones size={35} color="#c2772b" />,
+      icon: "/siki3.png",
       title: "24/7 Customer Support",
       text: "We are here to help you anytime, anywhere",
     },
     {
-      icon: <CalendarClock size={35} color="#c2772b" />,
+      icon:"/siki4.png",
       title: "Flexible Rent & Stay",
       text: "Choose from a variety of stay durations that suit your needs",
     },
@@ -33,7 +33,7 @@ const Home5 = () => {
       <div className="why-grid-97">
         {data.map((item, index) => (
           <div key={index} className="why-card-97">
-            <div className="why-icon-97">{item.icon}</div>
+            <img className="why-icon-97" src={item.icon}/>
             <h3 className="why-title-97">{item.title}</h3>
             <p className="why-text-97">{item.text}</p>
           </div>
