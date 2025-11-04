@@ -23,6 +23,7 @@ function Home6() {
         </div>
         <div className="ovika-connect-form-wrapper">
           <form className="ovika-connect-form">
+            <h2 className="form-heading-ovika-homepage">Contact Us</h2>
             <input
               type="text"
               className="ovika-input"

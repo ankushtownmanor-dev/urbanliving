@@ -1,10 +1,12 @@
+/* ---------- Desktop / Tablet base (keep existing look) ---------- */
 .why-container-97 {
   background-color: #e6e7e6;
   text-align: center;
   padding: 80px 20px;
- max-width: 1200px;   /* adjust as needed */
-  margin: 0 auto;      /* centers it */
+  max-width: 1200px;
+  margin: 0 auto;
   border-radius: 18px;
+  box-sizing: border-box;
 }
 
 .why-heading-97 {
@@ -24,11 +26,12 @@
 .why-card-97 {
   background: #ffffff;
   border-radius: 16px;
-   box-shadow: 0 2px 1px 1px rgba(50, 48, 48, 0.2), 
-              0 0px 1px rgba(50, 48, 48, 0.2); 
+  box-shadow: 0 2px 1px 1px rgba(50, 48, 48, 0.2),
+              0 0px 1px rgba(50, 48, 48, 0.2);
   width: 240px;
   padding: 40px 25px;
   transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
 .why-card-97:hover {
@@ -38,6 +41,12 @@
 
 .why-icon-97 {
   margin-bottom: 18px;
+  display: block;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .why-title-97 {
@@ -53,18 +62,157 @@
   line-height: 1.5;
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-  .why-grid-97 {
-    gap: 20px;
+/* ---------- IMPORTANT: mobile/tablet overrides (placed AFTER base rules) ---------- */
+/* We target typical mobile widths and make a 2x2 grid like your image */
+@media (max-width: 768px) {
+  .why-container-97 {
+    padding: 30px 14px;
+    border-radius: 14px;
+    margin: 12px;              /* give spacing from screen edges */
   }
+
+  .why-heading-97 {
+    font-size: 20px;
+    margin-bottom: 26px;
+    font-weight: 600;
+  }
+
+  /* use CSS grid to get exact 2 columns */
+  .why-grid-97 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 14px; /* row-gap col-gap */
+    justify-items: center;
+    align-items: stretch;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
   .why-card-97 {
-    width: 45%;
+    width: 100%;
+    max-width: 320px;     /* card max width within grid cell */
+    padding: 22px 14px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(50, 48, 48, 0.18);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .why-icon-97 {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 12px;
+  }
+
+  .why-title-97 {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  .why-text-97 {
+    font-size: 13px;
+    max-width: 90%;
+    color: #555;
+    line-height: 1.45;
+    margin: 0 auto;
   }
 }
 
-@media (max-width: 600px) {
+
+
+
+/* ///////////////////////////////////new */
+
+
+@media (max-width: 486px) {
+  .why-container-97 {
+    padding: 30px 14px;
+    border-radius: 14px;
+    margin: 12px;              /* give spacing from screen edges */
+  }
+
+  .why-heading-97 {
+    font-size: 20px;
+    margin-bottom: 26px;
+    font-weight: 600;
+  }
+
+  /* use CSS grid to get exact 2 columns */
+  .why-grid-97 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 14px; /* row-gap col-gap */
+    justify-items: center;
+    align-items: stretch;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
   .why-card-97 {
     width: 100%;
+    max-width: 320px;     /* card max width within grid cell */
+    padding: 22px 14px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(50, 48, 48, 0.18);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
+
+  .why-icon-97 {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 12px;
+  }
+
+  .why-title-97 {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  .why-text-97 {
+    font-size: 13px;
+    max-width: 90%;
+    color: #555;
+    line-height: 1.45;
+    margin: 0 auto;
+  }
+}
+
+
+
+
+
+
+
+
+/* For very small narrow phones, fall back to single column */
+@media (max-width: 420px) {
+  .why-grid-97 {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .why-card-97 {
+    max-width: 100%;
+    padding: 20px 16px;
+  }
+
+  .why-title-97 {
+    font-size: 15px;
+  }
+
+  .why-text-97 {
+    font-size: 13px;
+  }
+}
+
+/* ---------- small utility to ensure images behave predictably ---------- */
+.why-card-97 img {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }

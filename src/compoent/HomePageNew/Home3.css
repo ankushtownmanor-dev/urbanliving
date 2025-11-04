@@ -70,3 +70,57 @@ box-shadow:
   color: #555;
   line-height: 1.5;
 }
+/* ✅ Mobile View */
+@media (max-width: 768px) {
+  .how-container {
+    padding: 40px 15px;
+  }
+
+  .how-heading {
+    font-size: 22px;
+    margin-bottom: 40px;
+  }
+
+  .how-card-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .how-card {
+    width: 90%;
+    max-width: 340px;
+    padding: 30px 20px;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .icon-circle {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 18px;
+    background: #ebe9e9;
+    box-shadow: 0 3px 10px rgba(50, 48, 48, 0.25);
+  }
+
+  .how-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .how-title {
+    font-size: 17px;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 6px;
+  }
+
+  .how-text {
+    font-size: 13.5px;
+    color: #666;
+    max-width: 90%;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+}
