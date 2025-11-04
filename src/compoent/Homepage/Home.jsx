@@ -17,22 +17,22 @@ function Home() {
   return (
    <>
    <Helmet>
-     <title>Ovika – Smart & Stylish Living Spaces | Comfort & Freedom</title>
+     <title>OVIKA – Premium Living Spaces in Noida & Greater Noida | Smart Urban Living</title>
      <meta
        name="description"
-       content="Discover Ovika’s smart and stylish living spaces. From shared to independent homes, enjoy comfort, flexibility, and modern living designed for every lifestyle."
+       content="From shared to stylish – OVIKA offers premium living spaces in Noida & Greater Noida. Explore Luxe, Stay & Hive or partner with us to list your property."
      />
      <meta
        name="keywords"
-       content="rental house in Noida, rental room in Noida, apartment for rent in Noida, fully furnished apartment in Noida, 1 BHK rental house in Noida, 2 BHK rental house in Noida, flat for rent in Noida Sector 62, flat for rent in Noida Sector 137, Noida Extension rental house, PG and rooms for rent in Noida, rental house in Delhi, rental room in Delhi, flat for rent in South Delhi, flat for rent in East Delhi, flat for rent in West Delhi, flat for rent in North Delhi, fully furnished apartment in Delhi, no brokerage room rent in Delhi, rental property management in Delhi, independent house for rent in Delhi, rental house in Gurgaon, rental room in Gurgaon, apartment for rent in Gurgaon, fully furnished apartment in Gurgaon, 1 BHK rental house in Gurgaon, 2 BHK flat for rent in Gurgaon, flat for rent near Cyber City Gurgaon, flat for rent in DLF Phase 1 Gurgaon, flat for rent in MG Road Gurgaon, no brokerage rooms in Gurgaon, rent my property in Noida, rent my property in Delhi, rent my property in Gurgaon, no brokerage room rent in Noida, rental and property management in Noida, rental and property management in Delhi NCR, rooms in a house for rent in NCR, fully furnished apartment for rent in NCR"
+       content="ovika, ovika noida, ovika greater noida, ovika smart urban living, tm luxe noida, tm luxe greater noida, luxe 1 studio noida, luxe 2 suite noida, premium serviced apartments noida, premium studio stay noida, short term stays noida, corporate stay noida, co-living noida, tm stay noida, tm hive noida, premium pg noida, business stay greater noida, premium living spaces noida, luxury rentals noida, list your property ovika, lease property ovika, managed rental solutions noida, property management noida, premium 1bhk apartments noida, elegant stay noida"
      />
      <meta name="robots" content="index,follow" />
-     <meta property="og:title" content="Ovika – Smart & Stylish Living Spaces | Comfort & Freedom" />
-     <meta property="og:description" content="Discover Ovika’s smart and stylish living spaces. From shared to independent homes, enjoy comfort, flexibility, and modern living designed for every lifestyle." />
+     <meta property="og:title" content="OVIKA – Premium Living Spaces in Noida & Greater Noida" />
+     <meta property="og:description" content="From shared to stylish – OVIKA offers premium living spaces. Experience smart urban living with Luxe, Stay & Hive collections." />
      <meta property="og:type" content="website" />
      <meta name="twitter:card" content="summary_large_image" />
-     <meta name="twitter:title" content="Ovika – Smart & Stylish Living Spaces | Comfort & Freedom" />
-     <meta name="twitter:description" content="Discover Ovika’s smart and stylish living spaces. From shared to independent homes, enjoy comfort, flexibility, and modern living designed for every lifestyle." />
+     <meta name="twitter:title" content="OVIKA – Premium Living Spaces in Noida & Greater Noida" />
+     <meta name="twitter:description" content="Experience smart urban living with OVIKA's premium living spaces. Discover Luxe, Stay & Hive collections in Noida & Greater Noida." />
    </Helmet>
    {/* <Navbar/> */}
    <MainBanner/>
