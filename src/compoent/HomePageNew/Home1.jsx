@@ -43,7 +43,7 @@ export default function Home1() {
       
       <div className="ovika-urban-hero-wrapper">
         <h1 className="ovika-urban-hero-heading">
-      Smart Urban Living, redefined for <br/>
+      Smart burben Living, redefined for <br/>
 the modern you. Stay, connect, <br/>
 and thrive with Ovika
         </h1>
