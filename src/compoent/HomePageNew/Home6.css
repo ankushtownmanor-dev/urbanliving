@@ -119,7 +119,7 @@
 }
 
 .ovika-submit-btn-homepage {
-  background: linear-gradient(to right, #cf1518, #1b0101);;
+  background: #c2772b;
   color: #fff;
   font-size: 1.2rem;
   padding: 10px 0;
@@ -140,6 +140,57 @@
   color: #000;
   margin-bottom: 20px;
   text-align: center;
+}
+/* ✅ Left-side Property Listing Button */
+.ovika-left-btn {
+  background: #c2772b;
+  color: #fff;
+  border: none;
+  border-radius: 28px;
+  padding: 8px 0;
+  width: 230px; /* slightly wider */
+  font-size: 1.08rem;
+  font-weight: 400;
+  cursor: pointer;
+  margin-top: 26px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+  text-decoration: none;
+
+  /* ✅ Make text & icon aligned properly */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* space between text and arrow */
+}
+
+.ovika-left-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* ✅ Arrow animation on hover */
+.ovika-left-btn-arrow {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+}
+
+.ovika-left-btn:hover .ovika-left-btn-arrow {
+  transform: translateX(4px); /* smooth arrow slide */
+}
+
+/* ✅ Mobile view */
+@media (max-width: 768px) {
+  .ovika-left-btn {
+    width: 100%;
+    font-size: 1rem;
+    padding: 10px 0;
+    border-radius: 25px;
+    background: linear-gradient(to right, #cf1518, #1b0101);
+    gap: 6px;
+    text-decoration: none;
+  }
 }
 
 @media (max-width: 900px) {
@@ -176,6 +227,20 @@
     padding: 18px 7vw;
   }
 }
+
+
+/* ✅ Mobile view adjustments */
+@media (max-width: 768px) {
+  .ovika-left-btn {
+    width: 100%;
+    font-size: 1rem;
+    padding: 10px 0;
+    border-radius: 25px;
+    text-decoration: none;
+    background: linear-gradient(to right, #cf1518, #1b0101); /* same as form button */
+  }
+}
+
 /* ✅ Perfect Mobile View - Matches Screenshot */
 @media (max-width: 768px) {
   .ovika-connect-main {

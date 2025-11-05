@@ -95,7 +95,7 @@
   text-align: left;
 }
 .living-btn {
-background: linear-gradient(to right, #cf1518, #1b0101);
+background: #c2772b;
   color: white;
   border: none;
   padding: 10px 22px;
@@ -113,7 +113,7 @@ background: linear-gradient(to right, #cf1518, #1b0101);
 
 
 .living-btn:hover {
-  background-color: #8d1414;
+  background-color:#c2772b;
 }
 
 .arrow {

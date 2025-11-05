@@ -1,7 +1,4 @@
-/* Import the typography system */
-/* @import '../../styles/typography.css'; */
-
-/* Base Footer Styles */
+/* 
 .hoomie-footer-container {
   background: #f8f9fa;
   color: #4a4a4a;
@@ -18,7 +15,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  /* background: linear-gradient(90deg, #c5393a, #e57373); */
+  
 }
 
 .hoomie-footer-main {
@@ -32,7 +29,7 @@
   position: relative;
 }
 
-/* Footer Columns */
+
 .hoomie-footer-col {
   flex: 1 1 200px;
   min-width: 200px;
@@ -46,7 +43,7 @@
 
 .hoomie-footer-logo {
   margin-bottom: 20px;
-  height: 50px; /* Adjust based on your logo's aspect ratio */
+  height: 50px; 
   display: flex;
   align-items: center;
 }
@@ -61,7 +58,6 @@ width: 60%;
   line-height: 0;
 }
 
-/* Footer Headings */
 .hoomie-footer-heading {
   font-size: 1.1rem;
   font-weight: 700;
@@ -83,7 +79,7 @@ width: 60%;
   background: #c5393a;
 }
 
-/* Footer Links */
+
 .hoomie-footer-col ul {
   list-style: none;
   padding: 0;
@@ -119,7 +115,7 @@ width: 60%;
   left: 0;
 }
 
-/* Connect Section */
+
 .hoomie-footer-connect {
   min-width: 300px;
   flex: 1 1 340px;
@@ -176,7 +172,6 @@ width: 60%;
   box-shadow: 0 4px 12px rgba(197, 57, 58, 0.15);
 }
 
-/* Contact Info */
 .hoomie-footer-contact-row {
   display: flex;
   flex-direction: column;
@@ -211,7 +206,6 @@ width: 60%;
   color: #c5393a;
 }
 
-/* Social Icons */
 .hoomie-footer-socials {
   display: flex;
   gap: 15px;
@@ -226,54 +220,52 @@ width: 60%;
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: transparent; /* will be set per brand below */
+  background: transparent; 
   font-size: 1.4rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 2px solid transparent;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Default brand-filled styles (same as current hover) */
-.hoomie-footer-social-icon:nth-child(1) { /* LinkedIn */
+.hoomie-footer-social-icon:nth-child(1) { 
   background: #0077b5;
   color: #ffffff;
   border-color: #0077b5;
 }
-.hoomie-footer-social-icon:nth-child(2) { /* Facebook */
+.hoomie-footer-social-icon:nth-child(2) { 
   background: #4267B2;
   color: #ffffff;
   border-color: #4267B2;
 }
-.hoomie-footer-social-icon:nth-child(3) { /* Instagram */
+.hoomie-footer-social-icon:nth-child(3) { 
   background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
   color: #ffffff;
   border-color: transparent;
 }
 
-/* Individual icon colors on hover */
+
 .hoomie-footer-social-icon:hover {
   transform: translateY(-3px) scale(1.1);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
-  /* Hover keeps same colors; just animate */
-  .hoomie-footer-social-icon:nth-child(1):hover { /* LinkedIn */
+
+  .hoomie-footer-social-icon:nth-child(1):hover { 
     background: #0077b5;
     color: #ffffff;
     border-color: #0077b5;
   }
-  .hoomie-footer-social-icon:nth-child(2):hover { /* Facebook */
+  .hoomie-footer-social-icon:nth-child(2):hover {
     background: #4267B2;
     color: #ffffff;
     border-color: #4267B2;
   }
-  .hoomie-footer-social-icon:nth-child(3):hover { /* Instagram */
+  .hoomie-footer-social-icon:nth-child(3):hover { 
     background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
     color: #ffffff;
     border-color: transparent;
   }
 
-/* Add subtle animation on hover */
 @keyframes iconBounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-5px); }
@@ -283,7 +275,7 @@ width: 60%;
   animation: iconBounce 0.6s ease;
 }
 
-/* Responsive adjustments */
+
 @media (max-width: 768px) {
   .hoomie-footer-socials {
     margin-top: 25px;
@@ -296,7 +288,6 @@ width: 60%;
   }
 }
 
-/* Bottom Bar */
 .hoomie-footer-bottom {
   background: #f0f2f5;
   padding: 20px 30px;
@@ -322,7 +313,7 @@ width: 60%;
   text-decoration: underline;
 }
 
-/* Responsive Design */
+
 @media (max-width: 1024px) {
   .hoomie-footer-main {
     padding: 0 20px 30px;
@@ -401,5 +392,153 @@ width: 60%;
   .hoomie-footer-join-btn {
     border-radius: 6px;
     padding: 12px;
+  }
+} */
+
+.ovika-footer {
+  background: linear-gradient(to bottom, #dba14b, #7c4a17);
+  color: #fff;
+  padding: 50px 8%;
+  border-radius: 20px 20px 0 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 30px;
+  width: 120%;
+}
+
+.footer-left {
+  max-width: 300px;
+}
+
+.footer-logo {
+  width: 110px;
+  margin-bottom: 10px;
+}
+
+.footer-description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #f0e6d8;
+}
+
+.footer-section h4 {
+  font-size: 17px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.footer-section a {
+  display: block;
+  color: #fff;
+  font-size: 14px;
+  margin-bottom: 8px;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-section a:hover {
+  color: #ffd18b;
+}
+
+.footer-section p {
+  font-size: 14px;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.footer-section svg {
+  margin-right: 8px;
+}
+
+.newsletter {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.newsletter p {
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+.newsletter-input {
+  display: inline-flex;
+  background: #fff;
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.newsletter-input input {
+  border: none;
+  padding: 10px 15px;
+  outline: none;
+  width: 250px;
+  font-size: 14px;
+}
+
+.newsletter-input button {
+  background: linear-gradient(to right, #e43b3b, #000);
+  color: #fff;
+  border: none;
+  padding: 0 18px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 35px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  padding-top: 15px;
+  flex-wrap: wrap;
+}
+
+.footer-bottom p {
+  font-size: 14px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 12px;
+  font-size: 18px;
+}
+
+.bottom-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  margin-left: 15px;
+}
+
+.bottom-links a:hover {
+  color: #ffd18b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-container {
+    grid-template-columns: 1fr 1fr;
+  }
+  .newsletter-input input {
+    width: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .footer-left {
+    margin: 0 auto;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 10px;
   }
 }

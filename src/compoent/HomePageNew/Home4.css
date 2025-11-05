@@ -95,7 +95,7 @@
 }
 
 .featured-btn {
- background: linear-gradient(to right, #ec1d20, #770b0b);
+ background: #c2772b;
   color: #fff;
   border: none;
   padding: 10px 25px;
@@ -109,7 +109,7 @@
 }
 
 .featured-btn:hover {
-  background-color: #8d1414;
+  background-color:#c2772b;
 }
 
 @media (max-width:786px) {
