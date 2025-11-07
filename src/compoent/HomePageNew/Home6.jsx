@@ -69,7 +69,7 @@ function Home6() {
           </p>
 
           {/* ✅ Property Listing Button with Arrow */}
-        <a style={{textDecoration:"none"}} href="/list-property" target="_blank">  <button className="ovika-left-btn">
+        <a style={{textDecoration:"none"}} href="/list-property" target="_blank">  <button className="ovika-left-btn-property">
             Property Listing <ArrowRight className="ovika-left-btn-arrow" />
           </button></a>
         </div>

@@ -142,7 +142,7 @@
   text-align: center;
 }
 /* ✅ Left-side Property Listing Button */
-.ovika-left-btn {
+.ovika-left-btn-property {
   background: #c2772b;
   color: #fff;
   border: none;
@@ -182,7 +182,7 @@
 
 /* ✅ Mobile view */
 @media (max-width: 768px) {
-  .ovika-left-btn {
+  .ovika-left-btn-property {
     width: 100%;
     font-size: 1rem;
     padding: 10px 0;
@@ -231,13 +231,16 @@
 
 /* ✅ Mobile view adjustments */
 @media (max-width: 768px) {
-  .ovika-left-btn {
-    width: 100%;
+  .ovika-left-btn-property {
+    width: 75%;
     font-size: 1rem;
     padding: 10px 0;
     border-radius: 25px;
     text-decoration: none;
-    background: linear-gradient(to right, #cf1518, #1b0101); /* same as form button */
+    background: #c2772b; /* same as form button */
+    margin-left: 46px;
+    border-color: #c2772b;
+    color: white;
   }
 }
 
@@ -326,7 +329,7 @@
   }
 
   .ovika-submit-btn-homepage {
-    background: linear-gradient(to right, #cf1518, #1b0101);
+    background: #c2772b;
     color: #fff;
     font-size: 1.05rem;
     font-weight: 400;

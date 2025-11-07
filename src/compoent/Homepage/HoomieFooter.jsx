@@ -478,12 +478,1003 @@
 
 // export default HoomieFooter;
 
+// import React, { useState } from "react";
+// import { Mail, Phone, MapPin, Smartphone } from "lucide-react";
+
+// // Helper component for vertical link spacing
+// const LinkList = ({ items }) => (
+//   <div style={{ display: "flex", flexDirection: "column", gap: "15px", marginTop: "4px" }}>
+//     {items.map((item, index) => (
+//       <a
+//         key={index}
+//         href="#"
+//         style={{
+//           fontSize: "13px",
+//           color: "#fff",
+//           textDecoration: "none",
+//           opacity: 1,
+//           transition: "opacity 0.2s",
+//         }}
+//         onMouseOver={e => (e.target.style.opacity = "0.7")}
+//         onMouseOut={e => (e.target.style.opacity = "1")}
+//       >
+//         {item}
+//       </a>
+//     ))}
+//   </div>
+// );
+
+// const mobileCSS = `
+// @media (max-width: 900px) {
+//   .footer-container {
+//     padding: 32px 12px 10px !important;
+//     margin-left: 0 !important;
+//     margin-right: 0 !important;
+//   }
+//   .footer-grid {
+//     display: flex !important;
+//     flex-wrap: wrap !important;
+//     flex-direction: column !important;
+//     gap: 0 !important;
+//     margin-bottom: 32px !important;
+//     text-align: center ;
+//   }
+//   .footer-col {
+//     margin-bottom: 32px !important;
+//     width: 100% !important;
+//     min-width: unset !important;
+//     max-width: unset !important;
+//     padding-right: 0 !important;
+//     padding-left: 0 !important;
+//   }
+//   .newsletter-row {
+//     flex-direction: column !important;
+//     gap: 16px !important;
+//     align-items: stretch !important;
+//     width: 100% !important;
+//   }
+//   .newsletter-inputrow {
+//     width: 100% !important;
+//     min-width: unset !important;
+//     max-width: unset !important;
+//   }
+//   .bottom-row {
+//     flex-direction: column !important;
+//     gap: 19px !important;
+//     font-size: 12px !important;
+//     align-items: flex-start !important;
+//     justify-content: flex-start !important;
+//   }
+//   .logo-col img {
+//     width: 90px !important;
+//   }
+// }
+// `;
+
+// const HoomieFooter = () => {
+//   const [email, setEmail] = useState("");
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     console.log("Email submitted:", email);
+//     setEmail("");
+//   };
+
+//   return (
+//     <>
+//       <style>{mobileCSS}</style>
+//       <footer
+//         className="footer-container"
+//         style={{
+//           background: "linear-gradient(180deg, #c98b3e 0%, #7c4e13 100%)",
+//           color: "#fff",
+//           padding: "60px 40px 20px",
+//           borderRadius: "20px 20px 0 0",
+//           fontFamily: "Poppins, sans-serif",
+//           marginLeft: "20px",
+//           marginRight: "20px"
+//         }}
+//       >
+//         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+//           {/* Top Section */}
+//           <div className="footer-grid"
+//             style={{
+//               display: "grid",
+//               gridTemplateColumns: "1.3fr 1fr 1fr 1fr 1fr",
+//               gap: "40px",
+//               marginBottom: "60px",
+//             }}
+//           >
+//             {/* Company Info */}
+//             <div className="footer-col logo-col" style={{ marginTop: "-40px" }}>
+//               <img
+//                 src="/ovika.png"
+//                 alt="OVIKA Logo"
+//                 style={{ width: "110px", marginBottom: "10px" }}
+//               />
+//               <p style={{ fontSize: "13px", lineHeight: "1.7", opacity: "0.95" }}>
+//                 OVIKA is the flagship brand of Townmanor Technologies Pvt. Ltd.,<br />
+//                 representing the company's vision for Smart Urban Living. Designed to redefine <br />
+//                 the way people experience modern city <br />
+//                 life, OVIKA integrates technology, design, and convenience to create connected and intelligent living spaces.
+//               </p>
+//             </div>
+
+//             {/* Contact Us */}
+//             <div className="footer-col">
+//               <h3
+//                 style={{
+//                   fontSize: "18px",
+//                   fontWeight: "600",
+//                   marginBottom: "12px",
+//                 }}
+//               >
+//                 Contact Us
+//               </h3>
+//               <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+//                 <MapPin size={16} style={{ marginTop: "2px" }} />
+//                 <span style={{ fontSize: "13px", lineHeight: "1.6" }}>
+//                   ST-304, Eldeco Studio, Sector 93A, Noida India, PIN-201304
+//                 </span>
+//               </div>
+//               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "12px" }}>
+//                 <Phone size={16} />
+//                 <span style={{ fontSize: "13px" }}>+91-0120-4420450</span>
+//               </div>
+//               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "10px" }}>
+//                 <Smartphone size={16} />
+//                 <span style={{ fontSize: "13px" }}>7042888903</span>
+//               </div>
+//               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "10px" }}>
+//                 <Mail size={16} />
+//                 <a
+//                   href="mailto:corporate@townmanor.in"
+//                   style={{
+//                     color: "#fff",
+//                     fontSize: "13px",
+//                     textDecoration: "none",
+//                   }}
+//                 >
+//                   corporate@townmanor.in
+//                 </a>
+//               </div>
+//             </div>
+
+//             {/* Quick Links */}
+//             <div className="footer-col">
+//               <h3
+//                 style={{
+//                   fontSize: "18px",
+//                   fontWeight: "600",
+//                   marginBottom: "12px",
+//                 }}
+//               >
+//                 Quick Links
+//               </h3>
+//               <LinkList items={[
+//                 "About Us",
+//                 "FAQ's",
+//                 "Terms and condition",
+//                 "Privacy Policy",
+//                 "Refund and Cancellation Policy"
+//               ]} />
+//             </div>
+
+//             {/* Services */}
+//             <div className="footer-col">
+//               <h3
+//                 style={{
+//                   fontSize: "18px",
+//                   fontWeight: "600",
+//                   marginBottom: "12px",
+//                 }}
+//               >
+//                 Services
+//               </h3>
+//               <LinkList items={[
+//                 "Home Loan",
+//                 "Insurance",
+//                 "Home Interior",
+//                 "Subscription Plan",
+//                 "Home Shift",
+//                 "Property Valuation"
+//               ]} />
+//             </div>
+
+//             {/* More About */}
+//             <div className="footer-col">
+//               <h3
+//                 style={{
+//                   fontSize: "18px",
+//                   fontWeight: "600",
+//                   marginBottom: "12px",
+//                 }}
+//               >
+//                 More About
+//               </h3>
+//               <LinkList items={[
+//                 "Blogs",
+//                 "News/Article",
+//                 "Luxury Apartment",
+//                 "Video Tutorial",
+//                 "Support Team",
+//                 "Site Map"
+//               ]} />
+//             </div>
+//           </div>
+
+//           {/* Newsletter */}
+//           <div
+//             className="newsletter-row"
+//             style={{
+//               padding: "35px 0",
+//               display: "flex",
+//               justifyContent: "center",
+//             }}
+//           >
+//             <div
+//               style={{
+//                 display: "flex",
+//                 alignItems: "center",
+//                 justifyContent: "space-between",
+//                 width: "80%",
+//                 maxWidth: "1000px",
+//                 gap: "40px",
+//               }}
+//             >
+//               {/* LEFT SIDE TEXT */}
+//               <p
+//                 style={{
+//                   color: "white",
+//                   fontSize: "16px",
+//                   fontWeight: 400,
+//                   fontFamily: "Poppins, sans-serif",
+//                   whiteSpace: "nowrap",
+//                   marginBottom: "0"
+//                 }}
+//               >
+//                 Get the latest updates about Townmanor and Ovika
+//               </p>
+
+//               {/* RIGHT SIDE INPUT BAR */}
+//               <form onSubmit={handleSubmit} className="newsletter-inputrow" style={{ margin: 0, padding: 0, width: "100%" }}>
+//                 <div
+//                   style={{
+//                     display: "flex",
+//                     alignItems: "center",
+//                     width: "460px",
+//                     height: "46px",
+//                     borderRadius: "50px",
+//                     backgroundColor: "#fff",
+//                     position: "relative",
+//                   }}
+//                 >
+//                   <input
+//                     type="email"
+//                     placeholder="Add your email*"
+//                     value={email}
+//                     onChange={e => setEmail(e.target.value)}
+//                     style={{
+//                       flex: 1,
+//                       height: "100%",
+//                       padding: "0 20px",
+//                       border: "none",
+//                       outline: "none",
+//                       fontSize: "15px",
+//                       borderRadius: "50px",
+//                       fontFamily: "Poppins, sans-serif",
+//                     }}
+//                     required
+//                   />
+//                   <button
+//                     type="submit"
+//                     style={{
+//                       position: "absolute",
+//                       right: "0",
+//                       height: "100%",
+//                       width: "130px",
+//                       background: "linear-gradient(90deg, #b62305 0%, #000000 100%)",
+//                       color: "white",
+//                       border: "none",
+//                       cursor: "pointer",
+//                       fontSize: "18px",
+//                       display: "flex",
+//                       alignItems: "center",
+//                       justifyContent: "center",
+//                       borderRadius: "50px",
+//                       marginRight: "-2px",
+//                       transition: "0.3s ease",
+//                     }}
+//                   >
+//                     →
+//                   </button>
+//                 </div>
+//               </form>
+//             </div>
+//           </div>
+
+//           {/* Bottom Section */}
+//           <div
+//             className="bottom-row"
+//             style={{
+//               borderTop: "1px solid rgba(255, 255, 255, 0.3)",
+//               display: "flex",
+//               justifyContent: "space-between",
+//               alignItems: "center",
+//               flexWrap: "wrap",
+//               fontSize: "13px",
+//               paddingTop: "15px",
+//               paddingBottom: "15px",
+//             }}
+//           >
+//             {/* LEFT SIDE COPYRIGHT */}
+//             <span style={{ color: "#fff", fontFamily: "Poppins, sans-serif" }}>
+//               © 2025 TOWNMANOR
+//             </span>
+
+//             {/* CENTER SOCIAL ICONS */}
+//             <div
+//               style={{
+//                 display: "flex",
+//                 alignItems: "center",
+//                 justifyContent: "center",
+//                 gap: "18px",
+//               }}
+//             >
+//               <a
+//                 href="https://twitter.com"
+//                 target="_blank"
+//                 rel="noopener noreferrer"
+//                 style={{
+//                   width: "35px",
+//                   height: "35px",
+//                   display: "flex",
+//                   justifyContent: "center",
+//                   alignItems: "center",
+//                   borderRadius: "50%",
+//                 }}
+//               >
+//                 <img
+//                   src="/Group 1711.png"
+//                   alt="Twitter"
+//                   style={{
+//                     width: "100%",
+//                     height: "100%",
+//                     objectFit: "contain",
+//                     cursor: "pointer",
+//                   }}
+//                 />
+//               </a>
+//               <a
+//                 href="https://facebook.com"
+//                 target="_blank"
+//                 rel="noopener noreferrer"
+//                 style={{
+//                   width: "35px",
+//                   height: "35px",
+//                   display: "flex",
+//                   justifyContent: "center",
+//                   alignItems: "center",
+//                   borderRadius: "50%",
+//                 }}
+//               >
+//                 <img
+//                   src="/Group 1722.png"
+//                   alt="Facebook"
+//                   style={{
+//                     width: "100%",
+//                     height: "100%",
+//                     objectFit: "contain",
+//                     cursor: "pointer",
+//                   }}
+//                 />
+//               </a>
+//               <a
+//                 href="https://instagram.com"
+//                 target="_blank"
+//                 rel="noopener noreferrer"
+//                 style={{
+//                   width: "35px",
+//                   height: "35px",
+//                   display: "flex",
+//                   justifyContent: "center",
+//                   alignItems: "center",
+//                   borderRadius: "50%",
+//                 }}
+//               >
+//                 <img
+//                   src="/Group 1733.png"
+//                   alt="Instagram"
+//                   style={{
+//                     width: "100%",
+//                     height: "100%",
+//                     objectFit: "contain",
+//                     cursor: "pointer",
+//                   }}
+//                 />
+//               </a>
+//             </div>
+
+//             {/* RIGHT SIDE LINKS */}
+//             <div
+//               style={{
+//                 display: "flex",
+//                 alignItems: "center",
+//                 gap: "8px",
+//                 color: "#fff",
+//                 fontFamily: "Poppins, sans-serif",
+//               }}
+//             >
+//               <a
+//                 href="#terms"
+//                 style={{
+//                   color: "#fff",
+//                   textDecoration: "none",
+//                   fontSize: "13px",
+//                 }}
+//               >
+//                 TERMS
+//               </a>
+//               <span>|</span>
+//               <a
+//                 href="#privacy"
+//                 style={{
+//                   color: "#fff",
+//                   textDecoration: "none",
+//                   fontSize: "13px",
+//                 }}
+//               >
+//                 PRIVACY
+//               </a>
+//             </div>
+//           </div>
+//         </div>
+//       </footer>
+//     </>
+//   );
+// };
+
+// export default HoomieFooter;
+
+
+// import React, { useState } from "react";
+// import { Mail, Phone, MapPin, Smartphone } from "lucide-react";
+
+// const LinkList = ({ items }) => (
+//   <div
+//     style={{
+//       display: "flex",
+//       flexDirection: "column",
+//       gap: "15px",
+//       marginTop: "4px",
+//     }}
+//   >
+//     {items.map((item, index) => (
+//       <a
+//         key={index}
+//         href="#"
+//         style={{
+//           fontSize: "13px",
+//           color: "#fff",
+//           textDecoration: "none",
+//           opacity: 1,
+//           transition: "opacity 0.2s",
+//         }}
+//         onMouseOver={(e) => (e.target.style.opacity = "0.7")}
+//         onMouseOut={(e) => (e.target.style.opacity = "1")}
+//       >
+//         {item}
+//       </a>
+//     ))}
+//   </div>
+// );
+
+// const mobileCSS = `
+// @media (max-width: 900px) {
+
+//   /* 1️⃣ Background full width */
+//   .footer-container {
+//     width: 100vw !important;
+//     margin: 0 !important;
+//     border-radius: 0 !important;
+//     padding: 32px 12px 10px !important;
+//   }
+
+//   /* 2️⃣ Logo text color fix + Center align sab kuch */
+//   .logo-col p {
+//     color: #fff !important;
+//     text-align: center !important;
+//   }
+
+//   .logo-col {
+//     display: flex !important;
+//     flex-direction: column !important;
+//     align-items: center !important;
+//     text-align: center !important;
+//   }
+
+//   /* 3️⃣ Contact us section center aligned */
+//   .footer-col h3,
+//   .footer-col div,
+//   .footer-col a,
+//   .footer-col span {
+//     text-align: center !important;
+//     justify-content: center !important;
+//   }
+
+//   .footer-grid {
+//     display: flex !important;
+//     flex-direction: column !important;
+//     gap: 0 !important;
+//     align-items: center !important;
+//   }
+
+//   /* 4️⃣ Social icons upar, copyright neeche */
+//   .bottom-row {
+//     flex-direction: column-reverse !important;
+//     align-items: center !important;
+//     justify-content: center !important;
+//     text-align: center !important;
+//     gap: 12px !important;
+//   }
+
+//   .bottom-row div, .bottom-row span {
+//     justify-content: center !important;
+//   }
+
+//   /* General centering for all footer content */
+//   .footer-container * {
+//     text-align: center !important;
+//   }
+
+//   .logo-col img {
+//     width: 100px !important;
+//     margin: 0 auto 10px auto !important;
+//   }
+// }
+// `;
+
+// const HoomieFooter = () => {
+//   const [email, setEmail] = useState("");
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     console.log("Email submitted:", email);
+//     setEmail("");
+//   };
+
+//   return (
+//     <>
+//       <style>{mobileCSS}</style>
+//       <footer
+//         className="footer-container"
+//         style={{
+//           background: "linear-gradient(180deg, #c98b3e 0%, #7c4e13 100%)",
+//           color: "#fff",
+//           padding: "60px 40px 20px",
+//           borderRadius: "20px 20px 0 0",
+//           fontFamily: "Poppins, sans-serif",
+//           marginLeft: "20px",
+//           marginRight: "20px",
+//         }}
+//       >
+//         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+//           {/* Top Section */}
+//           <div
+//             className="footer-grid"
+//             style={{
+//               display: "grid",
+//               gridTemplateColumns: "1.3fr 1fr 1fr 1fr 1fr",
+//               gap: "40px",
+//               marginBottom: "60px",
+//             }}
+//           >
+//             {/* Company Info */}
+//             <div className="footer-col logo-col" style={{ marginTop: "-40px" }}>
+//               <img
+//                 src="/ovika.png"
+//                 alt="OVIKA Logo"
+//                 style={{ width: "110px", marginBottom: "10px" }}
+//               />
+//               <p
+//                 style={{
+//                   fontSize: "13px",
+//                   lineHeight: "1.7",
+//                   opacity: "0.95",
+//                 }}
+//               >
+//                 OVIKA is the flagship brand of Townmanor Technologies Pvt. Ltd.,
+//                 <br />
+//                 representing the company's vision for Smart Urban Living.
+//                 Designed to redefine <br />
+//                 the way people experience modern city <br />
+//                 life, OVIKA integrates technology, design, and convenience to
+//                 create connected and intelligent living spaces.
+//               </p>
+//             </div>
+
+//             {/* Contact Us */}
+//             <div className="footer-col">
+//               <h3
+//                 style={{
+//                   fontSize: "18px",
+//                   fontWeight: "600",
+//                   marginBottom: "12px",
+//                 }}
+//               >
+//                 Contact Us
+//               </h3>
+//               <div
+//                 style={{
+//                   display: "flex",
+//                   alignItems: "flex-start",
+//                   gap: "10px",
+//                 }}
+//               >
+//                 <MapPin size={16} style={{ marginTop: "2px" }} />
+//                 <span style={{ fontSize: "13px", lineHeight: "1.6" }}>
+//                   ST-304, Eldeco Studio, Sector 93A, Noida India, PIN-201304
+//                 </span>
+//               </div>
+//               <div
+//                 style={{
+//                   display: "flex",
+//                   alignItems: "center",
+//                   gap: "10px",
+//                   marginTop: "12px",
+//                 }}
+//               >
+//                 <Phone size={16} />
+//                 <span style={{ fontSize: "13px" }}>+91-0120-4420450</span>
+//               </div>
+//               <div
+//                 style={{
+//                   display: "flex",
+//                   alignItems: "center",
+//                   gap: "10px",
+//                   marginTop: "10px",
+//                 }}
+//               >
+//                 <Smartphone size={16} />
+//                 <span style={{ fontSize: "13px" }}>7042888903</span>
+//               </div>
+//               <div
+//                 style={{
+//                   display: "flex",
+//                   alignItems: "center",
+//                   gap: "10px",
+//                   marginTop: "10px",
+//                 }}
+//               >
+//                 <Mail size={16} />
+//                 <a
+//                   href="mailto:corporate@townmanor.in"
+//                   style={{
+//                     color: "#fff",
+//                     fontSize: "13px",
+//                     textDecoration: "none",
+//                   }}
+//                 >
+//                   corporate@townmanor.in
+//                 </a>
+//               </div>
+//             </div>
+
+//             {/* Quick Links */}
+//             <div className="footer-col">
+//               <h3
+//                 style={{
+//                   fontSize: "18px",
+//                   fontWeight: "600",
+//                   marginBottom: "12px",
+//                 }}
+//               >
+//                 Quick Links
+//               </h3>
+//               <LinkList
+//                 items={[
+//                   "About Us",
+//                   "FAQ's",
+//                   "Terms and condition",
+//                   "Privacy Policy",
+//                   "Refund and Cancellation Policy",
+//                 ]}
+//               />
+//             </div>
+
+//             {/* Services */}
+//             <div className="footer-col">
+//               <h3
+//                 style={{
+//                   fontSize: "18px",
+//                   fontWeight: "600",
+//                   marginBottom: "12px",
+//                 }}
+//               >
+//                 Services
+//               </h3>
+//               <LinkList
+//                 items={[
+//                   "Home Loan",
+//                   "Insurance",
+//                   "Home Interior",
+//                   "Subscription Plan",
+//                   "Home Shift",
+//                   "Property Valuation",
+//                 ]}
+//               />
+//             </div>
+
+//             {/* More About */}
+//             <div className="footer-col">
+//               <h3
+//                 style={{
+//                   fontSize: "18px",
+//                   fontWeight: "600",
+//                   marginBottom: "12px",
+//                 }}
+//               >
+//                 More About
+//               </h3>
+//               <LinkList
+//                 items={[
+//                   "Blogs",
+//                   "News/Article",
+//                   "Luxury Apartment",
+//                   "Video Tutorial",
+//                   "Support Team",
+//                   "Site Map",
+//                 ]}
+//               />
+//             </div>
+//           </div>
+
+//           {/* Newsletter */}
+//           <div
+//             className="newsletter-row"
+//             style={{
+//               padding: "35px 0",
+//               display: "flex",
+//               justifyContent: "center",
+//             }}
+//           >
+//             <div
+//               style={{
+//                 display: "flex",
+//                 alignItems: "center",
+//                 justifyContent: "space-between",
+//                 width: "80%",
+//                 maxWidth: "1000px",
+//                 gap: "40px",
+//               }}
+//             >
+//               <p
+//                 style={{
+//                   color: "white",
+//                   fontSize: "16px",
+//                   fontWeight: 400,
+//                   fontFamily: "Poppins, sans-serif",
+//                   whiteSpace: "nowrap",
+//                   marginBottom: "0",
+//                 }}
+//               >
+//                 Get the latest updates about Townmanor and Ovika
+//               </p>
+
+//               <form
+//                 onSubmit={handleSubmit}
+//                 className="newsletter-inputrow"
+//                 style={{ margin: 0, padding: 0, width: "100%" }}
+//               >
+//                 <div
+//                   style={{
+//                     display: "flex",
+//                     alignItems: "center",
+//                     width: "460px",
+//                     height: "46px",
+//                     borderRadius: "50px",
+//                     backgroundColor: "#fff",
+//                     position: "relative",
+//                   }}
+//                 >
+//                   <input
+//                     type="email"
+//                     placeholder="Add your email*"
+//                     value={email}
+//                     onChange={(e) => setEmail(e.target.value)}
+//                     style={{
+//                       flex: 1,
+//                       height: "100%",
+//                       padding: "0 20px",
+//                       border: "none",
+//                       outline: "none",
+//                       fontSize: "15px",
+//                       borderRadius: "50px",
+//                       fontFamily: "Poppins, sans-serif",
+//                     }}
+//                     required
+//                   />
+//                   <button
+//                     type="submit"
+//                     style={{
+//                       position: "absolute",
+//                       right: "0",
+//                       height: "100%",
+//                       width: "130px",
+//                       background:
+//                         "linear-gradient(90deg, #b62305 0%, #000000 100%)",
+//                       color: "white",
+//                       border: "none",
+//                       cursor: "pointer",
+//                       fontSize: "18px",
+//                       display: "flex",
+//                       alignItems: "center",
+//                       justifyContent: "center",
+//                       borderRadius: "50px",
+//                       marginRight: "-2px",
+//                       transition: "0.3s ease",
+//                     }}
+//                   >
+//                     →
+//                   </button>
+//                 </div>
+//               </form>
+//             </div>
+//           </div>
+
+//           {/* Bottom Section */}
+//           <div
+//             className="bottom-row"
+//             style={{
+//               borderTop: "1px solid rgba(255, 255, 255, 0.3)",
+//               display: "flex",
+//               justifyContent: "space-between",
+//               alignItems: "center",
+//               flexWrap: "wrap",
+//               fontSize: "13px",
+//               paddingTop: "15px",
+//               paddingBottom: "15px",
+//             }}
+//           >
+//             <span style={{ color: "#fff", fontFamily: "Poppins, sans-serif" }}>
+//               © 2025 TOWNMANOR
+//             </span>
+
+//             <div
+//               style={{
+//                 display: "flex",
+//                 alignItems: "center",
+//                 justifyContent: "center",
+//                 gap: "18px",
+//               }}
+//             >
+//               <a
+//                 href="https://twitter.com"
+//                 target="_blank"
+//                 rel="noopener noreferrer"
+//                 style={{
+//                   width: "35px",
+//                   height: "35px",
+//                   display: "flex",
+//                   justifyContent: "center",
+//                   alignItems: "center",
+//                   borderRadius: "50%",
+//                 }}
+//               >
+//                 <img
+//                   src="/Group 1711.png"
+//                   alt="Twitter"
+//                   style={{
+//                     width: "100%",
+//                     height: "100%",
+//                     objectFit: "contain",
+//                     cursor: "pointer",
+//                   }}
+//                 />
+//               </a>
+//               <a
+//                 href="https://facebook.com"
+//                 target="_blank"
+//                 rel="noopener noreferrer"
+//                 style={{
+//                   width: "35px",
+//                   height: "35px",
+//                   display: "flex",
+//                   justifyContent: "center",
+//                   alignItems: "center",
+//                   borderRadius: "50%",
+//                 }}
+//               >
+//                 <img
+//                   src="/Group 1722.png"
+//                   alt="Facebook"
+//                   style={{
+//                     width: "100%",
+//                     height: "100%",
+//                     objectFit: "contain",
+//                     cursor: "pointer",
+//                   }}
+//                 />
+//               </a>
+//               <a
+//                 href="https://instagram.com"
+//                 target="_blank"
+//                 rel="noopener noreferrer"
+//                 style={{
+//                   width: "35px",
+//                   height: "35px",
+//                   display: "flex",
+//                   justifyContent: "center",
+//                   alignItems: "center",
+//                   borderRadius: "50%",
+//                 }}
+//               >
+//                 <img
+//                   src="/Group 1733.png"
+//                   alt="Instagram"
+//                   style={{
+//                     width: "100%",
+//                     height: "100%",
+//                     objectFit: "contain",
+//                     cursor: "pointer",
+//                   }}
+//                 />
+//               </a>
+//             </div>
+
+//             <div
+//               style={{
+//                 display: "flex",
+//                 alignItems: "center",
+//                 gap: "8px",
+//                 color: "#fff",
+//                 fontFamily: "Poppins, sans-serif",
+//               }}
+//             >
+//               <a
+//                 href="#terms"
+//                 style={{
+//                   color: "#fff",
+//                   textDecoration: "none",
+//                   fontSize: "13px",
+//                 }}
+//               >
+//                 TERMS
+//               </a>
+//               <span>|</span>
+//               <a
+//                 href="#privacy"
+//                 style={{
+//                   color: "#fff",
+//                   textDecoration: "none",
+//                   fontSize: "13px",
+//                 }}
+//               >
+//                 PRIVACY
+//               </a>
+//             </div>
+//           </div>
+//         </div>
+//       </footer>
+//     </>
+//   );
+// };
+
+// export default HoomieFooter;
+ 
+
 import React, { useState } from "react";
 import { Mail, Phone, MapPin, Smartphone } from "lucide-react";
 
-// Helper component for vertical link spacing
 const LinkList = ({ items }) => (
-  <div style={{ display: "flex", flexDirection: "column", gap: "15px", marginTop: "4px" }}>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      gap: "15px",
+      marginTop: "4px",
+    }}
+  >
     {items.map((item, index) => (
       <a
         key={index}
@@ -495,8 +1486,8 @@ const LinkList = ({ items }) => (
           opacity: 1,
           transition: "opacity 0.2s",
         }}
-        onMouseOver={e => (e.target.style.opacity = "0.7")}
-        onMouseOut={e => (e.target.style.opacity = "1")}
+        onMouseOver={(e) => (e.target.style.opacity = "0.7")}
+        onMouseOut={(e) => (e.target.style.opacity = "1")}
       >
         {item}
       </a>
@@ -505,47 +1496,104 @@ const LinkList = ({ items }) => (
 );
 
 const mobileCSS = `
-@media (max-width: 900px) {
+@media (max-width: 786px) {
   .footer-container {
     padding: 32px 12px 10px !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+    margin-top: 8px !important;
   }
+
   .footer-grid {
     display: flex !important;
-    flex-wrap: wrap !important;
     flex-direction: column !important;
-    gap: 0 !important;
-    margin-bottom: 32px !important;
+    gap: 35px !important;
+    text-align: center !important;
+    align-items: center !important;
   }
+
   .footer-col {
-    margin-bottom: 32px !important;
     width: 100% !important;
-    min-width: unset !important;
-    max-width: unset !important;
-    padding-right: 0 !important;
-    padding-left: 0 !important;
+    text-align: center !important;
+    margin-bottom: 20px !important;
   }
+
+  .footer-col p,
+  .footer-col span,
+  .footer-col a {
+    text-align: center !important;
+  }
+    
+
+  /* Contact Us center */
+ \
+  .footer-col div {
+    justify-content: center !important;
+  }
+
+  /* Newsletter Section Fix */
   .newsletter-row {
     flex-direction: column !important;
-    gap: 16px !important;
-    align-items: stretch !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    gap: 18px !important;
     width: 100% !important;
   }
+
+  .newsletter-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+
+  .newsletter-wrapper p {
+    white-space: normal !important;
+    text-align: center !important;
+    font-size: 15px !important;
+    padding: 0 10px !important;
+    margin: 0 !important;
+  }
+
   .newsletter-inputrow {
     width: 100% !important;
-    min-width: unset !important;
-    max-width: unset !important;
+    display: flex !important;
+    justify-content: center !important;
   }
+
+  .newsletter-inputrow div {
+    width: 90% !important;
+    max-width: 360px !important;
+  }
+
+  /* Bottom Row Fix */
   .bottom-row {
     flex-direction: column !important;
-    gap: 19px !important;
-    font-size: 12px !important;
-    align-items: flex-start !important;
-    justify-content: flex-start !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    gap: 16px !important;
   }
+
+  .bottom-row div,
+  .bottom-row span,
+  .bottom-row a {
+    text-align: center !important;
+  }
+
+  .bottom-row > div:nth-child(2) {
+    justify-content: center !important;
+  }
+
+  .bottom-row img {
+    margin: 0 auto !important;
+  }
+
   .logo-col img {
     width: 90px !important;
+    margin: 0 auto !important;
   }
 }
 `;
@@ -571,12 +1619,13 @@ const HoomieFooter = () => {
           borderRadius: "20px 20px 0 0",
           fontFamily: "Poppins, sans-serif",
           marginLeft: "20px",
-          marginRight: "20px"
+          marginRight: "20px",
         }}
       >
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           {/* Top Section */}
-          <div className="footer-grid"
+          <div
+            className="footer-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "1.3fr 1fr 1fr 1fr 1fr",
@@ -591,53 +1640,77 @@ const HoomieFooter = () => {
                 alt="OVIKA Logo"
                 style={{ width: "110px", marginBottom: "10px" }}
               />
-              <p style={{ fontSize: "13px", lineHeight: "1.7", opacity: "0.95" }}>
-                OVIKA is the flagship brand of Townmanor Technologies Pvt. Ltd.,<br />
-                representing the company's vision for Smart Urban Living. Designed to redefine <br />
+              <p
+                style={{
+                  fontSize: "13px",
+                  lineHeight: "1.7",
+                  opacity: "0.95",
+                }}
+              >
+                <span style={{color:"black"}}>OVIKA</span> is the flagship brand of <span style={{color:"black"}}>Townmanor Technologies Pvt. Ltd.</span>,
+                <br />
+                representing the company's vision for <span style={{color:"black"}}>Smart Urban Living.</span>
+                Designed to redefine <br />
                 the way people experience modern city <br />
-                life, OVIKA integrates technology, design, and convenience to create connected and intelligent living spaces.
+                life, OVIKA integrates technology, design, and convenience to
+                create connected and intelligent living spaces.
               </p>
             </div>
 
             {/* Contact Us */}
-            <div className="footer-col">
-              <h3
-                style={{
-                  fontSize: "18px",
-                  fontWeight: "600",
-                  marginBottom: "12px",
-                }}
-              >
-                Contact Us
-              </h3>
-              <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                <MapPin size={16} style={{ marginTop: "2px" }} />
-                <span style={{ fontSize: "13px", lineHeight: "1.6" }}>
-                  ST-304, Eldeco Studio, Sector 93A, Noida India, PIN-201304
-                </span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "12px" }}>
-                <Phone size={16} />
-                <span style={{ fontSize: "13px" }}>+91-0120-4420450</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "10px" }}>
-                <Smartphone size={16} />
-                <span style={{ fontSize: "13px" }}>7042888903</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "10px" }}>
-                <Mail size={16} />
-                <a
-                  href="mailto:corporate@townmanor.in"
-                  style={{
-                    color: "#fff",
-                    fontSize: "13px",
-                    textDecoration: "none",
-                  }}
-                >
-                  corporate@townmanor.in
-                </a>
-              </div>
-            </div>
+{/* Contact Us */}
+<div className="footer-col">
+  <h3
+    style={{
+      fontSize: "18px",
+      fontWeight: "600",
+      marginBottom: "12px",
+    }}
+  >
+    Contact Us
+  </h3>
+
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      gap: "14px",
+      fontSize: "13px",
+    }}
+  >
+    <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+      <MapPin size={16} style={{ marginTop: "2px" }} />
+      <span style={{ lineHeight: "1.6" }}>
+        ST-304, Eldeco Studio, Sector 93A, Noida India, PIN-201304
+      </span>
+    </div>
+
+    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <Phone size={16} />
+      <span>+91-0120-4420450</span>
+    </div>
+
+    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <Smartphone size={16} />
+      <span>7042888903</span>
+    </div>
+
+    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <Mail size={16} />
+      <a
+        href="mailto:corporate@townmanor.in"
+        style={{
+          color: "#fff",
+          textDecoration: "none",
+          fontSize: "13px",
+        }}
+      >
+        corporate@townmanor.in
+      </a>
+    </div>
+  </div>
+</div>
+
 
             {/* Quick Links */}
             <div className="footer-col">
@@ -650,13 +1723,15 @@ const HoomieFooter = () => {
               >
                 Quick Links
               </h3>
-              <LinkList items={[
-                "About Us",
-                "FAQ's",
-                "Terms and condition",
-                "Privacy Policy",
-                "Refund and Cancellation Policy"
-              ]} />
+              <LinkList
+                items={[
+                  "About Us",
+                  "FAQ's",
+                  "Terms and condition",
+                  "Privacy Policy",
+                  "Refund and Cancellation Policy",
+                ]}
+              />
             </div>
 
             {/* Services */}
@@ -670,14 +1745,16 @@ const HoomieFooter = () => {
               >
                 Services
               </h3>
-              <LinkList items={[
-                "Home Loan",
-                "Insurance",
-                "Home Interior",
-                "Subscription Plan",
-                "Home Shift",
-                "Property Valuation"
-              ]} />
+              <LinkList
+                items={[
+                  "Home Loan",
+                  "Insurance",
+                  "Home Interior",
+                  "Subscription Plan",
+                  "Home Shift",
+                  "Property Valuation",
+                ]}
+              />
             </div>
 
             {/* More About */}
@@ -691,14 +1768,16 @@ const HoomieFooter = () => {
               >
                 More About
               </h3>
-              <LinkList items={[
-                "Blogs",
-                "News/Article",
-                "Luxury Apartment",
-                "Video Tutorial",
-                "Support Team",
-                "Site Map"
-              ]} />
+              <LinkList
+                items={[
+                  "Blogs",
+                  "News/Article",
+                  "Luxury Apartment",
+                  "Video Tutorial",
+                  "Support Team",
+                  "Site Map",
+                ]}
+              />
             </div>
           </div>
 
@@ -711,17 +1790,8 @@ const HoomieFooter = () => {
               justifyContent: "center",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                width: "80%",
-                maxWidth: "1000px",
-                gap: "40px",
-              }}
-            >
-              {/* LEFT SIDE TEXT */}
+            <div className="newsletter-wrapper">
+              {/* Text on Top */}
               <p
                 style={{
                   color: "white",
@@ -729,14 +1799,18 @@ const HoomieFooter = () => {
                   fontWeight: 400,
                   fontFamily: "Poppins, sans-serif",
                   whiteSpace: "nowrap",
-                  marginBottom: "0"
+                  marginBottom: "0",
                 }}
               >
                 Get the latest updates about Townmanor and Ovika
               </p>
 
-              {/* RIGHT SIDE INPUT BAR */}
-              <form onSubmit={handleSubmit} className="newsletter-inputrow" style={{ margin: 0, padding: 0, width: "100%" }}>
+              {/* Search Bar Below */}
+              <form
+                onSubmit={handleSubmit}
+                className="newsletter-inputrow"
+                style={{ margin: 0, padding: 0, width: "100%" }}
+              >
                 <div
                   style={{
                     display: "flex",
@@ -752,7 +1826,7 @@ const HoomieFooter = () => {
                     type="email"
                     placeholder="Add your email*"
                     value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                     style={{
                       flex: 1,
                       height: "100%",
@@ -772,7 +1846,8 @@ const HoomieFooter = () => {
                       right: "0",
                       height: "100%",
                       width: "130px",
-                      background: "linear-gradient(90deg, #b62305 0%, #000000 100%)",
+                      background:
+                        "linear-gradient(90deg, #b62305 0%, #000000 100%)",
                       color: "white",
                       border: "none",
                       cursor: "pointer",
@@ -806,12 +1881,10 @@ const HoomieFooter = () => {
               paddingBottom: "15px",
             }}
           >
-            {/* LEFT SIDE COPYRIGHT */}
             <span style={{ color: "#fff", fontFamily: "Poppins, sans-serif" }}>
               © 2025 TOWNMANOR
             </span>
 
-            {/* CENTER SOCIAL ICONS */}
             <div
               style={{
                 display: "flex",
@@ -894,7 +1967,6 @@ const HoomieFooter = () => {
               </a>
             </div>
 
-            {/* RIGHT SIDE LINKS */}
             <div
               style={{
                 display: "flex",

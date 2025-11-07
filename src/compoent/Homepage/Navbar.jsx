@@ -678,8 +678,8 @@ function Navbar() {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "50px",
-              marginLeft: "300px",
+              gap: "40px",
+              marginLeft: "550px",
               fontSize: "17px",
               color: "#232323",
               fontWeight: 500,
@@ -703,27 +703,7 @@ function Navbar() {
 
           {/* Right Side Buttons */}
           <div className="navbar-right" style={{ display: "flex", alignItems: "center", gap: "24px" }}>
-            <button
-              style={{
-                background: "#c98b3e",
-                color: "#fff",
-                border: "none",
-                borderRadius: "22px",
-                padding: "0 23px",
-                height: "40px",
-                fontWeight: 500,
-                fontSize: "15px",
-                display: "flex",
-                alignItems: "center",
-                gap: "7px",
-                cursor: "pointer",
-                fontFamily: "Poppins,sans-serif",
-                boxShadow: "0 1px 12px 0 rgba(201,139,62,0.08)",
-              }}
-            >
-              <span style={{ fontSize: "18px", fontWeight: "bold" }}>+</span>
-              Property Listing
-            </button>
+          
 
             {user ? (
               <div ref={userMenuRef} style={{ position: "relative" }}>
