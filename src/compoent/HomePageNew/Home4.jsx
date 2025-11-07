@@ -9,7 +9,7 @@ const Home4 = () => {
   // Define each property separately for better control
   const property1 = {
     id: 1,
-    img: "/image 199.png",
+    img: "/tmluxe1.jpeg",
     city: "Noida Sector 137",
     title: "TM Lux - 1",
     text: "Urban Nest Co-Living offers thoughtfully designed shared spaces that blend privacy with social connection. Perfect for students and young professionals, each room comes fully furnished with modern amenities, high-speed Wi-Fi, and access to vibrant community zones.",
@@ -20,7 +20,7 @@ const Home4 = () => {
 
   const property2 = {
     id: 2,
-    img: "/image 291.png",
+    img: "/tmluxe22.jpg",
     city: "Greater Noida Knowledge Park",
     title: "TM Lux - 2",
     text: "Located in the heart of the tech district, Silicon Valley Stays redefines urban living for working professionals and digital creators. With dedicated co-working spaces, contemporary interiors, and 24/7 access to facilities, it's designed for productivity and comfort.",
@@ -31,7 +31,7 @@ const Home4 = () => {
 
   const property3 = {
     id: 3,
-    img: "/image 203.png",
+    img: "/tmluxe3.png",
     city: "Noida Extension",
     title: "TM Lux - 3",
     text: "Hitech Homes brings elegance and sophistication to everyday living. Each residence features premium furnishings, smart home technology, and exclusive amenities like fitness studios and rooftop lounges. Ideal for executives and families seeking refined living.",
