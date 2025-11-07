@@ -71,7 +71,12 @@ const ListPropertyPage = () => {
     <div className="list-property-page">
       {/* Hero Section */}
       <div className="hero-section">
-        <div className="hero-content">
+        <div className="hero-overlay"></div>
+        <div className="container">
+          <div className="hero-content">
+            <h1>Turn your property into a smart income source</h1>
+            <p>Join hundreds of property owners who are earning with us — we handle everything from tenant verification to maintenance.</p>
+          </div>
         </div>
       </div>
 
@@ -129,105 +134,110 @@ const ListPropertyPage = () => {
      
 
       {/* Property Types Section */}
-      <div className="property-types-section">
-        <div className="container">
-          <h2 style={{fontWeight:"400" , color:"black"}}>List any Property type</h2>
-          <p className="section-subtitle">
-            From cozy PGs to luxurious Villas, Ovika is a perfect platform to showcase your property
-          </p>
-          
-          <div className="property-types-grid" ref={ptContainerRef} onScroll={handlePTScroll}>
-            {renderCards.map((card, idx) => (
-              <div
-                key={`${card.title}-${idx}`}
-                className={`property-type-card${isMobile && (idx === 0 || idx === renderCards.length - 1) ? ' is-clone' : ''}`}
-              >
-                <div className="property-image">
-                  <img src={card.img} alt={card.title} />
-                </div>
-                <div className="property-overlay">
-                  <h3>{card.title}</h3>
-                  <p>{card.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      {/* Working Model Section - Fixed alignment (text left, image right) */}
-<div className="working-model">
+    <div className="property-types-section">
   <div className="container">
-    <h2 className="wm-title">Our working Model</h2>
-    <p className="wm-subtitle">
-      List your property your way — renovate and earn, let Ovika manage it, or take full control by uploading yourself.
+    <h2 className="property-types-title">List any <span className="highlight-text">Property</span> type</h2>
+    <p className="property-types-subtitle">
+      From cozy PGs to luxurious Villas, Ovika is a perfect platform to showcase your property
     </p>
 
-    <div className="wm-row">
-      <div className="wm-text">
-        <h3>Share your property - we renovate & share profit</h3>
-        <p>
-          Have an unused or old property that's losing its charm or sitting idle? With Ovika, you can turn it into
-          a profitable investment without lifting a finger. Simply share your property with us, and our expert team will
-          take care of everything — from renovation and furnishing to marketing and tenant management. We transform your
-          space into a modern, desirable rental property that attracts the right tenants and ensures consistent earnings.
-          Once it's rented, you receive a fair share of the profits, making it a hassle-free way to earn passive income
-          while increasing your property's overall value.
-        </p>
-        <a href='/renovation' target='_blank'>  <button  target='_blank' className="wm-ctarnw">
-          Check out process
-        </button></a>
-       
-      </div>
-      <div className="wm-image">
-        <img src="/home1.png" alt="Renovate and share profit" />
-      </div>
-    </div>
-
-    <div className="wm-row">
-      <div className="wm-text">
-        <h3>Don’t want to manage listings? we will handle it for you</h3>
-        <p>
-          If you don’t have the time or experience to handle property listings, Ovika is here to do it for you.
-          Share your property details with us — photos, location, rent preferences — and our team will professionally
-          list it on the Ovika platform, verify details, and showcase it to thousands of potential tenants. Start earning
-          without the hassle.
-        </p>
-        {/* <button className="wm-cta" onClick={() => window.location.href = '/ownermain'}>
-          Check out process
-        </button> */}
-        <a href='/ownermain' target='_blank'>
-          <button className="wm-ctarnw" >
-          Check out process
-        </button>
-        </a>
-      </div>
-      <div className="wm-image">
-        <img src="/home2.png" alt="We handle listings" />
-      </div>
-    </div>
-
-    <div className="wm-row">
-      <div className="wm-text">
-        <h3>List your property your way</h3>
-        <p>
-          Prefer full control? Easily add photos, set rent, write descriptions, and publish instantly on Ovika. Reach
-          potential tenants directly, track inquiries, and update details anytime. Perfect for hands-on owners with the
-          reach of a trusted platform.
-        </p>
-         <a href='/selfmanage' target='_blank'>  <button  target='_blank' className="wm-ctarnw">
-          Check out process
-        </button></a>
-      </div>
-      <div className="wm-image">
-        <img src="/home3.png" alt="List your way" />
-      </div>
+    <div className="property-types-grid" ref={ptContainerRef} onScroll={handlePTScroll}>
+      {renderCards.map((card, idx) => (
+        <div
+          key={`${card.title}-${idx}`}
+          className={`property-type-card${isMobile && (idx === 0 || idx === renderCards.length - 1) ? ' is-clone' : ''}`}
+        >
+          <div className="property-image">
+            <img src={card.img} alt={card.title} />
+          </div>
+          <div className="property-overlay">
+            <h3>{card.title}</h3>
+            <p>{card.desc}</p>
+          </div>
+        </div>
+      ))}
     </div>
   </div>
 </div>
+      {/* Working Model Section */}
+      <div className="working-model">
+        <div className="container">
+          <h2 className="wm-title">Our <span className="highlight-working">working</span> Model</h2>
+          <p className="wm-subtitle">
+            List your property your way — renovate and earn, let us manage it, or take full control by uploading yourself.
+          </p>
+
+          <div className="wm-cards">
+            {/* Card 1 */}
+            <div className="wm-card">
+              <div className="wm-card-content">
+                <div className="wm-card-text">
+                  <h3>Share your property - we renovate & share profit</h3>
+                  <p>
+                    Have an unused or old property that's losing its charm or sitting idle? With Ovika, you can turn it into
+                    a profitable investment without lifting a finger. Simply share your property with us, and our expert team will
+                    take care of everything — from renovation and furnishing to marketing and tenant management. We transform your
+                    space into a modern, desirable rental property that attracts the right tenants and ensures consistent earnings.
+                    Once it's rented, you receive a fair share of the profits, making it a hassle-free way to earn passive income
+                    while increasing your property's overall value.
+                  </p>
+                  <a href="/renovation" target="_blank" className="wm-cta">
+                    Check out process
+                  </a>
+                </div>
+                <div className="wm-card-image">
+                  <img src="/home1.png" alt="Renovate and share profit" />
+                </div>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="wm-card">
+              <div className="wm-card-content">
+                <div className="wm-card-text">
+                  <h3>Don't want to manage listings? We will handle it for you</h3>
+                  <p>
+                   If you don’t have the time or experience to handle property listings, 
+                   Ovika is here to do it for you. Share your property details with us — photos,
+                  location, rent preferences — and our team will professionally list it on the Ovika platform, 
+                  verify details, and showcase it to thousands of potential tenants. Start earning without the hassle.
+                  </p>
+                  <a href="/ownermain" target="_blank" className="wm-cta">
+                    Check out process
+                  </a>
+                </div>
+                <div className="wm-card-image">
+                  <img src="/home2.png" alt="We handle listings" />
+                </div>
+              </div>
+            </div>
+
+            {/* Card 3 */}
+            <div className="wm-card">
+              <div className="wm-card-content">
+                <div className="wm-card-text">
+                  <h3>List your property your way</h3>
+                  <p>
+                    Prefer full control? Easily add photos, set rent, write descriptions, 
+                    and publish instantly on Ovika. Reach potential tenants directly, track inquiries, 
+                    and update details anytime. Perfect for hands-on owners with the reach of a trusted platform.
+                  </p>
+                  <a href="/selfmanage" target="_blank" className="wm-cta">
+                    Check out process
+                  </a>
+                </div>
+                <div className="wm-card-image">
+                  <img src="/home3.png" alt="List your way" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
  {/* Benefits Section */}
  <div className="benefits-section">
         <div className="container">
-          <h2 style={{fontWeight:"400", color:"black"}}>Benefit of Listing with Ovika</h2>
+          <h2 style={{fontWeight:"400", color:"black"}}>Benefit of Listing with <span style={{color: "rgb(201, 139, 62)"}}>Ovika</span></h2>
           <p className="section-subtitle">
             Experience the advantage of listing your property with Ovika and unlock world of opportunity
           </p>
