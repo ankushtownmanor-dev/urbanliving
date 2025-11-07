@@ -243,21 +243,44 @@ import { useNavigate } from "react-router";
 const Home4 = () => {
   const navigate = useNavigate();
 
-  // ✅ 1. Dummy data defined first
-  const dummyData = [
-    {
-      id: 999,
-      img: "/image 199.png",
-      city: "Noida ",
-      title: "TM Lux - 3",
-      text: "Urban Nest Co-Living offers thoughtfully designed shared spaces that blend privacy with social connection. Perfect for students and young professionals, each room comes fully furnished with modern amenities, high-speed Wi-Fi, and access to vibrant community zones.",
-      rating: "Comming Soon",
-      price: "Comming Soon",
-      btn: "Comming Soon",
-    },
-  ];
+  // Define each property separately for better control
+  const property1 = {
+    id: 1,
+    img: "/image 199.png",
+    city: "Noida Sector 137",
+    title: "TM Lux - 1",
+    text: "Urban Nest Co-Living offers thoughtfully designed shared spaces that blend privacy with social connection. Perfect for students and young professionals, each room comes fully furnished with modern amenities, high-speed Wi-Fi, and access to vibrant community zones.",
+    rating: "⭐ 4.8 (120 reviews)",
+    price: "₹4,500 / night",
+    btn: "View Property"
+  };
 
-  const [properties, setProperties] = useState(dummyData); // ✅ show dummy first
+  const property2 = {
+    id: 2,
+    img: "/image 291.png",
+    city: "Greater Noida Knowledge Park",
+    title: "TM Lux - 2",
+    text: "Located in the heart of the tech district, Silicon Valley Stays redefines urban living for working professionals and digital creators. With dedicated co-working spaces, contemporary interiors, and 24/7 access to facilities, it's designed for productivity and comfort.",
+    rating: "⭐ 4.9 (85 reviews)",
+    price: "₹3,300 / night",
+    btn: "View Property"
+  };
+
+  const property3 = {
+    id: 3,
+    img: "/image 203.png",
+    city: "Noida Extension",
+    title: "TM Lux - 3",
+    text: "Hitech Homes brings elegance and sophistication to everyday living. Each residence features premium furnishings, smart home technology, and exclusive amenities like fitness studios and rooftop lounges. Ideal for executives and families seeking refined living.",
+    rating: "Coming Soon",
+    price: "Coming Soon",
+    btn: "Coming Soon"
+  };
+
+  // Default properties that will always show
+  const defaultProperties = [property1, property2, property3];
+
+  const [properties, setProperties] = useState(defaultProperties); // Show default properties first
   const [loading, setLoading] = useState(false); // no delay
   const [error, setError] = useState("");
 
@@ -277,7 +300,7 @@ const Home4 = () => {
 
         if (fetchedProps.length === 0) {
           console.warn("API empty, keeping dummy data");
-          setProperties(dummyData);
+          setProperties(defaultProperties);
           return;
         }
 
@@ -313,12 +336,21 @@ const Home4 = () => {
           };
         });
 
-        // ✅ Always keep dummy property visible at the top
-        setProperties([dummyData[0], ...formatted]);
+        // Merge API properties with default properties, avoiding duplicates by ID
+        const mergedProperties = [...defaultProperties];
+        
+        formatted.forEach(apiProp => {
+          // Only add if not already in default properties
+          if (!defaultProperties.some(p => p.id === apiProp.id)) {
+            mergedProperties.push(apiProp);
+          }
+        });
+        
+        setProperties(mergedProperties);
       } catch (err) {
         console.error("❌ Error fetching properties:", err);
         setError("Unable to load properties.");
-        setProperties(dummyData);
+        setProperties(defaultProperties);
       }
     };
 
