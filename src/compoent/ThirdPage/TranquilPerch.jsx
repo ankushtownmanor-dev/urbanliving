@@ -209,8 +209,8 @@ export default function TranquilPerch({
   };
 
   const getPropertyLocation = () => {
-    if (id === 2 || id === "2") return "Greater Noida";
-    if (id === 1 || id === "1") return "Noida";
+    if (id === 2 || id === "2") return "Greater Noida Knowledge Park 3";
+    if (id === 1 || id === "1") return "Noida Sector 137";
     return "Taxes included • Free cancellation available";
   };
 
