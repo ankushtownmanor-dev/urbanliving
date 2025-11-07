@@ -8,7 +8,7 @@ const Home4 = () => {
 
   // Define each property separately for better control
   const property1 = {
-    id: 1,
+    id: 2,
     img: "/tmluxe1.jpeg",
     city: "Noida Sector 137",
     title: "TM Lux - 1",
@@ -19,7 +19,7 @@ const Home4 = () => {
   };
 
   const property2 = {
-    id: 2,
+    id: 1,
     img: "/tmluxe22.jpg",
     city: "Greater Noida Knowledge Park",
     title: "TM Lux - 2",
@@ -36,7 +36,7 @@ const Home4 = () => {
     title: "TM Lux - 3",
     text: "Hitech Homes brings elegance and sophistication to everyday living. Each residence features premium furnishings, smart home technology, and exclusive amenities like fitness studios and rooftop lounges. Ideal for executives and families seeking refined living.",
     rating: "Coming Soon",
-    price: "Coming Soon",
+    price: "₹5,000 / night",
     btn: "Coming Soon"
   };
 

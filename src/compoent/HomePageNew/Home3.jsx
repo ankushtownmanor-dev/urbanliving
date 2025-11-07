@@ -15,8 +15,8 @@ const Home3 = () => {
     },
     {
       icon: "/novi3.png", // replace with your icon
-      title: "Move In Hassle-free",
-      text: "Enjoy a smooth move-in experience with our support.",
+      title: "Check-in Hassle Free",
+      text: "Check-in experience with our support.",
     },
     {
       icon: "/novi4.png", // replace with your icon

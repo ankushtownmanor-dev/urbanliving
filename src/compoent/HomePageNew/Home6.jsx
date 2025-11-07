@@ -70,7 +70,7 @@ function Home6() {
 
           {/* ✅ Property Listing Button with Arrow */}
         <a style={{textDecoration:"none"}} href="/list-property" target="_blank">  <button className="ovika-left-btn-property">
-            Property Listing <ArrowRight className="ovika-left-btn-arrow" />
+            List your Property <ArrowRight className="ovika-left-btn-arrow" />
           </button></a>
         </div>
 
@@ -93,7 +93,7 @@ function Home6() {
               placeholder="Phone Number"
             />
             <button className="ovika-submit-btn-homepage">
-              List With Ovika
+            Submit
             </button>
           </form>
         </div>

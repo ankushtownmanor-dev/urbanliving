@@ -244,7 +244,7 @@ function Navbar() {
               transition: ".3s",
             }}
           >
-            <a href="/" style={{ textDecoration: "none", color: "#232323" }}>
+            {/* <a href="/" style={{ textDecoration: "none", color: "#232323" }}>
               Home
             </a>
             <a href="/services" style={{ textDecoration: "none", color: "#232323" }}>
@@ -255,7 +255,7 @@ function Navbar() {
             </a>
             <a href="/contact" style={{ textDecoration: "none", color: "#232323" }}>
               Contact us
-            </a>
+            </a> */}
           </div>
 
           {/* Right Buttons */}
