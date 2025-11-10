@@ -1,162 +1,129 @@
-.beforeafter-section {
+.showcase-section {
   text-align: center;
   padding: 60px 0;
   font-family: "Poppins", sans-serif;
-  /* background: #fff; */
+  background: #fff;
 }
 
-.beforeafter-section h2 {
-  font-size: 2.3rem;
+.showcase-title {
+  font-size: clamp(28px, 4.5vw, 40px);
   font-weight: 500;
-  margin-bottom: 8px;
   color: #111;
 }
 
-.beforeafter-section p {
-  color: #555;
-  font-size: 15px;
-  margin-bottom: 40px;
+.showcase-title span {
+  color: #b87b2a; /* Desirable accent color */
 }
 
-/* ------------ Carousel Layout ------------ */
-.carousel-container {
+.showcase-subtitle {
+  font-size: 15px;
+  color: #555;
+  margin: 10px 0 40px;
+}
+
+/* Carousel Container */
+.showcase-carousel {
   position: relative;
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
 }
 
-.carousel-wrapper {
+.showcase-wrapper {
   position: relative;
-  width: 60%;
-  height: 650px;
-  max-width: 750px;
-  /* max-height: 1650px; Total height for 2 stacked images */
+  width: 70%;
+  max-width: 850px;
+  height: 420px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* ------------ Cards ------------ */
-.carousel-card {
+/* Each Slide */
+.showcase-card {
   position: absolute;
   top: 0;
-  left: 60px;
-  width: 90%;
+  width: 100%;
   opacity: 0;
   transform: scale(0.85);
   transition: all 0.6s ease;
   filter: blur(4px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-.carousel-card.activeSlide {
+.showcase-card.activeSlide {
   opacity: 1;
   transform: scale(1);
   filter: blur(0);
   z-index: 3;
 }
 
-.carousel-card.lastSlide {
+.showcase-card.lastSlide {
   transform: translateX(-60%) scale(0.85);
   opacity: 0.5;
   z-index: 2;
 }
 
-.carousel-card.nextSlide {
+.showcase-card.nextSlide {
   transform: translateX(60%) scale(0.85);
   opacity: 0.5;
   z-index: 2;
 }
 
-/* ------------ Inner Card ------------ */
-.card-inner {
+/* Before/After Image Pair */
+.image-pair {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  gap: 2px;
+  background: #fff;
   border-radius: 16px;
   overflow: hidden;
-  width: 100%;
-  height: 100%;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.15);
-  /* background: #fff; */
-  padding: 10px;
-  box-sizing: border-box;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
-/* ------------ Image Box ------------ */
-.card-img {
+.image-box {
   position: relative;
-  width: 100%;
-  height: 300px; /* Equal height for both images */
-  border-radius: 12px;
+  width: 50%;
+  height: 420px;
   overflow: hidden;
-  /* background: #f8f8f8; */
 }
 
-.card-img img {
+.image-box img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Fit perfectly without distortion */
+  object-fit: cover;
   display: block;
 }
 
-/* ------------ Tag + Label ------------ */
-.tag {
+/* Labels */
+.badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 14px;
+  left: 14px;
   background: rgba(255, 255, 255, 0.9);
   color: #111;
   font-size: 13px;
-  padding: 5px 12px;
-  border-radius: 14px;
   font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 14px;
 }
 
-.tag.after {
+.badge.after {
   background: #c91f22;
   color: #fff;
 }
 
-.label {
-  position: absolute;
-  bottom: 10px;
-  right: 14px;
-  left: -540px;
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 500;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-}
-.label-2 {
-  position: absolute;
-  bottom: 10px;
-  right: 14px;
-  /* left: -540px; */
-  color: #fff;
-  font-size: 15px;
-  font-weight: 500;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-}
-
-
-/* ------------ Navigation Buttons ------------ */
+/* Navigation Buttons */
 .nav-btn {
   background: #fff;
   border: none;
-  font-size: 20px;
-  cursor: pointer;
   border-radius: 50%;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   transition: all 0.3s ease;
   z-index: 5;
@@ -177,18 +144,26 @@
   right: 6%;
 }
 
-/* ------------ Responsive ------------ */
+/* Responsive */
 @media (max-width: 768px) {
-  .carousel-wrapper {
+  .showcase-wrapper {
     width: 90%;
-    height: 520px;
+    height: 320px;
   }
 
-  .card-img {
-    height: 240px;
+  .image-box {
+    height: 320px;
   }
 
-  .beforeafter-section h2 {
+  .showcase-title {
     font-size: 1.8rem;
+  }
+
+  .nav-btn.left {
+    left: 3%;
+  }
+
+  .nav-btn.right {
+    right: 3%;
   }
 }
