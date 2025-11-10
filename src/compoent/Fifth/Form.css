@@ -1,185 +1,140 @@
-.property-share-wrapper {
-  background: #fff;
-  padding: 40px 0;
-  font-family: Arial, sans-serif;
+/* ======= Base Section ======= */
+.ovika-section {
+  padding: 60px 20px;
+  background-color: #fff;
   text-align: center;
-}
-
-.main-heading-renovation {
-  font-size: 2.5rem;
-  font-weight: 400;
-  margin-bottom: 8px;
-}
-
-.sub-heading {
-  font-size: 1rem;
-  color: #000000;
-  margin-bottom: 40px;
-}
-
-.form-office-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  background: #fff;
-  border: 2px solid #d3d3d3;
-  border-radius: 20px;
-  margin: 0 auto;
-  width: 80%;
-  padding: 40px 20px;
   box-sizing: border-box;
 }
 
-.form-section-newsection, .office-section {
-  width: 48%;
+/* ======= Top Text ======= */
+.ovika-top-text h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #000;
 }
 
-.section-heading-renovation {
-  font-size: 2.5rem;
-  font-weight: 400;
-  margin-bottom: 18px;
-}
-.section-heading-two{
-      font-size: 2.5rem;
-  font-weight: 400;
-  margin-bottom: 18px; 
-  text-align: center;
+.ovika-top-text h3 span {
+  color: #c47c26; /* brand color */
 }
 
-.share-form {
+.ovika-top-text p {
+  color: #5c5c5c;
+  font-size: 1rem;
+  margin-top: 8px;
+}
+
+/* ======= Content Layout ======= */
+.ovika-content {
+  margin: 50px;
+  background: url("Group 185.png") center/cover
+    no-repeat; /* replace with your image path */
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  padding: 60px;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+/* ======= Left Side ======= */
+.ovika-left {
+  flex: 1;
+  min-width: 280px;
+  color: #fff;
+  text-align: left;
+}
+
+.ovika-left h2 {
+  font-size: 3.0rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.ovika-left h2 span {
+  color: #f4f4f4;
+}
+
+.ovika-left p {
+  margin-top: 16px;
+  font-size: 1.5rem;
+  color: #f2f2f2;
+  max-width: 400px;
+}
+
+/* ======= Form Box ======= */
+.ovika-form {
+  flex: 0.9;
+  min-width: 320px;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.15);
+}
+
+.ovika-form form {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  gap: 15px;
 }
 
-.input-field {
-  border: 2px solid #910a0a;
-  border-radius: 18px;
-  padding: 12px 16px;
-  font-size: 1rem;
+.ovika-form input,
+.ovika-form textarea {
   width: 100%;
-  margin-bottom: 16px;
+  padding: 12px 16px;
+  border: none;
   outline: none;
-}
-
-.textarea-field {
-  height: 90px;
+  background-color: #f7f7f7;
+  border-radius: 25px;
+  font-size: 15px;
+  color: #333;
   resize: none;
 }
 
-.submit-btn-renovation {
-  margin-top: 16px;
-  background: linear-gradient(to right, #cf1518, #1b0101);
+.ovika-form textarea {
+  height: 80px;
+}
+
+.ovika-form button {
+  background: #c47c26;
   color: #fff;
-  border: none; 
-  border-radius: 999px;
-  padding: 8px 32px;
-  font-weight: 400;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 0;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 6px 14px rgba(197, 45, 47, 0.25);
-  transform: translateY(-4px); /* same as hover */
-  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
-  margin-left: 130px;
-}
-.submit-btn-renovation:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(to right, #cf1518, #1b0101);
-}
-.arrow {
-  margin-left: 18px;
-  font-size: 1.2rem;
-  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
-
-
-.office-desc {
-  font-size: 0.99rem;
-  margin-bottom: 18px;
-  color: #222;
-  line-height: 1.5;
+.ovika-form button:hover {
+  opacity: 0.9;
+  transform: translateY(1px);
 }
 
+/* ======= Responsive Design ======= */
+@media (max-width: 992px) {
+  .ovika-content {
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 25px;
+  }
 
-.address-title {
-  font-weight: bold;
-  color: #910a0a;
+  .ovika-left {
+    text-align: center;
+  }
+
+  .ovika-left p {
+    margin: 0 auto;
+  }
 }
 
+@media (max-width: 600px) {
+  .ovika-left h2 {
+    font-size: 1.6rem;
+  }
 
-.office-section {
-  text-align: left;
-  padding-left: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-/* .address-block {
-  margin-top: 25px;
-  display: flex;
-  align-items: stretch;
-  gap: 12px;
-} */
-
-/* Red vertical line */
-/* .address-line {
-  width: 4px;
-  background-color: #910a0a;
-  border-radius: 2px;
-} */
-
-/* Address container box */
-/* .address-container {
-  background: #f3f3f3;
-  padding: 14px 18px;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: #222;
-  flex: 1;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-} */
-.address-block {
-  margin-top: 25px;
-  display: flex;
-  align-items: stretch;
-}
-
-.address-line {
-  width: 4px;
-  background-color: #910a0a;
-  border-radius: 2px 0 0 2px;
-}
-
-.address-container {
-  background: #f3f3f3;
-  padding: 14px 18px;
-  border-radius: 0 10px 10px 0;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: #222;
-  flex: 1;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-.address-title {
-  font-weight: 600;
-  color: #910a0a;
-  margin-bottom: 8px;
-  font-size: 1.05rem;
-}
-
-/* Title inside box */
-.address-title {
-  font-weight: 600;
-  color: #910a0a;
-  margin-bottom: 8px;
-  font-size: 1.05rem;
-}
-
-.footnote {
-  font-size: 0.55rem;
-  color: #666;
-  margin-top: 20px;
-  line-height: 1.4;
+  .ovika-form {
+    width: 100%;
+  }
 }

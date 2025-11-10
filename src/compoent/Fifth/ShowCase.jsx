@@ -125,7 +125,7 @@ const ShowCase = () => {
   return (
     <section className="showcase-section">
       <h2 className="showcase-title">
-        From Dated to <span>Desirable</span>
+          Before and After <span>ShowCase</span>
       </h2>
       <p className="showcase-subtitle">
         see the incredible transformations we’ve delivered for our partners.

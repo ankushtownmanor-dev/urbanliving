@@ -4,6 +4,7 @@ import WorkFlow from './WorkFlow'
 import ShowCase from './ShowCase'
 import FAQ from './FAQ'
 import Form from './Form'
+import Parterns from './Parterns'
 
  function FifthMain  ()  {
   return (
@@ -11,6 +12,7 @@ import Form from './Form'
         <ShareProperty/>
         <WorkFlow/>
         <ShowCase/>
+        <Parterns/>
         <FAQ/>
         <Form/>
     </div>
