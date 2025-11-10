@@ -1,8 +1,8 @@
 import React from 'react';
-import './Testimonials.css';
+import './OvikaTestimonials.css';
 
-const Testimonials = () => {
-  const testimonials = [
+const OvikaTestimonials = () => {
+  const testimonialsData = [
     {
       name: "Riya Sharma",
       rating: 5,
@@ -21,24 +21,24 @@ const Testimonials = () => {
   ];
 
   return (
-    <div className="testimonials-section">
-      <h2 className="testimonials-title">
+    <div className="ovika-testimonials-wrapper">
+      <h2 className="ovika-testimonials-heading">
         What Our <span>Partners</span> Say
       </h2>
 
-      <div className="testimonials-container">
-        {testimonials.map((testimonial, index) => (
-          <div key={index} className="testimonial-card">
-            <div className="stars">
-              {[...Array(testimonial.rating)].map((_, i) => (
+      <div className="ovika-testimonials-grid">
+        {testimonialsData.map((item, index) => (
+          <div key={index} className="ovika-testimonial-box">
+            <div className="ovika-rating-stars">
+              {[...Array(item.rating)].map((_, i) => (
                 <span key={i}>★</span>
               ))}
             </div>
-            <p className="testimonial-text">
-              {testimonial.text}
+            <p className="ovika-testimonial-content">
+              {item.text}
             </p>
-            <h3 className="testimonial-name">
-              {testimonial.name}
+            <h3 className="ovika-testimonial-author">
+              {item.name}
             </h3>
           </div>
         ))}
@@ -47,4 +47,4 @@ const Testimonials = () => {
   );
 };
 
-export default Testimonials;
+export default OvikaTestimonials;

@@ -1,0 +1,214 @@
+/* ========================================
+   Property Control Section - Light Background Design
+   ======================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Main Wrapper */
+.prop-ctrl-wrapper {
+  width: 100%;
+  max-width: 1400px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+/* Image Container with Rounded Corners */
+.prop-ctrl-image-container {
+  position: relative;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Background Property Image - Reduced Height */
+.prop-ctrl-bg-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  min-height: 380px; /* Reduced from 500px */
+  max-height: 420px; /* Added max-height */
+}
+
+/* Text Overlay - Moved Up with Less Padding */
+.prop-ctrl-text-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    to top,
+    rgba(240, 240, 240, 0.98) 0%,
+    rgba(240, 240, 240, 0.95) 65%,
+    rgba(240, 240, 240, 0) 100%
+  );
+  padding: 35px 70px 35px 70px; /* Reduced padding */
+}
+
+/* Heading - Black Text */
+.prop-ctrl-heading {
+  font-size: 2rem; /* Slightly reduced */
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 12px 0; /* Reduced margin */
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+/* Description Text - Dark Grey */
+.prop-ctrl-description {
+  font-size: 14px; /* Slightly reduced */
+  line-height: 1.65; /* Tighter line height */
+  color: #2a2a2a;
+  margin: 0;
+  text-align: justify;
+  font-weight: 400;
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+
+/* Large Desktop (1600px+) */
+@media (min-width: 1600px) {
+  .prop-ctrl-wrapper {
+    max-width: 1600px;
+  }
+
+  .prop-ctrl-bg-img {
+    min-height: 420px;
+    max-height: 480px;
+  }
+
+  .prop-ctrl-text-overlay {
+    padding: 45px 90px 40px 90px;
+  }
+
+  .prop-ctrl-heading {
+    font-size: 2.3rem;
+  }
+
+  .prop-ctrl-description {
+    font-size: 15px;
+  }
+}
+
+/* Desktop (max-width: 1200px) */
+@media (max-width: 1200px) {
+  .prop-ctrl-bg-img {
+    min-height: 350px;
+    max-height: 400px;
+  }
+
+  .prop-ctrl-text-overlay {
+    padding: 35px 60px 35px 60px;
+  }
+
+  .prop-ctrl-heading {
+    font-size: 1.85rem;
+  }
+
+  .prop-ctrl-description {
+    font-size: 13px;
+  }
+}
+
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .prop-ctrl-wrapper {
+    margin: 50px auto;
+  }
+
+  .prop-ctrl-bg-img {
+    min-height: 320px;
+    max-height: 380px;
+  }
+
+  .prop-ctrl-text-overlay {
+    padding: 30px 50px 30px 50px;
+  }
+
+  .prop-ctrl-heading {
+    font-size: 1.7rem;
+    margin-bottom: 10px;
+  }
+
+  .prop-ctrl-description {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .prop-ctrl-wrapper {
+    margin: 40px auto;
+    padding: 0 15px;
+  }
+
+  .prop-ctrl-image-container {
+    border-radius: 16px;
+  }
+
+  .prop-ctrl-bg-img {
+    min-height: 280px;
+    max-height: 340px;
+  }
+
+  .prop-ctrl-text-overlay {
+    padding: 28px 35px 28px 35px;
+    background: linear-gradient(
+      to top,
+      rgba(240, 240, 240, 0.98) 0%,
+      rgba(240, 240, 240, 0.92) 60%,
+      rgba(240, 240, 240, 0) 100%
+    );
+  }
+
+  .prop-ctrl-heading {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  .prop-ctrl-description {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .prop-ctrl-wrapper {
+    margin: 30px auto;
+    padding: 0 10px;
+  }
+
+  .prop-ctrl-image-container {
+    border-radius: 12px;
+  }
+
+  .prop-ctrl-bg-img {
+    min-height: 240px;
+    max-height: 300px;
+  }
+
+  .prop-ctrl-text-overlay {
+    padding: 25px 25px 25px 25px;
+  }
+
+  .prop-ctrl-heading {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+  }
+
+  .prop-ctrl-description {
+    font-size: 11px;
+    line-height: 1.55;
+    text-align: left;
+  }
+}

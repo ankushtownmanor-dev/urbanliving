@@ -40,12 +40,15 @@
   /* Each item card */
   .faq-ovika.item{
     background: var(--faq-ovika-white);
-    border-radius: 14px;
-    box-shadow: var(--faq-ovika-shadow);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     overflow: hidden;
+    border: 1px solid #d18934 !important;
+    transition: all 0.2s ease;
+  }
   
-    /* solid black border */
-    border: 1px solid #6e6464;   /* or #121314 if you prefer */
+  .faq-ovika.item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   }
   
   /* Question button row */

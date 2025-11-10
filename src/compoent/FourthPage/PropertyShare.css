@@ -3,9 +3,9 @@
 }
 
 .property-share-container {
-  width: 100%;
+  width: 90%;
   /* min-height: 100vh; */
-  background-image: url('/public/image 229.png'); /* replace with your link */
+  background-image: url('/public/Group 189.png'); /* replace with your link */
   background-size: cover;
   background-position: center;
   position: relative;
@@ -14,17 +14,11 @@
   justify-content: center;
   color: white;
   font-family: 'Poppins', sans-serif;
+  padding: 4vw 2vw;
+  border-radius: 40px;
+  margin-left: 6vw;
 }
 
-.property-share-overlay {
-  width: 100%;
-  height: 110vh;
-  background: rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4vw;
-}
 
 .property-share-content {
   text-align: center;
