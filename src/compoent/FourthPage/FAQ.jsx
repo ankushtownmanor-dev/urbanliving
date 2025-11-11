@@ -14,10 +14,10 @@ const data = [
   {
     q: 'Is there any cost to list my property??',
     a:
-      'Listing your property on Ovīka is free. You can later choose premium visibility or management options if you want faster results.',
+      'Listing your property on Ovika is free. You can later choose premium visibility or management options if you want faster results.',
   },
   {
-    q: 'How do I find tenants through Ovīka?',
+    q: 'How do I find tenants through Ovika?',
     a:
       'Once your property is listed, verified tenants can contact you directly through the platform. You can manage inquiries, schedule visits, and finalize rentals securely.',
   },

@@ -154,7 +154,7 @@ body {
   font-size: 16px;
   font-weight: 600;
   color: #ffffff;
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  background: #d97706;
   border: none;
   border-radius: 50px;
   cursor: pointer;
@@ -164,7 +164,7 @@ body {
 }
 
 .form-submit-btn:hover {
-  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  background: #d97706;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
 }
