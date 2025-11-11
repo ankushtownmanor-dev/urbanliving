@@ -2191,125 +2191,246 @@ function Payment() {
           )}
 
           {step === 4 && (
-            <div>
-              <h2 className="form-step-title">Verification</h2>
-              <div className="verification-container">
-                <div className="verification-card">
-                  <h3 className="verification-title">Phone OTP</h3>
-                  <div className="phone-inputs-container">
-                    <label className="digit-inputs-label">Enter Mobile Number</label>
-                    <div className="digit-inputs" role="group" aria-label="Mobile number">
-                      {phoneDigits.map((d, i) => (
-                        <input
-                          key={i}
-                          type="text"
-                          inputMode="numeric"
-                          pattern="[0-9]*"
-                          maxLength={1}
-                          value={d}
-                          ref={el => phoneInputsRef.current[i] = el}
-                          onChange={(e) => handlePhoneChange(i, e.target.value.replace(/\D/g, ''))}
-                          onKeyDown={(e) => handlePhoneKeyDown(i, e)}
-                          className={`digit-box ${d ? 'is-filled' : ''}`}
-                          disabled={formData.phoneOtpVerified}
-                        />
-                      ))}
-                    </div>
-                    <button
-                      onClick={handleSendOtp}
-                      disabled={formData.phoneOtpVerified || phoneDigits.join('').length !== 10}
-                      className={`verification-button ${
-                        formData.phoneOtpVerified
-                          ? 'verification-button-verified'
-                          : 'verification-button-default'
-                      } send-otp-button`}
-                    >
-                      {formData.phoneOtpVerified ? 'Verified' : 'Send OTP'}
-                    </button>
-                  </div>
+            // <div>
+            //   <h2 className="form-step-title">Verification</h2>
+            //   <div className="verification-container">
+            //     <div className="verification-card">
+            //       <h3 className="verification-title">Phone OTP</h3>
+            //       <div className="phone-inputs-container">
+            //         <label className="digit-inputs-label">Enter Mobile Number</label>
+            //         <div className="digit-inputs" role="group" aria-label="Mobile number">
+            //           {phoneDigits.map((d, i) => (
+            //             <input
+            //               key={i}
+            //               type="text"
+            //               inputMode="numeric"
+            //               pattern="[0-9]*"
+            //               maxLength={1}
+            //               value={d}
+            //               ref={el => phoneInputsRef.current[i] = el}
+            //               onChange={(e) => handlePhoneChange(i, e.target.value.replace(/\D/g, ''))}
+            //               onKeyDown={(e) => handlePhoneKeyDown(i, e)}
+            //               className={`digit-box ${d ? 'is-filled' : ''}`}
+            //               disabled={formData.phoneOtpVerified}
+            //             />
+            //           ))}
+            //         </div>
+            //         <button
+            //           onClick={handleSendOtp}
+            //           disabled={formData.phoneOtpVerified || phoneDigits.join('').length !== 10}
+            //           className={`verification-button ${
+            //             formData.phoneOtpVerified
+            //               ? 'verification-button-verified'
+            //               : 'verification-button-default'
+            //           } send-otp-button`}
+            //         >
+            //           {formData.phoneOtpVerified ? 'Verified' : 'Send OTP'}
+            //         </button>
+            //       </div>
 
-                  {showOtpInputs && !formData.phoneOtpVerified && (
-                    <div className="otp-inputs-container">
-                      <label className="digit-inputs-label">Enter OTP</label>
-                      <div className="verification-action">
-                        <input
-                          ref={otpInputRef}
-                          type="text"
-                          inputMode="numeric"
-                          pattern="[0-9]*"
-                          maxLength={6}
-                          value={otpValue}
-                          onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ''))}
-                          className="aadhaar-input"
-                          placeholder="Enter 4 or 6-digit OTP"
-                        />
-                        <button
-                          onClick={() => handleSubmitOtp(otpValue)}
-                          disabled={!(otpValue.length === 4 || otpValue.length === 6) || loading}
-                          className={`verification-button ${
-                            (otpValue.length === 4 || otpValue.length === 6) && !loading
-                              ? 'verification-button-default'
-                              : 'verification-button-default'
-                          }`}
-                        >
-                          {loading ? 'Verifying…' : 'Verify'}
-                        </button>
-                      </div>
-                      {otpError && <p className="otp-error-text">{otpError}</p>}
-                    </div>
-                  )}
+            //       {showOtpInputs && !formData.phoneOtpVerified && (
+            //         <div className="otp-inputs-container">
+            //           <label className="digit-inputs-label">Enter OTP</label>
+            //           <div className="verification-action">
+            //             <input
+            //               ref={otpInputRef}
+            //               type="text"
+            //               inputMode="numeric"
+            //               pattern="[0-9]*"
+            //               maxLength={6}
+            //               value={otpValue}
+            //               onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ''))}
+            //               className="aadhaar-input"
+            //               placeholder="Enter 4 or 6-digit OTP"
+            //             />
+            //             <button
+            //               onClick={() => handleSubmitOtp(otpValue)}
+            //               disabled={!(otpValue.length === 4 || otpValue.length === 6) || loading}
+            //               className={`verification-button ${
+            //                 (otpValue.length === 4 || otpValue.length === 6) && !loading
+            //                   ? 'verification-button-default'
+            //                   : 'verification-button-default'
+            //               }`}
+            //             >
+            //               {loading ? 'Verifying…' : 'Verify'}
+            //             </button>
+            //           </div>
+            //           {otpError && <p className="otp-error-text">{otpError}</p>}
+            //         </div>
+            //       )}
 
-                  <div className="verification-status-icon">
-                    {formData.phoneOtpVerified ? (
-                      <CheckCircle size={24} color="#8b0000" />
-                    ) : (
-                      <XCircle size={24} color="gray" />
-                    )}
-                  </div>
-                </div>
+            //       <div className="verification-status-icon">
+            //         {formData.phoneOtpVerified ? (
+            //           <CheckCircle size={24} color="#8b0000" />
+            //         ) : (
+            //           <XCircle size={24} color="gray" />
+            //         )}
+            //       </div>
+            //     </div>
 
-                <div className="verification-card">
-                  <h3 className="verification-title">Aadhaar Check</h3>
-                  <label className="digit-inputs-label">Enter Aadhaar Number</label>
-                  <div className="aadhaar-inputs-container">
+            //     <div className="verification-card">
+            //       <h3 className="verification-title">Aadhaar Check</h3>
+            //       <label className="digit-inputs-label">Enter Aadhaar Number</label>
+            //       <div className="aadhaar-inputs-container">
                    
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      pattern="[0-9]*"
-                      maxLength={12}
-                      value={aadhaarNumber}
-                      onChange={(e) => setAadhaarNumber(e.target.value.replace(/\D/g, ''))}
-                      className="aadhaar-input"
-                      disabled={formData.aadhaarVerified}
-                      placeholder="12-digit Aadhaar"
-                    />
-                    <button
-                      onClick={handleVerifyAadhaar}
-                      disabled={formData.aadhaarVerified || !aadhaarNumber || isAadhaarLoading}
-                      className={`verification-button ${
-                        formData.aadhaarVerified
-                          ? 'verification-button-verified'
-                          : 'verification-button-default'
-                      }`}
-                    >
-                      {formData.aadhaarVerified ? 'Verified' : (isAadhaarLoading ? 'Verifying…' : 'Verify Aadhaar')}
-                    </button>
-                  </div>
-                  <div className="verification-status-icon">
-                    {formData.aadhaarVerified ? (
-                      <CheckCircle size={24} color="#8b0000" />
-                    ) : (
-                      isAadhaarLoading ? (
-                        <Loader size={24} className="animate-spin text-gray-400" />
-                      ) : (
-                        <XCircle size={24} color="gray" />
-                      )
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
+            //         <input
+            //           type="text"
+            //           inputMode="numeric"
+            //           pattern="[0-9]*"
+            //           maxLength={12}
+            //           value={aadhaarNumber}
+            //           onChange={(e) => setAadhaarNumber(e.target.value.replace(/\D/g, ''))}
+            //           className="aadhaar-input"
+            //           disabled={formData.aadhaarVerified}
+            //           placeholder="12-digit Aadhaar"
+            //         />
+            //         <button
+            //           onClick={handleVerifyAadhaar}
+            //           disabled={formData.aadhaarVerified || !aadhaarNumber || isAadhaarLoading}
+            //           className={`verification-button ${
+            //             formData.aadhaarVerified
+            //               ? 'verification-button-verified'
+            //               : 'verification-button-default'
+            //           }`}
+            //         >
+            //           {formData.aadhaarVerified ? 'Verified' : (isAadhaarLoading ? 'Verifying…' : 'Verify Aadhaar')}
+            //         </button>
+            //       </div>
+            //       <div className="verification-status-icon">
+            //         {formData.aadhaarVerified ? (
+            //           <CheckCircle size={24} color="#8b0000" />
+            //         ) : (
+            //           isAadhaarLoading ? (
+            //             <Loader size={24} className="animate-spin text-gray-400" />
+            //           ) : (
+            //             <XCircle size={24} color="gray" />
+            //           )
+            //         )}
+            //       </div>
+            //     </div>
+            //   </div>
+            // </div>
+            <div>
+  <h2 className="form-step-title">Verification</h2>
+  <div className="veri-container-1">
+    {/* PHONE VERIFICATION */}
+    <div className="veri-card-1">
+      <h3 className="veri-title-1">Phone OTP</h3>
+      <div className="veri-phone-wrap-1">
+        <label className="veri-label-1">Enter Mobile Number</label>
+        <div className="veri-digits-1" role="group" aria-label="Mobile number">
+          {phoneDigits.map((d, i) => (
+            <input
+              key={i}
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={1}
+              value={d}
+              ref={(el) => (phoneInputsRef.current[i] = el)}
+              onChange={(e) =>
+                handlePhoneChange(i, e.target.value.replace(/\D/g, ""))
+              }
+              onKeyDown={(e) => handlePhoneKeyDown(i, e)}
+              className={`veri-digitbox-1 ${d ? "is-filled" : ""}`}
+              disabled={formData.phoneOtpVerified}
+            />
+          ))}
+        </div>
+        <button
+          onClick={handleSendOtp}
+          disabled={
+            formData.phoneOtpVerified || phoneDigits.join("").length !== 10
+          }
+          className={`veri-btn-1 ${
+            formData.phoneOtpVerified ? "veri-btn-verified-1" : "veri-btn-default-1"
+          }`}
+        >
+          {formData.phoneOtpVerified ? "Verified" : "Send OTP"}
+        </button>
+      </div>
+
+      {showOtpInputs && !formData.phoneOtpVerified && (
+        <div className="veri-otp-wrap-1">
+          <label className="veri-label-1">Enter OTP</label>
+          <div className="veri-action-1">
+            <input
+              ref={otpInputRef}
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={6}
+              value={otpValue}
+              onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ""))}
+              className="veri-input-1"
+              placeholder="Enter 4 or 6-digit OTP"
+            />
+            <button
+              onClick={() => handleSubmitOtp(otpValue)}
+              disabled={!(otpValue.length === 4 || otpValue.length === 6) || loading}
+              className={`veri-btn-1 veri-btn-default-1`}
+            >
+              {loading ? "Verifying…" : "Verify"}
+            </button>
+          </div>
+          {otpError && <p className="veri-error-1">{otpError}</p>}
+        </div>
+      )}
+
+      <div className="veri-icon-1">
+        {formData.phoneOtpVerified ? (
+          <CheckCircle size={24} color="#8b0000" />
+        ) : (
+          <XCircle size={24} color="gray" />
+        )}
+      </div>
+    </div>
+
+    {/* AADHAAR VERIFICATION */}
+    <div className="veri-card-1">
+      <h3 className="veri-title-1">Aadhaar Check</h3>
+      <label className="veri-label-1">Enter Aadhaar Number</label>
+      <div className="veri-aadhaar-wrap-1">
+        <input
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          maxLength={12}
+          value={aadhaarNumber}
+          onChange={(e) => setAadhaarNumber(e.target.value.replace(/\D/g, ""))}
+          className="veri-input-1"
+          disabled={formData.aadhaarVerified}
+          placeholder="12-digit Aadhaar"
+        />
+        <button
+          onClick={handleVerifyAadhaar}
+          disabled={formData.aadhaarVerified || !aadhaarNumber || isAadhaarLoading}
+          className={`veri-btn-1 ${
+            formData.aadhaarVerified
+              ? "veri-btn-verified-1"
+              : "veri-btn-default-1"
+          }`}
+        >
+          {formData.aadhaarVerified
+            ? "Verified"
+            : isAadhaarLoading
+            ? "Verifying…"
+            : "Verify Aadhaar"}
+        </button>
+      </div>
+      <div className="veri-icon-1">
+        {formData.aadhaarVerified ? (
+          <CheckCircle size={24} color="#8b0000" />
+        ) : isAadhaarLoading ? (
+          <Loader size={24} className="animate-spin text-gray-400" />
+        ) : (
+          <XCircle size={24} color="gray" />
+        )}
+      </div>
+    </div>
+  </div>
+</div>
+
           )}
 
           {step === 5 && (

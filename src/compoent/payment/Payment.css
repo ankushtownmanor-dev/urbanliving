@@ -388,7 +388,7 @@
           }
 
           /* Step 4 Specific */
-          .verification-container {
+          /* .verification-container {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
@@ -414,10 +414,10 @@
                 gap: 1rem;
                 width: 300px;
                 text-align: center;
-          }
+          } */
 
           /* Digit input groups (phone & OTP) */
-          .phone-inputs-container,
+          /* .phone-inputs-container,
           .otp-inputs-container{
             margin-top: 0.5rem;
             display: flex;
@@ -511,7 +511,165 @@
             background: var(--primary-gradient);
             color: #fff;
             cursor: not-allowed;
-          }
+          } */
+
+
+          .veri-container-1 {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Card */
+.veri-card-1 {
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.veri-title-1 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Inputs layout */
+.veri-phone-wrap-1,
+.veri-otp-wrap-1 {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.veri-aadhaar-wrap-1 {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+.veri-label-1 {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.veri-digits-1 {
+  display: flex;
+  gap: 0.15rem;
+  /* flex-wrap: wrap; */
+}
+
+.veri-digitbox-1 {
+  width: 2.5rem;
+  height: 2.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  text-align: center;
+  font-size: 1.125rem;
+  background-color: #fff;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.veri-digitbox-1:focus {
+  box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.25);
+  border-color: #8b0000;
+}
+
+.veri-digitbox-1.is-filled {
+  border-color: #8b0000;
+}
+
+/* Buttons */
+.veri-btn-1 {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.veri-btn-default-1 {
+  background-color: #fff;
+  border: 1px solid #d1d5db;
+  color: #000;
+}
+
+.veri-btn-default-1:hover {
+  background-color: #f3f4f6;
+}
+
+.veri-btn-verified-1 {
+  background: var(--primary-gradient);
+  color: #fff;
+  cursor: not-allowed;
+}
+
+/* Input fields */
+.veri-input-1 {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  outline: none;
+  background-color: #fff;
+  transition: box-shadow 0.2s ease;
+}
+
+.veri-input-1:focus {
+  box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.25);
+}
+
+/* Flex layout for OTP and Aadhaar actions */
+.veri-action-1 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 320px;
+}
+
+.veri-error-1 {
+  color: #b91c1c;
+  font-size: 0.875rem;
+}
+
+.veri-icon-1 {
+  margin-top: 0.5rem;
+}
+
+/* ✅ Responsive Design */
+@media (max-width: 768px) {
+  .veri-container-1 {
+    gap: 1rem;
+  }
+
+  .veri-card-1 {
+    padding: 1rem;
+  }
+
+  .veri-aadhaar-wrap-1,
+  .veri-action-1 {
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .veri-btn-1 {
+    width: 100%;
+  }
+
+  .veri-input-1 {
+    width: 100%;
+  }
+
+  .veri-digits-1 {
+    justify-content: center;
+  }
+}
+
 
           /* Step 5 Specific */
           .upload-container {
