@@ -2035,43 +2035,118 @@ function Payment() {
           )}
 
           {step === 2 && (
-            <div>
-              <h2 className="form-step-title">Terms & Conditions</h2>
-              <div className="terms-container">
-                <p className="font-bold mb-2">1. Booking Agreement</p>
-                <p className="mb-4">
-                  By confirming this booking, you agree to abide by all house rules, including check-in/check-out times, noise restrictions, and guest limits. Violation of these terms may result in a fine or cancellation of your reservation without a refund.
-                </p>
-                <p className="font-bold mb-2">2. Cancellation Policy</p>
-                <p className="mb-4">
-                  A full refund will be provided for cancellations made within 48 hours of booking, if the check-in date is at least 14 days away. 50% refund for cancellations made 7 days before check-in. No refund for cancellations within 7 days of check-in.
-                </p>
-                <p className="font-bold mb-2">3. Damage & Liability</p>
-                <p className="mb-4">
-                  Guests are responsible for any damage caused to the property and its contents during their stay. The host reserves the right to charge the guest for repair or replacement costs.
-                </p>
-                <p className="font-bold mb-2">4. Payment & Pricing</p>
-                <p className="mb-4">
-                  All prices are final and non-negotiable. Additional taxes and service fees are included in the final price. Payment must be completed in full before the reservation is confirmed.
-                </p>
-                <p className="font-bold mb-2">5. Privacy</p>
-                <p className="mb-4">
-                  Your personal information will be used solely for the purpose of this booking and will not be shared with third parties.
-                </p>
-              </div>
-              <label className="terms-agreement-label">
-                <input
-                  type="checkbox"
-                  className="hidden"
-                  checked={formData.termsAgreed}
-                  onChange={(e) => setFormData({ ...formData, termsAgreed: e.target.checked })}
-                />
-                <span className={`custom-checkbox ${formData.termsAgreed ? 'is-checked' : ''}`}>
-                  {formData.termsAgreed && <CheckCircle size={16} color="white" />}
-                </span>
-                <span className="custom-checkbox-text">I have read and agree to the Terms & Conditions.</span>
-              </label>
-            </div>
+            // <div>
+            //   <h2 className="form-step-title">Terms & Conditions</h2>
+            //   <div className="terms-container">
+            //     <p className="font-bold mb-2">1. Booking Agreement</p>
+            //     <p className="mb-4">
+            //       By confirming this booking, you agree to abide by all house rules, including check-in/check-out times, noise restrictions, and guest limits. Violation of these terms may result in a fine or cancellation of your reservation without a refund.
+            //     </p>
+            //     <p className="font-bold mb-2">2. Cancellation Policy</p>
+            //     <p className="mb-4">
+            //       A full refund will be provided for cancellations made within 48 hours of booking, if the check-in date is at least 14 days away. 50% refund for cancellations made 7 days before check-in. No refund for cancellations within 7 days of check-in.
+            //     </p>
+            //     <p className="font-bold mb-2">3. Damage & Liability</p>
+            //     <p className="mb-4">
+            //       Guests are responsible for any damage caused to the property and its contents during their stay. The host reserves the right to charge the guest for repair or replacement costs.
+            //     </p>
+            //     <p className="font-bold mb-2">4. Payment & Pricing</p>
+            //     <p className="mb-4">
+            //       All prices are final and non-negotiable. Additional taxes and service fees are included in the final price. Payment must be completed in full before the reservation is confirmed.
+            //     </p>
+            //     <p className="font-bold mb-2">5. Privacy</p>
+            //     <p className="mb-4">
+            //       Your personal information will be used solely for the purpose of this booking and will not be shared with third parties.
+            //     </p>
+            //   </div>
+            //   <label className="terms-agreement-label">
+            //     <input
+            //       type="checkbox"
+            //       className="hidden"
+            //       checked={formData.termsAgreed}
+            //       onChange={(e) => setFormData({ ...formData, termsAgreed: e.target.checked })}
+            //     />
+            //     <span className={`custom-checkbox ${formData.termsAgreed ? 'is-checked' : ''}`}>
+            //       {formData.termsAgreed && <CheckCircle size={16} color="white" />}
+            //     </span>
+            //     <span className="custom-checkbox-text">I have read and agree to the Terms & Conditions.</span>
+            //   </label>
+            // </div>
+    <div>
+  <h2 className="form-step-title">Terms & Conditions</h2>
+  <div className="terms-container">
+    <p className="mb-4">
+      1. By booking a property through OVIKA, the guest agrees to comply with these Terms & Conditions. OVIKA acts as a booking facilitator for listed properties owned or managed by its partners or affiliates. Guests must be at least 18 years of age to make a booking.
+    </p>
+
+    <p className="mb-4">
+      2. All bookings are subject to availability and confirmation by OVIKA. Full or partial payment must be made at the time of booking. Accepted payment methods include credit/debit cards, UPI, bank transfers, or any other mode listed on the website. Prices are displayed in INR and include applicable taxes unless stated otherwise. Any promotional offers or discounts apply only if booked within the specified period. Payment must be completed in full before confirmation.
+    </p>
+
+    <p className="mb-4">
+      3. Standard check-in time is 2:00 PM and standard check-out time is 11:00 AM. Early check-in or late check-out is subject to availability and may incur additional charges. A valid government ID (Aadhaar, Passport, or Driving License) is mandatory for all adult guests at check-in.
+    </p>
+
+    <p className="mb-4">
+      4. Cancellations made 48 hours or more before check-in are eligible for a full refund. Cancellations made within 48 hours of check-in will incur a one-night charge or as per the property’s individual policy. No-shows or early check-outs are non-refundable. Refunds will be processed within 7–10 business days through the original payment mode.
+    </p>
+
+    <p className="mb-4">
+      5. Guests must maintain decorum and respect the property, neighbors, and staff. Loud music, parties, or unlawful activities are strictly prohibited unless prior written approval is obtained. Smoking is not allowed in non-smoking properties. Any damage to property, furnishings, or equipment caused by the guest will be charged to the guest at actual cost.
+    </p>
+
+    <p className="mb-4">
+      6. Each property has a maximum occupancy limit as stated in its listing. Extra guests may be allowed only upon prior approval and may attract additional charges. Pets are allowed only in designated pet-friendly properties.
+    </p>
+
+    <p className="mb-4">
+      7. Daily or periodic housekeeping services may be provided depending on the booking plan. Guests must promptly inform OVIKA or the property manager of any maintenance issues. OVIKA reserves the right to access the unit for cleaning, maintenance, or inspection with prior notice.
+    </p>
+
+    <p className="mb-4">
+      8. Guests are responsible for any damage caused to the property or its contents during their stay. OVIKA and the property owners are not responsible for loss of personal belongings, valuables, or injuries during the stay. Guests are advised to follow all safety guidelines. OVIKA shall not be liable for disruptions beyond its control such as power cuts, natural calamities, or government restrictions.
+    </p>
+
+    <p className="mb-4">
+      9. In case of unforeseen circumstances such as maintenance or overbooking, OVIKA reserves the right to relocate the guest to an equivalent property or provide a full refund.
+    </p>
+
+    <p className="mb-4">
+      10. Guest information is collected solely for booking, communication, and legal compliance. OVIKA respects your privacy and follows applicable data protection laws. Your personal information will not be shared with third parties except as required for booking and compliance. For more details, please refer to our Privacy Policy.
+    </p>
+
+    <p className="mb-4">
+      11. OVIKA or the property owner reserves the right to terminate a booking without refund if the guest violates these terms, engages in illegal activity, or causes disturbance to others.
+    </p>
+
+    <p className="mb-4">
+      12. These Terms & Conditions are governed by and construed in accordance with the laws of India. Any disputes shall be subject to the exclusive jurisdiction of courts in Noida, Uttar Pradesh.
+    </p>
+
+    <p className="mb-4">
+      13. For any booking-related queries or concerns, please contact us at:
+      <br />📧 enquiry@ovikaliving.com
+      <br />📞 (+91) 7042888903
+    </p>
+  </div>
+
+  <label className="terms-agreement-label">
+    <input
+      type="checkbox"
+      className="hidden"
+      checked={formData.termsAgreed}
+      onChange={(e) => setFormData({ ...formData, termsAgreed: e.target.checked })}
+    />
+    <span className={`custom-checkbox ${formData.termsAgreed ? 'is-checked' : ''}`}>
+      {formData.termsAgreed && <CheckCircle size={16} color="white" />}
+    </span>
+    <span className="custom-checkbox-text">
+      I have read and agree to the Terms & Conditions.
+    </span>
+  </label>
+</div>
+
+
           )}
 
           {step === 3 && (

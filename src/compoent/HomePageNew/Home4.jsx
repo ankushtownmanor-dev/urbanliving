@@ -12,7 +12,7 @@ const Home4 = () => {
     img: "/tmluxe1.jpeg",
     city: "Noida Sector 137",
     title: "TM Lux - 1",
-    text: "Urban Nest Co-Living offers thoughtfully designed shared spaces that blend privacy with social connection. Perfect for students and young professionals, each room comes fully furnished with modern amenities, high-speed Wi-Fi, and access to vibrant community zones.",
+    text: "Experience refined urban living at TM Luxe 1, where thoughtfully designed spaces combine comfort, style, and convenience. Ideal for business executives, professionals, families, and tourists, the accommodation is fully furnished and features a comfortable living area with sofa, Google TV, air-conditioning, and a private balcony. A fully loaded kitchen and laundry provisions with washing machine, iron, and ironing board ensure a homelike experience. Guests also enjoy the ease of self check-in and check-out for a seamless and independent stay.",
     rating: "⭐ 4.8 (120 reviews)",
     price: "₹4,500 / night",
     btn: "View Property"
@@ -23,7 +23,7 @@ const Home4 = () => {
     img: "/tmluxe22.jpg",
     city: "Greater Noida Knowledge Park",
     title: "TM Lux - 2",
-    text: "Located in the heart of the tech district, Silicon Valley Stays redefines urban living for working professionals and digital creators. With dedicated co-working spaces, contemporary interiors, and 24/7 access to facilities, it's designed for productivity and comfort.",
+    text: "TM Luxe 2 is a private luxury room within a premium apartment, offering comfort and privacy for modern travelers. The room features an attached toilet and a private balcony, providing a relaxing personal space. It is equipped with an air conditioner, sofa, Google TV, and a coffeemaker for added convenience. The metro station is just a five-minute walk away, and popular shopping and entertainment centers are located in close vicinity.",
     rating: "⭐ 4.9 (85 reviews)",
     price: "₹3,300 / night",
     btn: "View Property"
@@ -34,7 +34,7 @@ const Home4 = () => {
     img: "/tmluxe3.png",
     city: "Noida Extension",
     title: "TM Lux - 3",
-    text: "Hitech Homes brings elegance and sophistication to everyday living. Each residence features premium furnishings, smart home technology, and exclusive amenities like fitness studios and rooftop lounges. Ideal for executives and families seeking refined living.",
+    text: "TM Luxe 3 is a super-luxury studio overlooking the golf courses, stadium, and Jaypee Greens resorts. Spanning 710 sq. ft., the studio features a fitted kitchen, dining counter with high chairs, a modern toilet, and a private balcony. The space is elegantly furnished with sofas, Google TV, Wi-Fi, and other contemporary comforts. Guests can also enjoy the convenience of self check-in and check-out facilities.",
     rating: "Coming Soon",
     price: "₹5,000 / night",
     btn: "Coming Soon"
