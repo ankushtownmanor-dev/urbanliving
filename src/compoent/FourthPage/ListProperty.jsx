@@ -16,7 +16,7 @@ const ListingSteps = () => {
           </div>
           <h3 className="step-heading">Create your Listing</h3>
           <p className="step-text">
-            Upload stunning photos right, completing the description and all the necessary details and amenities your property offers.
+            Upload stunning photos, complete the description, and all the necessary details and amenities your property offers.
           </p>
         </div>
 
@@ -27,7 +27,7 @@ const ListingSteps = () => {
           </div>
           <h3 className="step-heading">Publish Instantly</h3>
           <p className="step-text">
-            Set your rent and terms and publish your listing instantly. Your property will be live and visible to thousands of potential tenants across our platform.
+            Set your rent and terms, and publish your listing instantly. Your property will be live and visible to thousands of potential tenants across our platform.
           </p>
         </div>
 
