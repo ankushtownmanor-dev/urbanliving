@@ -217,8 +217,8 @@ input[type="email"],
 input[type="tel"],
 select,
 textarea {
-    width: 100%;
-    padding: 0.75rem 1rem;
+    /* width: 100%; */
+    padding: 0.-25rem 1rem;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 1rem;

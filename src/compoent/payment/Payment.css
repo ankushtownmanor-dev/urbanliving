@@ -567,7 +567,7 @@
 /* OTP and phone digit boxes */
 .veri-digits-1 {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.15rem;
   flex-wrap: nowrap;
   overflow-x: auto;
   padding-bottom: 4px;
@@ -669,7 +669,7 @@
 
   .veri-digits-1 {
     justify-content: center;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
   }
 
   .veri-digitbox-1 {

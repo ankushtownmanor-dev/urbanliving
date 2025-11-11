@@ -2321,7 +2321,7 @@ function Payment() {
         <div className="veri-digits-1" role="group" aria-label="Mobile number">
           {phoneDigits.map((d, i) => (
             <input
-            style={{width:"24px"}}
+            style={{width:"28px"}}
               key={i}
               type="text"
               inputMode="numeric"
