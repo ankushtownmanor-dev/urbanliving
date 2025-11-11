@@ -1232,7 +1232,7 @@ const HoomieFooter = () => {
                       alignItems: "center",
                       justifyContent: "center",
                       borderRadius: "50px",
-                      marginRight: "-2px",
+                      marginRight: "-12px",
                       transition: "0.3s ease",
                     }}
                   >
