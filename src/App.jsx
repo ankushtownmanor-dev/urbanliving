@@ -105,6 +105,7 @@ import DashBoardDocuments from "./compoent/AdminDashBoard/AdminDashBoardPages/Da
 import Support from "./compoent/AdminDashBoard/AdminDashBoardPages/Support";
 // import { HomeMain } from "./compoent/HomePageNew/HomeMain";
 import { HomeMain } from "./compoent/HomePageNew/HomeMain";
+import PropertyListingForm from "./compoent/PropertyListingForm/PropertyListingForm";
 
 function App() {
   return (
@@ -130,6 +131,7 @@ function App() {
           <Route path="/selfmanage" element={<SelfManage />} />
           <Route path="/ownermain" element={<Ownermain />} />
           <Route path="/renovation" element={<FifthMain />} />
+          <Route path="listed" element={<PropertyListingForm />}/>
 
           {/* =========================
               ADMIN DASHBOARD SECTION
@@ -142,6 +144,7 @@ function App() {
             <Route path="messages" element={<Message />} />
             <Route path="documents" element={<DashBoardDocuments />} />
             <Route path="support" element={<Support />} />
+            <Route path="listed" element={<PropertyListingForm />}/>
           </Route>
         </Routes>
 
