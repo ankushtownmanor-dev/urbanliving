@@ -1,126 +1,242 @@
-*{
-   font-family:"Inter","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+/* ========================================
+   Property Share Section (Hero Area)
+   ======================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* 🔲 Background container */
 .property-share-container {
   width: 90%;
-  /* min-height: 100vh; */
-  background-image: url('/public/Group 189.png'); /* replace with your link */
+  max-width: 1400px;
+  background-image: url('/public/Group 189.png');
+  height: 600px;
   background-size: cover;
   background-position: center;
+  border-radius: 30px;
+  margin: 60px auto;
+  overflow: hidden;
   position: relative;
+}
+
+/* 🌌 Dark overlay layer */
+.property-share-overlay {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.45),
+    rgba(0, 0, 0, 0.55)
+  );
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-family: 'Poppins', sans-serif;
-  padding: 4vw 2vw;
-  border-radius: 40px;
-  margin-left: 6vw;
+  padding: 80px 60px;
 }
 
-
+/* 📄 Text area */
 .property-share-content {
   text-align: center;
-  max-width: 1200px;
-  width: 100%;
-  padding: 4vw 2vw;
-  box-sizing: border-box;
-    margin-bottom: 6rem;
+  color: #fff;
+  max-width: 900px;
 }
 
-.property-share-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
+/* 🏠 Main heading */
 .property-share-title {
-  /* font-size: clamp(1.8rem, 3.5vw, 4rem); */
-  font-size: clamp(28px, 4.5vw, 48px);
-  font-weight: 400;
-  line-height: 1.2;
-  margin-bottom: 3.9rem;
-  letter-spacing: 1.2px;
-}
-
-.property-share-text {
-  font-size: clamp(1rem, 1.4vw, 1.3rem);
-  line-height: 1.7;
-  margin-bottom: 2rem;
-  color: #f0f0f0;
-  font-weight: 200;
-}
-
-.property-share-button {
-  background: white;
-  border: none;
-  color: black;
-  padding: 0.9rem 3rem;
-  font-size: clamp(0.9rem, 1vw, 1rem);
+  font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 600;
-  border-radius: 45px;
+  line-height: 1.25;
+  margin-bottom: 25px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* ✏️ Sub text */
+.property-share-text {
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  font-weight: 300;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* 🎯 Button group wrapper */
+.property-share-btn-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 🟢 Left button - Start Earning */
+.property-btn-started {
+  background: #fff;
+  color: #111;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 15px 32px;
+  border: none;
+  border-radius: 0;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.property-share-button:hover {
-  background: linear-gradient(to right, #ff8a00, #f6b042);
-  transform: scale(1.05);
+.property-btn-started:hover {
+  background: #f5f5f5;
+  transform: translateY(-2px);
 }
 
-/* ✅ Large screen optimization (like LED screens or 2K/4K displays) */
-@media (min-width: 1600px) {
-  .property-share-container {
-    min-height: 90vh;
-  }
-  .property-share-title {
-    font-size: clamp(2.5rem, 3vw, 4.5rem);
-  }
-  .property-share-text {
-    font-size: clamp(1.1rem, 1.2vw, 1.5rem);
-  }
+/* 🔶 Right button - Now */
+.property-btn-free {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 15px 35px;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-/* ✅ Tablet */
+.property-btn-free:hover {
+  background: linear-gradient(135deg, #e48b08, #b45309);
+  transform: translateY(-2px);
+}
+
+.arrow {
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-left: 2px;
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+
+/* 🖥 Desktop / Tablet (1024px and below) */
 @media (max-width: 1024px) {
   .property-share-container {
-    min-height: 80vh;
+    width: 94%;
+    border-radius: 24px;
   }
+  
+  .property-share-overlay {
+    padding: 60px 40px;
+  }
+  
   .property-share-title {
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-size: 2.2rem;
+  }
+  
+  .property-share-text {
+    font-size: 1.05rem;
   }
 }
 
-/* ✅ Mobile */
+/* 📱 Mobile (768px and below) - Matching Your Image */
 @media (max-width: 768px) {
   .property-share-container {
-    background-position: top center;
-    min-height: 80vh;
-    padding: 2rem 1rem;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    background-position: center;
   }
-
+  
+  .property-share-overlay {
+    padding: 60px 25px;
+    min-height: 500px;
+    align-items: flex-start;
+    padding-top: 80px;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.6)
+    );
+  }
+  
+  .property-share-content {
+    text-align: left;
+    max-width: 100%;
+  }
+  
   .property-share-title {
-    font-size: 1.9rem;
-    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 20px;
+    text-align: left;
   }
-
+  
   .property-share-text {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .property-share-button {
-    padding: 10px 28px;
     font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 35px;
+    text-align: left;
+    font-weight: 300;
+  }
+  
+  .property-share-btn-wrap {
+    display: inline-flex;
+    flex-direction: row;
+    border-radius: 50px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+  }
+  
+  .property-btn-started {
+    padding: 12px 24px;
+    font-size: 0.95rem;
+  }
+  
+  .property-btn-free {
+    padding: 12px 28px;
+    font-size: 0.95rem;
+  }
+  
+  .arrow {
+    font-size: 1.1rem;
   }
 }
 
-/* ✅ Very small screens */
+/* 📲 Small Mobile (480px and below) */
 @media (max-width: 480px) {
-  .property-share-title {
-    font-size: 1.6rem;
+  .property-share-overlay {
+    padding: 50px 20px;
+    padding-top: 70px;
+    min-height: 450px;
   }
+  
+  .property-share-title {
+    font-size: 1.5rem;
+    margin-bottom: 18px;
+  }
+  
   .property-share-text {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin-bottom: 30px;
+  }
+  
+  .property-btn-started {
+    padding: 11px 20px;
     font-size: 0.9rem;
+  }
+  
+  .property-btn-free {
+    padding: 11px 24px;
+    font-size: 0.9rem;
+  }
+  
+  .arrow {
+    font-size: 1rem;
   }
 }

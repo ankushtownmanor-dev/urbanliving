@@ -1,27 +1,40 @@
-/* Ovika Testimonials Section */
-.ovika-testimonials-wrapper {
-  background-color: #fff;
+/* ========================================
+   OVIKA TESTIMONIALS - COMPLETE STYLES
+   ======================================== */
+
+.ovika-testimonials-section-unique {
+  background-color: #ffffff;
   padding: 80px 20px;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Heading */
-.ovika-testimonials-heading {
-  font-size: 2.5rem;
-  font-weight: 400;
+.ovika-testimonials-header-unique {
   text-align: center;
   margin-bottom: 60px;
+}
+
+.ovika-testimonials-title-unique {
+  font-size: 2.5rem;
+  font-weight: 500;
   color: #1a1a1a;
-  letter-spacing: -0.5px;
+  margin-bottom: 10px;
 }
 
-.ovika-testimonials-heading span {
+.ovika-orange-text-unique {
   color: #f59e0b;
-  font-weight: 400;
 }
 
-/* Grid Container */
-.ovika-testimonials-grid {
+.ovika-testimonials-subtitle-unique {
+  font-size: 1rem;
+  color: #666;
+  font-weight: 300;
+}
+
+/* ========================================
+   DESKTOP GRID - RECTANGLE CARDS
+   ======================================== */
+
+.ovika-desktop-grid-unique {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
@@ -32,137 +45,211 @@
   border-radius: 24px;
 }
 
-/* Individual Box */
-.ovika-testimonial-box {
-  background: #fff;
-  padding: 40px 35px;
+.ovika-testimonial-card-desktop-unique {
+  background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 40px 35px;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-height: 280px;
 }
 
-.ovika-testimonial-box:hover {
+.ovika-testimonial-card-desktop-unique:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
-/* Rating Stars */
-.ovika-rating-stars {
+.ovika-stars-unique {
   display: flex;
   gap: 4px;
   margin-bottom: 24px;
-}
-
-.ovika-rating-stars span {
   color: #f59e0b;
   font-size: 24px;
 }
 
-/* Testimonial Content */
-.ovika-testimonial-content {
+.ovika-testimonial-content-unique {
   font-size: 16px;
   line-height: 1.7;
   color: #333;
-  margin: 0 0 30px 0;
+  margin-bottom: 30px;
   flex-grow: 1;
 }
 
-/* Author Name */
-.ovika-testimonial-author {
+.ovika-testimonial-author-unique {
   font-size: 18px;
   font-weight: 600;
   color: #1a1a1a;
   margin: 0;
 }
 
-/* Responsive - Tablet */
+/* ========================================
+   MOBILE SLIDER (Hidden by Default)
+   ======================================== */
+
+.ovika-mobile-slider-unique {
+  display: none;
+}
+
+/* ========================================
+   RESPONSIVE - TABLET
+   ======================================== */
+
 @media (max-width: 1024px) {
-  .ovika-testimonials-grid {
+  .ovika-desktop-grid-unique {
     grid-template-columns: repeat(2, 1fr);
     gap: 25px;
     padding: 50px 30px;
   }
 
-  .ovika-testimonials-heading {
-    font-size: 2rem;
-  }
-
-  .ovika-testimonial-box {
+  .ovika-testimonial-card-desktop-unique {
     padding: 35px 30px;
   }
 }
 
-/* Responsive - Mobile */
+/* ========================================
+   RESPONSIVE - MOBILE (CIRCLE SLIDER)
+   ======================================== */
+
 @media (max-width: 768px) {
-  .ovika-testimonials-wrapper {
+  .ovika-testimonials-section-unique {
     padding: 60px 15px;
   }
 
-  .ovika-testimonials-heading {
+  .ovika-testimonials-title-unique {
     font-size: 1.8rem;
+  }
+
+  .ovika-testimonials-subtitle-unique {
+    font-size: 0.9rem;
     margin-bottom: 40px;
   }
 
-  .ovika-testimonials-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 40px 20px;
+  /* HIDE DESKTOP GRID */
+  .ovika-desktop-grid-unique {
+    display: none !important;
   }
 
-  .ovika-testimonial-box {
-    padding: 30px 25px;
+  /* SHOW MOBILE SLIDER */
+  .ovika-mobile-slider-unique {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 450px;
+    padding: 20px 0;
   }
 
-  .ovika-testimonial-content {
-    font-size: 15px;
-    margin-bottom: 24px;
+  /* CIRCLE CARD FOR MOBILE */
+  .ovika-testimonial-card-mobile-unique {
+    background: #ffffff;
+    border-radius: 50%;
+    width: 340px;
+    height: 340px;
+    padding: 45px 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    animation: ovikaFadeIn 0.6s ease-in-out;
   }
 
-  .ovika-testimonial-author {
-    font-size: 17px;
+  @keyframes ovikaFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 
-  .ovika-rating-stars span {
-    font-size: 20px;
+  .ovika-testimonial-card-mobile-unique .ovika-stars-unique {
+    color: #e11d27;
+    font-size: 22px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+
+  .ovika-testimonial-card-mobile-unique .ovika-testimonial-content-unique {
+    font-size: 14px;
+    line-height: 1.65;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .ovika-testimonial-card-mobile-unique .ovika-testimonial-author-unique {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+  }
+
+  /* DOTS INDICATOR */
+  .ovika-dots-unique {
+    display: flex;
+    gap: 10px;
+    margin-top: 35px;
+  }
+
+  .ovika-dot-unique {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ddd;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .ovika-dot-active-unique {
+    background: #f59e0b;
+    width: 12px;
+    height: 12px;
   }
 }
 
-/* Responsive - Small Mobile */
+/* ========================================
+   RESPONSIVE - SMALL MOBILE
+   ======================================== */
+
 @media (max-width: 480px) {
-  .ovika-testimonials-wrapper {
+  .ovika-testimonials-section-unique {
     padding: 50px 10px;
   }
 
-  .ovika-testimonials-heading {
+  .ovika-testimonials-title-unique {
     font-size: 1.5rem;
+  }
+
+  .ovika-testimonials-subtitle-unique {
+    font-size: 0.85rem;
     margin-bottom: 30px;
   }
 
-  .ovika-testimonials-grid {
-    padding: 30px 15px;
-    gap: 15px;
+  .ovika-mobile-slider-unique {
+    min-height: 400px;
   }
 
-  .ovika-testimonial-box {
-    padding: 25px 20px;
+  .ovika-testimonial-card-mobile-unique {
+    width: 300px;
+    height: 300px;
+    padding: 35px 28px;
   }
 
-  .ovika-testimonial-content {
-    font-size: 14px;
+  .ovika-testimonial-card-mobile-unique .ovika-testimonial-content-unique {
+    font-size: 13px;
     line-height: 1.6;
   }
 
-  .ovika-testimonial-author {
-    font-size: 16px;
+  .ovika-testimonial-card-mobile-unique .ovika-testimonial-author-unique {
+    font-size: 15px;
   }
 
-  .ovika-rating-stars {
-    margin-bottom: 20px;
-  }
-
-  .ovika-rating-stars span {
-    font-size: 18px;
+  .ovika-testimonial-card-mobile-unique .ovika-stars-unique {
+    font-size: 20px;
   }
 }
