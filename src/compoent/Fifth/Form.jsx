@@ -76,9 +76,9 @@ const PropertyConsultation = () => {
         <h3>
           Start sharing your property with <span>Ovika</span> today !
         </h3>
-        <p>
+        {/* <p>
           Ready to unlock your property potential? Choose your preferred way to connect with us below
-        </p>
+        </p> */}
       </div>
 
       <div className="ovika-content">

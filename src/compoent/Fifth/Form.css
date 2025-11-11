@@ -118,6 +118,7 @@
     flex-direction: column;
     align-items: center;
     padding: 40px 25px;
+    margin: 30px 15px;
   }
 
   .ovika-left {
@@ -129,12 +130,100 @@
   }
 }
 
-@media (max-width: 600px) {
+/* ======= EXACT MOBILE VIEW ======= */
+@media (max-width: 768px) {
+  .ovika-content {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 25px 18px;
+    margin: 20px -10px;
+    background: url("Group 186.png") center/cover no-repeat;
+    border-radius: 20px;
+    position: relative;
+  }
+
+  .ovika-left {
+    width: 100%;
+    text-align: left;
+    padding: 10px;
+    margin-top: 30px;
+  }
+
   .ovika-left h2 {
-    font-size: 1.6rem;
+    font-size: 27px;
+    line-height: 1.4;
+    color: #ffffff;
+  }
+
+  .ovika-left p {
+    font-size: 0.65rem;
+    color: #eeeeee;
+    margin-top: 8px;
+  }
+
+  /* === Form Card === */
+  .ovika-form {
+    width: 100%;
+    margin-top: 20px;
+     background: rgba(255, 255, 255, 0.85); /* white with 85% opacity */
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    /* background: rgba(255, 255, 255, 0.97);
+    border-radius: 20px;
+    padding: 20px 15px; */
+    /* box-shadow: 0 6px 16px #0000002e; */
+    text-align: left;
+  }
+
+  .ovika-form::before {
+    content: "Contact us";
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: #000;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    text-align: center;
+    /* box-shadow: 0 6px 16px #0000002e; */
+  }
+
+  .ovika-form input,
+  .ovika-form textarea {
+    font-size: 14px;
+    padding: 10px 14px;
+    border-radius: 25px;
+    box-shadow: 0 6px 16px #0000002e;
+  }
+
+  .ovika-form button {
+    background: #c47c26;
+    border-radius: 25px;
+    padding: 10px 0;
+    font-size: 14px;
+  }
+
+  .ovika-form button::after {
+    content: " →";
+  }
+}
+
+/* ======= Tiny screens ======= */
+@media (max-width: 480px) {
+  .ovika-left h2 {
+    font-size: 27px;
+  }
+
+  .ovika-left p {
+    font-size: 0.9rem;
+  }
+
+  .ovika-content {
+    padding: 15px 10px;
   }
 
   .ovika-form {
-    width: 100%;
+    padding: 15px;
   }
 }
