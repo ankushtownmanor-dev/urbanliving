@@ -46,12 +46,16 @@ function FourthMain() {
             manage inquiries, and publish your property in minutes.
           </p>
 
-          <div className="property-share-btn-wrap">
-            <button className="property-btn-started">
-              Get Started <span className="arrow">→</span>
-            </button>
-            <button className="property-btn-free">Free</button>
-          </div>
+          <div className="property-share-btn-group">
+  <button className="property-share-btn property-share-btn-white">
+    Get Started
+    <span className="property-share-arrow">→</span>
+  </button>
+  
+  <button className="property-share-btn property-share-btn-orange">
+    Free
+  </button>
+</div>
         </div>
       </div>
     </div>
