@@ -36,7 +36,7 @@ const OvikaConsultForm = () => {
       {/* Hero Image + Content Overlay */}
       <div className="ovika-consult-hero">
         <img
-          src="/public/Group 191.png"
+          src="public/Group 191.png"
           alt="Property Consultation"
           className="ovika-consult-hero-img"
         />
