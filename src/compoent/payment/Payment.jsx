@@ -1928,64 +1928,120 @@ function Payment() {
   };
   
 
-  const handleProceedToPayment = async (bookingIdParam) => {
-    console.log('Proceeding to payment for booking ID:', bookingIdParam);
-    try {
-      localStorage.setItem('paymentType', 'coliving');
-      if (bookingIdParam) localStorage.setItem('bookingId', bookingIdParam);
+  // const handleProceedToPayment = async (bookingIdParam) => {
+  //   console.log('Proceeding to payment for booking ID:', bookingIdParam);
+  //   try {
+  //     localStorage.setItem('paymentType', 'coliving');
+  //     if (bookingIdParam) localStorage.setItem('bookingId', bookingIdParam);
       
-      const userResponse = await fetch(`https://www.townmanor.ai/api/user/${username}`);
-      if (!userResponse.ok) {
-        throw new Error('Failed to fetch user data');
-      }
-      const userData = await userResponse.json();
+  //     const userResponse = await fetch(`https://www.townmanor.ai/api/user/${username}`);
+  //     if (!userResponse.ok) {
+  //       throw new Error('Failed to fetch user data');
+  //     }
+  //     const userData = await userResponse.json();
 
-      const txnid = 'OID' + Date.now();
+  //     const txnid = 'OID' + Date.now();
 
-      const paymentData = {
-        key: 'UvTrjC',
-        txnid: txnid,
-        amount: pricing.total,
-        productinfo: 'Room Booking',
-        firstname: userData.name || username || '',
-        email: userData.email || '',
-        phone: userData.phone || '',
-        surl: `https://townmanor.ai/api/boster/payu/success?redirectUrl=https://www.ovika.co.in/success`,
-        furl: `https://townmanor.ai/api/boster/payu/failure?redirectUrl=https://www.ovika.co.in/failure`,
-        udf1: bookingIdParam || '',
-        service_provider: 'payu_paisa'
-      };
+  //     const paymentData = {
+  //       key: 'UvTrjC',
+  //       txnid: txnid,
+  //       amount: pricing.total,
+  //       productinfo: 'Room Booking',
+  //       firstname: userData.name || username || '',
+  //       email: userData.email || '',
+  //       phone: userData.phone || '',
+  //       surl: `https://townmanor.ai/api/boster/payu/success?redirectUrl=https://www.ovika.co.in/success`,
+  //       furl: `https://townmanor.ai/api/boster/payu/failure?redirectUrl=https://www.ovika.co.in/failure`,
+  //       udf1: bookingIdParam || '',
+  //       service_provider: 'payu_paisa'
+  //     };
 
-      const response = await axios.post('https://townmanor.ai/api/payu/payment', paymentData);
+  //     const response = await axios.post('https://townmanor.ai/api/payu/payment', paymentData);
 
-      if (!response.data || !response.data.paymentUrl || !response.data.params) {
-        throw new Error('Invalid payment response received');
-      }
+  //     if (!response.data || !response.data.paymentUrl || !response.data.params) {
+  //       throw new Error('Invalid payment response received');
+  //     }
 
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = response.data.paymentUrl;
+  //     const form = document.createElement('form');
+  //     form.method = 'POST';
+  //     form.action = response.data.paymentUrl;
 
-      Object.entries(response.data.params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = key;
-          input.value = value.toString();
-          form.appendChild(input);
-        }
-      });
+  //     Object.entries(response.data.params).forEach(([key, value]) => {
+  //       if (value !== undefined && value !== null) {
+  //         const input = document.createElement('input');
+  //         input.type = 'hidden';
+  //         input.name = key;
+  //         input.value = value.toString();
+  //         form.appendChild(input);
+  //       }
+  //     });
 
-      document.body.appendChild(form);
-      form.submit();
-      document.body.removeChild(form);
+  //     document.body.appendChild(form);
+  //     form.submit();
+  //     document.body.removeChild(form);
 
-    } catch (error) {
-      console.error('Payment initiation failed:', error);
-      showAlert(error.response?.data?.message || error.message || 'Failed to initiate payment. Please try again.');
+  //   } catch (error) {
+  //     console.error('Payment initiation failed:', error);
+  //     showAlert(error.response?.data?.message || error.message || 'Failed to initiate payment. Please try again.');
+  //   }
+  // };
+const handleProceedToPayment = async (bookingIdParam) => {
+  console.log('Proceeding to payment for booking ID:', bookingIdParam);
+  try {
+    localStorage.setItem('paymentType', 'coliving');
+    if (bookingIdParam) localStorage.setItem('bookingId', bookingIdParam);
+    
+    const userResponse = await fetch(`https://www.townmanor.ai/api/user/${username}`);
+    if (!userResponse.ok) {
+      throw new Error('Failed to fetch user data');
     }
-  };
+    const userData = await userResponse.json();
 
+    const txnid = 'OID' + Date.now();
+
+    const paymentData = {
+      key: 'UvTrjC',
+      txnid: txnid,
+      amount: 1, // Changed to ₹1 for testing
+      productinfo: 'Room Booking',
+      firstname: userData.name || username || '',
+      email: userData.email || '',
+      phone: userData.phone || '',
+      surl: `https://townmanor.ai/api/boster/payu/success?redirectUrl=https://www.ovika.co.in/success`,
+      furl: `https://townmanor.ai/api/boster/payu/failure?redirectUrl=https://www.ovika.co.in/failure`,
+      udf1: bookingIdParam || '',
+      service_provider: 'payu_paisa'
+    };
+
+    const response = await axios.post('https://townmanor.ai/api/payu/payment', paymentData);
+
+    if (!response.data || !response.data.paymentUrl || !response.data.params) {
+      throw new Error('Invalid payment response received');
+    }
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = response.data.paymentUrl;
+
+    Object.entries(response.data.params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = value.toString();
+        form.appendChild(input);
+      }
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+
+  } catch (error) {
+    console.error('Payment initiation failed:', error);
+    showAlert(error.response?.data?.message || error.message || 'Failed to initiate payment. Please try again.');
+  }
+};
   return (
    <>
      <div className="booking-form-wrapper">

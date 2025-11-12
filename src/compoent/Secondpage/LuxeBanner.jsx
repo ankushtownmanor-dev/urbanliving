@@ -8,7 +8,9 @@ function LuxeBanner() {
     return (
         <>
             {/* Hero Section */}
+        
             <div className="tmxluxe-hero">
+                
                 <div className="tmxluxe-container">
                     <div className="tmxluxe-hero-content">
                         <div className="tmxluxe-logo-row">
