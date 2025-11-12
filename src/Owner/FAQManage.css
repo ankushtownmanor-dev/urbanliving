@@ -1,0 +1,105 @@
+:root {
+  --faq-manage-bg: #ecefea;
+  --faq-manage-white: #ffffff;
+  --faq-manage-text: #121314;
+  --faq-manage-dim: #5a606c;
+  --faq-manage-border: rgba(0, 0, 0, 0.12);
+  --faq-manage-ring: rgba(0, 0, 0, 0.08);
+  --faq-manage-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  --faq-manage-max: 980px;
+}
+
+/* ✳️ Section Base */
+.faq-manage-section {
+  background: var(--faq-manage-bg);
+  font-family: "Inter", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--faq-manage-text);
+}
+
+/* 📦 Container */
+.faq-manage-container {
+  max-width: var(--faq-manage-max);
+  margin: 0 auto;
+  padding: 48px 18px 64px;
+}
+
+/* 🧭 Heading */
+.faq-manage-heading {
+  text-align: center;
+  font-weight: 400;
+  font-size: clamp(28px, 4.5vw, 48px);
+  letter-spacing: -0.3px;
+  margin: 6px 0 28px;
+}
+
+/* 🗂 Grid */
+.faq-manage-list {
+  display: grid;
+  gap: 18px;
+}
+
+/* 🔳 Item Card */
+.faq-manage-item {
+  background: var(--faq-manage-white);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border: 1px solid #d18934 !important;
+  transition: all 0.2s ease;
+}
+
+.faq-manage-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* ❓ Question Row */
+.faq-manage-question {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 18px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 300;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* ⬇️ Chevron */
+.faq-manage-chevron {
+  color: #111;
+  transition: transform 0.2s ease;
+}
+.faq-manage-chevron.rot {
+  transform: rotate(180deg);
+}
+
+/* 🅰️ Answer Text */
+.faq-manage-answer {
+  color: var(--faq-manage-dim);
+  border-top: 1px solid var(--faq-manage-border);
+  padding: 14px 18px 18px;
+  font-size: 14px;
+  line-height: 1.7;
+  text-align: left;
+}
+
+/* 📱 Responsive */
+@media (max-width: 640px) {
+  .faq-manage-container {
+    padding: 36px 14px 48px;
+  }
+  .faq-manage-heading {
+    font-size: 28px;
+  }
+  .faq-manage-question {
+    font-size: 15px;
+    padding: 16px;
+  }
+  .faq-manage-answer {
+    font-size: 13px;
+    padding: 12px 16px 16px;
+  }
+}

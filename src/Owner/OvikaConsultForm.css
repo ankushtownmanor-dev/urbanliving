@@ -1,0 +1,234 @@
+/* ========================================
+   OVIKA CONSULT FORM (FULL OVERLAY MOBILE)
+   ======================================== */
+
+.ovika-consult-wrapper {
+  background-color: #fff;
+  font-family: "Inter", "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  padding: 60px 20px 80px;
+}
+
+/* 🧭 Header */
+.ovika-consult-top-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.ovika-consult-heading {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 400;
+  color: #000;
+  margin-bottom: 12px;
+}
+
+.ovika-text-orange {
+  color: #d97706;
+  font-weight: 600;
+}
+
+.ovika-consult-subtext {
+  color: #666;
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+/* 🖼️ Hero Section */
+.ovika-consult-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.ovika-consult-hero-img {
+  width: 100%;
+  height: 700px;
+  object-fit: cover;
+  display: block;
+}
+
+/* 📍 Overlay Content */
+.ovika-consult-overlay-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  padding: 60px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ovika-consult-left-text {
+  max-width: 600px;
+}
+
+.ovika-consult-main-title {
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 25px;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  margin-top: -250px;
+}
+
+.ovika-consult-desc {
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  line-height: 1.6;
+  color: #ebebeb;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* 📝 Form - Image Overlay */
+.ovika-consult-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 400px;
+}
+
+.ovika-consult-input,
+.ovika-consult-textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 9999px;
+  font-size: 1rem;
+  padding: 16px 24px;
+  font-family: inherit;
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.ovika-consult-textarea {
+  border-radius: 20px;
+  min-height: 100px;
+  resize: none;
+}
+
+.ovika-consult-input::placeholder,
+.ovika-consult-textarea::placeholder {
+  color: #555;
+  font-weight: 300;
+}
+
+.ovika-consult-input:focus,
+.ovika-consult-textarea:focus {
+  outline: none;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* 🔘 Submit Button */
+.ovika-consult-btn {
+  width: 100%;
+  padding: 16px 30px;
+  border: none;
+  border-radius: 9999px;
+  background: #d97706;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.3s all ease;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+}
+
+.ovika-consult-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #b91c1c, #7f1d1d);
+}
+
+/* 🧩 Responsive - Tablet */
+@media (max-width: 1024px) {
+  .ovika-consult-overlay-content {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: 40px;
+  }
+
+  .ovika-consult-form {
+    width: 90%;
+    max-width: 450px;
+  }
+}
+
+/* 📱 Responsive - Mobile (Form Direct on Image) */
+@media (max-width: 768px) {
+  .ovika-consult-wrapper {
+    padding: 40px 15px;
+  }
+
+  .ovika-consult-hero-img {
+    height: 680px;
+    object-fit: cover;
+  }
+
+  .ovika-consult-overlay-content {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 30px 20px;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .ovika-consult-main-title {
+    font-size: 1.8rem;
+    text-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
+  }
+
+  .ovika-consult-desc {
+    font-size: 1rem;
+    margin-bottom: 25px;
+  }
+
+  .ovika-consult-form {
+    width: 100%;
+  }
+
+  .ovika-consult-input,
+  .ovika-consult-textarea {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 30px;
+    font-size: 0.95rem;
+  }
+}
+
+/* 📱 Very Small Mobile */
+@media (max-width: 480px) {
+  .ovika-consult-main-title {
+    font-size: 1.5rem;
+  }
+  .ovika-consult-main-title {
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 25px;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  margin-top: -83px;
+}
+
+  .ovika-consult-desc {
+    font-size: 0.9rem;
+  }
+
+  .ovika-consult-form {
+    width: 100%;
+    gap: 14px;
+  }
+
+  .ovika-consult-input,
+  .ovika-consult-textarea {
+    padding: 14px 18px;
+  }
+
+  .ovika-consult-btn {
+    padding: 14px 22px;
+    font-size: 1rem;
+  }
+}

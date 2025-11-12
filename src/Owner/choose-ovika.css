@@ -26,13 +26,13 @@
   font-weight:400;
   letter-spacing:.5px;
   line-height:1.2;
-  font-size:clamp(28px,4.6vw,48px);
+  font-size:35px;
   margin:6px 0 10px;
 }
 
 .choose-ovika.sub{
   color:#161616;
-  font-size:clamp(15px,1.6vw,20px);
+  font-size: 15px;
   font-weight:200;
   letter-spacing:.5px;
   margin-bottom:28px;
@@ -71,7 +71,7 @@
 /* Title text */
 .choose-ovika.cardTitle{
   font-weight:400;
-  font-size:23px;
+  font-size: 18px;
   line-height:1.35;
   margin-bottom: 18px;
 }

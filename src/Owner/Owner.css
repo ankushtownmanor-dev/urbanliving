@@ -1,156 +1,279 @@
 /* Namespace: ovika- (conflict-safe) */
-:root{
-  --ovika-white:#ffffff;
-  --ovika-text:#f7fafc;
-  --ovika-muted:#e9edf3;
-  --ovika-chip-bg:rgba(255,255,255,0.18);
-  --ovika-chip-ring:rgba(255,255,255,0.38);
-  --ovika-overlay-1:rgba(0,0,0,0.45);
-  --ovika-overlay-2:rgba(0,0,0,0.55);
-  --ovika-overlay-3:rgba(0,0,0,0.35);
-  --ovika-cta-text:#0f172a;
-  --ovika-shadow-soft:0 10px 30px rgba(0,0,0,0.25);
+:root {
+  --ovika-white: #ffffff;
+  --ovika-text: #f7fafc;
+  --ovika-muted: #e9edf3;
+  --ovika-chip-bg: rgba(255, 255, 255, 0.18);
+  --ovika-chip-ring: rgba(255, 255, 255, 0.38);
+  --ovika-overlay-1: rgba(0, 0, 0, 0.45);
+  --ovika-overlay-2: rgba(0, 0, 0, 0.55);
+  --ovika-overlay-3: rgba(0, 0, 0, 0.35);
+  --ovika-cta-text: #0f172a;
+  --ovika-shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
-.ovika-hero{
-  position:relative;
-  width:100%;
-  min-height:100vh;
-  overflow:hidden;
-  color:var(--ovika-text);
-  font-family:"Inter","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  background:#000; /* fallback while image loads */
+/* ---------- HERO ---------- */
+.ovika-hero {
+  position: relative;
+  width: 90%;
+  min-height: 100vh;
+  margin-left: 70px;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #000;
+  color: var(--ovika-text);
+  font-family: "Inter", "SF Pro Display", "Segoe UI", Roboto, sans-serif;
 }
 
-/* Background image via JSX */
-.ovika-hero__bg{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center;
-  transform:scale(1.02);
+/* Background Image */
+.ovika-hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
 }
 
-/* Dark overlay for legibility */
-.ovika-hero__overlay{
-  position:absolute;
-  inset:0;
-  background:linear-gradient(180deg,var(--ovika-overlay-1) 0%,var(--ovika-overlay-2) 40%,var(--ovika-overlay-3) 100%);
-  pointer-events:none;
+/* Gradient Overlay */
+.ovika-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    var(--ovika-overlay-1) 0%,
+    var(--ovika-overlay-2) 50%,
+    var(--ovika-overlay-3) 100%
+  );
+  z-index: 1;
 }
 
-/* Top badges */
-.ovika-hero__badges{
-  position:relative;
-  z-index:2;
-  display:flex;
-  gap:18px;
-  padding:24px;
-  max-width:1180px;
-  margin:0 auto;
-}
-.ovika-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:8px 14px;
-  border-radius:28px;
-  background:var(--ovika-chip-bg);
-  border:1px solid var(--ovika-chip-ring);
-  color:var(--ovika-white);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  box-shadow:0 2px 10px rgba(0,0,0,0.15);
-  font-weight:600;
-  font-size:14px;
-  line-height:1;
-}
-.ovika-badge__icon{
-  width:18px;
-  height:18px;
-  color:#ffffff;
-  opacity:0.95;
-}
-.ovika-badge__text{
-  display:inline-block;
-  font-weight: 200
+/* Content Area */
+.ovika-hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 80px 24px;
 }
 
-/* Content block */
-.ovika-hero__content{
-  position:relative;
-  z-index:2;
-  max-width:1180px;
-  margin:0 auto;
-  padding:28px 24px 64px;
-}
-
-/* Title mimicking the screenshot (large, three lines) */
-.ovika-hero__title{
-  font-weight:380;
-  font-size:3.5em;
-  line-height:1.02;
-  margin:8px 0 16px;
-  text-shadow:0 10px 28px rgba(0,0,0,0.35);
-  letter-spacing:-0.6px;
-}
-
-/* “handle it for you.” slightly separated */
-.ovika-hero__title--line2{
-  display:inline-block;
-  margin-top:6px;
-   font-weight:380;
-  /* font-size:3.5em; */
+/* Title */
+.ovika-hero__title {
+  font-weight: 400;
+  font-size: 3.4rem;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  margin-bottom: 18px;
+  text-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 /* Subtitle */
-.ovika-hero__subtitle{
-  max-width:1060px;
-  font-size:clamp(14px,1.6vw,20px);
-  line-height:1.6;
-  color:var(--ovika-muted);
-  text-shadow:0 3px 12px rgba(0,0,0,0.35);
-  margin:8px 0 24px;
-   font-weight:280;
+.ovika-hero__subtitle {
+  font-size: clamp(15px, 1.5vw, 20px);
+  line-height: 1.6;
+  color: var(--ovika-muted);
+  margin-bottom: 32px;
+  max-width: 720px;
 }
 
-/* CTA button with pill and light glass backdrop behind (to match screenshot) */
-.ovika-cta{
-  position:relative;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  height:56px;
-  padding:0 28px;
-  border:none;
-  border-radius:999px;
-  background:#ffffff;
-  color:var(--ovika-cta-text);
-  font-weight:550;
-  font-size:16px;
-  letter-spacing:0.2px;
-  box-shadow:var(--ovika-shadow-soft);
-  cursor:pointer;
-  transition:transform .15s ease, box-shadow .15s ease;
-}
-.ovika-cta:hover{
-  transform:translateY(-1px);
-  box-shadow:0 14px 34px rgba(0,0,0,0.32);
+/* ---------- BUTTON GROUP ---------- */
+.ovika-btn-group {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.3rem;
+  border: 2px solid #d97706;
+  border-radius: 50px;
+  background-color: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  width: fit-content;
 }
 
-/* Responsive tweaks */
-@media (max-width: 1024px){
-  .ovika-hero__title{ font-size: clamp(34px,7vw,64px); }
-  .ovika-hero__content{ padding-bottom:48px; }
+/* Common Button Styles */
+.ovika-btn {
+  border: none;
+  border-radius: 50px;
+  padding: 0.7rem 2.2rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  text-decoration: none;
 }
-@media (max-width: 768px){
-  .ovika-hero__badges{ gap:10px; flex-wrap:wrap; padding:16px; }
-  .ovika-badge{ font-size:12px; padding:7px 12px; }
-  .ovika-hero__title{ font-size: clamp(30px,8vw,54px); }
-  .ovika-cta{ width: 88%; max-width: 360px; }
+
+/* 🟠 Orange Button */
+.ovika-btn-orange {
+  background-color: #d97706;
+  color: #fff;
 }
-@media (max-width: 420px){
-  .ovika-hero__title{ font-size: 32px; }
+.ovika-btn-orange:hover {
+  background-color: #ea580c;
+  transform: translateY(-2px);
+}
+
+/* ⚪ White Button */
+.ovika-btn-white {
+  background-color: #fff;
+  color: #000;
+}
+.ovika-btn-white:hover {
+  background-color: #f8f8f8;
+  transform: translateY(-2px);
+}
+
+/* ➡️ Icon inside Button */
+.ovika-arrow {
+  font-size: 1.2rem;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1024px) {
+  .ovika-hero {
+    width: 95%;
+    margin: 0 auto;
+    border-radius: 16px;
+  }
+
+  .ovika-hero__title {
+    font-size: clamp(2rem, 5vw, 3rem);
+  }
+
+  .ovika-hero__subtitle {
+    max-width: 90%;
+  }
+
+  .ovika-btn-group {
+    margin-top: 20px;
+  }
+}
+
+/* ---------- TABLET / MOBILE ---------- */
+@media (max-width: 768px) {
+  .ovika-hero {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    min-height: 100vh;
+  }
+
+  .ovika-hero__bg {
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .ovika-hero__content {
+    text-align: center;
+    padding: 50px 20px;
+  }
+
+  .ovika-hero__title {
+    font-size: clamp(28px, 7vw, 44px);
+    line-height: 1.2;
+  }
+
+  .ovika-hero__subtitle {
+    margin: 0 auto 28px;
+    font-size: 15px;
+  }
+
+  /* Button group stacked and centered */
+  .ovika-btn-group {
+    flex-direction: column;
+    background: none;
+    border: none;
+    box-shadow: none;
+    gap: 0.8rem;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .ovika-btn {
+    width: 90%;
+    max-width: 340px;
+    border-radius: 50px;
+  }
+
+  .ovika-btn-orange,
+  .ovika-btn-white {
+    border: 2px solid #d97706;
+  }
+}
+
+/* ---------- SMALL MOBILE ---------- */
+@media (max-width: 480px) {
+  .ovika-hero__content {
+    padding: 40px 16px;
+  }
+
+  .ovika-hero__title {
+    font-size: 26px;
+    margin-bottom: 12px;
+  }
+
+  .ovika-hero__subtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+ .ovika-btn-group {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.3rem;
+  border: 2px solid #d97706;
+  border-radius: 50px;
+  background-color: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  width: fit-content;
+}
+
+/* Common Button Styles */
+.ovika-btn {
+  border: none;
+  border-radius: 50px;
+  padding: 0.7rem 2.2rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  text-decoration: none;
+}
+
+/* 🟠 Orange Button */
+.ovika-btn-orange {
+  background-color: #d97706;
+  color: #fff;
+}
+.ovika-btn-orange:hover {
+  background-color: #ea580c;
+  transform: translateY(-2px);
+}
+
+/* ⚪ White Button */
+.ovika-btn-white {
+  background-color: #fff;
+  color: #000;
+}
+.ovika-btn-white:hover {
+  background-color: #f8f8f8;
+  transform: translateY(-2px);
+}
+
+/* ➡️ Icon inside Button */
+.ovika-arrow {
+  font-size: 1.2rem;
+}
+
 }

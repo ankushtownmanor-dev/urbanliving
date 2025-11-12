@@ -35,7 +35,7 @@
 //   return (
 //     <section className="manage-ovika wrap">
 //       <div className="manage-ovika container">
-//         <h2 className="manage-ovika heading">How We Manage Listings</h2>
+//         <h2 className="manage-ovika heading">How We <span className="text-red-600">Manage</span> Listings</h2>
 //         <p className="manage-ovika sub">
 //           Our simple, streamlined process ensures your property is managed efficiently
 //         </p>
@@ -96,7 +96,7 @@ export default function ManageListings() {
   return (
     <section className="manage-ovika wrap">
       <div className="manage-ovika container">
-        <h2 className="manage-ovika heading">How We Manage Listings</h2>
+        <h2 className="manage-ovika heading">How We <span className="text-red-600">Manage</span> Listings</h2>
         <p className="manage-ovika sub">
           Our simple, streamlined process ensures your property is managed efficiently.
         </p>

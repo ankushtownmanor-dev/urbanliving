@@ -45,10 +45,16 @@ export default function Owner() {
         <p className="ovika-hero__subtitle">
           We take care of your rental business end to end, so you earn without the stress
         </p>
-
-        <button className="ovika-cta">
-          Check Out Process
-        </button>
+        <div className="ovika-btn-group">
+  <button className="ovika-btn ovika-btn-white">
+    Get Started
+    <span className="ovika-arrow">→</span>
+  </button>
+  
+  <button className="ovika-btn ovika-btn-orange">
+    Free
+  </button>
+</div>
       </div>
     </section>
   );
