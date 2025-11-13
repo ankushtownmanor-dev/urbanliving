@@ -1,8 +1,11 @@
 import React from 'react'
-import LuxeBanner from './LuxeBanner'
+// import LuxeBanner from './LuxeBanner'
 import LuxeProperties from './LuxeProperties'
-import LuxeResidentReviews from './LuxeResidentReviews'
+// import LuxeResidentReviews from './LuxeResidentReviews'
 import { Helmet } from 'react-helmet'
+import LuxeHeroTM from './LuxeHeroTM'
+import TMLuxeWhyChoose from './TMLuxeWhyChoose'
+import TMXLuxeTestimonialsCard from './TMXLuxeTestimonialsCard'
 
 function LuxeMain() {
   return (
@@ -42,10 +45,14 @@ function LuxeMain() {
       />
       <meta name="twitter:image" content="https://www.ovika.co.in/images/tmluxe-cover.jpg" />
     </Helmet>
-    <LuxeBanner/>
+    <LuxeHeroTM/>
+    <TMLuxeWhyChoose/>
+
+    {/* <LuxeBanner/> */}
 
     <LuxeProperties/>
-    <LuxeResidentReviews/>
+    <TMXLuxeTestimonialsCard/>
+    {/* <LuxeResidentReviews/> */}
     </>
   )
 }
