@@ -115,22 +115,14 @@ export default function Amenities({ amenities = [] }) {
       </div>
 
       {/* Reserve Box – visible only on mobile */}
-      <div className="reserve-box">
+      {/* <div className="reserve-box">
         <select className="reserve-input">
           <option>Location</option>
         </select>
 
-        <div className="reserve-input date-input">
-          10/4/2025
-          <span className="calendar-icon">📅</span>
-        </div>
-
-        <select className="reserve-input">
-          <option>Rooms & guests</option>
-        </select>
 
         <button className="reserve-button">Reserve</button>
-      </div>
+      </div> */}
     </div>
   );
 }

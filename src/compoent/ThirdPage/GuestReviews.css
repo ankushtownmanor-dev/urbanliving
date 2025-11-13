@@ -106,7 +106,7 @@
 
 .guestreview-text {
   margin-top: 4px;
-  font-size: 14px;
+  font-size: 10px;
   white-space: pre-line;
 }
 
@@ -117,7 +117,7 @@
 }
 
 .guestreviews-readmore-btn {
-  background: linear-gradient(90deg, #de2121 0%, #bf0000 100%);
+  background: #b2782b;
   color: #fff;
   padding: 11px 40px;
   border: none;

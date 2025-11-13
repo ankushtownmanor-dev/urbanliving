@@ -113,6 +113,13 @@
 }
 
 @media (max-width:786px) {
+  .featured-container {
+  text-align: center;
+  padding: 33px 1px;
+  background: #fff;
+  font-family: "Poppins", sans-serif;
+}
+
   .featured-card {
     width: 340px;
     background: #fff;
