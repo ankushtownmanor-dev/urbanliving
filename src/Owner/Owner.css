@@ -1,14 +1,13 @@
-/* Namespace: ovika- (conflict-safe) */
+/* Owner.css */
+/* Variables */
 :root {
   --ovika-white: #ffffff;
   --ovika-text: #f7fafc;
   --ovika-muted: #e9edf3;
-  --ovika-chip-bg: rgba(255, 255, 255, 0.18);
-  --ovika-chip-ring: rgba(255, 255, 255, 0.38);
   --ovika-overlay-1: rgba(0, 0, 0, 0.45);
   --ovika-overlay-2: rgba(0, 0, 0, 0.55);
   --ovika-overlay-3: rgba(0, 0, 0, 0.35);
-  --ovika-cta-text: #0f172a;
+  --ovika-orange: #d97706; /* theme orange */
   --ovika-shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
@@ -77,60 +76,72 @@
   max-width: 720px;
 }
 
-/* ---------- BUTTON GROUP ---------- */
-.ovika-btn-group {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  padding: 0.3rem;
-  border: 2px solid #d97706;
-  border-radius: 50px;
-  background-color: #fff;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-  width: fit-content;
+/* ---------- DUAL CTA PILL ---------- */
+.ovika-cta-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:0;
+  padding:6px;
+  border:2px solid var(--ovika-orange);
+  border-radius:999px;
+  background:#fff;
+  box-shadow:0 10px 24px rgba(0,0,0,.25);
 }
 
-/* Common Button Styles */
-.ovika-btn {
-  border: none;
-  border-radius: 50px;
-  padding: 0.7rem 2.2rem;
-  font-size: 1.1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  text-decoration: none;
+.ovika-cta{
+  display:flex; align-items:center; justify-content:center;
+  padding:14px 24px;
+  font-size:1.05rem;
+  font-weight:600;
+  border:none; outline:none;
+  cursor:pointer;
+  border-radius:999px;
+  transition:transform .2s ease, background-color .2s ease, color .2s ease;
+  line-height:1;
+  min-width:150px;
+}
+.ovika-cta:hover{ transform: translateY(-2px); }
+
+.ovika-cta--white{
+  background:#ffffff;
+  color:#111827;
+  box-shadow: inset -1px 0 0 rgba(0,0,0,0.08);
 }
 
-/* 🟠 Orange Button */
-.ovika-btn-orange {
-  background-color: #d97706;
-  color: #fff;
-}
-.ovika-btn-orange:hover {
-  background-color: #ea580c;
-  transform: translateY(-2px);
+.ovika-cta--orange{
+  background: var(--ovika-orange);
+  color:#ffffff;
+  padding:14px 28px;
 }
 
-/* ⚪ White Button */
-.ovika-btn-white {
-  background-color: #fff;
-  color: #000;
-}
-.ovika-btn-white:hover {
-  background-color: #f8f8f8;
-  transform: translateY(-2px);
+.ovika-cta__arrow{
+  display:inline-block;
+  margin-left:10px;
+  font-size:1.2rem;
 }
 
-/* ➡️ Icon inside Button */
-.ovika-arrow {
-  font-size: 1.2rem;
+/* ---------- OPTIONAL BADGES ---------- */
+.ovika-hero__badges {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 2;
+  display:flex;
+  gap:8px;
 }
+.ovika-badge{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;        /* fixed negative padding from earlier */
+  border-radius:999px;
+  background:rgba(255,255,255,.18);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.38);
+  backdrop-filter: blur(4px);
+}
+.ovika-badge__icon{ font-size:16px; }
+.ovika-badge__text{ font-size:13px; }
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 1024px) {
@@ -139,141 +150,50 @@
     margin: 0 auto;
     border-radius: 16px;
   }
-
-  .ovika-hero__title {
-    font-size: clamp(2rem, 5vw, 3rem);
-  }
-
-  .ovika-hero__subtitle {
-    max-width: 90%;
-  }
-
-  .ovika-btn-group {
-    margin-top: 20px;
-  }
+  .ovika-hero__title { font-size: clamp(2rem, 5vw, 3rem); }
+  .ovika-hero__subtitle { max-width: 90%; }
 }
 
-/* ---------- TABLET / MOBILE ---------- */
+/* Tablet / Mobile common */
 @media (max-width: 768px) {
   .ovika-hero {
     width: 100%;
     margin: 0;
     border-radius: 0;
-    min-height: 100vh;
+    min-height: 110vh;                /* more room so content can sit lower */
   }
-
   .ovika-hero__bg {
-    object-fit: cover;
-    object-position: center top;
+    object-position: center 20%;      /* keep subject framed on small screens */
   }
-
   .ovika-hero__content {
-    text-align: center;
-    padding: 50px 20px;
+    text-align: left;
+    padding: 22vh 20px 6vh;           /* pushes content down into lower third */
   }
-
   .ovika-hero__title {
     font-size: clamp(28px, 7vw, 44px);
     line-height: 1.2;
   }
-
   .ovika-hero__subtitle {
-    margin: 0 auto 28px;
+    margin: 0 0 24px;
     font-size: 15px;
   }
 
-  /* Button group stacked and centered */
-  .ovika-btn-group {
-    flex-direction: column;
-    background: none;
-    border: none;
-    box-shadow: none;
-    gap: 0.8rem;
-    align-items: center;
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  .ovika-btn {
-    width: 90%;
-    max-width: 340px;
-    border-radius: 50px;
-  }
-
-  .ovika-btn-orange,
-  .ovika-btn-white {
-    border: 2px solid #d97706;
-  }
+  .ovika-cta{ font-size:1rem; padding:12px 18px; min-width:140px; }
+  .ovika-cta--orange{ padding:12px 22px; }
 }
 
-/* ---------- SMALL MOBILE ---------- */
+/* Small mobile */
 @media (max-width: 480px) {
+  .ovika-hero {
+    min-height: 115vh;               /* a bit taller for tiny phones */
+  }
   .ovika-hero__content {
-    padding: 40px 16px;
+    padding: 26vh 16px 7vh;          /* push further down */
   }
+  .ovika-hero__title { font-size: 33px; margin-bottom: 12px; }
+  .ovika-hero__subtitle { font-size: 20px; margin-bottom: 18px; }
 
-  .ovika-hero__title {
-    font-size: 26px;
-    margin-bottom: 12px;
-  }
-
-  .ovika-hero__subtitle {
-    font-size: 14px;
-    margin-bottom: 24px;
-  }
-
- .ovika-btn-group {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  padding: 0.3rem;
-  border: 2px solid #d97706;
-  border-radius: 50px;
-  background-color: #fff;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-  width: fit-content;
-}
-
-/* Common Button Styles */
-.ovika-btn {
-  border: none;
-  border-radius: 50px;
-  padding: 0.7rem 2.2rem;
-  font-size: 1.1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  text-decoration: none;
-}
-
-/* 🟠 Orange Button */
-.ovika-btn-orange {
-  background-color: #d97706;
-  color: #fff;
-}
-.ovika-btn-orange:hover {
-  background-color: #ea580c;
-  transform: translateY(-2px);
-}
-
-/* ⚪ White Button */
-.ovika-btn-white {
-  background-color: #fff;
-  color: #000;
-}
-.ovika-btn-white:hover {
-  background-color: #f8f8f8;
-  transform: translateY(-2px);
-}
-
-/* ➡️ Icon inside Button */
-.ovika-arrow {
-  font-size: 1.2rem;
-}
-
+  .ovika-cta-pill{ box-shadow:0 8px 18px rgba(0,0,0,.22); }
+  .ovika-cta{ font-size:.98rem; padding:12px 16px; min-width:132px; }
+  .ovika-cta--orange{ padding:12px 20px; }
 }

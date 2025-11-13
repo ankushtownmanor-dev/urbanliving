@@ -1,234 +1,198 @@
-/* ========================================
-   OVIKA CONSULT FORM (FULL OVERLAY MOBILE)
-   ======================================== */
+/* OvikaConsultForm.css */
+/* Variables */
+:root{
+  --ovk-white:#fff;
+  --ovk-black:#000;
+  --ovk-muted:#666;
+  --ovk-orange:#d97706;
+  --ovk-card-bg:rgb(255 255 255 / 32%);
+  --ovk-card-stroke:rgba(255,255,255,0.55);
+  --ovk-shadow:0 15px 35px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+.ovk-orange{color:var(--ovk-orange);font-weight:600}
 
-.ovika-consult-wrapper {
-  background-color: #fff;
-  font-family: "Inter", "SF Pro Display", "Segoe UI", Roboto, sans-serif;
-  padding: 60px 20px 80px;
+/* Wrapper */
+.ovk-wrap{
+  font-family: Inter, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  background:#fff;
+  padding: 50px 18px 70px;
 }
 
-/* 🧭 Header */
-.ovika-consult-top-header {
-  text-align: center;
-  margin-bottom: 50px;
+/* Header */
+.ovk-top{ text-align:center; margin-bottom:34px; }
+.ovk-top__title{
+  font-weight:400;
+  color:#000;
+  font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+  margin:0 0 10px;
+}
+.ovk-top__sub{
+  color:var(--ovk-muted);
+  font-size:.98rem;
+  margin:0;
 }
 
-.ovika-consult-heading {
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
-  font-weight: 400;
-  color: #000;
-  margin-bottom: 12px;
+/* Hero area */
+.ovk-hero{
+  position:relative;
+  max-width:1400px;
+  margin:0 auto;
+  border-radius:22px;
+  overflow:hidden;
+  background:#000; /* fallback while image loads */
+}
+.ovk-hero__img{
+  width:100%;
+  height:640px;           /* desktop height */
+  object-fit:cover;
+  display:block;
 }
 
-.ovika-text-orange {
-  color: #d97706;
-  font-weight: 600;
+/* Overlay layout */
+.ovk-hero__overlay{
+  position:absolute; inset:0;
+  display:grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items:center;
+  gap:32px;
+  padding: 40px 46px;
 }
 
-.ovika-consult-subtext {
-  color: #666;
+/* Left text */
+.ovk-left{ color:#fff; max-width:640px; }
+.ovk-left__title{
+  font-weight:700;
+  line-height:1.12;
+  font-size: clamp(2.2rem, 3.2vw, 3.4rem);
+  text-shadow: 0 4px 12px rgba(0,0,0,.55);
+  margin: 0 0 14px;
+}
+.ovk-left__desc{
+  color:#ececec;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height:1.6;
+  text-shadow: 0 2px 6px rgba(0,0,0,.45);
+  margin:0;
+}
+
+/* Glass card form */
+.ovk-card{
+  justify-self:end;
+  width: 520px;
+  background: var(--ovk-card-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 22px;
+  border: 1px solid var(--ovk-card-stroke);
+  box-shadow: var(--ovk-shadow);
+  padding: 26px 26px 22px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.ovk-card__title{
+  margin:4px 4px 8px;
+  font-size: 1.6rem;
+  font-weight:700;
+  color:#111827;
+  text-align:center;
+}
+
+/* Inputs */
+.ovk-input, .ovk-textarea{
+  width:100%;
+  background:#fff;
+  border:none;
+  border-radius: 999px;
+  padding: 14px 18px;
   font-size: 1rem;
-  font-weight: 300;
+  color:#111827;
+  box-shadow: 0 2px 6px rgba(0,0,0,.12);
 }
-
-/* 🖼️ Hero Section */
-.ovika-consult-hero {
-  position: relative;
-  overflow: hidden;
-  border-radius: 24px;
-  max-width: 1400px;
-  margin: 0 auto;
+.ovk-input::placeholder, .ovk-textarea::placeholder{ color:#6b7280; }
+.ovk-input:focus, .ovk-textarea:focus{
+  outline:none; box-shadow:0 0 0 3px rgba(217,119,6,.25);
 }
+.ovk-textarea{ border-radius:16px; resize:none }
 
-.ovika-consult-hero-img {
-  width: 100%;
-  height: 700px;
-  object-fit: cover;
-  display: block;
+/* CTA */
+.ovk-cta{
+  margin-top:4px;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  padding: 14px 20px;
+  border:none; border-radius:999px;
+  color:#fff; font-weight:700; font-size:1.05rem; cursor:pointer;
+  background: linear-gradient(90deg, #d62a2a, #a31313 60%, #3b0b0b);
+  box-shadow: 0 10px 24px rgba(164, 22, 22, .45);
+  transition: transform .2s ease, filter .2s ease;
 }
+.ovk-cta:hover{ transform: translateY(-2px); filter:brightness(1.05); }
+.ovk-cta__arrow{ font-size:1.25rem; line-height:1 }
 
-/* 📍 Overlay Content */
-.ovika-consult-overlay-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  color: #fff;
-  padding: 60px 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.ovika-consult-left-text {
-  max-width: 600px;
-}
-
-.ovika-consult-main-title {
-  font-size: clamp(2rem, 3.5vw, 3.5rem);
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 25px;
-  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  margin-top: -250px;
-}
-
-.ovika-consult-desc {
-  font-size: clamp(1rem, 1.8vw, 1.25rem);
-  line-height: 1.6;
-  color: #ebebeb;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-}
-
-/* 📝 Form - Image Overlay */
-.ovika-consult-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  width: 400px;
-}
-
-.ovika-consult-input,
-.ovika-consult-textarea {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
-  border-radius: 9999px;
-  font-size: 1rem;
-  padding: 16px 24px;
-  font-family: inherit;
-  color: #333;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-}
-
-.ovika-consult-textarea {
-  border-radius: 20px;
-  min-height: 100px;
-  resize: none;
-}
-
-.ovika-consult-input::placeholder,
-.ovika-consult-textarea::placeholder {
-  color: #555;
-  font-weight: 300;
-}
-
-.ovika-consult-input:focus,
-.ovika-consult-textarea:focus {
-  outline: none;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-}
-
-/* 🔘 Submit Button */
-.ovika-consult-btn {
-  width: 100%;
-  padding: 16px 30px;
-  border: none;
-  border-radius: 9999px;
-  background: #d97706;
-  color: #fff;
-  font-weight: 600;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: 0.3s all ease;
-  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
-}
-
-.ovika-consult-btn:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(135deg, #b91c1c, #7f1d1d);
-}
-
-/* 🧩 Responsive - Tablet */
-@media (max-width: 1024px) {
-  .ovika-consult-overlay-content {
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    gap: 40px;
+/* Tablet */
+@media (max-width: 1024px){
+  .ovk-hero__overlay{
+    grid-template-columns: 1fr;
+    justify-items:center;
+    text-align:center;
+    padding: 34px 28px;
+    gap: 26px;
   }
-
-  .ovika-consult-form {
-    width: 90%;
-    max-width: 450px;
-  }
+  .ovk-left{ max-width:720px }
+  .ovk-card{ justify-self:center; width: 90%; max-width: 520px }
 }
 
-/* 📱 Responsive - Mobile (Form Direct on Image) */
-@media (max-width: 768px) {
-  .ovika-consult-wrapper {
-    padding: 40px 15px;
-  }
+/* Mobile: fix low height and center content */
+@media (max-width: 768px){
+  .ovk-wrap{ padding:38px 14px 54px }
 
-  .ovika-consult-hero-img {
-    height: 680px;
+  .ovk-hero{
+    min-height: 720px;         /* ensures tall hero on phones */
+  }
+  .ovk-hero__img{
+    height: 100%;
+    min-height: 720px;         /* make image fill hero height */
+    width: 100%;
     object-fit: cover;
   }
 
-  .ovika-consult-overlay-content {
+  .ovk-hero__overlay{
+    background: rgba(0,0,0,.45);
+    padding: 26px 18px 30px;
+    display: flex;
     flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    padding: 30px 20px;
-    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;   /* vertical centering within min-height */
+    align-items: center;
+    gap: 22px;
   }
 
-  .ovika-consult-main-title {
-    font-size: 1.8rem;
-    text-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
-  }
+  .ovk-left__title{ font-size: 1.9rem }
+  .ovk-left__desc{ font-size: 1rem }
 
-  .ovika-consult-desc {
-    font-size: 1rem;
-    margin-bottom: 25px;
-  }
-
-  .ovika-consult-form {
-    width: 100%;
-  }
-
-  .ovika-consult-input,
-  .ovika-consult-textarea {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 30px;
-    font-size: 0.95rem;
+  .ovk-card{
+    width: 94%;
+    padding: 22px 18px 18px;
+    gap:12px;
   }
 }
 
-/* 📱 Very Small Mobile */
-@media (max-width: 480px) {
-  .ovika-consult-main-title {
-    font-size: 1.5rem;
-  }
-  .ovika-consult-main-title {
-  font-size: clamp(2rem, 3.5vw, 3.5rem);
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 25px;
-  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  margin-top: -83px;
-}
-
-  .ovika-consult-desc {
-    font-size: 0.9rem;
+/* Small Mobile */
+@media (max-width: 480px){
+  .ovk-hero,
+  .ovk-hero__img{
+    min-height: 640px;         /* a bit shorter for tiny screens */
   }
 
-  .ovika-consult-form {
-    width: 100%;
-    gap: 14px;
-  }
+  .ovk-left__title{ font-size: 1.6rem }
+  .ovk-top__title{ font-size: 1.35rem }
+  .ovk-card__title{ font-size: 1.35rem }
+  .ovk-input, .ovk-textarea{ padding: 13px 14px; font-size:.98rem }
+  .ovk-cta{ padding: 13px 18px; font-size: 1rem }
 
-  .ovika-consult-input,
-  .ovika-consult-textarea {
-    padding: 14px 18px;
-  }
-
-  .ovika-consult-btn {
-    padding: 14px 22px;
-    font-size: 1rem;
+  /* If content still overflows on very small devices, allow scroll inside overlay */
+  .ovk-hero__overlay{
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
   }
 }

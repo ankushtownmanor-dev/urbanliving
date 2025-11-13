@@ -1,3 +1,4 @@
+// Owner.jsx
 import React from 'react';
 import './Owner.css';
 import { MdVerified, MdOutlineLoop } from 'react-icons/md';
@@ -6,19 +7,19 @@ import { BiSupport } from 'react-icons/bi';
 export default function Owner() {
   return (
     <section className="ovika-hero">
-      {/* Background image rendered via JSX */}
+      {/* Background image */}
       <img
         className="ovika-hero__bg"
-        src="Group 78.png"  /* replace with your exact villa image path if different */
+        src="Group 78.png"   /* update to your actual path if different */
         alt="Modern villa exterior"
         loading="eager"
         decoding="async"
       />
 
-      {/* Overlay for readability */}
+      {/* Readability overlay */}
       <div className="ovika-hero__overlay" />
 
-      {/* Top badges */}
+      {/* Optional badges (kept from your code) */}
       <div className="ovika-hero__badges">
         <div className="ovika-badge">
           <MdVerified className="ovika-badge__icon" aria-hidden="true" />
@@ -45,16 +46,15 @@ export default function Owner() {
         <p className="ovika-hero__subtitle">
           We take care of your rental business end to end, so you earn without the stress
         </p>
-        <div className="ovika-btn-group">
-  <button className="ovika-btn ovika-btn-white">
-    Get Started
-    <span className="ovika-arrow">→</span>
-  </button>
-  
-  <button className="ovika-btn ovika-btn-orange">
-    Free
-  </button>
-</div>
+
+        {/* NEW dual-button pill */}
+        <div className="ovika-cta-pill">
+          <button className="ovika-cta ovika-cta--white">
+            <span>Start Earning</span>
+            <span className="ovika-cta__arrow">→</span>
+          </button>
+          <button className="ovika-cta ovika-cta--orange">Now</button>
+        </div>
       </div>
     </section>
   );
