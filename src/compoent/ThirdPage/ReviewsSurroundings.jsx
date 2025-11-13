@@ -164,7 +164,7 @@ import "./ReviewsSurroundings.css";
 
 const ReviewsSurroundings = ({ propertyName }) => {
   const reviews = [
-    { label: "Staff", rating: 4.8 },
+    { label: "Host", rating: 4.8 },
     { label: "Comfort", rating: 4.6 },
     { label: "Cleanliness", rating: 4.9 },
     { label: "Facilities", rating: 4.5 },

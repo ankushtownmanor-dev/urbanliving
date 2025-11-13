@@ -169,7 +169,7 @@
 }
 
 /* Responsive */
-@media (max-width: 900px) {
+@media (max-width: 786px) {
   .navbar-inner {
     width: 100%;
     border-radius: 0;
@@ -201,5 +201,9 @@
     font-size: 14px;
     padding: 0 18px;
     border-radius: 18px;
+  }
+  .username-text-change {
+    display: none !important;
+    color: #50c23e;
   }
 }

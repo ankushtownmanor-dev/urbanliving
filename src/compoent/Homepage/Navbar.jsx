@@ -512,6 +512,34 @@ function Navbar() {
     setUserMenuOpen(false);
     navigate("/dashboard");
   };
+  const responsiveCSS = `
+@media (max-width: 900px) {
+  .navbar-outer {
+    padding: 0 !important;
+    min-height: 67px !important;
+  }
+
+  ...
+
+  .mobile-link-row {
+    font-size: 16px !important;
+    color: #232323;
+    display: flex;
+    flex-direction: column;
+    gap: 21px;
+    font-weight: 500;
+    align-items: flex-start;
+    padding-left: 24px;
+    margin-bottom: 5px;
+  }
+
+  /* 👇 Added code: hide username in mobile view */
+  .username-text {
+    display: none !important;
+  }
+}
+`;
+
 
   return (
     <>
@@ -637,11 +665,12 @@ function Navbar() {
                   aria-haspopup="true"
                   aria-expanded={userMenuOpen}
                 >
-                  <span style={{ fontSize: "19px", fontWeight: "bold", marginRight: "9px" }}>
-                    {user.username?.[0]?.toUpperCase() || "U"}
-                  </span>
-                  <span>{user.username}</span>
-                  <span style={{ marginLeft: "7px" }}>{userMenuOpen ? "▲" : "▼"}</span>
+               <span style={{ fontSize: "19px", marginRight: "9px" }}>
+  {user.username?.[0]?.toUpperCase() || "U"}
+</span>
+<span className="username-text">{user.username}</span>
+<span style={{ marginLeft: "7px" }}>{userMenuOpen ? "▲" : "▼"}</span>
+
                 </button>
                 {userMenuOpen && (
                   <div

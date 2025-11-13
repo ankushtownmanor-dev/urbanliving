@@ -87,7 +87,7 @@
 
 
 .living-text {
-  font-size: 14px;
+  font-size: 10px;
   color: #555;
   line-height: 1.5;
   flex-grow: 1; /* ✅ makes text take remaining space equally */
