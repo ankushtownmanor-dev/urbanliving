@@ -626,7 +626,7 @@ function Navbar() {
               cursor: "pointer",
               objectFit: "contain",
               position: "absolute",
-              left: "50%",
+              left: "45%",
               transform: "translateX(-50%)",
             }}
             onClick={() => navigate("/")}

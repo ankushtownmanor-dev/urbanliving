@@ -25,7 +25,7 @@ const Home4 = () => {
     title: "TM Lux - 2",
     text: "TM Luxe 2 is a private luxury room within a premium apartment, offering comfort and privacy for modern travelers. The room features an attached toilet and a private balcony, providing a relaxing personal space. It is equipped with an air conditioner, sofa, Google TV, and a coffeemaker for added convenience. The metro station is just a five-minute walk away, and popular shopping and entertainment centers are located in close vicinity.",
     rating: "⭐ 4.9 (85 reviews)",
-    price: "₹3,300 / night",
+    price: "₹3,000 / night",
     btn: "View Property"
   };
 
