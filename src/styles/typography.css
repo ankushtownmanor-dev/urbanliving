@@ -140,3 +140,7 @@ input, textarea, select {
 .font-medium { font-weight: var(--font-weight-medium); }
 .font-semibold { font-weight: var(--font-weight-semibold); }
 .font-bold { font-weight: var(--font-weight-bold); }
+@media (width:786px) {
+
+  
+}

@@ -142,7 +142,7 @@
   }
 
   .step-text {
-    font-size: 0.9rem;
+    font-size: 10px;
     line-height: 1.6;
     text-align: center;
   }
@@ -180,6 +180,6 @@
   }
 
   .step-text {
-    font-size: 1rem;
+    font-size: 10px;
   }
 }

@@ -117,13 +117,13 @@
 .ovk-textarea{ border-radius:16px; resize:none }
 
 /* CTA */
-.ovk-cta{
+.ovk-cta-varnet{
   margin-top:4px;
   display:flex; align-items:center; justify-content:center; gap:10px;
   padding: 14px 20px;
   border:none; border-radius:999px;
-  color:#fff; font-weight:700; font-size:1.05rem; cursor:pointer;
-  background: linear-gradient(90deg, #d62a2a, #a31313 60%, #3b0b0b);
+  color:#fff; font-weight:300; font-size:1.05rem; cursor:pointer;
+  background: #d97706;
   box-shadow: 0 10px 24px rgba(164, 22, 22, .45);
   transition: transform .2s ease, filter .2s ease;
 }

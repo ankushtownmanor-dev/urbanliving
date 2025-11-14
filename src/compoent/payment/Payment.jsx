@@ -1381,18 +1381,19 @@ const Calendar = ({ selectedDates, onDateSelect, minDate = new Date(), disabledD
   );
 };
 
-// ========== MAIN PAYMENT COMPONENT ==========
+// ========== MAIN PAYMENT COMPONENT (MODIFIED WITH PASSPORT, TERMS REMOVED) ==========
 function Payment() {
   const [step, setStep] = useState(1);
   const [property, setProperty] = useState(null);
   const [propertyLoading, setPropertyLoading] = useState(true);
   const [propertyError, setPropertyError] = useState('');
   const [formData, setFormData] = useState({
-    termsAgreed: false,
+    // termsAgreed removed — you will add your own terms UI
     checkInDate: '',
     checkOutDate: '',
     phoneOtpVerified: false,
     aadhaarVerified: false,
+    passportVerified: false, // added
     uploadedPhoto: null,
   });
 
@@ -1407,6 +1408,12 @@ function Payment() {
 
   const [aadhaarNumber, setAadhaarNumber] = useState('');
   const [isAadhaarLoading, setIsAadhaarLoading] = useState(false);
+
+  // Passport states (in-memory only)
+  const [verificationMethod, setVerificationMethod] = useState('aadhaar'); // 'aadhaar' | 'passport'
+  const [passportInput, setPassportInput] = useState(''); // client_id or passport number (not persisted)
+  const [isPassportLoading, setIsPassportLoading] = useState(false);
+  const [passportError, setPassportError] = useState('');
 
   const [pricing, setPricing] = useState({
     subtotal: 0,
@@ -1479,6 +1486,7 @@ function Payment() {
   useEffect(() => {
     if (!hasLoadedFromStorageRef.current) return;
     try {
+      // Do NOT persist passportInput — it's in-memory only
       localStorage.setItem(STORAGE_KEYS.formData, JSON.stringify(formData));
     } catch {}
   }, [formData]);
@@ -1527,9 +1535,9 @@ function Payment() {
   ];
 
   const handleNext = () => {
-    if (step === 2 && !formData.termsAgreed) return;
+    // Terms check removed (you will add terms yourself)
     if (step === 3 && (!formData.checkInDate || !formData.checkOutDate || pricing.total <= 0)) return;
-    if (step === 4 && (!formData.phoneOtpVerified || !formData.aadhaarVerified)) return;
+    if (step === 4 && (!formData.phoneOtpVerified || !(formData.aadhaarVerified || formData.passportVerified))) return;
     if (step === 5 && !formData.uploadedPhoto) return;
 
     if (step < steps.length) {
@@ -1563,10 +1571,10 @@ function Payment() {
 
   useEffect(() => {
     const allStepsComplete =
-      formData.termsAgreed &&
+      // Terms requirement removed intentionally
       (formData.checkInDate && formData.checkOutDate && pricing.total > 0) &&
       formData.phoneOtpVerified &&
-      formData.aadhaarVerified &&
+      (formData.aadhaarVerified || formData.passportVerified) && // allow either
       formData.uploadedPhoto;
     setIsPayNowEnabled(allStepsComplete);
   }, [formData, pricing]);
@@ -1660,13 +1668,13 @@ function Payment() {
       setIsPhotoUploading(true);
       setUploading(true);
       
-      const formData = new FormData();
-      formData.append('images', file);
+      const formDataLocal = new FormData();
+      formDataLocal.append('images', file);
       
       try {
         const response = await fetch('https://www.townmanor.ai/api/image/aws-upload-owner-images', {
           method: 'POST',
-          body: formData,
+          body: formDataLocal,
         });
         
         const data = await response.json();
@@ -1750,8 +1758,8 @@ function Payment() {
     }
   };
 
-  const handleSubmitOtp = async (otpValue) => {
-    if (!otpValue || !(otpValue.length === 4 || otpValue.length === 6)) {
+  const handleSubmitOtp = async (otpValueParam) => {
+    if (!otpValueParam || !(otpValueParam.length === 4 || otpValueParam.length === 6)) {
       showAlert('Please enter a valid 4 or 6-digit OTP.');
       return;
     }
@@ -1761,7 +1769,7 @@ function Payment() {
     try {
       const response = await axios.post('https://kyc-api.surepass.io/api/v1/telecom/submit-otp', {
         client_id: clientId,
-        otp: otpValue
+        otp: otpValueParam
       }, {
         headers: {
           'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg'
@@ -1850,7 +1858,67 @@ function Payment() {
       setIsAadhaarLoading(false);
     }
   };
-  
+
+  // ----------------- Passport verification -----------------
+  const SUREPASS_PASSPORT_VERIFY_URL = 'https://kyc-api.surepass.app/api/v1/passport/passport/verify';
+  const SUREPASS_BEARER = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg';
+
+  const handleVerifyPassport = async () => {
+    setFormData(prev => ({ ...prev, passportVerified: false }));
+    setPassportError('');
+    if (!passportInput || passportInput.trim().length < 3) {
+      showAlert('Please enter a passport identifier or client_id (at least 3 characters).');
+      return;
+    }
+    setIsPassportLoading(true);
+    showAlert('Verifying passport — please wait...');
+    try {
+      // Try two payload shapes: id_number (like Aadhaar) and client_id (some APIs expect this)
+      // First try id_number style
+      let res;
+      try {
+        res = await axios.post(SUREPASS_PASSPORT_VERIFY_URL, { id_number: passportInput.trim() }, {
+          headers: {
+            Authorization: SUREPASS_BEARER,
+            'Content-Type': 'application/json'
+          },
+          timeout: 20000
+        });
+      } catch (errInner) {
+        // if first fails, try client_id
+        try {
+          res = await axios.post(SUREPASS_PASSPORT_VERIFY_URL, { client_id: passportInput.trim() }, {
+            headers: {
+              Authorization: SUREPASS_BEARER,
+              'Content-Type': 'application/json'
+            },
+            timeout: 20000
+          });
+        } catch (err2) {
+          throw err2;
+        }
+      }
+
+      const data = res?.data || {};
+      if (data.success === true) {
+        setFormData(prev => ({ ...prev, passportVerified: true }));
+        showAlert('Passport verified successfully');
+      } else {
+        const msg = data?.message || 'Passport verification failed';
+        setPassportError(msg);
+        showAlert(msg);
+      }
+    } catch (err) {
+      console.error('Passport verify error', err);
+      const msg = err.response?.data?.message || err.message || 'Passport verification error';
+      setPassportError(msg);
+      showAlert(msg);
+    } finally {
+      setIsPassportLoading(false);
+      // passportInput stays only in memory (we do not persist it)
+    }
+  };
+
   const CustomAlert = ({ message, onClose }) => {
     return (
       <div className="alert__overlay">
@@ -1876,8 +1944,8 @@ function Payment() {
     setIsSubmitting(true);
   
     try {
-      if (!formData.phoneOtpVerified || !formData.aadhaarVerified) {
-        showAlert('Please verify your Aadhar and Phone number.');
+      if (!formData.phoneOtpVerified || !(formData.aadhaarVerified || formData.passportVerified)) {
+        showAlert('Please verify your phone and either Aadhaar or Passport before proceeding.');
         return;
       }
   
@@ -1897,7 +1965,7 @@ function Payment() {
         phone_number: phoneDigits.join(''),
         aadhar_number: aadhaarNumber || '',
         user_photo: formData.uploadedPhoto || '',
-        terms_verified: !!formData.termsAgreed,
+        terms_verified: !!formData.termsAgreed, // kept for backend payload; you can control when you add your terms UI
         email: userLocal.email || '',
       };
       console.log('Booking details:', bookingDetails);
@@ -1927,64 +1995,6 @@ function Payment() {
     }
   };
   
-
-  // const handleProceedToPayment = async (bookingIdParam) => {
-  //   console.log('Proceeding to payment for booking ID:', bookingIdParam);
-  //   try {
-  //     localStorage.setItem('paymentType', 'coliving');
-  //     if (bookingIdParam) localStorage.setItem('bookingId', bookingIdParam);
-      
-  //     const userResponse = await fetch(`https://www.townmanor.ai/api/user/${username}`);
-  //     if (!userResponse.ok) {
-  //       throw new Error('Failed to fetch user data');
-  //     }
-  //     const userData = await userResponse.json();
-
-  //     const txnid = 'OID' + Date.now();
-
-  //     const paymentData = {
-  //       key: 'UvTrjC',
-  //       txnid: txnid,
-  //       amount: pricing.total,
-  //       productinfo: 'Room Booking',
-  //       firstname: userData.name || username || '',
-  //       email: userData.email || '',
-  //       phone: userData.phone || '',
-  //       surl: `https://townmanor.ai/api/boster/payu/success?redirectUrl=https://www.ovika.co.in/success`,
-  //       furl: `https://townmanor.ai/api/boster/payu/failure?redirectUrl=https://www.ovika.co.in/failure`,
-  //       udf1: bookingIdParam || '',
-  //       service_provider: 'payu_paisa'
-  //     };
-
-  //     const response = await axios.post('https://townmanor.ai/api/payu/payment', paymentData);
-
-  //     if (!response.data || !response.data.paymentUrl || !response.data.params) {
-  //       throw new Error('Invalid payment response received');
-  //     }
-
-  //     const form = document.createElement('form');
-  //     form.method = 'POST';
-  //     form.action = response.data.paymentUrl;
-
-  //     Object.entries(response.data.params).forEach(([key, value]) => {
-  //       if (value !== undefined && value !== null) {
-  //         const input = document.createElement('input');
-  //         input.type = 'hidden';
-  //         input.name = key;
-  //         input.value = value.toString();
-  //         form.appendChild(input);
-  //       }
-  //     });
-
-  //     document.body.appendChild(form);
-  //     form.submit();
-  //     document.body.removeChild(form);
-
-  //   } catch (error) {
-  //     console.error('Payment initiation failed:', error);
-  //     showAlert(error.response?.data?.message || error.message || 'Failed to initiate payment. Please try again.');
-  //   }
-  // };
 const handleProceedToPayment = async (bookingIdParam) => {
   console.log('Proceeding to payment for booking ID:', bookingIdParam);
   try {
@@ -2042,6 +2052,7 @@ const handleProceedToPayment = async (bookingIdParam) => {
     showAlert(error.response?.data?.message || error.message || 'Failed to initiate payment. Please try again.');
   }
 };
+
   return (
    <>
      <div className="booking-form-wrapper">
@@ -2090,119 +2101,44 @@ const handleProceedToPayment = async (bookingIdParam) => {
             </div>
           )}
 
-          {step === 2 && (
-            // <div>
-            //   <h2 className="form-step-title">Terms & Conditions</h2>
-            //   <div className="terms-container">
-            //     <p className="font-bold mb-2">1. Booking Agreement</p>
-            //     <p className="mb-4">
-            //       By confirming this booking, you agree to abide by all house rules, including check-in/check-out times, noise restrictions, and guest limits. Violation of these terms may result in a fine or cancellation of your reservation without a refund.
-            //     </p>
-            //     <p className="font-bold mb-2">2. Cancellation Policy</p>
-            //     <p className="mb-4">
-            //       A full refund will be provided for cancellations made within 48 hours of booking, if the check-in date is at least 14 days away. 50% refund for cancellations made 7 days before check-in. No refund for cancellations within 7 days of check-in.
-            //     </p>
-            //     <p className="font-bold mb-2">3. Damage & Liability</p>
-            //     <p className="mb-4">
-            //       Guests are responsible for any damage caused to the property and its contents during their stay. The host reserves the right to charge the guest for repair or replacement costs.
-            //     </p>
-            //     <p className="font-bold mb-2">4. Payment & Pricing</p>
-            //     <p className="mb-4">
-            //       All prices are final and non-negotiable. Additional taxes and service fees are included in the final price. Payment must be completed in full before the reservation is confirmed.
-            //     </p>
-            //     <p className="font-bold mb-2">5. Privacy</p>
-            //     <p className="mb-4">
-            //       Your personal information will be used solely for the purpose of this booking and will not be shared with third parties.
-            //     </p>
-            //   </div>
-            //   <label className="terms-agreement-label">
-            //     <input
-            //       type="checkbox"
-            //       className="hidden"
-            //       checked={formData.termsAgreed}
-            //       onChange={(e) => setFormData({ ...formData, termsAgreed: e.target.checked })}
-            //     />
-            //     <span className={`custom-checkbox ${formData.termsAgreed ? 'is-checked' : ''}`}>
-            //       {formData.termsAgreed && <CheckCircle size={16} color="white" />}
-            //     </span>
-            //     <span className="custom-checkbox-text">I have read and agree to the Terms & Conditions.</span>
-            //   </label>
-            // </div>
-    <div>
-  <h2 className="form-step-title">Terms & Conditions</h2>
-  <div className="terms-container">
-    <p className="mb-4">
-      1. By booking a property through OVIKA, the guest agrees to comply with these Terms & Conditions. OVIKA acts as a booking facilitator for listed properties owned or managed by its partners or affiliates. Guests must be at least 18 years of age to make a booking.
-    </p>
-
-    <p className="mb-4">
-      2. All bookings are subject to availability and confirmation by OVIKA. Full or partial payment must be made at the time of booking. Accepted payment methods include credit/debit cards, UPI, bank transfers, or any other mode listed on the website. Prices are displayed in INR and include applicable taxes unless stated otherwise. Any promotional offers or discounts apply only if booked within the specified period. Payment must be completed in full before confirmation.
-    </p>
-
-    <p className="mb-4">
-      3. Standard check-in time is 2:00 PM and standard check-out time is 11:00 AM. Early check-in or late check-out is subject to availability and may incur additional charges. A valid government ID (Aadhaar, Passport, or Driving License) is mandatory for all adult guests at check-in.
-    </p>
-
-    <p className="mb-4">
-      4. Cancellations made 48 hours or more before check-in are eligible for a full refund. Cancellations made within 48 hours of check-in will incur a one-night charge or as per the property’s individual policy. No-shows or early check-outs are non-refundable. Refunds will be processed within 7–10 business days through the original payment mode.
-    </p>
-
-    <p className="mb-4">
-      5. Guests must maintain decorum and respect the property, neighbors, and staff. Loud music, parties, or unlawful activities are strictly prohibited unless prior written approval is obtained. Smoking is not allowed in non-smoking properties. Any damage to property, furnishings, or equipment caused by the guest will be charged to the guest at actual cost.
-    </p>
-
-    <p className="mb-4">
-      6. Each property has a maximum occupancy limit as stated in its listing. Extra guests may be allowed only upon prior approval and may attract additional charges. Pets are allowed only in designated pet-friendly properties.
-    </p>
-
-    <p className="mb-4">
-      7. Daily or periodic housekeeping services may be provided depending on the booking plan. Guests must promptly inform OVIKA or the property manager of any maintenance issues. OVIKA reserves the right to access the unit for cleaning, maintenance, or inspection with prior notice.
-    </p>
-
-    <p className="mb-4">
-      8. Guests are responsible for any damage caused to the property or its contents during their stay. OVIKA and the property owners are not responsible for loss of personal belongings, valuables, or injuries during the stay. Guests are advised to follow all safety guidelines. OVIKA shall not be liable for disruptions beyond its control such as power cuts, natural calamities, or government restrictions.
-    </p>
-
-    <p className="mb-4">
-      9. In case of unforeseen circumstances such as maintenance or overbooking, OVIKA reserves the right to relocate the guest to an equivalent property or provide a full refund.
-    </p>
-
-    <p className="mb-4">
-      10. Guest information is collected solely for booking, communication, and legal compliance. OVIKA respects your privacy and follows applicable data protection laws. Your personal information will not be shared with third parties except as required for booking and compliance. For more details, please refer to our Privacy Policy.
-    </p>
-
-    <p className="mb-4">
-      11. OVIKA or the property owner reserves the right to terminate a booking without refund if the guest violates these terms, engages in illegal activity, or causes disturbance to others.
-    </p>
-
-    <p className="mb-4">
-      12. These Terms & Conditions are governed by and construed in accordance with the laws of India. Any disputes shall be subject to the exclusive jurisdiction of courts in Noida, Uttar Pradesh.
-    </p>
-
-    <p className="mb-4">
-      13. For any booking-related queries or concerns, please contact us at:
-      <br />📧 enquiry@ovikaliving.com
-      <br />📞 (+91) 7042888903
-    </p>
-  </div>
-
-  <label className="terms-agreement-label">
-    <input
-      type="checkbox"
-      className="hidden"
-      checked={formData.termsAgreed}
-      onChange={(e) => setFormData({ ...formData, termsAgreed: e.target.checked })}
-    />
-    <span className={`custom-checkbox ${formData.termsAgreed ? 'is-checked' : ''}`}>
-      {formData.termsAgreed && <CheckCircle size={16} color="white" />}
-    </span>
-    <span className="custom-checkbox-text">
-      I have read and agree to the Terms & Conditions.
-    </span>
-  </label>
-</div>
-
-
+            {step === 2 && (
+            <div>
+              <h2 className="form-step-title">Terms & Conditions</h2>
+              <div className="terms-container">
+                <p className="font-bold mb-2">1. Booking Agreement</p>
+                <p className="mb-4">
+                  By confirming this booking, you agree to abide by all house rules, including check-in/check-out times, noise restrictions, and guest limits. Violation of these terms may result in a fine or cancellation of your reservation without a refund.
+                </p>
+                <p className="font-bold mb-2">2. Cancellation Policy</p>
+                <p className="mb-4">
+                  A full refund will be provided for cancellations made within 48 hours of booking, if the check-in date is at least 14 days away. 50% refund for cancellations made 7 days before check-in. No refund for cancellations within 7 days of check-in.
+                </p>
+                <p className="font-bold mb-2">3. Damage & Liability</p>
+                <p className="mb-4">
+                  Guests are responsible for any damage caused to the property and its contents during their stay. The host reserves the right to charge the guest for repair or replacement costs.
+                </p>
+                <p className="font-bold mb-2">4. Payment & Pricing</p>
+                <p className="mb-4">
+                  All prices are final and non-negotiable. Additional taxes and service fees are included in the final price. Payment must be completed in full before the reservation is confirmed.
+                </p>
+                <p className="font-bold mb-2">5. Privacy</p>
+                <p className="mb-4">
+                  Your personal information will be used solely for the purpose of this booking and will not be shared with third parties.
+                </p>
+              </div>
+              <label className="terms-agreement-label">
+                <input
+                  type="checkbox"
+                  className="hidden"
+                  checked={formData.termsAgreed}
+                  onChange={(e) => setFormData({ ...formData, termsAgreed: e.target.checked })}
+                />
+                <span className={`custom-checkbox ${formData.termsAgreed ? 'is-checked' : ''}`}>
+                  {formData.termsAgreed && <CheckCircle size={16} color="white" />}
+                </span>
+                <span className="custom-checkbox-text">I have read and agree to the Terms & Conditions.</span>
+              </label>
+            </div>
           )}
 
           {step === 3 && (
@@ -2247,127 +2183,19 @@ const handleProceedToPayment = async (bookingIdParam) => {
           )}
 
           {step === 4 && (
-            // <div>
-            //   <h2 className="form-step-title">Verification</h2>
-            //   <div className="verification-container">
-            //     <div className="verification-card">
-            //       <h3 className="verification-title">Phone OTP</h3>
-            //       <div className="phone-inputs-container">
-            //         <label className="digit-inputs-label">Enter Mobile Number</label>
-            //         <div className="digit-inputs" role="group" aria-label="Mobile number">
-            //           {phoneDigits.map((d, i) => (
-            //             <input
-            //               key={i}
-            //               type="text"
-            //               inputMode="numeric"
-            //               pattern="[0-9]*"
-            //               maxLength={1}
-            //               value={d}
-            //               ref={el => phoneInputsRef.current[i] = el}
-            //               onChange={(e) => handlePhoneChange(i, e.target.value.replace(/\D/g, ''))}
-            //               onKeyDown={(e) => handlePhoneKeyDown(i, e)}
-            //               className={`digit-box ${d ? 'is-filled' : ''}`}
-            //               disabled={formData.phoneOtpVerified}
-            //             />
-            //           ))}
-            //         </div>
-            //         <button
-            //           onClick={handleSendOtp}
-            //           disabled={formData.phoneOtpVerified || phoneDigits.join('').length !== 10}
-            //           className={`verification-button ${
-            //             formData.phoneOtpVerified
-            //               ? 'verification-button-verified'
-            //               : 'verification-button-default'
-            //           } send-otp-button`}
-            //         >
-            //           {formData.phoneOtpVerified ? 'Verified' : 'Send OTP'}
-            //         </button>
-            //       </div>
-
-            //       {showOtpInputs && !formData.phoneOtpVerified && (
-            //         <div className="otp-inputs-container">
-            //           <label className="digit-inputs-label">Enter OTP</label>
-            //           <div className="verification-action">
-            //             <input
-            //               ref={otpInputRef}
-            //               type="text"
-            //               inputMode="numeric"
-            //               pattern="[0-9]*"
-            //               maxLength={6}
-            //               value={otpValue}
-            //               onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ''))}
-            //               className="aadhaar-input"
-            //               placeholder="Enter 4 or 6-digit OTP"
-            //             />
-            //             <button
-            //               onClick={() => handleSubmitOtp(otpValue)}
-            //               disabled={!(otpValue.length === 4 || otpValue.length === 6) || loading}
-            //               className={`verification-button ${
-            //                 (otpValue.length === 4 || otpValue.length === 6) && !loading
-            //                   ? 'verification-button-default'
-            //                   : 'verification-button-default'
-            //               }`}
-            //             >
-            //               {loading ? 'Verifying…' : 'Verify'}
-            //             </button>
-            //           </div>
-            //           {otpError && <p className="otp-error-text">{otpError}</p>}
-            //         </div>
-            //       )}
-
-            //       <div className="verification-status-icon">
-            //         {formData.phoneOtpVerified ? (
-            //           <CheckCircle size={24} color="#8b0000" />
-            //         ) : (
-            //           <XCircle size={24} color="gray" />
-            //         )}
-            //       </div>
-            //     </div>
-
-            //     <div className="verification-card">
-            //       <h3 className="verification-title">Aadhaar Check</h3>
-            //       <label className="digit-inputs-label">Enter Aadhaar Number</label>
-            //       <div className="aadhaar-inputs-container">
-                   
-            //         <input
-            //           type="text"
-            //           inputMode="numeric"
-            //           pattern="[0-9]*"
-            //           maxLength={12}
-            //           value={aadhaarNumber}
-            //           onChange={(e) => setAadhaarNumber(e.target.value.replace(/\D/g, ''))}
-            //           className="aadhaar-input"
-            //           disabled={formData.aadhaarVerified}
-            //           placeholder="12-digit Aadhaar"
-            //         />
-            //         <button
-            //           onClick={handleVerifyAadhaar}
-            //           disabled={formData.aadhaarVerified || !aadhaarNumber || isAadhaarLoading}
-            //           className={`verification-button ${
-            //             formData.aadhaarVerified
-            //               ? 'verification-button-verified'
-            //               : 'verification-button-default'
-            //           }`}
-            //         >
-            //           {formData.aadhaarVerified ? 'Verified' : (isAadhaarLoading ? 'Verifying…' : 'Verify Aadhaar')}
-            //         </button>
-            //       </div>
-            //       <div className="verification-status-icon">
-            //         {formData.aadhaarVerified ? (
-            //           <CheckCircle size={24} color="#8b0000" />
-            //         ) : (
-            //           isAadhaarLoading ? (
-            //             <Loader size={24} className="animate-spin text-gray-400" />
-            //           ) : (
-            //             <XCircle size={24} color="gray" />
-            //           )
-            //         )}
-            //       </div>
-            //     </div>
-            //   </div>
-            // </div>
-            <div>
+<div>
   <h2 className="form-step-title">Verification</h2>
+
+  <div style={{ marginBottom: 12 }}>
+    <label style={{ marginRight: 12 }}>
+      <input type="radio" name="verif-method" value="aadhaar" checked={verificationMethod === 'aadhaar'} onChange={() => setVerificationMethod('aadhaar')} /> Aadhaar
+    </label>
+    <label>
+      <input type="radio" name="verif-method" value="passport" checked={verificationMethod === 'passport'} onChange={() => setVerificationMethod('passport')} /> Passport
+    </label>
+    <div style={{ fontSize: 12, color: '#666', marginTop: 6 }}>Passport verification — for foreign customers or where Aadhaar not available.</div>
+  </div>
+
   <div className="veri-container-1">
     {/* PHONE VERIFICATION */}
     <div className="veri-card-1">
@@ -2443,51 +2271,89 @@ const handleProceedToPayment = async (bookingIdParam) => {
       </div>
     </div>
 
-    {/* AADHAAR VERIFICATION */}
-    <div className="veri-card-1">
-      <h3 className="veri-title-1">Aadhaar Check</h3>
-      <label className="veri-label-1">Enter Aadhaar Number</label>
-      <div className="veri-aadhaar-wrap-1">
-        <input
-          type="text"
-          inputMode="numeric"
-          pattern="[0-9]*"
-          maxLength={12}
-          value={aadhaarNumber}
-          onChange={(e) => setAadhaarNumber(e.target.value.replace(/\D/g, ""))}
-          className="veri-input-1"
-          disabled={formData.aadhaarVerified}
-          placeholder="12-digit Aadhaar"
-        />
-        <button
-          onClick={handleVerifyAadhaar}
-          disabled={formData.aadhaarVerified || !aadhaarNumber || isAadhaarLoading}
-          className={`veri-btn-1 ${
-            formData.aadhaarVerified
-              ? "veri-btn-verified-1"
-              : "veri-btn-default-1"
-          }`}
-        >
-          {formData.aadhaarVerified
-            ? "Verified"
-            : isAadhaarLoading
-            ? "Verifying…"
-            : "Verify Aadhaar"}
-        </button>
+    {/* AADHAAR or PASSPORT verification card(s) */}
+    {verificationMethod === 'aadhaar' ? (
+      <div className="veri-card-1">
+        <h3 className="veri-title-1">Aadhaar Check</h3>
+        <label className="veri-label-1">Enter Aadhaar Number</label>
+        <div className="veri-aadhaar-wrap-1">
+          <input
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={12}
+            value={aadhaarNumber}
+            onChange={(e) => setAadhaarNumber(e.target.value.replace(/\D/g, ""))}
+            className="veri-input-1"
+            disabled={formData.aadhaarVerified}
+            placeholder="12-digit Aadhaar"
+          />
+          <button
+            onClick={handleVerifyAadhaar}
+            disabled={formData.aadhaarVerified || !aadhaarNumber || isAadhaarLoading}
+            className={`veri-btn-1 ${
+              formData.aadhaarVerified
+                ? "veri-btn-verified-1"
+                : "veri-btn-default-1"
+            }`}
+          >
+            {formData.aadhaarVerified
+              ? "Verified"
+              : isAadhaarLoading
+              ? "Verifying…"
+              : "Verify Aadhaar"}
+          </button>
+        </div>
+        <div className="veri-icon-1">
+          {formData.aadhaarVerified ? (
+            <CheckCircle size={24} color="#8b0000" />
+          ) : isAadhaarLoading ? (
+            <Loader size={24} className="animate-spin text-gray-400" />
+          ) : (
+            <XCircle size={24} color="gray" />
+          )}
+        </div>
       </div>
-      <div className="veri-icon-1">
-        {formData.aadhaarVerified ? (
-          <CheckCircle size={24} color="#8b0000" />
-        ) : isAadhaarLoading ? (
-          <Loader size={24} className="animate-spin text-gray-400" />
-        ) : (
-          <XCircle size={24} color="gray" />
-        )}
+    ) : (
+      <div className="veri-card-1">
+        <h3 className="veri-title-1">Passport Check</h3>
+        <label className="veri-label-1">Enter Passport number or client_id</label>
+        <div className="veri-aadhaar-wrap-1">
+          <input
+            type="text"
+            value={passportInput}
+            onChange={(e) => setPassportInput(e.target.value)}
+            className="veri-input-1"
+            disabled={formData.passportVerified}
+            placeholder="Passport no. or client_id (kept in memory only)"
+          />
+          <button
+            onClick={handleVerifyPassport}
+            disabled={formData.passportVerified || !passportInput || isPassportLoading}
+            className={`veri-btn-1 ${
+              formData.passportVerified ? "veri-btn-verified-1" : "veri-btn-default-1"
+            }`}
+          >
+            {formData.passportVerified ? "Verified" : isPassportLoading ? "Verifying…" : "Verify Passport"}
+          </button>
+        </div>
+        {passportError && <p style={{ color: 'red', marginTop: 6 }}>{passportError}</p>}
+        <div className="veri-icon-1">
+          {formData.passportVerified ? (
+            <CheckCircle size={24} color="#8b0000" />
+          ) : isPassportLoading ? (
+            <Loader size={24} className="animate-spin text-gray-400" />
+          ) : (
+            <XCircle size={24} color="gray" />
+          )}
+        </div>
+        <div style={{ marginTop: 8, fontSize: 12, color: '#666' }}>
+          Note: Some passport verify endpoints expect a client_id returned after uploading the passport image. If you only have passport number and verification fails, I can add an upload→get client_id→auto-verify flow.
+        </div>
       </div>
-    </div>
+    )}
   </div>
 </div>
-
           )}
 
           {step === 5 && (
@@ -2571,7 +2437,7 @@ const handleProceedToPayment = async (bookingIdParam) => {
           </button>
           <button
             onClick={handleNext}
-            disabled={step === steps.length || (step === 2 && !formData.termsAgreed)}
+            disabled={step === steps.length}
             className="navigation-button next-button"
           >
             Next

@@ -31,7 +31,7 @@
 .manage-ovika.sub {
   text-align: center;
   color: #444;
-  font-size: clamp(16px, 1.5vw, 18px);
+  font-size: 15px;
   font-weight: 400;
   margin-bottom: 36px;
 }
@@ -126,6 +126,6 @@
     font-size: 17px;
   }
   .manage-ovika.text {
-    font-size: 13px;
+    font-size: 10px;
   }
 }

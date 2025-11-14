@@ -83,7 +83,7 @@ export default function OvikaConsultForm() {
               rows={3}
             />
 
-            <button type="submit" className="ovk-cta">
+            <button type="submit" className="ovk-cta-varnet">
               <span>List With Ovika</span>
               <span className="ovk-cta__arrow">→</span>
             </button>

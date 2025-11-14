@@ -65,7 +65,7 @@
 }
 
 .tmxluxeTest-text {
-  font-size: 16px;
+  font-size: 10px;
   line-height: 1.7;
   color: #333;
   margin-bottom: 30px;
@@ -108,7 +108,7 @@
   }
 
   .tmxluxeTest-subtitle {
-    font-size: 0.9rem;
+    font-size: 15px;
     margin-bottom: 40px;
   }
 
@@ -156,7 +156,7 @@
   }
 
   .tmxluxeTest-textMobile {
-    font-size: 14px;
+    font-size: 10px;
     line-height: 1.65;
     color: #333;
     margin-bottom: 20px;
@@ -204,7 +204,7 @@
   }
 
   .tmxluxeTest-subtitle {
-    font-size: 0.85rem;
+    font-size: 15px;
     margin-bottom: 30px;
   }
 
@@ -219,7 +219,7 @@
   }
 
   .tmxluxeTest-textMobile {
-    font-size: 13px;
+    font-size: 10px;
     line-height: 1.6;
   }
 

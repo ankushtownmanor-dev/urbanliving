@@ -117,7 +117,7 @@
   text-align: center;
   color: #666;
   margin-bottom: 60px;
-  max-width: 600px;
+  max-width: 400px;
   margin-left: auto;
   margin-right: auto;
   line-height: 1.6;
@@ -329,7 +329,7 @@
 .benefit-card p {
   color: #131313;
   line-height: 1.4;
-  font-size: 0.85rem;
+  font-size: 10px;
   transition: all 0.3s ease;
   transform: translateZ(5px);
 }
@@ -367,7 +367,7 @@
 }
 
 .property-types-subtitle {
-  font-size: 1.1rem;
+  font-size: 15px;
   color: #666;
   max-width: 800px;
   margin: 0 auto 40px auto;
@@ -460,7 +460,7 @@
 }
 
 .property-overlay p {
-  font-size: 0.9rem;
+  font-size: 10px;
   color: #555;
   line-height: 1.4;
 }
@@ -547,7 +547,7 @@
   }
 
   .property-overlay p {
-    font-size: 0.8rem;
+    font-size: 10px;
   }
 }
 /* Testimonials Section */
@@ -814,7 +814,7 @@
   }
   
   .wm-subtitle {
-    font-size: 1rem;
+    font-size: 15px;
     padding: 0 15px;
     margin-bottom: 30px;
   }
@@ -833,7 +833,7 @@
   }
   
   .wm-card-text p {
-    font-size: 1rem;
+    font-size: 10px;
     line-height: 1.6;
     margin-bottom: 20px;
   }
@@ -973,10 +973,10 @@
     margin-left: -1px;
   }
   .step-description {
-    font-size: 0.9rem;
+    font-size:10px;
   }
   .how-it-works-subtitle{
-    font-size: 0.9rem;
+    font-size: 15px;
   }
 
   /* Section spacing adjust so cards ke upar neeche acha gap rahe */
@@ -1036,14 +1036,14 @@
 
   .property-overlay { padding: 20px 16px 16px; }
   .property-overlay h3 { font-size: 1.6rem; line-height: 1.1; }
-  .property-overlay p { font-size: 0.95rem; opacity: 0.95; }
+  .property-overlay p { font-size: 10px; opacity: 0.95; }
   
   .property-image img {
     object-fit: cover;
     object-position: center;
   }
   .section-subtitle {
-    font-size: 1rem;
+    font-size: 15px;
     font-weight: 400;
     color: #666;
     text-align: center;
@@ -1079,11 +1079,12 @@
   font-size: 2rem;
   margin-top: -33px;
   font-weight: 450;
+  margin-left: 0px;
 
 
 }
 .section-subtitle {
-  font-size: 1rem;
+  font-size: 15px;
   font-weight: 400;
   color: #666;
   text-align: center;
@@ -1173,7 +1174,7 @@
   }
   
   .property-overlay p {
-    font-size: 1rem;
+    font-size: 10px;
   }
 }
 @media (max-width: 768px) {
