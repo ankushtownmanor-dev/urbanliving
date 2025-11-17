@@ -25,7 +25,7 @@
 
 .living-subtext {
   color: #444;
-  font-size: 15px;
+  font-size: 10px;
   margin-bottom: 50px;
   line-height: 1.6;
 }
@@ -116,8 +116,9 @@ background: #c2772b;
   background-color:#c2772b;
 }
 
-.arrow {
+.arrow-main-new {
   font-size: 16px;
+  color: white;
 }
 
 @media (max-width: 768px) {

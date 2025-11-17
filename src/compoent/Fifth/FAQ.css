@@ -71,11 +71,18 @@
     padding: 12px 14px;
   }
 
-  .faq-question {
+  .faq-question-newmanage {
     font-size: 15px;
+     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* font-size: 16px; */
+    /* font-weight: 500; */
+    color: #111;
   }
 
   .faq-answer {
     font-size: 10px;
+       
   }
 }

@@ -143,7 +143,7 @@ const FaqSection = () => {
             className={`faq-item ${activeIndex === index ? "active" : ""}`}
             onClick={() => toggleAnswer(index)}
           >
-            <div className="faq-question">
+            <div className="faq-question-newmanage">
               <span>{item.q}</span>
               <span className="arrow">
                 {activeIndex === index ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}

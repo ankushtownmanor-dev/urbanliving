@@ -81,5 +81,14 @@
 @media (max-width:640px){
   .choose-ovika.container{ padding:36px 16px 32px; }
   .choose-ovika.grid{ grid-template-columns:1fr; gap:18px; }
-  .choose-ovika.cardTitle{ font-size:17px; }
+  .choose-ovika.cardTitle{ font-size:10px; }
+}
+@media (max-width:786px) {
+  
+.choose-ovika.sub{
+  color:#161616;
+  font-size: 10px;
+  font-weight:200;
+  margin-bottom:28px;
+}
 }

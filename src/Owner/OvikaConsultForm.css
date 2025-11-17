@@ -146,6 +146,11 @@
 /* Mobile: fix low height and center content */
 @media (max-width: 768px){
   .ovk-wrap{ padding:38px 14px 54px }
+  .ovk-top__sub{
+  color:var(--ovk-muted);
+  font-size:10px;
+  margin:0;
+}
 
   .ovk-hero{
     min-height: 720px;         /* ensures tall hero on phones */

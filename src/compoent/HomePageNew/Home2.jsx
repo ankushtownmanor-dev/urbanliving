@@ -105,7 +105,7 @@ const Home2 = () => {
                 onClick={() => handleButtonClick(card.link)}
                 
               >
-                {card.btn} <span className="arrow">→</span>
+                {card.btn} <span className="arrow-main-new">→</span>
               </button>
             </div>
           </div>

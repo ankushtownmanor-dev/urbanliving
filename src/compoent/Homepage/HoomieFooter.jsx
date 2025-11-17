@@ -844,7 +844,7 @@ const mobileCSS = `
   
   .logo-col p {
     text-align: center !important;
-    font-size: 14px !important;
+    font-size: 10px !important;
   }
   
   .footer-link-columns {
@@ -886,7 +886,7 @@ const mobileCSS = `
   
   .newsletter-wrapper p {
     white-space: normal !important;
-    font-size: 15px !important;
+    font-size: 10px !important;
     padding: 0 10px !important;
     margin: 0 !important;
     text-align: center !important;
@@ -914,6 +914,16 @@ const mobileCSS = `
   
   .bottom-row > div {
     justify-content: center !important;
+    font-size:10px !important;
+  }
+    .new-link-format{
+    font-size: 10px !important;
+    }
+    .footer-link-columns a,
+  .footer-col.quicklinks-col a,
+  .footer-col.contactus-col span,
+  .footer-col.contactus-col a {
+    font-size: 10px !important;
   }
 }
 `;
@@ -1081,14 +1091,25 @@ const HoomieFooter = () => {
                 Quick Links
               </h3>
               <LinkList
+              className="new-link-format"
                 items={[
+                      "Refund and Cancellation Policy",
+                       "Terms and condition",
+                   "Subscription Plan",
+                    "Privacy Policy",
+                       "Blogs",
+                        "FAQ's",
+
                   "About Us",
-                  "FAQ's",
-                  "Terms and condition",
-                  "Privacy Policy",
-                  "Refund and Cancellation Policy",
-                  "Subscription Plan",
-                  "Blogs",
+                 
+                
+                   
+                 
+                 
+                  
+                 
+                 
+                 
                 ]}
               />
             </div>

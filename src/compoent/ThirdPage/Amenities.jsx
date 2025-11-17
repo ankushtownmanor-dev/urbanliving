@@ -103,7 +103,7 @@ export default function Amenities({ amenities = [] }) {
           amenities.map((item, idx) => (
             <div className="amenity-item" key={idx}>
               {getAmenityIcon(item)}
-              <span>{item}</span>
+              <span className="aminites-tmluxe">{item}</span>
             </div>
           ))
         ) : (

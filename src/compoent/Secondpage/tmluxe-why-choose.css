@@ -4,8 +4,8 @@
   --tmluxe-bg: #ffffff;
   --tmluxe-text: #121212;
   --tmluxe-muted: #5a5a5a;
-  --tmluxe-accent: #f59e0b; /* close to amber/orange accent in heading */
-  --tmluxe-border: #e5e7eb; /* light gray border for 3D card edges */
+  --tmluxe-accent: #f59e0b; 
+  --tmluxe-border: #e5e7eb;
   --tmluxe-shadow-1: 0 2px 6px rgba(0, 0, 0, 0.06);
   --tmluxe-shadow-2: 0 10px 20px rgba(0, 0, 0, 0.06);
   --tmluxe-shadow-inner: inset 0 1px 0 rgba(255,255,255,0.5);
@@ -23,12 +23,12 @@
   margin: 0 auto;
 }
 
+/* Center Heading */
 .tmluxe-heading {
   text-align: center;
   color: var(--tmluxe-text);
   font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    Roboto, "Helvetica Neue", Arial;
   font-weight: 400;
   letter-spacing: 0.2px;
   margin: 6px 0 22px;
@@ -50,6 +50,7 @@
 /* Grid */
 .tmluxe-grid {
   display: grid;
+  place-items: center;   /* PERFECT CENTER FIX */
   grid-template-columns: 1fr;
   gap: 10px;
 }
@@ -66,22 +67,21 @@
   }
 }
 
-/* Card with 3D appearance */
+/* 3D Card */
 .tmluxe-card {
   background: #fff;
   border: 1px solid var(--tmluxe-border);
   border-radius: var(--tmluxe-radius);
-  padding: 22px 22px 20px;
-  box-shadow:
-    var(--tmluxe-shadow-1),
-    var(--tmluxe-shadow-2);
+  padding: 22px;
+  box-shadow: var(--tmluxe-shadow-1), var(--tmluxe-shadow-2);
   position: relative;
   transition: transform 200ms ease, box-shadow 200ms ease;
-  width: 400px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;     /* FULL CENTER ALIGN */
 }
 
 .tmluxe-card::before {
-  /* subtle top highlight for 3D bevel effect */
   content: "";
   position: absolute;
   inset: 0;
@@ -92,19 +92,18 @@
 
 .tmluxe-card:hover {
   transform: translateY(-3px);
-  box-shadow:
-    0 6px 12px rgba(0, 0, 0, 0.08),
-    0 20px 34px rgba(0, 0, 0, 0.10);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08),
+              0 20px 34px rgba(0, 0, 0, 0.10);
 }
 
-/* Icon */
+/* Icon Center */
 .tmluxe-icon-wrap {
   height: 56px;
   width: 56px;
-  display: inline-flex;
+  margin: 0 auto 8px auto;
+  display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 8px;
 }
 
 .tmluxe-icon {
@@ -113,27 +112,26 @@
   display: block;
 }
 
-/* Titles and text */
+/* Title + Text Continue Center */
 .tmluxe-card-title {
   margin: 6px 0 8px;
   font-size: 18px;
   font-weight: 500;
   color: var(--tmluxe-text);
+  text-align: center;
 }
 
 .tmluxe-card-text {
-  margin: 0;
   color: var(--tmluxe-muted);
   line-height: 1.45;
   font-size: 10px;
   max-width: 38ch;
+  margin: 0 auto;          /* CENTER TEXT WIDTH */
+  text-align: center;
 }
 
-/* Better spacing on larger viewports */
+/* Desktop Improvements */
 @media (min-width: 980px) {
-  .tmluxe-card {
-    padding: 26px 26px 22px;
-  }
   .tmluxe-card-title {
     font-size: 20px;
   }
@@ -142,7 +140,7 @@
   }
 }
 
-/* Respect reduced motion */
+/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .tmluxe-card {
     transition: none;

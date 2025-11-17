@@ -251,7 +251,7 @@ body {
   }
 
   .main-page-subtitle {
-    font-size: 1rem;
+    font-size: 10px;
     margin-bottom: 35px;
   }
 
@@ -295,7 +295,7 @@ body {
   }
 
   .main-page-subtitle {
-    font-size: 0.9rem;
+    font-size: 10px;
   }
 
   .hero-form-container {

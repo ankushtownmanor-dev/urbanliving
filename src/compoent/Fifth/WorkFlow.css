@@ -178,7 +178,7 @@ ease;
     width: 90%;
   }
   .how-subtitle {
-  font-size: 15px;
+  font-size: 10px;
   color: #555;
   margin-bottom: 60px;
 }
@@ -187,6 +187,7 @@ ease;
   color: #444;
   line-height: 1.5;
   text-align: center;
+margin-top: 10px;
 }
 
 }

@@ -102,4 +102,7 @@
   .reserve-button:hover {
     background: linear-gradient(to right, #8b0000, #b60000);
   }
+  .aminites-tmluxe{
+    font-size: 11px;
+  }
 }

@@ -719,7 +719,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 6;
+  /* -webkit-line-clamp: 6; */
   -webkit-box-orient: vertical;
 }
 
@@ -814,7 +814,7 @@
   }
   
   .wm-subtitle {
-    font-size: 15px;
+    font-size: 10px;
     padding: 0 15px;
     margin-bottom: 30px;
   }
@@ -851,6 +851,14 @@
   .wm-card-image img {
     max-height: 220px;
   }
+  .property-types-subtitle {
+  font-size: 10px;
+  color: #666;
+  max-width: 800px;
+  margin: 0 auto 40px auto;
+  opacity: 0.9;
+  line-height: 1.5;
+}
 }
 
 /* Ensure the img itself has no white edges */
@@ -976,7 +984,7 @@
     font-size:10px;
   }
   .how-it-works-subtitle{
-    font-size: 15px;
+    font-size: 10px;
   }
 
   /* Section spacing adjust so cards ke upar neeche acha gap rahe */
@@ -1084,7 +1092,7 @@
 
 }
 .section-subtitle {
-  font-size: 15px;
+  font-size: 10px;
   font-weight: 400;
   color: #666;
   text-align: center;
