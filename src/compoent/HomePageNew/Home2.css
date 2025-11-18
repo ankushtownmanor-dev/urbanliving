@@ -137,5 +137,14 @@ ease;
 ease;
     margin-top: 2px;
 }
+.living-subtext {
+    color: #444;
+    font-size: 10px;
+    margin-bottom: 50px;
+    line-height: 1.6;
+    width: 360px;
+    /* text-align: center; */
+    padding-left: 28px;
+}
   
 }

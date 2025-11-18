@@ -19,7 +19,7 @@ export default function ChooseOvika() {
           Why Choose <span className='text-red-600'>Ovika </span>for Property Management<br />
         </h2>
         <p className="choose-ovika sub">
-        Our end-to-end service ensures your property earns consistently — while you enjoy complete <br/> peace of mind.
+        Our end-to-end service ensures your property earns consistently — while you enjoy complete peace of mind.
 From verified tenants to automated rent collection, Ovika manages it all through a  <br/>  trusted commission model.
         </p>
 

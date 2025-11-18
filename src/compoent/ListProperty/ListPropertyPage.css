@@ -815,7 +815,7 @@
   
   .wm-subtitle {
     font-size: 10px;
-    padding: 0 15px;
+    padding: 0 54px;
     margin-bottom: 30px;
   }
   
@@ -858,6 +858,7 @@
   margin: 0 auto 40px auto;
   opacity: 0.9;
   line-height: 1.5;
+  padding: 0 54px;
 }
 }
 
@@ -985,6 +986,7 @@
   }
   .how-it-works-subtitle{
     font-size: 10px;
+    padding: 0 54px;
   }
 
   /* Section spacing adjust so cards ke upar neeche acha gap rahe */
@@ -1051,7 +1053,7 @@
     object-position: center;
   }
   .section-subtitle {
-    font-size: 15px;
+    font-size: 10px;
     font-weight: 400;
     color: #666;
     text-align: center;
@@ -1060,6 +1062,7 @@
     line-height: 1.6;
     margin-top: -32px;
     opacity: 0.9;
+    padding: 0 54px;
 }
 .wm-title {
   font-size: 1.9rem;
@@ -1202,6 +1205,9 @@
 
   .container {
     padding: 0 15px;
+  }
+  .benefit-card p{
+    padding: 0 70px;
   }
 }
 
