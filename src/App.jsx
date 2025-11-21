@@ -106,6 +106,7 @@ import Support from "./compoent/AdminDashBoard/AdminDashBoardPages/Support";
 // import { HomeMain } from "./compoent/HomePageNew/HomeMain";
 import { HomeMain } from "./compoent/HomePageNew/HomeMain";
 import PropertyListingForm from "./compoent/PropertyListingForm/PropertyListingForm";
+import Tmx9PropertyForm from "./compoent/ovikalistingform/Tmx9PropertyForm";
 
 function App() {
   return (
@@ -132,6 +133,7 @@ function App() {
           <Route path="/ownermain" element={<Ownermain />} />
           <Route path="/renovation" element={<FifthMain />} />
           <Route path="listed" element={<PropertyListingForm />}/>
+          <Route path="listed1" element={<Tmx9PropertyForm/>}/>
 
           {/* =========================
               ADMIN DASHBOARD SECTION
