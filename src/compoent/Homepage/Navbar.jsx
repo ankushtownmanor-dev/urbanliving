@@ -618,11 +618,12 @@ function Navbar() {
 
           {/* Center: Logo */}
           <img
-            src="/ovika.png"
+            src="/ovikalogo.png"
             alt="Ovika Logo"
             className="navbar-logo"
             style={{
-              height: "80px",
+              height: "165px",
+              marginTop: "-48px",
               cursor: "pointer",
               objectFit: "contain",
               position: "absolute",
