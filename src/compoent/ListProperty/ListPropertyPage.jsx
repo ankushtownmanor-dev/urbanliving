@@ -168,6 +168,28 @@ const ListPropertyPage = () => {
           </p>
 
           <div className="wm-cards">
+            {/* Card 2 */}
+            <div className="wm-card">
+              <div className="wm-card-content">
+                <div className="wm-card-text">
+                  <h3>List Your Property Easily — OVIKA Handles Everything</h3>
+                  <p>
+                   Our user-friendly platform allows property owners and hosts to list their spaces directly in just a few simple steps.
+Upload your photos, add your property details, set your preferred pricing — and your listing goes live on OVIKA.
+
+Once your property is listed, OVIKA manages guest enquiries, short-term rental bookings, and payment collection.
+After every stay, we transfer the host’s earnings, deducting only the agreed commission.
+                  </p>
+                  <a href="/ownermain" target="_blank" className="wm-cta">
+                    Check out process
+                  </a>
+                </div>
+                <div className="wm-card-image">
+                  <img src="/home2.png" alt="We handle listings" />
+                </div>
+              </div>
+            </div>
+
             {/* Card 1 */}
             <div className="wm-card">
               <div className="wm-card-content">
@@ -191,26 +213,7 @@ const ListPropertyPage = () => {
               </div>
             </div>
 
-            {/* Card 2 */}
-            <div className="wm-card">
-              <div className="wm-card-content">
-                <div className="wm-card-text">
-                  <h3>Don't want to manage listings? We will handle it for you</h3>
-                  <p>
-                   If you don’t have the time or experience to handle property listings, 
-                   Ovika is here to do it for you. Share your property details with us — photos,
-                  location, rent preferences — and our team will professionally list it on the Ovika platform, 
-                  verify details, and showcase it to thousands of potential tenants. Start earning without the hassle.
-                  </p>
-                  <a href="/ownermain" target="_blank" className="wm-cta">
-                    Check out process
-                  </a>
-                </div>
-                <div className="wm-card-image">
-                  <img src="/home2.png" alt="We handle listings" />
-                </div>
-              </div>
-            </div>
+            
 
             {/* Card 3 */}
             <div className="wm-card">
