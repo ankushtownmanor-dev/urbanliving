@@ -618,17 +618,17 @@ function Navbar() {
 
           {/* Center: Logo */}
           <img
-            src="/ovikalogo.png"
-            alt="Ovika Logo"
+            src="/ovikalogo1.png"
+            alt="Urban Living Logo"
             className="navbar-logo"
             style={{
-              height: "165px",
-              marginTop: "-48px",
+              height: "170px",
               cursor: "pointer",
               objectFit: "contain",
               position: "absolute",
               left: "45%",
               transform: "translateX(-50%)",
+              marginTop:"30px"
             }}
             onClick={() => navigate("/")}
           />
