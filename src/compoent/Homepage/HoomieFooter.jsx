@@ -967,7 +967,7 @@ const HoomieFooter = () => {
             {/* Company Info */}
             <div className="footer-col logo-col" style={{ marginTop: "-40px" }}>
               <img
-                src="/ovikalogo1.png"
+                src="/ovikalogo4.png"
                 alt="Urban Living Logo"
                 style={{ width: "200px", marginBottom: "10px" }}
               />
