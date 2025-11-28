@@ -166,19 +166,15 @@ const ListPropertyPage = () => {
           <p className="wm-subtitle">
             List your property your way — renovate and earn, let us manage it, or take full control by uploading yourself.
           </p>
-
+          
           <div className="wm-cards">
-            {/* Card 2 */}
+
             <div className="wm-card">
               <div className="wm-card-content">
                 <div className="wm-card-text">
-                  <h3>List Your Property Easily — OVIKA Handles Everything</h3>
+                  <h3>Host your property. We take care of everything</h3>
                   <p>
-                   Our user-friendly platform allows property owners and hosts to list their spaces directly in just a few simple steps.
-Upload your photos, add your property details, set your preferred pricing — and your listing goes live on OVIKA.
-
-Once your property is listed, OVIKA manages guest enquiries, short-term rental bookings, and payment collection.
-After every stay, we transfer the host’s earnings, deducting only the agreed commission.
+                    List your homestay, B&B, or property on OVIKA. We manage bookings, guests, and payouts — you enjoy the income.
                   </p>
                   <a href="/ownermain" target="_blank" className="wm-cta">
                     Check out process
@@ -189,8 +185,25 @@ After every stay, we transfer the host’s earnings, deducting only the agreed c
                 </div>
               </div>
             </div>
-
-            {/* Card 1 */}
+             <div className="wm-card">
+              <div className="wm-card-content">
+                <div className="wm-card-text">
+                  <h3>List your property your way</h3>
+                  <p>
+                    Prefer full control? Easily add photos, set rent, write descriptions, 
+                    and publish instantly on Ovika. Reach potential tenants directly, track inquiries, 
+                    and update details anytime. Perfect for hands-on owners with the reach of a trusted platform.
+                  </p>
+                  <a href="/selfmanage" target="_blank" className="wm-cta">
+                    Check out process
+                  </a>
+                </div>
+                <div className="wm-card-image">
+                  <img src="/home3.png" alt="List your way" />
+                </div>
+              </div>
+            </div>
+          
             <div className="wm-card">
               <div className="wm-card-content">
                 <div className="wm-card-text">
@@ -215,25 +228,8 @@ After every stay, we transfer the host’s earnings, deducting only the agreed c
 
             
 
-            {/* Card 3 */}
-            <div className="wm-card">
-              <div className="wm-card-content">
-                <div className="wm-card-text">
-                  <h3>List your property your way</h3>
-                  <p>
-                    Prefer full control? Easily add photos, set rent, write descriptions, 
-                    and publish instantly on Ovika. Reach potential tenants directly, track inquiries, 
-                    and update details anytime. Perfect for hands-on owners with the reach of a trusted platform.
-                  </p>
-                  <a href="/selfmanage" target="_blank" className="wm-cta">
-                    Check out process
-                  </a>
-                </div>
-                <div className="wm-card-image">
-                  <img src="/home3.png" alt="List your way" />
-                </div>
-              </div>
-            </div>
+        
+           
           </div>
         </div>
       </div>
