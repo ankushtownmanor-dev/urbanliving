@@ -2,29 +2,79 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './PropertyDetailPage.css';
 
-const API_BASE_URL = 'http://localhost:3030/api/ovika'; // update if needed
+const API_BASE_URL = 'http://localhost:3030/api/ovika';
 
 const getPhotoUrl = (photo) => {
   if (!photo) return null;
   if (typeof photo !== 'string') return null;
-  
-  // If it's already a full URL, return as is
+
   if (photo.startsWith('http://') || photo.startsWith('https://')) {
     return photo;
   }
-  
-  // If it already includes the full path with /uploads/, return as is
+
+  // If photo already contains /uploads/ path, attach to API_BASE_URL appropriately
   if (photo.includes('/uploads/')) {
     return `${API_BASE_URL}${photo.startsWith('/') ? '' : '/'}${photo}`;
   }
-  
-  // Otherwise, construct the full URL
+
   return `${API_BASE_URL}/uploads/${photo.startsWith('/') ? photo.substring(1) : photo}`;
 };
 
 const formatCurrency = (num) => {
   if (num === null || num === undefined) return 'N/A';
   return Number(num).toLocaleString('en-IN');
+};
+
+const transformPropertyData = (data) => {
+  if (!data) return null;
+
+  // Preserve values from API. For numeric fee fields, keep null if not provided (no hard defaults).
+  const base_rate = data.hasOwnProperty('base_rate') ? data.base_rate : null;
+  const cleaning_fee = data.hasOwnProperty('cleaning_fee') ? data.cleaning_fee : null;
+  const service_fee = data.hasOwnProperty('service_fee') ? data.service_fee : null;
+  const security_deposit = data.hasOwnProperty('security_deposit') ? data.security_deposit : null;
+
+  return {
+    ...data,
+    property_name: data.property_name || 'Untitled Property',
+    description: data.description || 'No description available.',
+    city: data.city || '',
+    address: data.address || '',
+    bedrooms: data.bedrooms ?? null,
+    bathrooms: data.bathrooms ?? null,
+    area: data.area ?? null,
+    property_type: data.property_type || '',
+    amenities: Array.isArray(data.amenities) ? data.amenities : (typeof data.amenities === 'string' ? (() => { try { return JSON.parse(data.amenities); } catch(e) { return [data.amenities]; } })() : []),
+    rules: data.rules || null,
+    policies: data.policies || (data.cancellation_policy ? `Cancellation Policy: ${data.cancellation_policy}` : null),
+    available_from: data.available_from || null,
+    available_to: data.available_to || null,
+    check_in_time: data.check_in_time || null,
+    check_out_time: data.check_out_time || null,
+    max_guests: data.guests ?? data.max_guests ?? null,
+    base_rate,
+    cleaning_fee,
+    service_fee,
+    security_deposit,
+    photos: Array.isArray(data.photos) ? data.photos : (data.photos ? [data.photos] : []),
+    min_stay: data.min_stay ?? data.min_stay_nights ?? null,
+    smoking: data.hasOwnProperty('smoking') ? data.smoking : null,
+    pets: data.hasOwnProperty('pets') ? data.pets : null,
+    events: data.hasOwnProperty('events') ? data.events : null,
+    quiet_hours: data.quiet_hours ?? null,
+    number_of_nights: data.number_of_nights ?? data.rental_nights ?? null,
+    included_utilities: data.included_utilities ?? null,
+    contact: data.contact ?? null,
+    host: data.host ?? null,
+    meta: data.meta ?? null,
+    nearby: data.nearby ?? null,
+    features: data.features ?? null,
+    floor: data.floor ?? null,
+    year_built: data.year_built ?? null,
+    parking: data.parking ?? null,
+    pet_friendly: data.pet_friendly ?? null,
+    furnishing: data.furnishing ?? null,
+  };
 };
 
 const PropertyDetailPage = () => {
@@ -43,9 +93,11 @@ const PropertyDetailPage = () => {
       setLoading(true);
       try {
         const res = await fetch(`${API_BASE_URL}/properties/${id}`);
-        if (!res.ok) throw new Error('Property not found');
+        if (!res.ok) throw new Error(`Property not found (status ${res.status})`);
         const data = await res.json();
-        setProperty(data.data || data);
+        // API might return { success: true, data: {...} } or { property: {...} } or raw object
+        const raw = data?.data ?? data?.property ?? data;
+        setProperty(transformPropertyData(raw));
       } catch (err) {
         console.error(err);
         setError(err.message || 'Error fetching property');
@@ -76,26 +128,22 @@ const PropertyDetailPage = () => {
     if (!photos.length) return;
     changeImage((currentImageIndex + 1) % photos.length);
   };
+
   const prevImage = () => {
     if (!photos.length) return;
     changeImage((currentImageIndex - 1 + photos.length) % photos.length);
   };
 
-  // Use backend-provided nights if available
-  const nights = property.number_of_nights ?? property.rental_nights ?? null;
-
-  // Fees only from API
+  // Pricing calculations only when base_rate and nights are provided by API (no defaults)
+  const nights = property.number_of_nights ?? null;
   const baseRate = property.base_rate ?? null;
   const cleaningFee = property.cleaning_fee ?? null;
   const serviceFee = property.service_fee ?? null;
-  const refundableDeposit = property.refundable_deposit ?? null;
-  const includedUtilities = property.included_utilities ?? null;
+  const securityDeposit = property.security_deposit ?? null;
 
-  // Totals only if baseRate and nights available
-  const totalBeforeFees = (baseRate !== null && nights) ? baseRate * nights : null;
-  const totalAmount = totalBeforeFees !== null ? totalBeforeFees + (cleaningFee || 0) + (serviceFee || 0) + (refundableDeposit || 0) : null;
+  const totalBeforeFees = (baseRate !== null && nights !== null) ? baseRate * nights : null;
+  const totalAmount = totalBeforeFees !== null ? totalBeforeFees + (cleaningFee || 0) + (serviceFee || 0) + (securityDeposit || 0) : null;
 
-  // Helper to render object fields generically
   const renderObjectDetails = (obj) => {
     if (!obj || typeof obj !== 'object') return null;
     return (
@@ -115,11 +163,10 @@ const PropertyDetailPage = () => {
       <button className="back-button" onClick={() => navigate(-1)} aria-label="Back to list">← Back to Properties</button>
 
       <div className="property-header">
-        <h1>{property.property_name || 'Untitled Property'}</h1>
+        <h1>{property.property_name}</h1>
         <div className="property-location">
           {property.address && <span>{property.address}</span>}
           {property.city && <span>{property.city}</span>}
-          {property.state && <span>{property.state}</span>}
         </div>
       </div>
 
@@ -129,12 +176,12 @@ const PropertyDetailPage = () => {
             <div className="main-image">
               <img
                 src={getPhotoUrl(photos[currentImageIndex])}
-                alt={`${property.property_name || 'Property'} image ${currentImageIndex + 1}`}
+                alt={`${property.property_name} image ${currentImageIndex + 1}`}
                 className={fade ? 'fade-out' : ''}
                 onError={(e) => {
                   console.error('Failed to load image:', photos[currentImageIndex]);
                   e.target.src = 'https://via.placeholder.com/800x500?text=Image+Not+Available';
-                  e.target.onerror = null; // Prevent infinite loop if placeholder also fails
+                  e.target.onerror = null;
                 }}
               />
               {photos.length > 1 && (
@@ -159,8 +206,8 @@ const PropertyDetailPage = () => {
                     onKeyDown={(e) => { if (e.key === 'Enter') changeImage(idx); }}
                     aria-label={`View image ${idx + 1}`}
                   >
-                    <img 
-                      src={photoUrl} 
+                    <img
+                      src={photoUrl}
                       alt={`Thumbnail ${idx + 1}`}
                       onError={(e) => {
                         console.error('Failed to load thumbnail:', p);
@@ -182,39 +229,47 @@ const PropertyDetailPage = () => {
         <div className="property-details">
           <div className="property-highlights">
             <div className="highlight">
-              <span className="highlight-value">{property.bedrooms ?? '0'}</span>
+              <span className="highlight-value">{property.bedrooms ?? 'N/A'}</span>
               <span className="highlight-label">Beds</span>
             </div>
             <div className="highlight">
-              <span className="highlight-value">{property.bathrooms ?? '0'}</span>
+              <span className="highlight-value">{property.bathrooms ?? 'N/A'}</span>
               <span className="highlight-label">Baths</span>
             </div>
             <div className="highlight">
-              <span className="highlight-value">{property.area ? `${property.area}` : 'N/A'}</span>
+              <span className="highlight-value">{property.area ?? 'N/A'}</span>
               <span className="highlight-label">Area</span>
             </div>
             <div className="highlight">
-              <span className="highlight-value">{property.property_type || 'N/A'}</span>
-              <span className="highlight-label">Type</span>
+              <span className="highlight-value">{property.max_guests ?? 'N/A'}</span>
+              <span className="highlight-label">Max Guests</span>
             </div>
           </div>
 
           <div className="section">
             <div className="section-header">About this place</div>
-            <div className="section-body">{property.description || 'No description available.'}</div>
+            <div className="section-body">
+              <p>{property.description}</p>
+              <div style={{ marginTop: '1rem' }}>
+                {property.check_in_time && <p><strong>Check-in:</strong> {property.check_in_time}</p>}
+                {property.check_out_time && <p><strong>Check-out:</strong> {property.check_out_time}</p>}
+                {property.max_guests !== null && <p><strong>Max Guests:</strong> {property.max_guests}</p>}
+                {property.min_stay !== null && <p><strong>Minimum Stay:</strong> {property.min_stay} night{property.min_stay > 1 ? 's' : ''}</p>}
+              </div>
+            </div>
           </div>
 
-          {/* Amenities */}
-          {Array.isArray(property.amenities) && property.amenities.length > 0 && (
+          {property.amenities && property.amenities.length > 0 && (
             <div className="section">
-              <div className="section-header">What this place offers</div>
+              <div className="section-header">Amenities</div>
               <div className="tags">
-                {property.amenities.map((a, i) => <div key={i} className="tag">{a}</div>)}
+                {property.amenities.map((amenity, index) => (
+                  <span key={index} className="tag">{amenity}</span>
+                ))}
               </div>
             </div>
           )}
 
-          {/* Rules */}
           {property.rules && (
             <div className="section">
               <div className="section-header">House Rules</div>
@@ -222,7 +277,6 @@ const PropertyDetailPage = () => {
             </div>
           )}
 
-          {/* Policies */}
           {property.policies && (
             <div className="section">
               <div className="section-header">Policies</div>
@@ -230,8 +284,7 @@ const PropertyDetailPage = () => {
             </div>
           )}
 
-          {/* Availability */}
-          {(property.available_from || property.available_to) && (
+          {(property.available_from || property.available_to || property.booking_status) && (
             <div className="section">
               <div className="section-header">Availability</div>
               <div className="info-grid">
@@ -257,7 +310,6 @@ const PropertyDetailPage = () => {
             </div>
           )}
 
-          {/* Features / extras */}
           {property.features && (
             <div className="section">
               <div className="section-header">Features</div>
@@ -269,7 +321,6 @@ const PropertyDetailPage = () => {
             </div>
           )}
 
-          {/* Nearby / location info */}
           {property.nearby && (
             <div className="section">
               <div className="section-header">Nearby</div>
@@ -277,26 +328,10 @@ const PropertyDetailPage = () => {
             </div>
           )}
 
-          {/* Custom metadata / object */}
           {property.meta && (
             <div className="section">
               <div className="section-header">Additional details</div>
               <div className="section-body">{renderObjectDetails(property.meta)}</div>
-            </div>
-          )}
-
-          {/* Host */}
-          {property.host && (
-            <div className="section">
-              <div className="section-header">Hosted by {property.host.name || 'Owner'}</div>
-              <div className="host-details" style={{ marginTop: '0.6rem' }}>
-                {property.host.avatar && <img src={property.host.avatar} alt={property.host.name || 'Host'} className="host-avatar" />}
-                <div>
-                  {property.host.joined && <div style={{ marginBottom: 6 }}>Host since {property.host.joined}</div>}
-                  {property.host.verified && <div className="verified-badge">✓ Verified</div>}
-                  {property.host.about && <div style={{ marginTop: 8 }}>{property.host.about}</div>}
-                </div>
-              </div>
             </div>
           )}
         </div>
@@ -307,33 +342,30 @@ const PropertyDetailPage = () => {
             <div className="price-period">{property.billing_cycle || 'per month'}</div>
           </div>
 
-          {/* Display-only date/guest values coming from API only */}
           <div className="section">
             <div className="section-header">Booking Info</div>
             <div className="section-body">
-              {/* Check-in / Check-out if provided by API */}
-              {property.check_in_date ? (
+              {property.check_in_time && (
                 <div className="date-display">
                   <label>Check-in</label>
-                  <div className="display-value">{property.check_in_date}</div>
+                  <div className="display-value">{property.check_in_time}</div>
                 </div>
-              ) : null}
+              )}
 
-              {property.check_out_date ? (
+              {property.check_out_time && (
                 <div className="date-display">
                   <label>Check-out</label>
-                  <div className="display-value">{property.check_out_date}</div>
+                  <div className="display-value">{property.check_out_time}</div>
                 </div>
-              ) : null}
+              )}
 
-              {property.guests ? (
+              {property.max_guests !== null && (
                 <div className="guests-display">
                   <label>Guests</label>
-                  <div className="display-value">{property.guests} {property.guests > 1 ? 'Guests' : 'Guest'}</div>
+                  <div className="display-value">{property.max_guests} {property.max_guests > 1 ? 'Guests' : 'Guest'}</div>
                 </div>
-              ) : null}
+              )}
 
-              {/* Nights from backend if present */}
               {nights !== null && (
                 <div style={{ marginTop: 8 }}>
                   <div className="info-key">Nights</div>
@@ -343,8 +375,7 @@ const PropertyDetailPage = () => {
             </div>
           </div>
 
-          {/* Price breakdown (only from API fields) */}
-          <div className="price-breakdown" aria-hidden={totalBeforeFees === null && cleaningFee === null && serviceFee === null && refundableDeposit === null}>
+          <div className="price-breakdown" aria-hidden={totalBeforeFees === null && cleaningFee === null && serviceFee === null && securityDeposit === null}>
             {baseRate !== null && nights !== null && (
               <div className="price-row">
                 <span>₹{formatCurrency(baseRate)} × {nights} {nights === 1 ? 'night' : 'nights'}</span>
@@ -366,18 +397,17 @@ const PropertyDetailPage = () => {
               </div>
             )}
 
-            {refundableDeposit !== null && refundableDeposit > 0 && (
+            {securityDeposit !== null && securityDeposit > 0 && (
               <div className="price-row">
-                <span>Refundable deposit</span>
-                <span>₹{formatCurrency(refundableDeposit)}</span>
+                <span>Security deposit</span>
+                <span>₹{formatCurrency(securityDeposit)}</span>
               </div>
             )}
 
-            {/* Included utilities list */}
-            {includedUtilities && (
+            {property.included_utilities && (
               <div style={{ marginTop: 8 }}>
                 <div className="info-key">Included utilities</div>
-                <div className="info-value">{Array.isArray(includedUtilities) ? includedUtilities.join(', ') : includedUtilities}</div>
+                <div className="info-value">{Array.isArray(property.included_utilities) ? property.included_utilities.join(', ') : property.included_utilities}</div>
               </div>
             )}
 
@@ -389,24 +419,22 @@ const PropertyDetailPage = () => {
             )}
           </div>
 
-          {/* Contact / host contact if provided */}
           {(property.contact || (property.host && (property.host.phone || property.host.email))) && (
             <div className="contact-card">
               <div style={{ fontWeight: 700, marginBottom: 8 }}>Contact</div>
-              {property.contact && property.contact.phone && <div className="contact-row"><span>Phone</span><span>{property.contact.phone}</span></div>}
-              {property.contact && property.contact.email && <div className="contact-row"><span>Email</span><span>{property.contact.email}</span></div>}
-              {property.host && property.host.phone && <div className="contact-row"><span>Host phone</span><span>{property.host.phone}</span></div>}
-              {property.host && property.host.email && <div className="contact-row"><span>Host email</span><span>{property.host.email}</span></div>}
+              {property.contact?.phone && <div className="contact-row"><span>Phone</span><span>{property.contact.phone}</span></div>}
+              {property.contact?.email && <div className="contact-row"><span>Email</span><span>{property.contact.email}</span></div>}
+              {property.host?.phone && <div className="contact-row"><span>Host phone</span><span>{property.host.phone}</span></div>}
+              {property.host?.email && <div className="contact-row"><span>Host email</span><span>{property.host.email}</span></div>}
             </div>
           )}
 
-          {/* Additional quick info grid */}
           <div style={{ marginTop: 12 }}>
             <div className="info-grid">
               {property.floor && <div className="info-item"><div className="info-key">Floor</div><div className="info-value">{property.floor}</div></div>}
               {property.year_built && <div className="info-item"><div className="info-key">Year built</div><div className="info-value">{property.year_built}</div></div>}
               {property.parking && <div className="info-item"><div className="info-key">Parking</div><div className="info-value">{property.parking}</div></div>}
-              {property.pet_friendly !== undefined && <div className="info-item"><div className="info-key">Pet friendly</div><div className="info-value">{property.pet_friendly ? 'Yes' : 'No'}</div></div>}
+              {property.pet_friendly !== null && property.pet_friendly !== undefined && <div className="info-item"><div className="info-key">Pet friendly</div><div className="info-value">{property.pet_friendly ? 'Yes' : 'No'}</div></div>}
               {property.furnishing && <div className="info-item"><div className="info-key">Furnishing</div><div className="info-value">{property.furnishing}</div></div>}
             </div>
           </div>
