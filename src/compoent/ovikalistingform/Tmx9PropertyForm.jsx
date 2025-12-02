@@ -630,53 +630,64 @@ const Tmx9PropertyForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form, setForm] = useState({
-    propertyType: PROPERTY_TYPES[0],
-    propertyCategory: DEFAULT_PROPERTY_CATEGORIES[0],
-    address: "",
-    city: "",
-    postalCode: "",
-    country: "",
-    latitude: "",
-    longitude: "",
-    registrationNumber: "",
-    localCompliance: "",
-
-    title: "",
-    mainDescription: "",
-    spaceDescription: "",
-    guestAccess: "",
+    // Property Information
+    property_name: "",
+    property_type: "Villa",
+    property_category: "Luxury",
+    space_description: "",
+    guest_access: "",
     interaction: "",
     neighborhood: "",
-    otherNotes: "",
-
+    other_notes: "",
+    pin: "",
+    zipcode: "",
+    
+    // Location
+    country: "India",
+    latitude: "",
+    longitude: "",
+    registration_number: "",
+    local_compliance: "",
+    
+    // Property Details
     bedrooms: 1,
     beds: 1,
     bathrooms: 1,
     area: "",
-    amenities: {},
-
-    checkInTime: "15:00",
-    checkOutTime: "11:00",
-    smokingAllowed: false,
-    petsAllowed: false,
-    eventsAllowed: false,
-    quietHours: "22:00-07:00",
-    maxGuests: 2,
-
-    baseRate: "",
-    weekendRate: "",
-    weeklyDiscountPct: "",
-    monthlyDiscountPct: "",
-    cleaningFee: "",
-    securityDeposit: "",
-    additionalGuestFee: "",
-    minStay: 1,
-    maxStay: 30,
-    bookingWindowDays: 365,
-
-    selfCheckIn: "",
-    keyExchange: "",
-    hostMeetup: ""
+    amenities: [],
+    
+    // Policies
+    check_in_time: "15:00:00",
+    check_out_time: "11:00:00",
+    smoking_allowed: 0,
+    pets_allowed: 0,
+    events_allowed: 0,
+    quiet_hours: "22:00-07:00",
+    max_guests: 2,
+    
+    // Pricing
+    base_rate: "",
+    weekend_rate: "",
+    weekly_discount_pct: "",
+    monthly_discount_pct: "",
+    cleaning_fee: "",
+    security_deposit: "",
+    additional_guest_fee: "",
+    min_stay: 1,
+    max_stay: 30,
+    booking_window_days: 365,
+    
+    // Check-in
+    self_check_in: "",
+    key_exchange: "",
+    host_meetup: "",
+    
+    // Additional
+    cover_photo_index: 0,
+    cancellation_policy: "Flexible",
+    insurance: 0,
+    damage_protection: 0,
+    host_id: 123
   });
 
   const photoPreviews = useFilePreviews();
@@ -717,6 +728,20 @@ const Tmx9PropertyForm = () => {
       if (!form.title?.trim()) newErrors.title = 'Title is required';
       if (!form.mainDescription?.trim()) newErrors.mainDescription = 'Description is required';
       else if (form.mainDescription.length < 30) newErrors.mainDescription = 'Description should be at least 30 characters';
+      
+      // Validate latitude and longitude if provided
+      if (form.latitude !== '' && form.latitude !== undefined) {
+        const lat = Number(form.latitude);
+        if (isNaN(lat) || lat < -90 || lat > 90) {
+          newErrors.latitude = 'Latitude must be between -90 and 90';
+        }
+      }
+      if (form.longitude !== '' && form.longitude !== undefined) {
+        const lng = Number(form.longitude);
+        if (isNaN(lng) || lng < -180 || lng > 180) {
+          newErrors.longitude = 'Longitude must be between -180 and 180';
+        }
+      }
     }
 
     // Step 1: Details & Amenities
@@ -724,6 +749,11 @@ const Tmx9PropertyForm = () => {
       if (form.bedrooms === '' || form.bedrooms < 0) newErrors.bedrooms = 'Bedrooms required (>= 0)';
       if (form.beds === '' || form.beds <= 0) newErrors.beds = 'At least one bed required';
       if (form.bathrooms === '' || form.bathrooms <= 0) newErrors.bathrooms = 'At least one bathroom required';
+      if (!form.area?.trim()) {
+        newErrors.area = 'Area is required';
+      } else if (form.area.length > 20) {
+        newErrors.area = 'Area should not exceed 20 characters';
+      }
     }
 
     // Step 2: House Rules
@@ -764,8 +794,20 @@ const Tmx9PropertyForm = () => {
 
   const handleNumChange = (e) => {
     const { name, value } = e.target;
-    const num = value === "" ? "" : Number(value);
-    setForm((s) => ({ ...s, [name]: num }));
+    // For latitude and longitude, allow empty string or valid number
+    if (name === 'latitude' || name === 'longitude') {
+      if (value === '') {
+        setForm((s) => ({ ...s, [name]: '' }));
+      } else {
+        const num = Number(value);
+        if (!isNaN(num)) {
+          setForm((s) => ({ ...s, [name]: num }));
+        }
+      }
+    } else {
+      const num = value === "" ? "" : Number(value);
+      setForm((s) => ({ ...s, [name]: num }));
+    }
   };
 
   const handleAmenityToggle = (amenity) => {
@@ -864,8 +906,9 @@ const Tmx9PropertyForm = () => {
         damageProtection,
         postalCode: form.postalCode,
         country: form.country,
-        latitude: form.latitude,
-        longitude: form.longitude,
+        // Only include latitude/longitude if they have values
+        ...(form.latitude !== '' && form.latitude !== undefined && { latitude: Number(form.latitude) }),
+        ...(form.longitude !== '' && form.longitude !== undefined && { longitude: Number(form.longitude) }),
         registrationNumber: form.registrationNumber,
         localCompliance: form.localCompliance
       };
@@ -1028,6 +1071,33 @@ const Tmx9PropertyForm = () => {
                 {renderError('city')}
               </div>
 
+              <div className="tmx9pf-field">
+                <label className="tmx9pf-label">Latitude</label>
+                <input 
+                  type="number" 
+                  step="0.000001" 
+                  name="latitude" 
+                  value={form.latitude} 
+                  onChange={handleNumChange} 
+                  className={`tmx9pf-input ${errors.latitude ? 'tmx9pf-input--error' : ''}`} 
+                  placeholder="e.g., 19.0760"
+                />
+                {renderError('latitude')}
+              </div>
+              <div className="tmx9pf-field">
+                <label className="tmx9pf-label">Longitude</label>
+                <input 
+                  type="number" 
+                  step="0.000001" 
+                  name="longitude" 
+                  value={form.longitude} 
+                  onChange={handleNumChange} 
+                  className={`tmx9pf-input ${errors.longitude ? 'tmx9pf-input--error' : ''}`}
+                  placeholder="e.g., 72.8777"
+                />
+                {renderError('longitude')}
+              </div>
+
             </div>
           </section>
         )}
@@ -1054,9 +1124,17 @@ const Tmx9PropertyForm = () => {
                 {renderError('bathrooms')}
               </div>
 
-              <div className="tmx9pf-field full">
-                <label className="tmx9pf-label">Living Spaces (describe)</label>
-                <input name="area" value={form.area} onChange={handleChange} className="tmx9pf-input" placeholder="e.g., Living room, kitchen, terrace" />
+              <div className="tmx9pf-field">
+                <label className="tmx9pf-label">Area (sq ft) *</label>
+                <input 
+                  name="area" 
+                  value={form.area} 
+                  onChange={handleChange} 
+                  maxLength={20}
+                  className={`tmx9pf-input ${errors.area ? 'tmx9pf-input--error' : ''}`} 
+                  placeholder="e.g., 1500 sqft" 
+                />
+                {renderError('area')}
               </div>
 
               <div className="tmx9pf-field full">

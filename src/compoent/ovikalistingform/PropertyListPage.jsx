@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { FiSearch, FiHome, FiMapPin, FiDollarSign, FiArrowRight } from 'react-icons/fi';
+import { FaBed, FaBath, FaRulerCombined, FaStar } from 'react-icons/fa';
 import './PropertyListPage.css';
 
 const API_BASE_URL = 'http://localhost:3030/api/ovika';
@@ -7,39 +9,48 @@ const API_BASE_URL = 'http://localhost:3030/api/ovika';
 // Single PropertyCard Component
 const PropertyCard = ({ property }) => {
   const navigate = useNavigate();
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    // Don't navigate if clicking on favorite button
+    if (e.target.closest('.favorite-btn')) return;
     navigate(`/property/${property.id}`);
   };
 
-  // Debug log for image loading
-  console.log('Property data:', {
-    id: property.id,
-    photos: property.photos,
-    firstPhoto: property.photos?.[0],
-    imageUrl: property.photos?.[0] 
-      ? `http://localhost:3030/api/ovika/uploads/${property.photos[0]}`
-      : 'No image'
-  });
+  const toggleFavorite = (e) => {
+    e.stopPropagation();
+    setIsFavorite(!isFavorite);
+  };
+
+  // Format price with commas
+  const formatPrice = (price) => {
+    if (!price && price !== 0) return 'Price on request';
+    return `₹${price.toLocaleString('en-IN')}`;
+  };
+
+  // Get first available image or placeholder
+  const getImageUrl = () => {
+    if (property.photos?.[0]) {
+      return `${API_BASE_URL}/uploads/${property.photos[0]}`;
+    }
+    return 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80';
+  };
+
+  // Get property type with fallback
+  const propertyType = property.property_type || 'Property';
+  const propertyCategory = property.property_category || 'For Rent';
+  const rating = property.rating || 4.8;
+  const reviewCount = property.review_count || 12;
 
   return (
     <div className="property-card" onClick={handleClick}>
       <div className="property-image">
         <img 
-          src={
-            property.photos?.[0] 
-              ? `http://localhost:3030/api/ovika/uploads/${property.photos[0]}`
-              : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
-          } 
-          alt={property.property_name || 'Property'} 
+          src={getImageUrl()}
+          alt={property.property_name || 'Property'}
           onError={(e) => {
             console.error('Error loading image:', e.target.src);
-            e.target.src = 'https://via.placeholder.com/300x200?text=Image+Not+Found';
-          }}
-          style={{
-            width: '100%',
-            height: '200px',
-            objectFit: 'cover',
+            e.target.src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80';
             borderRadius: '8px 8px 0 0'
           }}
         />
