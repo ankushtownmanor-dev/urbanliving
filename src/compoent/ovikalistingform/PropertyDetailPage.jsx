@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './PropertyDetailPage.css';
 
-const API_BASE_URL = 'http://localhost:3030/api/ovika';
+// Using production server
+const API_BASE_URL = 'https://townmanor.ai/api/ovika';
 
 const getPhotoUrl = (photo) => {
   if (!photo) return null;

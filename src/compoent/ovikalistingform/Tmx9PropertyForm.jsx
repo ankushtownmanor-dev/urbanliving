@@ -933,15 +933,15 @@ const Tmx9PropertyForm = () => {
       }
 
       // Send to backend (do not set Content-Type; browser will set boundary)
-      const res = await fetch('http://localhost:3030/api/ovika/properties/upload', {
+      const response = await fetch('https://townmanor.ai/api/ovika/properties/upload', {
         method: 'POST',
         body: fd,
         credentials: 'include' // optional: if you use cookies/sessions
       });
 
-      const data = await res.json().catch(() => ({ success: false, message: 'Invalid JSON response' }));
+      const data = await response.json().catch(() => ({ success: false, message: 'Invalid JSON response' }));
 
-      if (!res.ok) {
+      if (!response.ok) {
         console.error('API error', data);
         alert(`Error: ${data.message || 'Failed to create property'}`);
         setIsSubmitting(false);

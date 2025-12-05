@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { FiSearch, FiHome, FiMapPin, FiDollarSign, FiArrowRight } from 'react-icons/fi';
-import { FaBed, FaBath, FaRulerCombined, FaStar } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { FiSearch } from 'react-icons/fi';
 import './PropertyListPage.css';
 
-const API_BASE_URL = 'http://localhost:3030/api/ovika';
+// Using production server
+const API_BASE_URL = 'https://townmanor.ai/api/ovika';
 
 // Single PropertyCard Component
 const PropertyCard = ({ property }) => {
@@ -13,7 +13,7 @@ const PropertyCard = ({ property }) => {
 
   const handleClick = (e) => {
     // Don't navigate if clicking on favorite button
-    if (e.target.closest('.favorite-btn')) return;
+    if (e.target.closest && e.target.closest('.favorite-btn')) return;
     navigate(`/property/${property.id}`);
   };
 
@@ -22,52 +22,71 @@ const PropertyCard = ({ property }) => {
     setIsFavorite(!isFavorite);
   };
 
-  // Format price with commas
+  // Format price with commas, handle strings/numbers
   const formatPrice = (price) => {
-    if (!price && price !== 0) return 'Price on request';
-    return `₹${price.toLocaleString('en-IN')}`;
+    if (price === null || price === undefined || price === '') return 'Price on request';
+    const num = Number(price);
+    if (Number.isNaN(num)) return 'Price on request';
+    return `₹${num.toLocaleString('en-IN')}`;
   };
 
-  // Get first available image or placeholder
-  const getImageUrl = () => {
-    if (property.photos?.[0]) {
-      return `${API_BASE_URL}/uploads/${property.photos[0]}`;
+  // Get the property's cover photo URL
+  const getCoverPhoto = () => {
+    // Check for cover_photo in the property
+    if (property.cover_photo) {
+      return property.cover_photo;
     }
-    return 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80';
+    // If no cover_photo, try to get the first photo from the photos array
+    if (Array.isArray(property.photos) && property.photos.length > 0) {
+      return property.photos[0];
+    }
+    // If no photos at all, return null (will be handled by onError)
+    return null;
   };
 
-  // Get property type with fallback
+  // Handle image loading errors
+  const handleImageError = (e) => {
+    e.target.onerror = null;
+    e.target.src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
+    e.target.style.borderRadius = '8px 8px 0 0';
+    e.target.alt = 'Property image not available';
+  };
+
   const propertyType = property.property_type || 'Property';
   const propertyCategory = property.property_category || 'For Rent';
-  const rating = property.rating || 4.8;
-  const reviewCount = property.review_count || 12;
 
   return (
-    <div className="property-card" onClick={handleClick}>
+    <div className="property-card" onClick={handleClick} role="button" tabIndex={0}>
       <div className="property-image">
-        <img 
-          src={getImageUrl()}
+        <img
+          src={getCoverPhoto() || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'}
           alt={property.property_name || 'Property'}
-          onError={(e) => {
-            console.error('Error loading image:', e.target.src);
-            e.target.src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80';
-            borderRadius: '8px 8px 0 0'
-          }}
+          onError={handleImageError}
+          style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px 8px 0 0' }}
         />
-        <div className="property-price">₹{property.base_rate ? property.base_rate.toLocaleString() : 'N/A'}/month</div>
+        <div className="property-price">
+          {formatPrice(property.base_rate)}{property.base_rate ? '/month' : ''}
+        </div>
       </div>
+
       <div className="property-details">
         <h3>{property.property_name || 'Untitled Property'}</h3>
-        <p className="property-location">{property.address}, {property.city}</p>
+        <p className="property-location">
+          {property.address || 'Address not provided'}
+          {property.city ? `, ${property.city}` : ''}
+        </p>
+
         <div className="property-features">
-          <span>{property.bedrooms || 0} Beds</span>
-          <span>{property.bathrooms || 0} Baths</span>
+          <span>{property.bedrooms ?? 0} Beds</span>
+          <span>{property.bathrooms ?? 0} Baths</span>
           <span>{property.area || 'N/A'} sq.ft</span>
         </div>
+
         <div className="property-amenities">
           {Array.isArray(property.amenities) && property.amenities.slice(0, 3).map((amenity, i) => (
             <span key={i} className="amenity-tag">{amenity}</span>
           ))}
+
           {Array.isArray(property.amenities) && property.amenities.length > 3 && (
             <span className="amenity-more">+{property.amenities.length - 3} more</span>
           )}
@@ -87,16 +106,18 @@ const PropertyListPage = () => {
 
   const fetchProperties = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`${API_BASE_URL}/properties`);
       if (!response.ok) {
-        throw new Error('Failed to fetch properties');
+        const text = await response.text().catch(() => null);
+        throw new Error(text || 'Failed to fetch properties');
       }
       const data = await response.json();
-      const propertiesData = data.data || [];
+      const propertiesData = data?.data || [];
       setProperties(propertiesData);
       setFilteredProperties(propertiesData);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Error fetching properties');
       console.error('Error fetching properties:', err);
     } finally {
       setLoading(false);
@@ -105,20 +126,22 @@ const PropertyListPage = () => {
 
   // Filter properties based on search term
   useEffect(() => {
-    if (searchTerm.trim() === '') {
+    if (!searchTerm.trim()) {
       setFilteredProperties(properties);
-    } else {
-      const filtered = properties.filter(property => 
-        property.property_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        property.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        property.city?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredProperties(filtered);
+      return;
     }
+    const q = searchTerm.toLowerCase();
+    const filtered = properties.filter((property) =>
+      (property.property_name && property.property_name.toLowerCase().includes(q)) ||
+      (property.address && property.address.toLowerCase().includes(q)) ||
+      (property.city && property.city.toLowerCase().includes(q))
+    );
+    setFilteredProperties(filtered);
   }, [searchTerm, properties]);
 
   useEffect(() => {
     fetchProperties();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
@@ -133,6 +156,7 @@ const PropertyListPage = () => {
     <div className="property-list-container">
       <div className="property-list-header">
         <h1>Find Your Dream Property</h1>
+
         <div className="search-bar">
           <input
             type="text"
@@ -140,19 +164,27 @@ const PropertyListPage = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
+            aria-label="Search properties"
           />
-          <button className="search-button">
-            <i className="fas fa-search"></i>
+          <button
+            className="search-button"
+            type="button"
+            onClick={() => { /* no-op: live search */ }}
+            aria-label="Search"
+          >
+            <FiSearch />
           </button>
         </div>
-        <button 
+
+        <button
           className="btn-add-property"
           onClick={() => navigate('/listed1')}
+          type="button"
         >
-          <i className="fas fa-plus"></i> List New Property
+          <i className="fas fa-plus" /> List New Property
         </button>
       </div>
-      
+
       <div className="property-grid">
         {filteredProperties.length > 0 ? (
           filteredProperties.map((property) => (
@@ -163,14 +195,15 @@ const PropertyListPage = () => {
         ) : (
           <div className="no-properties">
             <div className="no-results">
-              <i className="fas fa-search-location"></i>
+              <i className="fas fa-search-location" />
               <h3>No properties found</h3>
               <p>We couldn't find any properties matching your search. Try different keywords or add a new property.</p>
-              <button 
+              <button
                 className="btn-add-property"
                 onClick={() => navigate('/listed1')}
+                type="button"
               >
-                <i className="fas fa-plus"></i> Add Your First Property
+                <i className="fas fa-plus" /> Add Your First Property
               </button>
             </div>
           </div>
