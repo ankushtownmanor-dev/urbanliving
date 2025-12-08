@@ -50,11 +50,11 @@ export default function Owner() {
 
         {/* NEW dual-button pill */}
         <div className="ovika-cta-pill">
-          <Link to="/properties" className="ovika-cta ovika-cta--white">
+          <Link to="/listed1" className="ovika-cta ovika-cta--white">
             <span>Start Earning</span>
             <span className="ovika-cta__arrow">→</span>
           </Link>
-          <Link to="/properties" className="ovika-cta ovika-cta--orange">Now</Link>
+          <Link to="/listed1" className="ovika-cta ovika-cta--orange">Now</Link>
         </div>
       </div>
     </section>
