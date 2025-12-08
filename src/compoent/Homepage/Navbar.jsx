@@ -618,7 +618,7 @@ function Navbar() {
 
           {/* Center: Logo */}
           <img
-            src="/ovikalogo4.png"
+            src="/ovikalogo11.png"
             alt="Urban Living Logo"
             className="navbar-logo"
             style={{

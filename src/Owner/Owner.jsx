@@ -1,5 +1,6 @@
 // Owner.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Owner.css';
 import { MdVerified, MdOutlineLoop } from 'react-icons/md';
 import { BiSupport } from 'react-icons/bi';
@@ -49,11 +50,11 @@ export default function Owner() {
 
         {/* NEW dual-button pill */}
         <div className="ovika-cta-pill">
-          <button className="ovika-cta ovika-cta--white">
+          <Link to="/properties" className="ovika-cta ovika-cta--white">
             <span>Start Earning</span>
             <span className="ovika-cta__arrow">→</span>
-          </button>
-          <button className="ovika-cta ovika-cta--orange">Now</button>
+          </Link>
+          <Link to="/properties" className="ovika-cta ovika-cta--orange">Now</Link>
         </div>
       </div>
     </section>
