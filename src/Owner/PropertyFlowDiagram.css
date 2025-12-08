@@ -1,0 +1,193 @@
+:root {
+  --gold: #C1802E;
+  --red: #D9534F;
+  --card-w: 320px;
+  --h-gap: 80px;   /* Horizontal Gap */
+  --v-gap: 60px;   /* Vertical Gap between rows */
+  --stagger: 80px; /* How much lower the 2nd card is */
+}
+
+.flow-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 50px 20px;
+  background-color: white;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.main-header { text-align: center; margin-bottom: 60px; }
+.main-header h1 { color: #333; margin-bottom: 10px; }
+.highlight { color: var(--gold); }
+.main-header p { color: #666; }
+
+.diagram-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- ROW LAYOUT --- */
+.process-row {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  /* Add padding bottom equal to vertical gap for next row connection */
+  padding-bottom: var(--v-gap); 
+}
+
+.row-normal { flex-direction: row; }
+.row-reverse { flex-direction: row-reverse; }
+
+/* --- CARD POSITIONS --- */
+.card-box {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+}
+
+/* Stagger Logic */
+.upper-pos { margin-top: 0; }
+.lower-pos { margin-top: var(--stagger); }
+
+/* --- CARD STYLING --- */
+.card-content {
+  width: var(--card-w);
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 1px solid #eee;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+.card-content:hover { transform: translateY(-3px); }
+
+.card-header {
+  background-color: var(--gold);
+  padding: 12px 15px;
+  color: white;
+}
+.card-header h3 { margin: 0; font-size: 1.1rem; }
+
+.card-body { padding: 15px; }
+.card-body ul { padding: 0; margin: 0; list-style: none; }
+.card-body li { margin-bottom: 5px; font-size: 0.9rem; color: #555; }
+
+
+/* --- THE STEP CONNECTOR (Clean Z-Shape) --- */
+.connector-step {
+  position: relative;
+  width: var(--h-gap);
+  /* Height covers the stagger distance */
+  height: var(--stagger); 
+  /* Align it starting from the Upper Card's header area roughly */
+  margin-top: 20px; 
+}
+
+/* 1. Horizontal Top Line (From Card 1) */
+.step-line-top {
+  position: absolute;
+  top: 0;
+  height: 3px;
+  background-color: var(--red);
+  width: 50%; /* Goes halfway */
+  /* Normal Row: Starts Left, Goes Right */
+}
+.row-normal .step-line-top { left: 0; }
+.row-reverse .step-line-top { right: 0; }
+
+/* 2. Vertical Down Line (The Drop) */
+.step-line-vertical {
+  position: absolute;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background-color: var(--red);
+  /* Positioned at 50% */
+}
+.row-normal .step-line-vertical { left: 50%; transform: translateX(-50%); }
+.row-reverse .step-line-vertical { right: 50%; transform: translateX(50%); }
+
+/* 3. Horizontal Bottom Line (To Card 2) */
+.step-line-bottom {
+  position: absolute;
+  bottom: 0;
+  height: 3px;
+  background-color: var(--red);
+  width: 50%;
+  /* Normal Row: Starts Middle, Goes Right */
+}
+.row-normal .step-line-bottom { right: 0; }
+.row-reverse .step-line-bottom { left: 0; }
+
+/* 4. The Single Circle (At the Top Turn) */
+.connector-circle {
+  position: absolute;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border: 4px solid var(--gold);
+  border-radius: 50%;
+  z-index: 3;
+  /* Centered on the vertical line top */
+}
+.row-normal .connector-circle { left: 50%; transform: translate(-50%, -50%); }
+.row-reverse .connector-circle { right: 50%; transform: translate(50%, -50%); }
+
+
+/* --- VERTICAL DROP (Row to Row) --- */
+.vertical-drop-line {
+  position: absolute;
+  top: 100%; /* Start at bottom of lower card */
+  /* Center align relative to card */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  width: 3px;
+  height: var(--v-gap); /* Distance to next row */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+.line-v {
+  width: 3px;
+  height: 100%;
+  background-color: var(--red);
+}
+
+.circle-v {
+  position: absolute;
+  bottom: -10px; /* Sit on next card header */
+  width: 20px;
+  height: 20px;
+  background: white;
+  border: 4px solid var(--gold);
+  border-radius: 50%;
+  z-index: 3;
+}
+
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 768px) {
+  .process-row, .row-normal, .row-reverse {
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 40px;
+  }
+
+  .card-box { margin-top: 0; }
+  .lower-pos { margin-top: 30px; } /* Small gap on mobile */
+  
+  /* Reset Step connector to simple line */
+  .connector-step {
+    width: 3px;
+    height: 30px; /* Vertical gap */
+    margin: 0;
+  }
+  .step-line-top, .step-line-bottom { display: none; }
+  .step-line-vertical { width: 3px; left: 0; right: auto; transform: none; background: var(--red); }
+  .connector-circle { left: -8.5px; top: 50%; transform: translateY(-50%); }
+
+  .vertical-drop-line { height: 40px; }
+}
