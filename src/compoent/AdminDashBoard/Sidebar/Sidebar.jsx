@@ -26,7 +26,7 @@ function Sidebar() {
 
       <ul className="menu">
         <li>
-          <NavLink to="/admindashboard/dashboard" end>
+          <NavLink to="/admindashboard" end>
             <span className="icon icon-wrap"><FaHome /></span>
             <span>Dashboard</span>
           </NavLink>

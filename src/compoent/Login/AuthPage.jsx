@@ -59,30 +59,37 @@ const AuthPage = () => {
     }
   };
 
-  const handleLogin = async () => {
-    setSubmitting(true);
-    try {
-      const response = await fetch(`${API_BASE}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+ const handleLogin = async () => {
+  setSubmitting(true);
+  try {
+    const response = await fetch(`${API_BASE}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
-      const data = await response.json();
-      if (!response.ok) {
-        console.error("Login failed", data);
-        alert(data?.message || "Invalid credentials");
-        return;
-      }
+    const data = await response.json();
 
-      login(data?.user); // ✅ update context + localStorage
-      navigate(redirectTo); // ✅ go back to previous page
-    } catch (error) {
-      console.error("Login Error:", error);
-    } finally {
-      setSubmitting(false);
+    if (!response.ok) {
+      console.error("Login failed", data);
+      alert(data?.message || "Invalid credentials");
+      return;
     }
-  };
+
+    // 🔥 ADD THESE 3 LINES TO SEE EXACT USER OBJECT FROM BACKEND
+    console.log("🔵 FULL LOGIN RESPONSE:", data);
+    console.log("🟢 USER OBJECT:", data.user);
+    console.log("🟡 USER OBJECT (PRETTY):", JSON.stringify(data.user, null, 2));
+
+    login(data?.user);   // store in context
+    navigate(redirectTo);
+  } catch (error) {
+    console.error("Login Error:", error);
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   const onSubmit = (e) => {
     e.preventDefault();

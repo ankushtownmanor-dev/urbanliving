@@ -27,10 +27,12 @@ function Auth() {
 				console.error("[Auth] Signup failed", data);
 				alert(data?.message || "Signup failed");
 				return;
+				
 			}
 			console.log("User signed up:", data?.user);
 			localStorage.setItem("user", JSON.stringify(data?.user));
 			alert("Signup successful");
+			console.log(data);
 		} catch (error) {
 			console.error("[Auth] Signup Error:", error);
 			alert("Server error during signup");
@@ -38,28 +40,38 @@ function Auth() {
 	};
 
 	// Login via backend
-	const handleLogin = async () => {
-		try {
-			console.info("[Auth] Login attempt", { email, hasPassword: Boolean(password) });
-			const response = await fetch(`${API_BASE}/login`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ email, password }),
-			});
-			const data = await response.json();
-			if (!response.ok) {
-				console.error("[Auth] Login failed", data);
-				alert(data?.message || "Invalid credentials");
-				return;
-			}
-			console.log("User logged in:", data?.user);
-			localStorage.setItem("user", JSON.stringify(data?.user));
-			alert("Login successful");
-		} catch (error) {
-			console.error("[Auth] Login Error:", error);
-			alert("Server error during login");
-		}
-	};
+// Login via backend
+const handleLogin = async () => {
+  try {
+    console.info("[Auth] Login attempt", { email, hasPassword: Boolean(password) });
+
+    const response = await fetch(`${API_BASE}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("[Auth] Login failed", data);
+      alert(data?.message || "Invalid credentials");
+      return;
+    }
+
+    // 🔥 yahin se tum user object clearly dekh sakte ho
+    console.log("[Auth] Full login response:", data);
+    console.log("[Auth] User object:", data.user);
+    console.log("[Auth] User (pretty):", JSON.stringify(data.user, null, 2));
+
+    localStorage.setItem("user", JSON.stringify(data?.user));
+    alert("Login successful");
+  } catch (error) {
+    console.error("[Auth] Login Error:", error);
+    alert("Server error during login");
+  }
+};
+
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
