@@ -51,16 +51,7 @@ Contemporary Living
           Discover a new way of city living with Ovika — where Co-Living, Paying Guest, and Luxury Spaces come together in perfect harmony. Designed for modern minds, our spaces blend comfort, community, and class, offering a lifestyle that feels effortless, connected, and truly urban.
         </p>
         
-        <div style={{alignItems:"center"}} className="ovika-urban-hero-btn-group-newhome">
-          <button className="ovika-urban-hero-btn ovika-urban-btn-white">
-            Explore
-            <span className="ovika-urban-arrow">→</span>
-          </button>
-          
-        <a style={{textDecoration:"none"}} target='_blank' href="https://townmanor.ai/"> <button className="ovika-urban-hero-btn ovika-urban-btn-orange">
-            Townmanor
-          </button></a> 
-        </div>
+       
       </div>
     </div>
   );
