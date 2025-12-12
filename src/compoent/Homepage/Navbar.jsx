@@ -1143,106 +1143,694 @@
 // }
 
 // export default Navbar;
-import React, { useContext, useState } from "react";
+// import React, { useContext, useState } from "react";
+// import { useNavigate } from "react-router";
+// import { AuthContext } from "../Login/AuthContext";
+
+// // ✅ Animation for sidebar (now from TOP)
+// const globalCSS = `
+// @keyframes slideDownSidebar {
+//   from { transform: translateY(-40px); opacity: 0; }
+//   to { transform: translateY(0); opacity: 1; }
+// }
+// `;
+
+// const responsiveCSS = `
+// @media (max-width: 900px) {
+//   .navbar-outer {
+//     padding: 0 !important;
+//     min-height: 67px !important;
+//   }
+
+//   .navbar-inner {
+//     width: 100% !important;
+//     height: 60px !important;
+//     border-radius: 1 !important;
+//     padding: 0 10px !important;
+//     box-shadow: none !important;
+//     display: flex !important;
+//     justify-content: center !important;
+//     align-items: center !important;
+//     background: #fff !important;
+//     position: relative !important;
+//   }
+
+//   .navbar-menu-toggle {
+//     display: flex !important;
+//     position: absolute !important;
+//     left: 22px !important;
+//     top: 50% !important;
+//     transform: translateY(-50%) !important;
+//   }
+
+//   .navbar-logo {
+//     height: 75px !important;
+//     width: 80px !important;
+//     object-fit: contain !important;
+//     position: absolute !important;
+//     left: 50% !important;
+//     transform: translateX(-50%) !important;
+//     margin-top: -4px !important;
+//   }
+
+//   .navbar-right {
+//     position: absolute !important;
+//     right: 12px !important;
+//     top: 50% !important;
+//     transform: translateY(-50%) !important;
+//   }
+
+//   .mobile-menu {
+//     display: flex !important;
+//     flex-direction: column !important;
+//     position: absolute !important;
+//     top: 60px !important;
+//     left: 0 !important;
+//     width: 100vw !important;
+//     background: #fff !important;
+//     z-index: 20 !important;
+//     box-shadow: 0 6px 18px 0 rgba(71,38,9,0.18);
+//     padding: 18px 0 12px 0 !important;
+//     border-radius: 0 0 20px 20px !important;
+//     animation: mobileMenuAnim .3s ease;
+//   }
+
+//   @keyframes mobileMenuAnim {
+//     from { transform: translateY(-32px); opacity: 0; }
+//     to { transform: translateY(0); opacity: 1; }
+//   }
+
+//   .mobile-link-row {
+//     font-size: 16px !important;
+//     color: #232323;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 21px;
+//     font-weight: 500;
+//     align-items: flex-start;
+//     padding-left: 24px;
+//     margin-bottom: 5px;
+//   }
+
+//   .username-text {
+//     display: none !important;
+//   }
+// }
+// `;
+
+// function Navbar() {
+//   const [showMenu, setShowMenu] = useState(false);        // hamburger mobile
+//   const [sideMenuOpen, setSideMenuOpen] = useState(false); // right sidebar
+//   const navigate = useNavigate();
+//   const { user, logout } = useContext(AuthContext);
+
+//   const handleLogin = () => navigate("/login");
+
+//   const goDashboard = () => {
+//     setSideMenuOpen(false);
+//     navigate("/dashboard");
+//   };
+
+//   const goListingPage = () => {
+//     setSideMenuOpen(false);
+//     // yahan apna actual listing route use karo
+//     navigate("/listed1");
+//   };
+//    const goOwnerDashboard = () => {
+//     setSideMenuOpen(false);
+//     // yahan apna actual listing route use karo
+//     navigate("/admindashboard");
+//   };
+
+//   const handleLogout = () => {
+//     setSideMenuOpen(false);
+//     logout();
+//   };
+
+//   return (
+//     <>
+//       <style>{globalCSS}</style>
+//       <style>{responsiveCSS}</style>
+
+//       <div
+//         className="navbar-outer"
+//         style={{
+//           minHeight: "90px",
+//           position: "relative",
+//           zIndex: 99999,
+//           fontFamily: "Poppins,sans-serif",
+//           background: "transparent",
+//         }}
+//       >
+//         <div
+//           className="navbar-inner"
+//           style={{
+//             width: "94%",
+//             margin: "22px auto 0",
+//             borderRadius: "40px",
+//             background: "#fff",
+//             boxShadow: "0 2px 24px 0 rgba(71, 38, 9, 0.13)",
+//             height: "68px",
+//             display: "flex",
+//             alignItems: "center",
+//             justifyContent: "center",
+//             position: "relative",
+//             padding: "0 30px",
+//             transition: ".3s",
+//             zIndex: 999999,
+//           }}
+//         >
+//           {/* Left: Hamburger (mobile) */}
+//           <button
+//             className="navbar-menu-toggle"
+//             onClick={() => setShowMenu(!showMenu)}
+//             aria-label="Toggle menu"
+//             style={{
+//               position: "absolute",
+//               left: "25px",
+//               background: "none",
+//               border: "none",
+//               cursor: "pointer",
+//               display: "flex",
+//               flexDirection: "column",
+//               justifyContent: "center",
+//               alignItems: "center",
+//               gap: "6px",
+//               padding: 0,
+//             }}
+//           >
+//             <span style={{ width: "28px", height: "3px", background: "#232323", borderRadius: "2px" }} />
+//             <span style={{ width: "28px", height: "3px", background: "#232323", borderRadius: "2px" }} />
+//             <span style={{ width: "28px", height: "3px", background: "#232323", borderRadius: "2px" }} />
+//           </button>
+
+//           {/* Center: Logo */}
+//           <img
+//             src="/ovikalogo11.png"
+//             alt="logo"
+//             className="navbar-logo"
+//             style={{
+//               height: "170px",
+//               cursor: "pointer",
+//               objectFit: "contain",
+//               position: "absolute",
+//               left: "45%",
+//               transform: "translateX(-50%)",
+//               marginTop: "30px",
+//             }}
+//             onClick={() => navigate("/")}
+//           />
+
+//           {/* Right: User / Sign in */}
+//           <div
+//             className="navbar-right"
+//             style={{
+//               position: "absolute",
+//               right: "30px",
+//               display: "flex",
+//               alignItems: "center",
+//               gap: "12px",
+//             }}
+//           >
+//             {user ? (
+//               <button
+//                 className="sign-btn"
+//                 onClick={() => setSideMenuOpen(true)}   // sidebar open
+//                 aria-haspopup="true"
+//                 aria-expanded={sideMenuOpen}
+//                 style={{
+//                   border: "2px solid #c98b3e",
+//                   background: "#fff",
+//                   color: "#232323",
+//                   fontWeight: 500,
+//                   fontSize: "15px",
+//                   borderRadius: "22px",
+//                   padding: "0 22px",
+//                   height: "40px",
+//                   display: "flex",
+//                   alignItems: "center",
+//                   cursor: "pointer",
+//                 }}
+//               >
+//                 <span style={{ fontSize: "19px", marginRight: "9px" }}>
+//                   {user.username?.[0]?.toUpperCase() || "U"}
+//                 </span>
+//                 <span className="username-text">{user.username}</span>
+//                 <span style={{ marginLeft: "7px" }}>▼</span>
+//               </button>
+//             ) : (
+//               <button
+//                 className="sign-btn"
+//                 onClick={handleLogin}
+//                 style={{
+//                   border: "2px solid #c98b3e",
+//                   background: "#fff",
+//                   color: "#232323",
+//                   fontWeight: 500,
+//                   fontSize: "15px",
+//                   borderRadius: "22px",
+//                   padding: "0 22px",
+//                   height: "40px",
+//                   display: "flex",
+//                   alignItems: "center",
+//                   cursor: "pointer",
+//                 }}
+//               >
+//                 Sign In
+//               </button>
+//             )}
+//           </div>
+//         </div>
+
+//         {/* Mobile dropdown (hamburger) */}
+//         {showMenu && (
+//           <div
+//             className="mobile-menu"
+//             style={{
+//               display: "flex",
+//               flexDirection: "column",
+//               position: "absolute",
+//               top: "88px",
+//               left: 0,
+//               background: "#fff",
+//               width: "100%",
+//               borderRadius: "0 0 20px 20px",
+//               boxShadow: "0 6px 18px rgba(71,38,9,0.18)",
+//               animation: "mobileMenuAnim .3s ease",
+//               zIndex: 999999,
+//             }}
+//           >
+//             <div
+//               className="mobile-link-row"
+//               style={{
+//                 display: "flex",
+//                 flexDirection: "column",
+//                 gap: "20px",
+//                 padding: "20px 0 20px 30px",
+//                 fontSize: "16px",
+//                 fontWeight: 500,
+//                 color: "#232323",
+//               }}
+//             >
+//               <a href="/">Home</a>
+//               <a href="/services">Services</a>
+//               <a href="/dashboard">Dashboard</a>
+//               <a href="/contact">Contact</a>
+//             </div>
+//           </div>
+//         )}
+
+//         {/* ⭐ Right Sidebar Menu */}
+//         {user && sideMenuOpen && (
+//           <>
+//             {/* Overlay */}
+//             <div
+//               onClick={() => setSideMenuOpen(false)}
+//               style={{
+//                 position: "fixed",
+//                 inset: 0,
+//                 background: "rgba(0,0,0,0.25)",
+//                 zIndex: 1000000,
+//               }}
+//             />
+
+//             {/* Panel */}
+//             <div
+//               style={{
+//                 position: "fixed",
+//                 top: 0,
+//                 right: 0,
+//                 height: "100vh",
+//                 width: "min(380px, 88vw)",
+//                 background: "#fff",
+//                 borderRadius: "24px 0 0 24px",
+//                 boxShadow: "0 10px 40px rgba(0,0,0,0.18)",
+//                 padding: "22px 22px 30px",
+//                 zIndex: 1000001,
+//                 display: "flex",
+//                 flexDirection: "column",
+//                 animation: "slideDownSidebar .28s ease-out", // 🔥 from TOP now
+//               }}
+//             >
+//               {/* Top row */}
+//               <div
+//                 style={{
+//                   display: "flex",
+//                   alignItems: "center",
+//                   justifyContent: "space-between",
+//                   marginBottom: "18px",
+//                 }}
+//               >
+//                 <div>
+//                   <div
+//                     style={{
+//                       fontSize: "20px",
+//                       fontWeight: 600,
+//                       color: "#1f1f1f",
+//                     }}
+//                   >
+//                     Menu
+//                   </div>
+//                   <div
+//                     style={{
+//                       fontSize: "13px",
+//                       color: "#777",
+//                       marginTop: "2px",
+//                     }}
+//                   >
+//                     Hi, {user.username}
+//                   </div>
+//                 </div>
+
+//                 <button
+//                   onClick={() => setSideMenuOpen(false)}
+//                   aria-label="Close menu"
+//                   style={{
+//                     border: "none",
+//                     background: "#f3f3f3",
+//                     width: "32px",
+//                     height: "32px",
+//                     borderRadius: "50%",
+//                     display: "flex",
+//                     alignItems: "center",
+//                     justifyContent: "center",
+//                     fontSize: "18px",
+//                     cursor: "pointer",
+//                   }}
+//                 >
+//                   ✕
+//                 </button>
+//               </div>
+
+//               {/* Highlight card */}
+//               <div
+//                 style={{
+//                   background: "#fbf5ec",
+//                   borderRadius: "18px",
+//                   padding: "14px 14px 16px",
+//                   marginBottom: "18px",
+//                 }}
+//               >
+//                 <div
+//                   style={{
+//                     fontSize: "14px",
+//                     fontWeight: 600,
+//                     marginBottom: "4px",
+//                     color: "#3a2c18",
+//                   }}
+//                 >
+//                   Manage your hosting
+//                 </div>
+//                 <div
+//                   style={{
+//                     fontSize: "12px",
+//                     color: "#7a6b57",
+//                     lineHeight: 1.5,
+//                   }}
+//                 >
+//                   Quickly access your dashboard, listings and account actions.
+//                 </div>
+//               </div>
+
+//               {/* Menu items */}
+//               <div
+//                 style={{
+//                   display: "flex",
+//                   flexDirection: "column",
+//                   gap: "10px",
+//                   flex: 1,
+//                 }}
+//               >
+//                 {/* Dashboard */}
+//                 <button
+//                   onClick={goDashboard}
+//                   style={{
+//                     border: "none",
+//                     background: "transparent",
+//                     padding: "10px 4px",
+//                     display: "flex",
+//                     alignItems: "center",
+//                     gap: "12px",
+//                     cursor: "pointer",
+//                   }}
+//                 >
+//                   <span
+//                     style={{
+//                       width: "32px",
+//                       height: "32px",
+//                       borderRadius: "12px",
+//                       background: "#f4f4f4",
+//                       display: "flex",
+//                       alignItems: "center",
+//                       justifyContent: "center",
+//                       fontSize: "16px",
+//                     }}
+//                   >
+//                     🏠
+//                   </span>
+//                   <div style={{ textAlign: "left" }}>
+//                     <div
+//                       style={{
+//                         fontSize: "14px",
+//                         fontWeight: 500,
+//                         color: "#232323",
+//                       }}
+//                     >
+//                       Dashboard
+//                     </div>
+//                     <div
+//                       style={{
+//                         fontSize: "12px",
+//                         color: "#8a8a8a",
+//                       }}
+//                     >
+//                       View your Bookings & performance
+//                     </div>
+//                   </div>
+//                 </button>
+
+//                 {/* Listing page */}
+//                 <button
+//                   onClick={goListingPage}
+//                   style={{
+//                     border: "none",
+//                     background: "transparent",
+//                     padding: "10px 4px",
+//                     display: "flex",
+//                     alignItems: "center",
+//                     gap: "12px",
+//                     cursor: "pointer",
+//                   }}
+//                 >
+//                   <span
+//                     style={{
+//                       width: "32px",
+//                       height: "32px",
+//                       borderRadius: "12px",
+//                       background: "#f4f4f4",
+//                       display: "flex",
+//                       alignItems: "center",
+//                       justifyContent: "center",
+//                       fontSize: "16px",
+//                     }}
+//                   >
+//                     📋
+//                   </span>
+//                   <div style={{ textAlign: "left" }}>
+//                     <div
+//                       style={{
+//                         fontSize: "14px",
+//                         fontWeight: 500,
+//                         color: "#232323",
+//                       }}
+//                     >
+//                       List your Property
+//                     </div>
+//                     <div
+//                       style={{
+//                         fontSize: "12px",
+//                         color: "#8a8a8a",
+//                       }}
+//                     >
+//                       Create your listings
+//                     </div>
+//                   </div>
+//                 </button>
+
+//                 {/* Ownwer Dashoboard */}
+//                   <button
+//                   onClick={goOwnerDashboard}
+//                   style={{
+//                     border: "none",
+//                     background: "transparent",
+//                     padding: "10px 4px",
+//                     display: "flex",
+//                     alignItems: "center",
+//                     gap: "12px",
+//                     cursor: "pointer",
+//                   }}
+//                 >
+//                   <span
+//                     style={{
+//                       width: "32px",
+//                       height: "32px",
+//                       borderRadius: "12px",
+//                       background: "#f4f4f4",
+//                       display: "flex",
+//                       alignItems: "center",
+//                       justifyContent: "center",
+//                       fontSize: "16px",
+//                     }}
+//                   >
+//                     🏠
+//                   </span>
+//                   <div style={{ textAlign: "left" }}>
+//                     <div
+//                       style={{
+//                         fontSize: "14px",
+//                         fontWeight: 500,
+//                         color: "#232323",
+//                       }}
+//                     >
+//                       Owner Dashboard
+//                     </div>
+//                     <div
+//                       style={{
+//                         fontSize: "12px",
+//                         color: "#8a8a8a",
+//                       }}
+//                     >
+//                    Show all properties and bookings
+//                     </div>
+//                   </div>
+//                 </button>
+
+//                 <hr
+//                   style={{
+//                     border: "none",
+//                     borderTop: "1px solid #eee",
+//                     margin: "14px 0",
+//                   }}
+//                 />
+
+//                 {/* Logout */}
+//                 <button
+//                   onClick={handleLogout}
+//                   style={{
+//                     border: "none",
+//                     background: "transparent",
+//                     padding: "8px 4px",
+//                     display: "flex",
+//                     alignItems: "center",
+//                     gap: "10px",
+//                     cursor: "pointer",
+//                   }}
+//                 >
+//                   <span
+//                     style={{
+//                       width: "28px",
+//                       height: "28px",
+//                       borderRadius: "999px",
+//                       background: "#fdeceb",
+//                       display: "flex",
+//                       alignItems: "center",
+//                       justifyContent: "center",
+//                       fontSize: "15px",
+//                       color: "#c23e3e",
+//                     }}
+//                   >
+//                     ⬅
+//                   </span>
+//                   <span
+//                     style={{
+//                       fontSize: "14px",
+//                       fontWeight: 500,
+//                       color: "#c23e3e",
+//                     }}
+//                   >
+//                     Log out
+//                   </span>
+//                 </button>
+//               </div>
+//             </div>
+//           </>
+//         )}
+//       </div>
+//     </>
+//   );
+// }
+
+// export default Navbar;
+
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../Login/AuthContext";
 
-// ✅ Animation for sidebar (now from TOP)
+/* -------------------------
+  Small CSS injected inline (keeps your original styling + responsive)
+   - unchanged except names kept the same
+-------------------------*/
 const globalCSS = `
 @keyframes slideDownSidebar {
   from { transform: translateY(-40px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 `;
-
 const responsiveCSS = `
 @media (max-width: 900px) {
-  .navbar-outer {
-    padding: 0 !important;
-    min-height: 67px !important;
-  }
-
-  .navbar-inner {
-    width: 100% !important;
-    height: 60px !important;
-    border-radius: 1 !important;
-    padding: 0 10px !important;
-    box-shadow: none !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    background: #fff !important;
-    position: relative !important;
-  }
-
-  .navbar-menu-toggle {
-    display: flex !important;
-    position: absolute !important;
-    left: 22px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-  }
-
-  .navbar-logo {
-    height: 75px !important;
-    width: 80px !important;
-    object-fit: contain !important;
-    position: absolute !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    margin-top: -4px !important;
-  }
-
-  .navbar-right {
-    position: absolute !important;
-    right: 12px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-  }
-
-  .mobile-menu {
-    display: flex !important;
-    flex-direction: column !important;
-    position: absolute !important;
-    top: 60px !important;
-    left: 0 !important;
-    width: 100vw !important;
-    background: #fff !important;
-    z-index: 20 !important;
-    box-shadow: 0 6px 18px 0 rgba(71,38,9,0.18);
-    padding: 18px 0 12px 0 !important;
-    border-radius: 0 0 20px 20px !important;
-    animation: mobileMenuAnim .3s ease;
-  }
-
-  @keyframes mobileMenuAnim {
-    from { transform: translateY(-32px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  .mobile-link-row {
-    font-size: 16px !important;
-    color: #232323;
-    display: flex;
-    flex-direction: column;
-    gap: 21px;
-    font-weight: 500;
-    align-items: flex-start;
-    padding-left: 24px;
-    margin-bottom: 5px;
-  }
-
-  .username-text {
-    display: none !important;
-  }
+  .navbar-outer { padding: 0 !important; min-height: 67px !important; }
+  .navbar-inner { width: 100% !important; height: 60px !important; border-radius: 1 !important; padding: 0 10px !important; box-shadow: none !important; display: flex !important; justify-content: center !important; align-items: center !important; background: #fff !important; position: relative !important; }
+  .navbar-menu-toggle { display: flex !important; position: absolute !important; left: 22px !important; top: 50% !important; transform: translateY(-50%) !important; }
+  .navbar-logo { height: 75px !important; width: 80px !important; object-fit: contain !important; position: absolute !important; left: 50% !important; transform: translateX(-50%) !important; margin-top: -4px !important; }
+  .navbar-right { position: absolute !important; right: 12px !important; top: 50% !important; transform: translateY(-50%) !important; }
+  .mobile-menu { display: flex !important; flex-direction: column !important; position: absolute !important; top: 60px !important; left: 0 !important; width: 100vw !important; background: #fff !important; z-index: 20 !important; box-shadow: 0 6px 18px 0 rgba(71,38,9,0.18); padding: 18px 0 12px 0 !important; border-radius: 0 0 20px 20px !important; animation: mobileMenuAnim .3s ease; }
+  @keyframes mobileMenuAnim { from { transform: translateY(-32px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .mobile-link-row { font-size: 16px !important; color: #232323; display: flex; flex-direction: column; gap: 21px; font-weight: 500; align-items: flex-start; padding-left: 24px; margin-bottom: 5px; }
+  .username-text { display: none !important; }
 }
 `;
 
 function Navbar() {
-  const [showMenu, setShowMenu] = useState(false);        // hamburger mobile
+  const [showMenu, setShowMenu] = useState(false); // hamburger mobile
   const [sideMenuOpen, setSideMenuOpen] = useState(false); // right sidebar
   const navigate = useNavigate();
-  const { user, logout } = useContext(AuthContext);
+
+  // NOTE: we now use login too to sync context if necessary
+  const { user, logout, login } = useContext(AuthContext);
+
+  // Helpful constants — keep both keys (your codebase uses both at different places)
+  const STORAGE_KEYS = ["user", "tm_user"];
+
+  // Try to sync context from localStorage if context user is null but storage has a user.
+  useEffect(() => {
+    if (user) return; // already in context — nothing to do
+
+    // Try both keys, prefer "user" then "tm_user"
+    for (const k of STORAGE_KEYS) {
+      try {
+        const raw = localStorage.getItem(k);
+        if (!raw) continue;
+        const parsed = JSON.parse(raw);
+        // require some id presence so we don't set bogus objects
+        if (parsed && (parsed.id || parsed._id || parsed.owner_id || parsed.userId || parsed.uid)) {
+          // call login from context to set user everywhere (AuthProvider will also persist)
+          if (typeof login === "function") {
+            login(parsed);
+          } else {
+            // fallback: write to tm_user so AuthContext's initial read picks it up on reload
+            try {
+              localStorage.setItem("tm_user", JSON.stringify(parsed));
+            } catch (e) {}
+          }
+          break;
+        }
+      } catch (e) {
+        // ignore parse errors
+        //console.warn("Navbar: failed to parse local user", e);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // run once on mount
 
   const handleLogin = () => navigate("/login");
 
@@ -1253,18 +1841,36 @@ function Navbar() {
 
   const goListingPage = () => {
     setSideMenuOpen(false);
-    // yahan apna actual listing route use karo
     navigate("/listed1");
   };
-   const goOwnerDashboard = () => {
+
+  const goOwnerDashboard = () => {
     setSideMenuOpen(false);
-    // yahan apna actual listing route use karo
     navigate("/admindashboard");
   };
 
+  // Hardened logout: clear both local keys and then call logout() and navigate
   const handleLogout = () => {
     setSideMenuOpen(false);
-    logout();
+    try {
+      // remove both possible keys used across your app
+      STORAGE_KEYS.forEach((k) => localStorage.removeItem(k));
+      // clear any session storage that could cause stale state
+      try { sessionStorage.removeItem("user"); sessionStorage.removeItem("tm_user"); } catch (e) {}
+    } catch (err) {
+      console.warn("Navbar: clearing storage failed", err);
+    }
+
+    // call AuthContext logout (this updates React context)
+    try {
+      logout();
+    } catch (e) {
+      console.warn("Navbar: logout() threw", e);
+    }
+
+    // Force full reload — this guarantees all cached state in other components is cleared.
+    // If you prefer client-side navigation, replace with: navigate("/", { replace: true });
+    window.location.href = "/";
   };
 
   return (
@@ -1355,7 +1961,7 @@ function Navbar() {
             {user ? (
               <button
                 className="sign-btn"
-                onClick={() => setSideMenuOpen(true)}   // sidebar open
+                onClick={() => setSideMenuOpen(true)} // sidebar open
                 aria-haspopup="true"
                 aria-expanded={sideMenuOpen}
                 style={{
@@ -1440,7 +2046,7 @@ function Navbar() {
           </div>
         )}
 
-        {/* ⭐ Right Sidebar Menu */}
+        {/* Right Sidebar Menu */}
         {user && sideMenuOpen && (
           <>
             {/* Overlay */}
@@ -1469,37 +2075,14 @@ function Navbar() {
                 zIndex: 1000001,
                 display: "flex",
                 flexDirection: "column",
-                animation: "slideDownSidebar .28s ease-out", // 🔥 from TOP now
+                animation: "slideDownSidebar .28s ease-out",
               }}
             >
               {/* Top row */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  marginBottom: "18px",
-                }}
-              >
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px" }}>
                 <div>
-                  <div
-                    style={{
-                      fontSize: "20px",
-                      fontWeight: 600,
-                      color: "#1f1f1f",
-                    }}
-                  >
-                    Menu
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "13px",
-                      color: "#777",
-                      marginTop: "2px",
-                    }}
-                  >
-                    Hi, {user.username}
-                  </div>
+                  <div style={{ fontSize: "20px", fontWeight: 600, color: "#1f1f1f" }}>Menu</div>
+                  <div style={{ fontSize: "13px", color: "#777", marginTop: "2px" }}>Hi, {user.username}</div>
                 </div>
 
                 <button
@@ -1523,233 +2106,45 @@ function Navbar() {
               </div>
 
               {/* Highlight card */}
-              <div
-                style={{
-                  background: "#fbf5ec",
-                  borderRadius: "18px",
-                  padding: "14px 14px 16px",
-                  marginBottom: "18px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: 600,
-                    marginBottom: "4px",
-                    color: "#3a2c18",
-                  }}
-                >
-                  Manage your hosting
-                </div>
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#7a6b57",
-                    lineHeight: 1.5,
-                  }}
-                >
+              <div style={{ background: "#fbf5ec", borderRadius: "18px", padding: "14px 14px 16px", marginBottom: "18px" }}>
+                <div style={{ fontSize: "14px", fontWeight: 600, marginBottom: "4px", color: "#3a2c18" }}>Manage your hosting</div>
+                <div style={{ fontSize: "12px", color: "#7a6b57", lineHeight: 1.5 }}>
                   Quickly access your dashboard, listings and account actions.
                 </div>
               </div>
 
               {/* Menu items */}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                  flex: 1,
-                }}
-              >
-                {/* Dashboard */}
-                <button
-                  onClick={goDashboard}
-                  style={{
-                    border: "none",
-                    background: "transparent",
-                    padding: "10px 4px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "12px",
-                    cursor: "pointer",
-                  }}
-                >
-                  <span
-                    style={{
-                      width: "32px",
-                      height: "32px",
-                      borderRadius: "12px",
-                      background: "#f4f4f4",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "16px",
-                    }}
-                  >
-                    🏠
-                  </span>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
+                <button onClick={goDashboard} style={{ border: "none", background: "transparent", padding: "10px 4px", display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}>
+                  <span style={{ width: "32px", height: "32px", borderRadius: "12px", background: "#f4f4f4", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px" }}>🏠</span>
                   <div style={{ textAlign: "left" }}>
-                    <div
-                      style={{
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        color: "#232323",
-                      }}
-                    >
-                      Dashboard
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "12px",
-                        color: "#8a8a8a",
-                      }}
-                    >
-                      View your Bookings & performance
-                    </div>
+                    <div style={{ fontSize: "14px", fontWeight: 500, color: "#232323" }}>Dashboard</div>
+                    <div style={{ fontSize: "12px", color: "#8a8a8a" }}>View your Bookings & performance</div>
                   </div>
                 </button>
 
-                {/* Listing page */}
-                <button
-                  onClick={goListingPage}
-                  style={{
-                    border: "none",
-                    background: "transparent",
-                    padding: "10px 4px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "12px",
-                    cursor: "pointer",
-                  }}
-                >
-                  <span
-                    style={{
-                      width: "32px",
-                      height: "32px",
-                      borderRadius: "12px",
-                      background: "#f4f4f4",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "16px",
-                    }}
-                  >
-                    📋
-                  </span>
+                <button onClick={goListingPage} style={{ border: "none", background: "transparent", padding: "10px 4px", display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}>
+                  <span style={{ width: "32px", height: "32px", borderRadius: "12px", background: "#f4f4f4", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px" }}>📋</span>
                   <div style={{ textAlign: "left" }}>
-                    <div
-                      style={{
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        color: "#232323",
-                      }}
-                    >
-                      List your Property
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "12px",
-                        color: "#8a8a8a",
-                      }}
-                    >
-                      Create your listings
-                    </div>
+                    <div style={{ fontSize: "14px", fontWeight: 500, color: "#232323" }}>List your Property</div>
+                    <div style={{ fontSize: "12px", color: "#8a8a8a" }}>Create your listings</div>
                   </div>
                 </button>
 
-                {/* Ownwer Dashoboard */}
-                  <button
-                  onClick={goOwnerDashboard}
-                  style={{
-                    border: "none",
-                    background: "transparent",
-                    padding: "10px 4px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "12px",
-                    cursor: "pointer",
-                  }}
-                >
-                  <span
-                    style={{
-                      width: "32px",
-                      height: "32px",
-                      borderRadius: "12px",
-                      background: "#f4f4f4",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "16px",
-                    }}
-                  >
-                    🏠
-                  </span>
+                <button onClick={goOwnerDashboard} style={{ border: "none", background: "transparent", padding: "10px 4px", display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}>
+                  <span style={{ width: "32px", height: "32px", borderRadius: "12px", background: "#f4f4f4", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px" }}>🏠</span>
                   <div style={{ textAlign: "left" }}>
-                    <div
-                      style={{
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        color: "#232323",
-                      }}
-                    >
-                      Owner Dashboard
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "12px",
-                        color: "#8a8a8a",
-                      }}
-                    >
-                   Show all properties and bookings
-                    </div>
+                    <div style={{ fontSize: "14px", fontWeight: 500, color: "#232323" }}>Owner Dashboard</div>
+                    <div style={{ fontSize: "12px", color: "#8a8a8a" }}>Show your properties and bookings</div>
                   </div>
                 </button>
 
-                <hr
-                  style={{
-                    border: "none",
-                    borderTop: "1px solid #eee",
-                    margin: "14px 0",
-                  }}
-                />
+                <hr style={{ border: "none", borderTop: "1px solid #eee", margin: "14px 0" }} />
 
                 {/* Logout */}
-                <button
-                  onClick={handleLogout}
-                  style={{
-                    border: "none",
-                    background: "transparent",
-                    padding: "8px 4px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    cursor: "pointer",
-                  }}
-                >
-                  <span
-                    style={{
-                      width: "28px",
-                      height: "28px",
-                      borderRadius: "999px",
-                      background: "#fdeceb",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "15px",
-                      color: "#c23e3e",
-                    }}
-                  >
-                    ⬅
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: 500,
-                      color: "#c23e3e",
-                    }}
-                  >
-                    Log out
-                  </span>
+                <button onClick={handleLogout} style={{ border: "none", background: "transparent", padding: "8px 4px", display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                  <span style={{ width: "28px", height: "28px", borderRadius: "999px", background: "#fdeceb", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", color: "#c23e3e" }}>⬅</span>
+                  <span style={{ fontSize: "14px", fontWeight: 500, color: "#c23e3e" }}>Log out</span>
                 </button>
               </div>
             </div>
@@ -1761,4 +2156,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
