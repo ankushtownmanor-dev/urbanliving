@@ -172,7 +172,7 @@
 //                   "About Us",
 //                   "FAQ's",
 //                   "Terms and condition",
-//                   "Privacy Policy",
+//                   <a href="/privacy-policy" style={{ color: '#fff', textDecoration: 'none' }}>Privacy Policy</a>,
 //                   "Refund and Cancellation Policy",
 //                   "Subscription Plan",
 //                   "Blogs",
@@ -564,7 +564,7 @@
 //                   "About Us",
 //                   "FAQ's",
 //                   "Terms and condition",
-//                   "Privacy Policy",
+//                   <a href="/privacy-policy" style={{ color: '#fff', textDecoration: 'none' }}>Privacy Policy</a>,
 //                   "Refund and Cancellation Policy",
 //                   "Subscription Plan",
 //                   "Blogs",
@@ -782,7 +782,7 @@
 
 import React, { useState } from "react";
 import { Mail, Phone, MapPin, Smartphone } from "lucide-react";
-
+import { Link } from "react-router-dom";  // This is the new import
 const LinkList = ({ items }) => (
   <div
     style={{
@@ -793,9 +793,8 @@ const LinkList = ({ items }) => (
     }}
   >
     {items.map((item, index) => (
-      <a
+      <div
         key={index}
-        href="#"
         style={{
           fontSize: "13px",
           color: "#fff",
@@ -806,8 +805,8 @@ const LinkList = ({ items }) => (
         onMouseOver={(e) => (e.target.style.opacity = "0.7")}
         onMouseOut={(e) => (e.target.style.opacity = "1")}
       >
-        {item}
-      </a>
+        {typeof item === 'string' ? <a href="#" style={{ color: '#fff', textDecoration: 'none' }}>{item}</a> : item}
+      </div>
     ))}
   </div>
 );
@@ -1006,7 +1005,7 @@ const HoomieFooter = () => {
                   "About Us",
                   "FAQ's",
                   "Terms and condition",
-                  "Privacy Policy",
+                  <Link to="/privacy-policy" style={{ color: '#fff', textDecoration: 'none' }}>Privacy Policy</Link>,
                   "Refund and Cancellation Policy",
                   "Subscription Plan",
                   "Blogs",
@@ -1096,7 +1095,7 @@ const HoomieFooter = () => {
                       "Refund and Cancellation Policy",
                        "Terms and condition",
                    "Subscription Plan",
-                    "Privacy Policy",
+                    <a href="/privacy-policy" style={{ color: '#fff', textDecoration: 'none' }}>Privacy Policy</a>,
                        "Blogs",
                         "FAQ's",
 
