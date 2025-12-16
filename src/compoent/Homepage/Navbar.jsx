@@ -2952,9 +2952,11 @@ export default function Navbar() {
               src="/ovikalogo11.png"
               alt="logo"
               style={{
-                height: isMobile ? "65px" : "110px",
+                height: isMobile ? "130px" : "180px",
                 cursor: "pointer",
                 objectFit: "contain",
+                transition: "all 0.3s ease",
+                marginTop: isMobile ? "20px" : "30px"
               }}
               onClick={() => navigate("/")}
             />
