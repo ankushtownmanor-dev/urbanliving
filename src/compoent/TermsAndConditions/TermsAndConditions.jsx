@@ -18,7 +18,7 @@ const TermsAndConditions = () => {
           operated under Townmanor Technologies ("Ovikaliving", "we", "us", "our").
         </p>
         <p>
-          By accessing, registering, or using our website(s) ovika.co.in and townmanor.ai (collectively, the
+          By accessing, registering, or using our website(s) ovika.co.in and ovikaliving.com (collectively, the
           "Platform"), you agree to be legally bound by these Terms.
         </p>
         <p className="warning-text">
