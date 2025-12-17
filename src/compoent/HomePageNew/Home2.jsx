@@ -56,6 +56,13 @@ import "./Home2.css";
 
 const Home2 = () => {
   const cards = [
+     {
+      img: "/image 87.png",
+      title: "Luxury Living Spaces",
+      text: "TM Luxe offers high-end, fully serviced apartments for those who value elegance, comfort, and privacy. With sophisticated interiors, modern amenities, and prime locations, TM Luxe is crafted for families, celeb business travelers, and individuals seeking a luxurious living experience.",
+      btn: "Know more",
+      link: "/tmluxe"
+    },
     {
       img: "/image 86.png",
       title: "PG Living Spaces",
@@ -70,13 +77,7 @@ const Home2 = () => {
       btn: "Coming Soon",
       link: "/"
     },
-    {
-      img: "/image 87.png",
-      title: "Luxury Living Spaces",
-      text: "TM Luxe offers high-end, fully serviced apartments for those who value elegance, comfort, and privacy. With sophisticated interiors, modern amenities, and prime locations, TM Luxe is crafted for families, celeb business travelers, and individuals seeking a luxurious living experience.",
-      btn: "Know more",
-      link: "/tmluxe"
-    },
+   
   ];
 
   const handleButtonClick = (url) => {

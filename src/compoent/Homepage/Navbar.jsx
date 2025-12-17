@@ -2718,7 +2718,7 @@ const mobileCSS = `
   .navbar-inner {
     display: flex !important;
     align-items: center !important;
-    justify-content: space-between !important;
+     justify-content: center !important;
     padding: 0 8px !important;
     gap: 4px !important;
   }
@@ -2741,6 +2741,7 @@ const mobileCSS = `
     display: flex !important;
     flex-shrink: 0;
     margin: 0 auto;
+    margin-left:3px;
   }
 
   .navbar-become-host {
@@ -2959,7 +2960,7 @@ export default function Navbar() {
           </div>
 
           {/* Book a Stay Button and Favorites */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '6px' : '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '10px' : '12px' }}>
             {/* Book a Stay Button */}
             <div className="navbar-book-stay">
               <button
@@ -3024,7 +3025,8 @@ export default function Navbar() {
                 style={{
                   width: isMobile ? 30 : 40,
                   height: isMobile ? 30 : 40,
-                  objectFit: 'contain'
+                  objectFit: 'contain',
+                  margin:isMobile?"14px":"40px",
                 }} 
               />
             </button>

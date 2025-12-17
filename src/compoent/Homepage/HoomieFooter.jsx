@@ -838,12 +838,13 @@ const mobileCSS = `
   }
   
   .logo-col img {
-    margin: 0 auto !important;
+    margin: -50px auto !important;
   }
   
   .logo-col p {
     text-align: center !important;
     font-size: 10px !important;
+    margin-top:-44px;
   }
   
   .footer-link-columns {
