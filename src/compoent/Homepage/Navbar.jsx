@@ -2741,7 +2741,7 @@ const mobileCSS = `
     display: flex !important;
     flex-shrink: 0;
     margin: 0 auto;
-    margin-left:-24px;
+    margin-left:-22px;
   }
 
   .navbar-become-host {
