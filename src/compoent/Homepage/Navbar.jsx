@@ -3105,7 +3105,7 @@ export default function Navbar() {
                 }}
               >
                 {isMobile ? (
-                  <span style={{ fontSize: 16 }}>👤</span>
+                  <span style={{ fontSize: 16 ,color:"#c2772b"}}>👤</span>
                 ) : (
                   <>
                     <span style={{ fontSize: 18 }}>
@@ -3122,9 +3122,9 @@ export default function Navbar() {
               <button
                 onClick={handleLogin}
                 style={{
-                  border: "2px solid #c98b3e",
+                  border: "0px solid #c98b3e",
                   background: "#fff",
-                  color: "#232323",
+                  color: "#c2772b",
                   fontWeight: 500,
                   fontSize: isMobile ? 16 : 15,
                   borderRadius: 22,
