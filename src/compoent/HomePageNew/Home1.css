@@ -148,13 +148,14 @@
 
   .ovika-urban-hero-heading {
     font-size: 1.6rem;
-    line-height: 1.3;
+    line-height: 1.2;
     margin-bottom: 1rem;
+    width: 344px;
   }
 
   .ovika-urban-hero-text {
-    font-size: 1.1rem;
-    max-width: 95%;
+    font-size: 1.0rem;
+    max-width: 99%;
     line-height: 1.5;
     text-align: left;
     margin-bottom: 1.5rem;
