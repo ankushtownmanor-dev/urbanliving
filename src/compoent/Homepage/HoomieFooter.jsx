@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mail, Phone, MapPin, Smartphone, X } from "lucide-react";
+import { Mail, Phone, MapPin, Smartphone, X, Linkedin, Instagram, Facebook } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const LinkList = ({ items }) => (
@@ -770,21 +770,87 @@ const HoomieFooter = () => {
               }}
             >
               <span>Follow Us</span>
-              <img
-                src="/Group 1711.png"
-                alt="Twitter"
-                style={{ width: "30px" }}
-              />
-              <img
-                src="/Group 1722.png"
-                alt="Facebook"
-                style={{ width: "30px" }}
-              />
-              <img
-                src="/Group 1733.png"
-                alt="Instagram"
-                style={{ width: "30px" }}
-              />
+              <a
+                href="#linkedin"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: "#fff",
+                  textDecoration: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  transition: "all 0.3s ease"
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = "#0077B5";
+                  e.currentTarget.style.transform = "translateY(-3px)";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
+              >
+                <Linkedin size={22} fill="#fff" />
+              </a>
+              <a
+                href="#instagram"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: "#fff",
+                  textDecoration: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  transition: "all 0.3s ease"
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.background = "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)";
+                  e.currentTarget.style.transform = "translateY(-3px)";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
+              >
+                <Instagram size={22} />
+              </a>
+              <a
+                href="#facebook"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: "#fff",
+                  textDecoration: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  transition: "all 0.3s ease"
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = "#1877F2";
+                  e.currentTarget.style.transform = "translateY(-3px)";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
+              >
+                <Facebook size={22} fill="#fff" />
+              </a>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <a
