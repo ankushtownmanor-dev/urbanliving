@@ -11,18 +11,18 @@ const Home5 = () => {
     },
     {
       icon: "/siki2.png",
-      title: "100+ Happy Residence",
-      text: "Join a vibrant community of professionals and students",
+      title: "Prime Locations",
+      text: "Our homes are located in well-connected neighborhoods, offering easy access to key areas and daily essentials",
     },
     {
       icon: "/siki3.png",
-      title: "24/7 Customer Support",
-      text: "We are here to help you anytime, anywhere",
+      title: "Dedicated Support",
+      text: "Our support team is available during service hours to assist you promptly and ensure a smooth living experience.",
     },
     {
       icon:"/siki4.png",
-      title: "Flexible Rent & Stay",
-      text: "Choose from a variety of stay durations that suit your needs",
+      title: "Transparent Pricing",
+      text: "We follow a clear and honest pricing structure with no hidden charges, ensuring complete clarity in billing at every step.",
     },
   ];
 

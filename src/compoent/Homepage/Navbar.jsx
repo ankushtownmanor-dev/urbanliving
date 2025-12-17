@@ -2958,40 +2958,75 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Book a Stay Button */}
-          <div className="navbar-book-stay">
+          {/* Book a Stay Button and Favorites */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '6px' : '12px' }}>
+            {/* Book a Stay Button */}
+            <div className="navbar-book-stay">
+              <button
+                onClick={() => navigate("/properties")}
+                style={{
+                  border: "1px solid #c98b3e",
+                  background: "#fff",
+                  color: "#232323",
+                  fontWeight: 600,
+                  fontSize: isMobile ? "7px" : 13,
+                  borderRadius: 20,
+                  padding: isMobile ? "9px 6px" : "8px 16px",
+                  height: isMobile ? "19px" : 38,
+                  display: "flex",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  gap: 4,
+                  boxShadow: "0 2px 6px rgba(201, 139, 62, 0.12)",
+                  transition: "all 0.3s ease",
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.boxShadow = "0 3px 10px rgba(201, 139, 62, 0.2)";
+                  e.currentTarget.style.background = "#fef9f2";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 2px 6px rgba(201, 139, 62, 0.12)";
+                  e.currentTarget.style.background = "#fff";
+                }}
+              >
+                <span className="book-emoji" style={{ fontSize: isMobile ? "4px" : "16px" }}>🏖️</span>
+                <span>{isMobile ? "Book a Stay" : "Book a Stay"}</span>
+              </button>
+            </div>
+            
+            {/* Favorite/Home Icon */}
             <button
-              onClick={() => navigate("/properties")}
+              onClick={() => navigate("/")}
               style={{
-                border: "1px solid #c98b3e",
-                background: "#fff",
-                color: "#232323",
-                fontWeight: 600,
-                fontSize: isMobile ? "7px" : 13,
-                borderRadius: 20,
-                padding: isMobile ? "9px 6px" : "8px 16px",
-                height: isMobile ? "19px" : 38,
+                border: "none",
+                background: "transparent",
+                padding: 0,
+                cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
-                cursor: "pointer",
-                gap: 4,
-                boxShadow: "0 2px 6px rgba(201, 139, 62, 0.12)",
-                transition: "all 0.3s ease",
-                whiteSpace: "nowrap",
+                justifyContent: "center",
+                transition: "transform 0.2s ease"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-1px)";
-                e.currentTarget.style.boxShadow = "0 3px 10px rgba(201, 139, 62, 0.2)";
-                e.currentTarget.style.background = "#fef9f2";
+                e.currentTarget.style.transform = "scale(1.1)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 2px 6px rgba(201, 139, 62, 0.12)";
-                e.currentTarget.style.background = "#fff";
+                e.currentTarget.style.transform = "scale(1)";
               }}
+              aria-label="Favorites"
             >
-              <span className="book-emoji" style={{ fontSize: isMobile ? "4px" : "16px" }}>🏖️</span>
-              <span>{isMobile ? "Book a Stay" : "Book a Stay"}</span>
+              <img 
+                src="/icon.png" 
+                alt="Favorites" 
+                style={{
+                  width: isMobile ? 30 : 40,
+                  height: isMobile ? 30 : 40,
+                  objectFit: 'contain'
+                }} 
+              />
             </button>
           </div>
 
