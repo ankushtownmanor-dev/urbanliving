@@ -3183,9 +3183,7 @@ export default function Navbar() {
                 }}
               >
                 <div>
-                  <div style={{ fontSize: isMobile ? 18 : 20, fontWeight: 600, color: "#1f1f1f" }}>
-                    Menu
-                  </div>
+                  
                   <div style={{ fontSize: isMobile ? 12 : 13, color: "#777", marginTop: 4 }}>
                     Navigate through Ovika
                   </div>
