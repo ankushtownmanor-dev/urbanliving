@@ -780,22 +780,23 @@ const HoomieFooter = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "50%",
-                  backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  transition: "all 0.3s ease"
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "8px",
+                  backgroundColor: "#0077B5",
+                  transition: "all 0.3s ease",
+                  boxShadow: "0 2px 8px rgba(0,119,181,0.3)"
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = "#0077B5";
                   e.currentTarget.style.transform = "translateY(-3px)";
+                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,119,181,0.5)";
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
                   e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,119,181,0.3)";
                 }}
               >
-                <Linkedin size={22} fill="#fff" />
+                <Linkedin size={22} fill="#fff" strokeWidth={0} />
               </a>
               <a
                 href="#instagram"
@@ -807,22 +808,23 @@ const HoomieFooter = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "50%",
-                  backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  transition: "all 0.3s ease"
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "8px",
+                  background: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
+                  transition: "all 0.3s ease",
+                  boxShadow: "0 2px 8px rgba(188,24,136,0.3)"
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.background = "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)";
                   e.currentTarget.style.transform = "translateY(-3px)";
+                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(188,24,136,0.5)";
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
                   e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 2px 8px rgba(188,24,136,0.3)";
                 }}
               >
-                <Instagram size={22} />
+                <Instagram size={22} strokeWidth={2} />
               </a>
               <a
                 href="#facebook"
@@ -834,22 +836,23 @@ const HoomieFooter = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "50%",
-                  backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  transition: "all 0.3s ease"
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "8px",
+                  backgroundColor: "#1877F2",
+                  transition: "all 0.3s ease",
+                  boxShadow: "0 2px 8px rgba(24,119,242,0.3)"
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = "#1877F2";
                   e.currentTarget.style.transform = "translateY(-3px)";
+                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(24,119,242,0.5)";
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
                   e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 2px 8px rgba(24,119,242,0.3)";
                 }}
               >
-                <Facebook size={22} fill="#fff" />
+                <Facebook size={22} fill="#fff" strokeWidth={0} />
               </a>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
