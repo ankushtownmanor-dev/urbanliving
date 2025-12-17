@@ -3027,7 +3027,7 @@ export default function Navbar() {
                   height: isMobile ? 30 : 40,
                   objectFit: 'contain',
                  marginLeft:isMobile? "10px":40,
-                    marginRight:isMobile? "20px":40,
+                    marginRight:isMobile? "30px":40,
                 }} 
               />
             </button>
