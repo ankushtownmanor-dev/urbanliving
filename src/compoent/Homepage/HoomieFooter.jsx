@@ -1004,7 +1004,7 @@ const HoomieFooter = () => {
                 items={[
                   "About Us",
                   "FAQ's",
-                  "Terms and condition",
+                  <Link to="/terms-and-conditions" style={{ color: '#fff', textDecoration: 'none' }}>Terms and Conditions</Link>,
                   <Link to="/privacy-policy" style={{ color: '#fff', textDecoration: 'none' }}>Privacy Policy</Link>,
                   "Refund and Cancellation Policy",
                   "Subscription Plan",

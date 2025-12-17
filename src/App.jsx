@@ -204,6 +204,7 @@ import Tmx9PropertyForm from "./compoent/ovikalistingform/Tmx9PropertyForm";
 import PropertyListPage from "./compoent/ovikalistingform/PropertyListPage";
 import PropertyDetailPage from "./compoent/ovikalistingform/PropertyDetailPage";
 import PrivacyPolicy from "./compoent/PrivacyPolicy/PrivacyPolicy";
+import TermsAndConditions from "./compoent/TermsAndConditions/TermsAndConditions";
 import { useContext } from "react";
 
 
@@ -260,6 +261,7 @@ function App() {
           <Route path="/properties" element={<PropertyListPage />} />
           <Route path="/property/:id" element={<PropertyDetailPage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
 
           {/* =========================
               ADMIN DASHBOARD SECTION
