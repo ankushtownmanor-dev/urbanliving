@@ -2960,7 +2960,7 @@ export default function Navbar() {
           </div>
 
           {/* Book a Stay Button and Favorites */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '8px' : '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '3px' : '12px' }}>
             {/* Book a Stay Button */}
             <div className="navbar-book-stay">
               <button
