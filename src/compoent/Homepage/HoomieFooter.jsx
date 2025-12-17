@@ -426,7 +426,7 @@ const HoomieFooter = () => {
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                Submit Query
+                Submit 
               </button>
             </form>
           </div>
