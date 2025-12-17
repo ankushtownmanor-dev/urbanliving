@@ -2741,7 +2741,7 @@ const mobileCSS = `
     display: flex !important;
     flex-shrink: 0;
     margin: 0 auto;
-    margin-left:3px;
+    margin-left:-24px;
   }
 
   .navbar-become-host {
@@ -3026,7 +3026,8 @@ export default function Navbar() {
                   width: isMobile ? 30 : 40,
                   height: isMobile ? 30 : 40,
                   objectFit: 'contain',
-                  margin:isMobile?"14px":"40px",
+                 marginLeft:isMobile? "10px":40,
+                    marginRight:isMobile? "20px":40,
                 }} 
               />
             </button>
