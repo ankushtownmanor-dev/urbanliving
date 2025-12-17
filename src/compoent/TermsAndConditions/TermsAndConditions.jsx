@@ -14,8 +14,8 @@ const TermsAndConditions = () => {
 
       <div className="intro-text">
         <p>
-          These Terms and Conditions ("Terms") govern your access to and use of the Ovikaliving platform,
-          operated under Townmanor Technologies ("Ovikaliving", "we", "us", "our").
+          These Terms and Conditions ("Terms") govern your access to and use of the Ovikaliving.com platform,
+          operated under Townmanor Technologies ("Ovikaliving.com", "we", "us", "our").
         </p>
         <p>
           By accessing, registering, or using our website(s) ovika.co.in and ovikaliving.com (collectively, the
@@ -30,11 +30,11 @@ const TermsAndConditions = () => {
       <div className="section-container">
         <div className="section-header">
           <div className="section-number">1</div>
-          <h2 className="section-title">About Ovikaliving and the Platform</h2>
+          <h2 className="section-title">About Ovikaliving.com and the Platform</h2>
         </div>
         <div className="section-content">
           <p>
-            The Platform operates as a digital marketplace that enables guests seeking accommodation to
+            Ovikaliving.com operates as a digital marketplace that enables guests seeking accommodation to
             connect with hosts or property owners offering PG, co-living, rental, and other residential living
             spaces across India.
           </p>
@@ -93,11 +93,11 @@ const TermsAndConditions = () => {
       <div className="section-container">
         <div className="section-header">
           <div className="section-number">4</div>
-          <h2 className="section-title">Role of Ovikaliving (Marketplace Disclaimer)</h2>
+          <h2 className="section-title">Role of Ovikaliving.com (Marketplace Disclaimer)</h2>
         </div>
         <div className="section-content">
           <p>
-            Unless specifically stated otherwise, the Platform functions solely as a technology intermediary that facilitates interactions between guests seeking accommodation and hosts or property owners offering residential spaces. The Platform enables listing, discovery, communication, and booking but does not control or manage the actual properties listed by hosts.
+            Unless specifically stated otherwise, Ovikaliving.com functions solely as a technology intermediary that facilitates interactions between guests seeking accommodation and hosts or property owners offering residential spaces. The Platform enables listing, discovery, communication, and booking but does not control or manage the actual properties listed by hosts.
           </p>
           <p>
             The Platform is not a party to any contractual arrangement, agreement, or transaction entered into between guests and hosts. All bookings, payments, stays, and related obligations arise directly between the parties involved.
@@ -362,9 +362,10 @@ const TermsAndConditions = () => {
           <h2 className="section-title">Indemnification</h2>
         </div>
         <div className="section-content">
-          <p>
-            You agree to indemnify, defend, and hold harmless the Platform, Townmanor Technologies, and their respective directors, employees, affiliates, and service partners from any claims, demands, losses, liabilities, damages, or expenses (including legal fees) arising out of or related to:
-          </p>
+        <p>
+  You agree to indemnify, defend, and hold harmless the Platform operated by Townmanor Technologies, including its websites such as <strong>ovikaliving.com</strong> and <strong>ovika.co.in</strong>, along with their respective directors, employees, affiliates, and service partners, from any claims, demands, losses, liabilities, damages, or expenses (including legal fees) arising out of or related to:
+</p>
+
           <ul className="list-style">
             <li>Your use or misuse of the Platform</li>
             <li>Your breach of these Terms or any supplemental policies</li>
