@@ -65,7 +65,7 @@ function Home6() {
           </h1>
           <p className="ovika-property-desc">
             Join hundreds of property owners who are earning with us — we handle
-            everything from tenant verification to maintenance.
+            everything from guest verification and onboarding to bookings and payouts - we handle it all.
           </p>
 
           {/* ✅ Property Listing Button with Arrow */}
