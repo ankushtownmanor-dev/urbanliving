@@ -1,5 +1,6 @@
 import React from 'react';
 import './tmluxe-why-choose.css';
+import { RiKey2Line } from 'react-icons/ri';
 
 export default function TMLuxeWhyChoose() {
   return (
@@ -34,12 +35,11 @@ export default function TMLuxeWhyChoose() {
 
           <article className="tmluxe-card">
             <div className="tmluxe-icon-wrap">
-              <img src="/tmluxe211.png" alt="Exceptional Services" className="tmluxe-icon" />
+              <img src="/key.png" alt="Key" className="tmluxe-icon" style={{ width: '45px', height: '45px' }} />
             </div>
-            <h3 className="tmluxe-card-title">Exceptional Services</h3>
+            <h3 className="tmluxe-card-title">Self Check-in & Check-out</h3>
             <p className="tmluxe-card-text">
-              Enjoy personalized service with dedicated concierge, housekeeping, and maintenance teams
-              ensuring a seamless stay.
+              Seamless, contactless arrival and departure for complete convenience.
             </p>
           </article>
         </div>

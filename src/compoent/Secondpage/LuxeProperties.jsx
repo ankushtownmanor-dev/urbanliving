@@ -130,7 +130,7 @@ function LuxeProperties() {
     <section className="tmxluxe-prop">
       <div className="tmxluxe-prop-container">
         <div className="tmxluxe-prop-head">
-          <h2 className="tmxluxe-prop-title">Available TM Luxe Properties In Noida</h2>
+          <h2 className="tmxluxe-prop-title">Available TM Luxe Properties</h2>
           <span className="tmxluxe-prop-chevron">›</span>
         </div>
 
@@ -154,7 +154,7 @@ function LuxeProperties() {
                 : Array.isArray(prop.IMAGES)
                 ? prop.IMAGES
                 : [];
-              const imageSrc = imageArray.length > 0 ? imageArray[0] : '/p1.png';
+              const imageSrc = imageArray.length > 0 ? imageArray[0] : '/tmluxe3.png';
               const rawPrice = prop.per_night_price ?? prop.PER_NIGHT_PRICE;
               const priceNumber =
                 typeof rawPrice === 'string' ? parseFloat(rawPrice) : rawPrice;
@@ -163,6 +163,14 @@ function LuxeProperties() {
                 : '';
               const id = prop.id ?? prop.ID;
               const name = prop.name ?? prop.NAME;
+              const fullAddress = prop.address || prop.ADDRESS || '';
+              // Extract just the city and sector from the address
+              const getShortAddress = (addr) => {
+                if (!addr) return '';
+                // Just return the city (Noida or Greater Noida)
+                return addr.toLowerCase().includes('greater noida') ? 'Greater Noida' : 'Noida';
+              };
+              const address = getShortAddress(fullAddress);
 
               return (
                 <article
@@ -182,13 +190,33 @@ function LuxeProperties() {
                   <div className="tmxluxe-prop-body">
                     <h3 className="tmxluxe-prop-name">{name}</h3>
                     <div className="tmxluxe-prop-meta">
-                      <span className="tmxluxe-prop-price">{priceText}</span>
+                      <div>
+                        <div className="tmxluxe-prop-price">{priceText}</div>
+                        {address && <div className="tmxluxe-prop-address">{address}</div>}
+                      </div>
                       <span className="tmxluxe-prop-rating">★ 4.9</span>
                     </div>
                   </div>
                 </article>
               );
             })}
+            {/* Dummy Coming Soon Property */}
+            <article className="tmxluxe-prop-card">
+              <div className="tmxluxe-prop-media" style={{position: 'relative'}}>
+                <img src="/tmluxe3.png" alt="TM Luxe 3" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                <span className="tmxluxe-prop-badge">Coming Soon</span>
+              </div>
+              <div className="tmxluxe-prop-body">
+                <h3 className="tmxluxe-prop-name">TM Luxe 3</h3>
+                <div className="tmxluxe-prop-meta">
+                  <div>
+                    <div className="tmxluxe-prop-price">₹ 5,000 per night</div>
+                    <div className="tmxluxe-prop-address">Greater Noida</div>
+                  </div>
+                  <span className="tmxluxe-prop-rating">★ 4.0</span>
+                </div>
+              </div>
+            </article>
           </div>
         )}
       </div>

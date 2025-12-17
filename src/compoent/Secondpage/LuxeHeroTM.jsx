@@ -1,5 +1,6 @@
 // LuxeHeroTM.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './LuxeHeroTM.css';
 
 export default function LuxeHeroTM() {
@@ -21,8 +22,7 @@ export default function LuxeHeroTM() {
       <div className="tmxluxe2-hero__content">
         {/* Top brand row */}
         <div className="tmxluxe2-brand">
-          <span className="tmxluxe2-brand__mark">TM</span>
-          <span className="tmxluxe2-brand__text">Luxe</span>
+          <span className="tmxluxe2-brand__mark">TM Luxe </span>
         </div>
 
         <h1 className="tmxluxe2-heading">
@@ -38,11 +38,11 @@ export default function LuxeHeroTM() {
 
         {/* Dual CTA pill */}
         <div className="tmxluxe2-cta-pill">
-          <a href="#" className="tmxluxe2-cta tmxluxe2-cta--white">
+          <Link to="/properties" className="tmxluxe2-cta tmxluxe2-cta--white">
             <span>Book Your Luxury Stay</span>
             <span className="tmxluxe2-cta__arrow">→</span>
-          </a>
-          <a href="#" className="tmxluxe2-cta tmxluxe2-cta--orange">Now</a>
+          </Link>
+          <Link to="/properties" className="tmxluxe2-cta tmxluxe2-cta--orange">Now</Link>
         </div>
       </div>
     </section>

@@ -136,6 +136,13 @@
   color: #111;
 }
 
+.tmxluxe-prop-address {
+  font-size: 13px;
+  color: #666;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
 /* Browse More Button */
 .tmxluxe-prop-more {
   margin-top: 16px;

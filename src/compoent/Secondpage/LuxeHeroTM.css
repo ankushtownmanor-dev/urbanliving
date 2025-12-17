@@ -52,7 +52,7 @@
 }
 .tmxluxe2-brand__mark{
   font-weight:500;
-  font-size: clamp(62px, 8vw, 96px);
+  font-size: clamp(24px, 8vw, 55px);
   line-height:1;
   color:#ffffff;
   letter-spacing:1px;
