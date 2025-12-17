@@ -590,7 +590,7 @@ const HoomieFooter = () => {
                   "Terms and condition",
                   "Subscription Plan",
                   <a href="/privacy-policy" style={{ color: '#fff', textDecoration: 'none' }}>Privacy Policy</a>,
-                  "Blogs",
+                  
                   "FAQ's",
                   "About Us",
                 ]}
