@@ -502,7 +502,7 @@ const HoomieFooter = () => {
                   <Link to="/privacy-policy" style={{ color: '#fff', textDecoration: 'none' }}>Privacy Policy</Link>,
                   "Refund and Cancellation Policy",
                   "Subscription Plan",
-                  "Blogs",
+                
                 ]}
               />
             </div>
@@ -860,7 +860,7 @@ const HoomieFooter = () => {
                 href="#terms"
                 style={{ color: "#fff", textDecoration: "none" }}
               >
-                © 2025 Ovika
+                © 2025 OvikaLiving
               </a>
               <span>|</span>
               <a
