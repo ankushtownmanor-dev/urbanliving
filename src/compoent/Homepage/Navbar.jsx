@@ -3023,11 +3023,11 @@ export default function Navbar() {
                 src="/icon.png" 
                 alt="Favorites" 
                 style={{
-                  width: isMobile ? 30 : 40,
-                  height: isMobile ? 30 : 40,
+                  width: isMobile ? 40 : 65,
+                  height: isMobile ? 50 : 65,
                   objectFit: 'contain',
                  marginLeft:isMobile? "10px":40,
-                    marginRight:isMobile? "42px":40,
+                    marginRight:isMobile? "35px":40,
                 }} 
               />
             </button>
@@ -3039,10 +3039,10 @@ export default function Navbar() {
               src="/ovikalogo11.png"
               alt="logo"
               style={{
-                height: isMobile ? "100px" : "110px",
-                cursor: "pointer",
-                objectFit: "contain",
-                marginTop: isMobile ? "13px" : "22px",
+               height: isMobile ? "120px" : "150px", // 🔼 size increase
+  cursor: "pointer",
+  objectFit: "contain",
+  marginTop: isMobile ? "16px" : "26px", // thoda adjust
               }}
               onClick={() => navigate("/")}
             />
