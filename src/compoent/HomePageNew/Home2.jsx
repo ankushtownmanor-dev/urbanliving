@@ -90,7 +90,7 @@ const Home2 = () => {
         Explore <span className="highlight">Living</span> Options
       </h2>
       <p className="living-subtext">
-        Ovika offers a range of living options to suit your lifestyle from cosy PG
+        OvikaLiving offers a range of living options to suit your lifestyle from cosy PG
         rentals to luxurious service apartments. <br /> Discover the perfect fit for you.
       </p>
       <div className="living-card-container">

@@ -471,13 +471,13 @@ const HoomieFooter = () => {
                   opacity: "0.95",
                 }}
               >
-                <span style={{ color: "" }}>OVIKA</span> is the flagship brand of{" "}
+                <span style={{ color: "" }}>OvikaLiving</span> is the flagship brand of{" "}
                 <span style={{ color: "" }}>
                   Townmanor Technologies Pvt. Ltd.
                 </span>
                 , representing the company's vision for{" "}
                 <span style={{ color: "" }}>Smart Urban Living.</span> Designed to
-                redefine the way people experience modern city life, OVIKA
+                redefine the way people experience modern city life, OvikaLiving
                 integrates technology, design, and convenience to create connected
                 and intelligent living spaces.
               </p>
@@ -688,7 +688,7 @@ const HoomieFooter = () => {
                   margin: 0,
                 }}
               >
-                Get the latest updates about Townmanor and Ovika
+                Get the latest updates about Townmanor and OvikaLiving
               </p>
               <div className="newsletter-inputrow" style={{ margin: 0, padding: 0, flex: 1 }}>
                 <div
