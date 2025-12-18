@@ -21,14 +21,14 @@ const Home3 = () => {
     {
       icon: "/novi4.png", // replace with your icon
       title: "Live Smart",
-      text: "Experience the best of urban living with Ovika.",
+      text: "Experience the best of urban living with OvikaLiving.",
     },
   ];
 
   return (
     <div className="how-container">
       <h2 className="how-heading">
-        How <span className="highlight">Ovika</span> Works
+        How <span className="highlight">OvikaLiving</span> Works
       </h2>
 
       <div className="how-card-container">

@@ -28,7 +28,7 @@ const Home5 = () => {
 
   return (
     <div className="why-container-97">
-      <h2 className="why-heading-97">Why Choose Ovika ?</h2>
+      <h2 className="why-heading-97">Why Choose OvikaLiving ?</h2>
 
       <div className="why-grid-97">
         {data.map((item, index) => (

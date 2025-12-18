@@ -206,6 +206,7 @@ import PropertyDetailPage from "./compoent/ovikalistingform/PropertyDetailPage";
 import PrivacyPolicy from "./compoent/PrivacyPolicy/PrivacyPolicy";
 import TermsAndConditions from "./compoent/TermsAndConditions/TermsAndConditions";
 import RefundAndCancellation from "./compoent/RefundAndCancellation/RefundAndCancellation";
+import FAQ from "./compoent/FAQ/FAQ";
 import { useContext } from "react";
 
 
@@ -264,6 +265,7 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/refund-cancellation-policy" element={<RefundAndCancellation />} />
+          <Route path="/faq" element={<FAQ />} />
 
           {/* =========================
               ADMIN DASHBOARD SECTION

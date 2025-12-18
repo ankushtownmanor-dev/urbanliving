@@ -151,8 +151,8 @@ const PropertyListPage = () => {
       {/* Hero / Header Section */}
       <header className="page-header">
         <div className="header-content">
-          <h1>Find Your Perfect Home</h1>
-          <p>Discover luxury apartments, cozy homes, and commercial spaces.</p>
+          <h1>Book Your Stay</h1>
+          <p>Luxury studios, homestays, and serviced apartments — curated for comfortable short and extended stays.</p>
           
           <div className="search-bar-wrapper">
             <FiSearch className="search-icon" />
