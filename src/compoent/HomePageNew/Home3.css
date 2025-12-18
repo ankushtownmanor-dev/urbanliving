@@ -85,7 +85,7 @@
 
   .how-card {
     width: 100%;
-    max-width: 39px;
+    max-width: 400px;
     padding: 18px 14px; /* kam internal padding */
     border: none;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
