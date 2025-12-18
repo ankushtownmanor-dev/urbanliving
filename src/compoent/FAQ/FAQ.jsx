@@ -36,20 +36,20 @@ const FAQ = () => {
         
         <FAQItem 
           number="1"
-          question="What is OvikaLiving?"
-          answer={<p>OvikaLiving is a technology-driven marketplace that connects guests with property owners offering short-term stays, PGs, co-living spaces, and rental accommodations across India.</p>}
+          question="What is OvikaLiving.com?"
+          answer={<p>OvikaLiving.com is a technology-driven marketplace that connects guests with property owners offering short-term stays, PGs, co-living spaces, and rental accommodations across India.</p>}
         />
 
         <FAQItem 
           number="2"
-          question="Who operates OvikaLiving?"
-          answer={<p>OvikaLiving is a flagship brand operated under Townmanor Technologies Pvt. Ltd.</p>}
+          question="Who operates OvikaLiving.com?"
+          answer={<p>OvikaLiving.com is a flagship brand operated under Townmanor Technologies Pvt. Ltd.</p>}
         />
 
         <FAQItem 
           number="3"
-          question="Is OvikaLiving available outside India?"
-          answer={<p>Currently, OvikaLiving operates only within India, and all transactions are processed in Indian Rupees (INR).</p>}
+          question="Is OvikaLiving.com available outside India?"
+          answer={<p>Currently, OvikaLiving.com operates only within India, and all transactions are processed in Indian Rupees (INR).</p>}
         />
       </div>
 
@@ -58,14 +58,14 @@ const FAQ = () => {
         
         <FAQItem 
           number="4"
-          question="How do I book a property on OvikaLiving?"
-          answer={<p>Guests can search for properties, review listings, and make bookings directly through the OvikaLiving platform.</p>}
+          question="How do I book a property on OvikaLiving.com?"
+          answer={<p>Guests can search for properties, review listings, and make bookings directly through the OvikaLiving.com platform.</p>}
         />
 
         <FAQItem 
           number="5"
           question="How are payments handled?"
-          answer={<p>All payments are processed securely through authorized payment gateways. OvikaLiving does not store your card or banking details.</p>}
+          answer={<p>All payments are processed securely through authorized payment gateways. OvikaLiving.com does not store your card or banking details.</p>}
         />
 
         <FAQItem 
@@ -77,7 +77,7 @@ const FAQ = () => {
         <FAQItem 
           number="7"
           question="What happens if a host cancels my booking?"
-          answer={<p>If a host cancels a confirmed booking, you are eligible for a full refund. OvikaLiving may also assist in finding alternative accommodation, subject to availability.</p>}
+          answer={<p>If a host cancels a confirmed booking, you are eligible for a full refund. OvikaLiving.com may also assist in finding alternative accommodation, subject to availability.</p>}
         />
 
         <FAQItem 
@@ -89,7 +89,7 @@ const FAQ = () => {
         <FAQItem 
           number="9"
           question="What if I face an issue during my stay?"
-          answer={<p>Guests can contact OvikaLiving support for assistance. However, the stay itself is managed directly between the guest and the property owner.</p>}
+          answer={<p>Guests can contact OvikaLiving.com support for assistance. However, the stay itself is managed directly between the guest and the property owner.</p>}
         />
       </div>
 
@@ -98,14 +98,14 @@ const FAQ = () => {
         
         <FAQItem 
           number="10"
-          question="How do I list my property on OvikaLiving?"
+          question="How do I list my property on OvikaLiving.com?"
           answer={<p>You can list your property by filling out the property onboarding form on our website. Alternatively, you can choose assisted listing through our team.</p>}
         />
 
         <FAQItem 
           number="11"
-          question="Does OvikaLiving charge any commission?"
-          answer={<p>No OvikaLiving does not charge commission on bookings.</p>}
+          question="Does OvikaLiving.com charge any commission?"
+          answer={<p>No, OvikaLiving.com does not charge commission on bookings.</p>}
         />
 
         <FAQItem 
@@ -122,14 +122,14 @@ const FAQ = () => {
 
         <FAQItem 
           number="14"
-          question="Can OvikaLiving remove my listing?"
+          question="Can OvikaLiving.com remove my listing?"
           answer={<p>Listings may be suspended or removed if they violate platform policies, contain misleading information, or fail verification checks.</p>}
         />
 
         <FAQItem 
           number="15"
-          question="Does OvikaLiving own or manage the listed properties?"
-          answer={<p>No. OvikaLiving acts as a technology intermediary and does not own or manage most properties listed on the platform.</p>}
+          question="Does OvikaLiving.com own or manage the listed properties?"
+          answer={<p>No. OvikaLiving.com acts as a technology intermediary and does not own or manage most properties listed on the platform.</p>}
         />
       </div>
 
@@ -139,18 +139,18 @@ const FAQ = () => {
         <FAQItem 
           number="16"
           question="How is my personal data protected?"
-          answer={<p>OvikaLiving follows applicable Indian data protection laws and implements security measures to protect user data. Please refer to our <Link to="/privacy-policy" className="faq-link">Privacy Policy</Link> for details.</p>}
+          answer={<p>OvikaLiving.com follows applicable Indian data protection laws and implements security measures to protect user data. Please refer to our <Link to="/privacy-policy" className="faq-link">Privacy Policy</Link> for details.</p>}
         />
 
         <FAQItem 
           number="17"
-          question="Is my ID safe with OvikaLiving?"
-          answer={<p>Yes. Identity documents are used only for verification and compliance purposes and are stored securely.</p>}
+          question="Is my ID safe with OvikaLiving.com?"
+          answer={<p>Yes. Identity documents are used only for verification and compliance purposes and are stored securely by OvikaLiving.com.</p>}
         />
 
         <FAQItem 
           number="18"
-          question="Does OvikaLiving share my data with third parties?"
+          question="Does OvikaLiving.com share my data with third parties?"
           answer={<p>Personal data is shared only with trusted service providers where necessary (e.g., payment processing) or when required by law.</p>}
         />
       </div>
@@ -160,14 +160,14 @@ const FAQ = () => {
         
         <FAQItem 
           number="19"
-          question="What laws govern OvikaLiving?"
+          question="What laws govern OvikaLiving.com?"
           answer={<p>All services are governed by the laws of India, as outlined in our <Link to="/terms-and-conditions" className="faq-link">Terms & Conditions</Link>.</p>}
         />
 
         <FAQItem 
           number="20"
-          question="Can OvikaLiving change its policies?"
-          answer={<p>Yes. OvikaLiving may update its policies from time to time. Updated versions will be published on the platform.</p>}
+          question="Can OvikaLiving.com change its policies?"
+          answer={<p>Yes. OvikaLiving.com may update its policies from time to time. Updated versions will be published on the platform.</p>}
         />
 
         <FAQItem 
