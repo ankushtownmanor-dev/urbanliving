@@ -48,11 +48,12 @@
   background: #f5f5f5;
   cursor: pointer;
   font-weight: 400;
+  
 }
 
 .auth-toggle-btn.active {
-     color: #ab0202;
-    border: 1px solid #8f0a0a;
+     color: #c2772b;
+    border: 1px solid #c2772b;
     font-size: 18px;
     font-weight: 500;
     box-shadow: 1px 1px 1px 1px #e5e4
@@ -96,7 +97,7 @@
 }
 
 .auth-forgot {
-  color: #b60000;
+  color: #c2772b;
   text-decoration: none;
 }
 
@@ -105,7 +106,7 @@
   padding: 12px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(to right, #b60000, #8b0000);
+  background: #c2772b ;
   color: #fff;
   cursor: pointer;
   font-size: 15px;
@@ -332,6 +333,7 @@
     padding: 12px;
     font-size: 14px;
     border-radius: 6px;
+    background-color: #c2772b;
   }
 
   /* Forgot password modal */
@@ -374,5 +376,6 @@
 
   .auth-submit {
     font-size: 13px;
+    background-color: #c2772b;
   }
 }
