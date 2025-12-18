@@ -205,7 +205,7 @@ const ListPropertyPage = () => {
             <div className="wm-card">
               <div className="wm-card-content">
                 <div className="wm-card-text">
-                  <h3>Share your property - we renovate & share profit</h3>
+                  <h3>Unused or Old Property? Not Rentable? Share with Us — We Renovate & Share Profits</h3>
                   <p>
                     Have an unused or old property that's losing its charm or sitting idle? With Ovika, you can turn it into
                     a profitable investment without lifting a finger. Simply share your property with us, and our expert team will
@@ -213,6 +213,9 @@ const ListPropertyPage = () => {
                     space into a modern, desirable rental property that attracts the right tenants and ensures consistent earnings.
                     Once it's rented, you receive a fair share of the profits, making it a hassle-free way to earn passive income
                     while increasing your property's overall value.
+                  </p>
+                  <p className="location-availability">
+                    This service is currently available in Noida & Greater Noida
                   </p>
                   <a href="/renovation" target="_blank" className="wm-cta">
                     Check out process
