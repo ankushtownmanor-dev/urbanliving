@@ -500,7 +500,7 @@ const HoomieFooter = () => {
                   "FAQ's",
                   <Link to="/terms-and-conditions" style={{ color: '#fff', textDecoration: 'none' }}>Terms and Conditions</Link>,
                   <Link to="/privacy-policy" style={{ color: '#fff', textDecoration: 'none' }}>Privacy Policy</Link>,
-                  "Refund and Cancellation Policy",
+                  <Link to="/refund-cancellation-policy" style={{ color: '#fff', textDecoration: 'none' }}>Refund and Cancellation Policy</Link>,
                   "Subscription Plan",
                 
                 ]}
@@ -586,11 +586,10 @@ const HoomieFooter = () => {
               <LinkList
                 className="new-link-format"
                 items={[
-                  "Refund and Cancellation Policy",
-                  "Terms and condition",
+                  <Link to="/refund-cancellation-policy" style={{ color: '#fff', textDecoration: 'none' }}>Refund and Cancellation Policy</Link>,
+                  <Link to="/terms-and-conditions" style={{ color: '#fff', textDecoration: 'none' }}>Terms and Conditions</Link>,
                   "Subscription Plan",
-                  <a href="/privacy-policy" style={{ color: '#fff', textDecoration: 'none' }}>Privacy Policy</a>,
-                  
+                  <Link to="/privacy-policy" style={{ color: '#fff', textDecoration: 'none' }}>Privacy Policy</Link>,
                   "FAQ's",
                   "About Us",
                 ]}
