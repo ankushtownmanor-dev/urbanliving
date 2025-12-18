@@ -188,14 +188,12 @@ const ListPropertyPage = () => {
              <div className="wm-card">
               <div className="wm-card-content">
                 <div className="wm-card-text">
-                  <h3>List your property your way</h3>
+                  <h3>List Your Property for Long-Term Rent</h3>
                   <p>
-                    Prefer full control? Easily add photos, set rent, write descriptions, 
-                    and publish instantly on Ovika. Reach potential tenants directly, track inquiries, 
-                    and update details anytime. Perfect for hands-on owners with the reach of a trusted platform.
+                    Simple, transparent listing — free basic plans or paid subscriptions for more reach and control.
                   </p>
                   <a href="/selfmanage" target="_blank" className="wm-cta">
-                    Check out process
+                    See Plans & Process
                   </a>
                 </div>
                 <div className="wm-card-image">
