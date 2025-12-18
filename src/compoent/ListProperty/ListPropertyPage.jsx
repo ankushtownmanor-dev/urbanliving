@@ -236,9 +236,9 @@ const ListPropertyPage = () => {
  {/* Benefits Section */}
  <div className="benefits-section">
         <div className="container">
-          <h2 style={{fontWeight:"400", color:"black"}}>Benefit of Listing with <span style={{color: "rgb(201, 139, 62)"}}>Ovika</span></h2>
+          <h2 style={{fontWeight:"400", color:"black"}}>Benefit of Listing with <span style={{color: "rgb(201, 139, 62)"}}>OvikaLiving</span></h2>
           <p className="section-subtitle">
-            Experience the advantage of listing your property with Ovika and unlock world of opportunity
+            Experience the advantage of listing your property with OvikaLiving and unlock world of opportunity
           </p>
           
           <div className="benefits-grid">
