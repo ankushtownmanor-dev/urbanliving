@@ -3,7 +3,7 @@ import "./OwnerForm.css";
 
 const OwnerForm = () => (
   <div className="property-share-wrapper">
-    <h1 className="main-heading-ownwemain">Start Sharing your property with Ovika today !</h1>
+    <h1 className="main-heading-ownwemain">Start Sharing your property with OvikaLiving today !</h1>
     <p className="sub-heading">
   Simply hand over your ready-to-rent property — we’ll handle the listing, tenant management, <br/> and rent collection while you enjoy effortless monthly income.
     {/* Ready to rent out your home or investment property? Connect with us below — our team <br/>will help you list your property, attract verified tenants, and start earning faster. */}

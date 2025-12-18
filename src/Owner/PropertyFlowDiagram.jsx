@@ -88,10 +88,10 @@ const PropertyFlowDiagram = () => {
     {
       title: "Payments & Earning",
       content: [
-        "After the guest checks out:",
-        "The booking amount is processed",
-        "Owner receives payout directly into their bank account",
-        "Owner can track earnings in the dashboard"
+        "After 24 hours of guest check-out:",
+        "The booking amount is processed securely",
+        "Owner receives payout directly into their bank account within 24-48 hours",
+        "Real-time tracking of earnings in the dashboard"
       ]
     },
     {

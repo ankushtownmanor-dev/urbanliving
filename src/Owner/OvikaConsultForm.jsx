@@ -23,7 +23,7 @@ export default function OvikaConsultForm() {
       {/* Top header */}
       <header className="ovk-top">
         <h2 className="ovk-top__title">
-          Start sharing your property with <span className="ovk-orange">Ovika</span> today !
+          Start sharing your property with <span className="ovk-orange">OvikaLiving</span> today !
         </h2>
         <p className="ovk-top__sub">
           Ready to unlock your property potential? Choose your preferred way to connect with us below
@@ -37,7 +37,7 @@ export default function OvikaConsultForm() {
         <div className="ovk-hero__overlay">
           {/* Left text block */}
           <div className="ovk-left">
-            <h3 className="ovk-left__title">Ready to Unlock your property’s Potential</h3>
+            <h3 className="ovk-left__title">Ready to Unlock your property's Potential with OvikaLiving</h3>
             <p className="ovk-left__desc">
               Fill out the form to schedule a free non obligation consultation with one of our property experts.
             </p>
@@ -84,7 +84,7 @@ export default function OvikaConsultForm() {
             />
 
             <button type="submit" className="ovk-cta-varnet">
-              <span>List With Ovika</span>
+              <span>Host With  OvikaLiving</span>
               <span className="ovk-cta__arrow">→</span>
             </button>
           </form>

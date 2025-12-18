@@ -15,11 +15,11 @@ const data = [
   {
     q: 'Do I retain property ownership?',
     a:
-      'Yes, you remain the full and legal owner of your property. OVIKA only manages the property on your behalf under a management agreement.',
+      'Yes, you remain the full and legal owner of your property. OvikaLiving only manages the property on your behalf under a management agreement.',
   },
-    {
+  {
     q: "How do I receive my earnings?",
-    a: "Your rental income is transferred directly to your registered bank account after deducting OVIKA’s commission. You also receive detailed monthly statements for full transparency."
+    a: "Your rental income is transferred directly to your registered bank account after deducting OvikaLiving's commission. You also receive detailed monthly statements for full transparency."
   },
   {
     q: "How are tenants verified?",

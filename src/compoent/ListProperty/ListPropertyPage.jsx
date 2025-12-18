@@ -75,7 +75,7 @@ const ListPropertyPage = () => {
         <div className="container">
           <div className="hero-content">
             <h1>Turn your property into a smart income source</h1>
-            <p>Join hundreds of property owners who are earning with us — we handle everything from tenant verification to maintenance.</p>
+            <p>Join hundreds of property owners who are earning with us — we handle everything from bookings to guest verification, onboarding, and payouts - we handle it all.</p>
           </div>
         </div>
       </div>
@@ -86,7 +86,7 @@ const ListPropertyPage = () => {
         <div className="container">
           <h2 className="how-it-works-title">How It Works</h2>
           <p className="how-it-works-subtitle">
-            Listing your property on Ovika is a simple and straightforward process. Follow
+            Listing your property on OvikaLiving is a simple and straightforward process. Follow
             these four easy steps to get started.
           </p>
         </div>
@@ -138,7 +138,7 @@ const ListPropertyPage = () => {
   <div className="container">
     <h2 className="property-types-title">List any <span className="highlight-text">Property</span> type</h2>
     <p className="property-types-subtitle">
-      From cozy PGs to luxurious Villas, Ovika is a perfect platform to showcase your property
+      From cozy PGs to luxurious Villas, OvikaLiving is a perfect platform to showcase your property
     </p>
 
     <div className="property-types-grid" ref={ptContainerRef} onScroll={handlePTScroll}>
@@ -174,7 +174,7 @@ const ListPropertyPage = () => {
                 <div className="wm-card-text">
                   <h3>Host your property. We take care of everything</h3>
                   <p>
-                    List your homestay, B&B, or property on OVIKA. We manage bookings, guests, and payouts — you enjoy the income.
+                    List your homestay, B&B, or property on OVIKALIVING. We manage bookings, guests, and payouts — you enjoy the income.
                   </p>
                   <a href="/ownermain" target="_blank" className="wm-cta">
                     Check out process

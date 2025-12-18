@@ -15,7 +15,7 @@
 //     Icon: MdVerified,
 //     title: 'We Upgrade and Manage',
 //     text:
-//       'We enhance the space with modern amenities and ensure it meets our Ovika standards — maintaining it regularly for a better guest experience.',
+//       'We enhance the space with modern amenities and ensure it meets our OvikaLiving standards — maintaining it regularly for a better guest experience.',
 //   },
 //   {
 //     Icon: AiFillSound,

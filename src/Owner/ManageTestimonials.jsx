@@ -6,7 +6,7 @@ const ManageTestimonials = () => {
     {
       name: "Riya Tanwar",
       rating: 5,
-      text: "I was skeptical at first, but Ovika's transparent process won me over. Their renovation team completely transformed my property, and within weeks it was rented out. I just receive my profit share every month. Smooth and professional experience!"
+      text: "I was skeptical at first, but OvikaLiving's transparent process won me over. Their renovation team completely transformed my property, and within weeks it was rented out. I just receive my profit share every month. Smooth and professional experience!"
     },
     {
       name: "Mukti Mohan",
@@ -16,7 +16,7 @@ const ManageTestimonials = () => {
     {
       name: "Anubhav Verma",
       rating: 5,
-      text: "The best part of working with Ovika is that it's completely hands-off. They handled everything, and I just get a check every month. It's that simple."
+      text: "The best part of working with OvikaLiving is that it's completely hands-off. They handled everything, and I just get a check every month. It's that simple."
     }
   ];
 
@@ -36,7 +36,7 @@ const ManageTestimonials = () => {
           Loved by Property <span className="manage-orange-text">Owners</span>
         </h2>
         <p className="manage-testimonials-subtitle">
-          Real stories from partners who trust Ovika
+          Real stories from partners who trust OvikaLiving
         </p>
       </div>
 
