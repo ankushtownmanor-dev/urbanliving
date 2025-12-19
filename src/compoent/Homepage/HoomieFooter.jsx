@@ -496,13 +496,12 @@ const HoomieFooter = () => {
               </h3>
               <LinkList
                 items={[
-                  "About Us",
+                  <Link to="/about" style={{ color: '#fff', textDecoration: 'none' }}>About Us</Link>,
                   <Link to="/faq" style={{ color: '#fff', textDecoration: 'none' }}>FAQ's</Link>,
                   <Link to="/terms-and-conditions" style={{ color: '#fff', textDecoration: 'none' }}>Terms and Conditions</Link>,
                   <Link to="/privacy-policy" style={{ color: '#fff', textDecoration: 'none' }}>Privacy Policy</Link>,
                   <Link to="/refund-cancellation-policy" style={{ color: '#fff', textDecoration: 'none' }}>Refund and Cancellation Policy</Link>,
                   "Subscription Plan",
-                
                 ]}
               />
             </div>
@@ -591,7 +590,7 @@ const HoomieFooter = () => {
                   "Subscription Plan",
                   <Link to="/privacy-policy" style={{ color: '#fff', textDecoration: 'none' }}>Privacy Policy</Link>,
                   <Link to="/faq" style={{ color: '#fff', textDecoration: 'none' }}>FAQ's</Link>,
-                  "About Us",
+                  <Link to="/about" style={{ color: '#fff', textDecoration: 'none' }}>About Us</Link>,
                 ]}
               />
             </div>
