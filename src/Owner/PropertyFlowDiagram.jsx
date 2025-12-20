@@ -4,7 +4,7 @@ import './PropertyFlowDiagram.css';
 const PropertyFlowDiagram = () => {
   const steps = [
     {
-      title: "Owner Registration",
+      title: "Owner Host/Registration",
       content: [
         "The owner creates an account on the platform by entering basic details such as:",
         "Name, Email, Phone number, Password",
