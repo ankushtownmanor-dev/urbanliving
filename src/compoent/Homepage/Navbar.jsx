@@ -6575,6 +6575,18 @@ export default function Navbar() {
                   </div>
                 </button>
 
+                <button onClick={goOwnerDashboard} style={panelButtonStyle}>
+                  <span style={iconBoxStyle}>🛡️</span>
+                  <div style={{ textAlign: "left" }}>
+                    <div style={{ fontSize: 14, fontWeight: 500, color: "#232323" }}>
+                      Owner Dashboard
+                    </div>
+                    <div style={{ fontSize: 12, color: "#8a8a8a" }}>
+                      Access owner controls
+                    </div>
+                  </div>
+                </button>
+
                 <button
                   onClick={() => {
                     setSideMenuOpen(false);
