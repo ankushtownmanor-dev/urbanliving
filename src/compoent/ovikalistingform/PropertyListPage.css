@@ -55,18 +55,15 @@ body {
   position: relative;
   margin: 25px;
   border-radius: 20px 20px 20px 20px; /* Reduced border radius from 30px to 20px */
-<<<<<<< HEAD
   margin: 0 1.5rem; 
   margin-top: -50px;
   /* margin-bottom: 30px; */
   max-width: calc(100% - 3rem); /* Ensure content doesn't touch the edges */
-=======
-   /* Added margin for better spacing on the sides */
+
   margin-top: -60px;
    /* Ensure content doesn't touch the edges */
->>>>>>> 06e7ba8371416963e655bf9a35a4d41e4f25cbd1
-}
 
+}
 .header-content h1 {
   font-size: 2.5rem;
   font-weight: 700;
