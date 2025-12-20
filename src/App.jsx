@@ -208,6 +208,7 @@ import TermsAndConditions from "./compoent/TermsAndConditions/TermsAndConditions
 import RefundAndCancellation from "./compoent/RefundAndCancellation/RefundAndCancellation";
 import FAQ from "./compoent/FAQ/FAQ";
 import { useContext } from "react";
+import { Subsriptionmain } from "./compoent/SubsriptionNew/Subsriptionmain";
 
 
 // 🔒 Protected Route Component
@@ -248,6 +249,7 @@ function App() {
           <Route path="/ownermain" element={<Ownermain />} />
           <Route path="/renovation" element={<FifthMain />} />
           <Route path="/listed" element={<PropertyListingForm />} />
+          <Route path="/subsription" element={<Subsriptionmain/>}/>
 
           {/* ✅ PROTECTED ROUTE – only after login */}
           <Route

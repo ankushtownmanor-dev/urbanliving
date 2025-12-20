@@ -6054,6 +6054,7 @@ export default function Navbar() {
                 cursor: "pointer",
                 objectFit: "contain",
                 marginTop: isMobile ? "13px" : "22px",
+                marginRight:isMobile ?"36px" :"",
               }}
               onClick={() => navigate("/")}
             />
@@ -6382,6 +6383,36 @@ export default function Navbar() {
                     <div style={{ fontSize: isMobile ? 11 : 12, color: "#8a8a8a" }}>
                       Get help and assistance
                     </div>
+                    
+                  </div>
+                </button>
+
+
+
+                 <button
+                  onClick={() => {
+                    setHamburgerMenuOpen(false);
+                    navigate("/subsription");
+                  }}
+                  style={{
+                    ...panelButtonStyle,
+                    padding: isMobile ? "8px 4px" : "10px 4px",
+                  }}
+                >
+                  <span style={{
+                    ...iconBoxStyle,
+                    width: isMobile ? 28 : 32,
+                    height: isMobile ? 28 : 32,
+                    fontSize: isMobile ? 14 : 16,
+                  }}>💬</span>
+                  <div style={{ textAlign: "left" }}>
+                    <div style={{ fontSize: isMobile ? 13 : 14, fontWeight: 500, color: "#232323" }}>
+                      Subscription Plane
+                    </div>
+                    <div style={{ fontSize: isMobile ? 11 : 12, color: "#8a8a8a" }}>
+                      Grow Faster With the Right Plan
+                    </div>
+                    
                   </div>
                 </button>
               </div>
@@ -6597,6 +6628,54 @@ export default function Navbar() {
                     </div>
                   </div>
                 </button>
+
+              <button
+  onClick={() => {
+    setSideMenuOpen(false);
+    navigate("/subsription");
+  }}
+  style={panelButtonStyle}
+>
+  {/* Icon Box */}
+  <span style={iconBoxStyle}>
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        x="3"
+        y="4"
+        width="18"
+        height="16"
+        rx="3"
+        stroke="#c2772b"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M3 9H21"
+        stroke="#c2772b"
+        strokeWidth="1.8"
+      />
+      <circle cx="8" cy="14" r="1.4" fill="#c2772b" />
+      <circle cx="12" cy="14" r="1.4" fill="#c2772b" />
+      <circle cx="16" cy="14" r="1.4" fill="#c2772b" />
+    </svg>
+  </span>
+
+  {/* Text */}
+  <div style={{ textAlign: "left" }}>
+    <div style={{ fontSize: 14, fontWeight: 500, color: "#232323" }}>
+      Subscription Plan
+    </div>
+    <div style={{ fontSize: 12, color: "#8a8a8a" }}>
+      Grow Faster With the Right Plan
+    </div>
+  </div>
+</button>
+
 
                 <hr
                   style={{

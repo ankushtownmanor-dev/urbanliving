@@ -501,7 +501,7 @@ const HoomieFooter = () => {
                   <Link to="/terms-and-conditions" style={{ color: '#fff', textDecoration: 'none' }}>Terms and Conditions</Link>,
                   <Link to="/privacy-policy" style={{ color: '#fff', textDecoration: 'none' }}>Privacy Policy</Link>,
                   <Link to="/refund-cancellation-policy" style={{ color: '#fff', textDecoration: 'none' }}>Refund and Cancellation Policy</Link>,
-                  "Subscription Plan",
+                   <Link to="/subsription" style={{ color: '#fff', textDecoration: 'none' }}>Subscription Plan</Link>,
                 ]}
               />
             </div>
@@ -587,7 +587,8 @@ const HoomieFooter = () => {
                 items={[
                   <Link to="/refund-cancellation-policy" style={{ color: '#fff', textDecoration: 'none' }}>Refund and Cancellation Policy</Link>,
                   <Link to="/terms-and-conditions" style={{ color: '#fff', textDecoration: 'none' }}>Terms and Conditions</Link>,
-                  "Subscription Plan",
+                  <Link to="/subsription" style={{ color: '#fff', textDecoration: 'none' }}>Subscription Plan</Link>,
+                   
                   <Link to="/privacy-policy" style={{ color: '#fff', textDecoration: 'none' }}>Privacy Policy</Link>,
                   <Link to="/faq" style={{ color: '#fff', textDecoration: 'none' }}>FAQ's</Link>,
                   <Link to="/about" style={{ color: '#fff', textDecoration: 'none' }}>About Us</Link>,
