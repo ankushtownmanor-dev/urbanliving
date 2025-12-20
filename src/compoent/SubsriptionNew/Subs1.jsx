@@ -19,7 +19,7 @@ const Subs1 = () => {
           List Unlimited Properties during this season and earn
           <span> ₹100 </span>
           for each property listed! Fill out the form to claim your reward
-          today. Offer valid for a limited period only.
+          today. Offer valid for a limited period  only.
         </p>
 
         <button
