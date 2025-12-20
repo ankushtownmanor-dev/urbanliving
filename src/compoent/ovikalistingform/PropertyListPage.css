@@ -58,8 +58,15 @@ body {
   margin-top: -50px;
   /* margin-bottom: 30px; */
   max-width: calc(100% - 3rem); /* Ensure content doesn't touch the edges */
+<<<<<<< HEAD
 }
+=======
 
+  margin-top: -60px;
+   /* Ensure content doesn't touch the edges */
+>>>>>>> 4229cf8d7728bca6804c7342b60ad7eb663aeab6
+
+}
 .header-content h1 {
   font-size: 2.5rem;
   font-weight: 700;
