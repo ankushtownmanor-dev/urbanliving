@@ -6,25 +6,25 @@ const PropertyFlowDiagram = () => {
     {
       title: "Owner/Host Registration",
       content: [
-        "The owner creates an account on the platform by entering basic details such as:",
+        "The owner/host creates an account on the platform by entering basic details such as:",
         "Name, Email, Phone number, Password",
-        "After registration, the owner gets access to the Owner Dashboard."
+        "After registration, the owner/host gets access to the Owner/Host Dashboard."
       ]
     },
     {
       title: "KYC & Property Verification",
       content: [
-        "Before listing a property, the owner must complete verification:",
+        "Before listing a property, the owner/host must complete verification:",
         "Upload ID proof",
         "Upload property ownership document",
         "Submit address proof",
-        "Once documents are approved, the owner becomes eligible to list a property."
+        "Once documents are approved, the owner/host becomes eligible to list a property."
       ]
     },
     {
       title: "Add New Property",
       content: [
-        "The owner clicks on 'Add Property' and fills the main information:",
+        "The owner/host clicks on 'Add Property' and fills the main information:",
         "Property type (Room / Apartment / Villa / House)",
         "Number of rooms",
         "Occupancy",
@@ -35,7 +35,7 @@ const PropertyFlowDiagram = () => {
     {
       title: "Upload Photos & Videos",
       content: [
-        "The owner uploads high-quality images of:",
+        "The owner/host uploads high-quality images of:",
         "Bedroom",
         "Bathroom",
         "Kitchen",
@@ -47,7 +47,7 @@ const PropertyFlowDiagram = () => {
     {
       title: "Set Pricing & Availability",
       content: [
-        "The owner sets:",
+        "The owner/host sets:",
         "Per-night price",
         "Cleaning fee (if any)",
         "Security deposit",
@@ -59,7 +59,7 @@ const PropertyFlowDiagram = () => {
     {
       title: "House Rule & Policies",
       content: [
-        "Owner adds important rules:",
+        "Owner/Host adds important rules:",
         "Check-in and check-out time",
         "Smoking allowed or not",
         "Pets allowed or not",
@@ -70,19 +70,19 @@ const PropertyFlowDiagram = () => {
     {
       title: "Publish Listing",
       content: [
-        "Once everything is filled, the owner clicks 'Publish'.",
+        "Once everything is filled, the owner/host clicks 'Publish'.",
         "Our team reviews it and approves the property for live listing."
       ]
     },
     {
       title: "Booking Management",
       content: [
-        "After the property becomes live, the owner can:",
+        "After the property becomes live, the owner/host can:",
         "Receive booking requests",
         "Accept or decline bookings",
         "Chat with guests",
         "View upcoming stays",
-        "The owner gets notifications on the app/website."
+        "The owner/host gets notifications on the app/website."
       ]
     },
     {
@@ -90,7 +90,7 @@ const PropertyFlowDiagram = () => {
       content: [
         "After 24 hours of guest check-out:",
         "The booking amount is processed securely",
-        "Owner receives payout directly into their bank account within 24-48 hours",
+        "Owner/Host receives payout directly into their bank account within 24-48 hours",
         "Real-time tracking of earnings in the dashboard"
       ]
     },
@@ -118,7 +118,7 @@ const PropertyFlowDiagram = () => {
     <div className="flow-wrapper">
       <div className="main-header">
         <h1>How We <span className="highlight">Manage Hosting</span></h1>
-        <p>A complete step-by-step guide for property owners.</p>
+        <p>A complete step-by-step guide for property owners/hosts.</p>
       </div>
 
       <div className="diagram-container">

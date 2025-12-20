@@ -33,7 +33,7 @@ const ManageTestimonials = () => {
     <div className="manage-testimonials-section">
       <div className="manage-testimonials-header">
         <h2 className="manage-testimonials-title">
-          Loved by Property <span className="manage-orange-text">Owners</span>
+          Loved by Property <span className="manage-orange-text">Owners/Hosts</span>
         </h2>
         <p className="manage-testimonials-subtitle">
           Real stories from partners who trust OvikaLiving
