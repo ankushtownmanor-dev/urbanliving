@@ -200,13 +200,20 @@ export default function TranquilPerch({
     navigate("/payment");
   };
 
+  // const handleShowMore = () => {
+  //   if (id === 1 || id === "1") {
+  //     window.open("https://townmanor.ai/colivingsecond/10", "_blank");
+  //   } else if (id === 2 || id === "2") {
+  //     window.open("https://townmanor.ai/colivingsecond/9", "_blank");
+  //   }
+  // };
   const handleShowMore = () => {
-    if (id === 1 || id === "1") {
-      window.open("https://townmanor.ai/colivingsecond/10", "_blank");
-    } else if (id === 2 || id === "2") {
-      window.open("https://townmanor.ai/colivingsecond/9", "_blank");
-    }
-  };
+  if (id === 1 || id === "1") {
+    window.open("https://www.ovikaliving.com/property/39", "_blank");
+  } else if (id === 2 || id === "2") {
+    window.open("https://www.ovikaliving.com/property/41", "_blank");
+  }
+};
 
   const getPropertyLocation = () => {
     if (id === 2 || id === "2") return "Greater Noida Knowledge Park 3";
