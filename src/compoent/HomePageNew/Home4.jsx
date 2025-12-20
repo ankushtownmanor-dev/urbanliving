@@ -123,7 +123,7 @@ const Home4 = () => {
   return (
     <div className="featured-container">
       <h2 className="featured-heading">
-        Featured <span className="highlight">OvikaLiving</span> Properties
+        Featured <span className="highlight">OvikaLiving</span> Stays
       </h2>
 
       <div className="featured-card-container">

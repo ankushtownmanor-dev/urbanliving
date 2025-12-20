@@ -168,8 +168,8 @@
     margin-bottom: 1.5rem;
   }
   .ovika-brand-name{
-    font-size: 20px;
-       transform: translateY(clamp(-1px, -2vw, -9px))
+      font-size: 20px !important;
+    transform: translateY(-1px) !important;
   }
 
   /* ✅ keep buttons side-by-side like desktop */

@@ -39,22 +39,22 @@ export default function Owner() {
       {/* Content */}
       <div className="ovika-hero__content">
         <h1 className="ovika-hero__title">
-          Your home,<br />
-          Our management-<br />
-          <span className="ovika-hero__title--line2">Shared success</span>
+          Host Smart, <br />
+          Earn Effortlessly-<br />
+          {/* <span className="ovika-hero__title--line2">Shared success</span> */}
         </h1>
 
         <p className="ovika-hero__subtitle">
-          We take care of your rental business end to end, so you earn without the stress
+        We handle bookings, guest onboarding, support, and timely payouts - so you enjoy stress-free short term rental income.
         </p>
 
         {/* NEW dual-button pill */}
         <div className="ovika-cta-pill">
-          <Link to="/listed1" className="ovika-cta ovika-cta--white">
-            <span>Start Earning</span>
+          <Link style={{textDecoration:"none"}} to="/listed1" className="ovika-cta ovika-cta--white">
+            <span>Start Hosting</span>
             <span className="ovika-cta__arrow">→</span>
           </Link>
-          <Link to="/listed1" className="ovika-cta ovika-cta--orange">Now</Link>
+          <Link  style={{textDecoration:"none"}}to="/listed1" className="ovika-cta ovika-cta--orange">Now</Link>
         </div>
       </div>
     </section>

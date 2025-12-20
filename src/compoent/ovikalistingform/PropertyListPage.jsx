@@ -62,7 +62,7 @@ const PropertyCard = ({ property }) => {
         </div>
       </div>
 
-      <div className="card-content">
+      <div className="card-content-main">
         <h3 className="card-title" title={property.property_name}>
           {property.property_name || 'Untitled Property'}
         </h3>

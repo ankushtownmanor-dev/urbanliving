@@ -117,7 +117,7 @@ const PropertyFlowDiagram = () => {
   return (
     <div className="flow-wrapper">
       <div className="main-header">
-        <h1>How We <span className="highlight">Manage Listings</span></h1>
+        <h1>How We <span className="highlight">Manage Hosting</span></h1>
         <p>A complete step-by-step guide for property owners.</p>
       </div>
 
