@@ -105,6 +105,13 @@
   background-color: #ea580c;
 }
 
+.ovika-brand-name{
+  color: #c2772b;
+            font-size: 3.10rem;
+            display: inline-block;
+            transform: translateY(clamp(-4px, -2vw, -9px))
+}
+
 .ovika-urban-arrow {
   font-size: 1.25rem;
 }
@@ -147,7 +154,7 @@
   }
 
   .ovika-urban-hero-heading {
-    font-size: 1.6rem;
+    font-size: 20px;
     line-height: 1.2;
     margin-bottom: 1rem;
     width: 394px;
@@ -159,6 +166,10 @@
     line-height: 1.5;
     text-align: left;
     margin-bottom: 1.5rem;
+  }
+  .ovika-brand-name{
+    font-size: 20px;
+       transform: translateY(clamp(-1px, -2vw, -9px))
   }
 
   /* ✅ keep buttons side-by-side like desktop */

@@ -54,13 +54,16 @@ body {
   color: white;
   position: relative;
   border-radius: 20px 20px 20px 20px; /* Reduced border radius from 30px to 20px */
-  margin: 0 1.5rem; /* Added margin for better spacing on the sides */
+  margin: 0 1.5rem; 
+  margin-top: -50px;
+  /* margin-bottom: 30px; */
   max-width: calc(100% - 3rem); /* Ensure content doesn't touch the edges */
 }
 
 .header-content h1 {
   font-size: 2.5rem;
   font-weight: 700;
+  margin-top: 50px;
   margin-bottom: 0.5rem;
   letter-spacing: -0.5px;
 }
