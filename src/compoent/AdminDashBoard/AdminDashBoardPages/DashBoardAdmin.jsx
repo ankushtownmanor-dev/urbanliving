@@ -68,6 +68,11 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
     cleaningFee: getMeta('cleaningFee'),
     weeklyDiscountPct: getMeta('weeklyDiscountPct'),
     maxGuests: getMeta('maxGuests', 1),
+    // Address fields
+    address: property.address || "",
+    city: property.city || "",
+    // Handle photos
+    photos: property.photos ? (Array.isArray(property.photos) ? property.photos.join(',') : property.photos) : "",
   });
 
   const handleChange = (e) => {
@@ -87,6 +92,10 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
       if (formData.property_name) payload.property_name = formData.property_name;
       if (formData.description) payload.description = formData.description;
       if (formData.price) payload.price = formData.price; // backend often accepts number or string
+
+      // Address fields
+      if (formData.address) payload.address = formData.address;
+      if (formData.city) payload.city = formData.city;
 
       // Core fields requested
       if (Number(formData.weekendRate)) payload.weekend_rate = formData.weekendRate;
@@ -149,6 +158,18 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
         <div>
            <label style={labelStyle}>Description ({formData.description.length} chars)</label>
            <textarea name="description" value={formData.description} onChange={handleChange} rows={3} style={{ ...inputStyle, fontFamily: 'inherit' }} />
+        </div>
+
+        {/* 2.5. Address & City */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+             <div>
+                <label style={labelStyle}>Address</label>
+                <input name="address" value={formData.address} onChange={handleChange} style={inputStyle} />
+             </div>
+             <div>
+                <label style={labelStyle}>City</label>
+                <input name="city" value={formData.city} onChange={handleChange} style={inputStyle} />
+             </div>
         </div>
 
         {/* 3. Price */}
