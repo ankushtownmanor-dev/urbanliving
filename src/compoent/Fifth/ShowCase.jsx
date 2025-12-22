@@ -117,9 +117,9 @@ const ShowCase = () => {
   const prevSlide = () => setIndex((prev) => (prev - 1 + 3) % 3);
 
   const slides = [
-    { before: "/before_new.png", after: "/after_new.png" },
-    { before: "/washroom_before.png", after: "/washroom_after.png" },
-    { before: "/before_bedroom.png", after: "/after_bedroom.png" },
+    { before: "/before3.jpeg", after: "/after_new.png" },
+    { before: "/before2.jpeg", after: "/washroom_after.png" },
+    { before: "/before1.jpeg", after: "/after_bedroom.png" },
   ];
 
   return (

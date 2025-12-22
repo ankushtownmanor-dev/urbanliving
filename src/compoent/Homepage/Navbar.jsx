@@ -6333,6 +6333,32 @@ export default function Navbar() {
                     </div>
                   </div>
                 </button>
+                   <button
+                  onClick={() => {
+                    setHamburgerMenuOpen(false);
+                    navigate("/subsription");
+                  }}
+                  style={{
+                    ...panelButtonStyle,
+                    padding: isMobile ? "8px 4px" : "10px 4px",
+                  }}
+                >
+                  <span style={{
+                    ...iconBoxStyle,
+                    width: isMobile ? 28 : 32,
+                    height: isMobile ? 28 : 32,
+                    fontSize: isMobile ? 14 : 16,
+                  }}>💬</span>
+                  <div style={{ textAlign: "left" }}>
+                    <div style={{ fontSize: isMobile ? 13 : 14, fontWeight: 500, color: "#232323" }}>
+                      Subscription Plan
+                    </div>
+                    <div style={{ fontSize: isMobile ? 11 : 12, color: "#8a8a8a" }}>
+                      Grow Faster With the Right Plan
+                    </div>
+                    
+                  </div>
+                </button>
 
                 <button
                   onClick={() => {
@@ -6389,32 +6415,7 @@ export default function Navbar() {
 
 
 
-                 <button
-                  onClick={() => {
-                    setHamburgerMenuOpen(false);
-                    navigate("/subsription");
-                  }}
-                  style={{
-                    ...panelButtonStyle,
-                    padding: isMobile ? "8px 4px" : "10px 4px",
-                  }}
-                >
-                  <span style={{
-                    ...iconBoxStyle,
-                    width: isMobile ? 28 : 32,
-                    height: isMobile ? 28 : 32,
-                    fontSize: isMobile ? 14 : 16,
-                  }}>💬</span>
-                  <div style={{ textAlign: "left" }}>
-                    <div style={{ fontSize: isMobile ? 13 : 14, fontWeight: 500, color: "#232323" }}>
-                      Subscription Plane
-                    </div>
-                    <div style={{ fontSize: isMobile ? 11 : 12, color: "#8a8a8a" }}>
-                      Grow Faster With the Right Plan
-                    </div>
-                    
-                  </div>
-                </button>
+              
               </div>
             </div>
           </>

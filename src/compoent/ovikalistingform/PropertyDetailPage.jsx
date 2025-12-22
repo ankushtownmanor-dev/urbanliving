@@ -181,7 +181,7 @@ const PropertyDetailPage = () => {
               <FiUser />
             </div>
             <div className="host-info">
-              <h4>Hosted by {property.host?.name || 'Property Owner'}</h4>
+              <h4>Hosted by {property.host?.name || 'Townmanor'}</h4>
               <p>Joined in 2024 • Responsive Host</p>
               {property.contact?.phone && <p className="contact-link">📞 {property.contact.phone}</p>}
             </div>

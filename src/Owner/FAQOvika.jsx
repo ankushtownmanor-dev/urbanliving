@@ -3,31 +3,49 @@ import './faq-ovika.css';
 
 const data = [
   {
-    q: 'Who manages the property?',
+    q: 'Who manages my property on OVIKA?',
     a:
-      "OVIKA’s professional property management team takes care of everything — from tenant onboarding and rent collection to maintenance and guest support — so you can earn without the daily hassles.",
+      'OVIKA provides end-to-end hosting management. From listing creation and pricing to guest communication, check-in support, cleaning coordination, and issue handling — everything is managed by our professional team.',
   },
   {
-    q: 'How is the commission structured?',
+    q: 'Do I need to handle guest communication or bookings?',
     a:
-      'We charge a transparent commission on the rent or income generated from your property. The exact percentage depends on the property type and services included, all clearly stated in the agreement.',
+      'No. OVIKA handles all guest interactions including inquiries, booking confirmations, check-in assistance, and ongoing support during the stay.',
   },
   {
-    q: 'Do I retain property ownership?',
+    q: 'How is pricing decided for my property?',
     a:
-      'Yes, you remain the full and legal owner of your property. OvikaLiving only manages the property on your behalf under a management agreement.',
+      'Pricing is optimized by OVIKA based on location, demand, seasonality, and comparable listings. You always have full visibility and control, and pricing can be reviewed or adjusted as needed.',
   },
   {
-    q: "How do I receive my earnings?",
-    a: "Your rental income is transferred directly to your registered bank account after deducting OvikaLiving's commission. You also receive detailed monthly statements for full transparency."
+    q: 'How do I receive my earnings?',
+    a:
+      'Your earnings are settled on a regular payout cycle and transferred directly to your registered bank account after successful guest stays, as per the agreed payout schedule.',
   },
   {
-    q: "How are tenants verified?",
-    a: "Every tenant is thoroughly screened and verified through background and ID checks to ensure security, reliability, and peace of mind."
+    q: 'Do I retain full ownership and control of my property?',
+    a:
+      'Yes. You retain 100% ownership of your property. OVIKA only manages the hosting operations — you can pause availability or stop hosting anytime.',
   },
   {
-    q: "What if there are maintenance issues?",
-    a: "Our team handles tenant-reported issues promptly through trusted service partners, keeping your property well-maintained and guests satisfied."
+    q: 'How are guests verified?',
+    a:
+      'All guests go through ID verification and booking validation before confirmation. OVIKA ensures only verified guests are allowed to stay at your property.',
+  },
+  {
+    q: 'What about cleaning, maintenance, or damages?',
+    a:
+      'OVIKA coordinates professional cleaning after every stay. Any maintenance or damage issues are promptly reported and handled as per agreed policies, ensuring your property remains well maintained.',
+  },
+  {
+    q: 'Can I block dates for personal use?',
+    a:
+      'Yes. You can block dates anytime through your owner dashboard, giving you complete flexibility to use your property whenever you want.',
+  },
+  {
+    q: 'Is hosting really hassle-free with OVIKA?',
+    a:
+      'Absolutely. From onboarding to payouts, OVIKA manages everything — so you enjoy passive income without daily operational stress.',
   }
 ];
 

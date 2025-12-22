@@ -16,7 +16,7 @@ function Ownermain() {
     <PropertyFlowDiagram/>
 
     {/* <ManageListings/> */}
-    <ChooseOvika/>
+    {/* <ChooseOvika/> */}
     {/* <OwnersSection/> */}
     <ManageTestimonials/>
 

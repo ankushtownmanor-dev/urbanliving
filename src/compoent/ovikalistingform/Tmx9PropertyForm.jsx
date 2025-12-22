@@ -34,7 +34,8 @@ const DEFAULT_PROPERTY_CATEGORIES = [
   "Villa",
   "Cabin",
   "Bungalow",
-  "Hotel room",
+  "Studio ",
+  "Suite",
   "Other",
 ];
 const PROPERTY_TYPES = ["Entire place", "Private room"];
@@ -529,14 +530,14 @@ const Tmx9PropertyForm = () => {
               </div>
 
               <div className="tmx9pf-field full">
-                <label className="tmx9pf-label">Main Description *</label>
+                <label className="tmx9pf-label">Property Description *</label>
                 <textarea name="mainDescription" value={form.mainDescription} onChange={handleChange} rows="4" className={`tmx9pf-textarea ${errors.mainDescription ? "tmx9pf-input--error" : ""}`} />
                 {renderError("mainDescription")}
               </div>
 
               <div className="tmx9pf-field full">
-                <label className="tmx9pf-label">Full Address *</label>
-                <input name="address" value={form.address} onChange={handleChange} className={`tmx9pf-input ${errors.address ? "tmx9pf-input--error" : ""}`} />
+                <label className="tmx9pf-label"> Address *</label>
+                <input placeholder="Street" name="address" value={form.address} onChange={handleChange} className={`tmx9pf-input ${errors.address ? "tmx9pf-input--error" : ""}`} />
                 {renderError("address")}
               </div>
 
