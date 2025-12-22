@@ -295,9 +295,63 @@
   .grid {
     grid-template-columns: 1fr;
   }
+}
 
+@media (max-width: 768px) {
+  .grid {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  /* Stack hero content */
+  .hero {
+    height: auto;
+    min-height: 200px;
+  }
+  
+  .heroContent {
+    position: relative;
+    inset: auto;
+    padding: 24px;
+  }
+  
+  .heroContent h1 {
+    font-size: 24px;
+  }
+
+  /* Single Column Property List */
   .properties {
     grid-template-columns: 1fr;
+  }
+  
+  /* Right column stacks naturally below properties because of main grid change */
+  .rightCol {
+    gap: 16px;
+  }
+
+  .propertyCard img {
+    height: 200px; /* Taller images on mobile for better view */
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar {
+    height: 50px;
+    padding: 0 12px;
+  }
+
+  .heroContent h1 {
+    font-size: 20px;
+  }
+  
+  .heroContent p {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  
+  .primaryBtn, .whiteBtn {
+    padding: 8px 12px;
+    font-size: 13px;
   }
 }
 
