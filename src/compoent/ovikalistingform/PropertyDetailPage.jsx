@@ -27,12 +27,23 @@ const formatCurrency = (num) => {
 // Data Helper
 const transformPropertyData = (data) => {
   if (!data) return null;
+  
+  // Helper to parse JSON fields safely
+  const parseJsonField = (field) => {
+    if (!field) return [];
+    if (Array.isArray(field)) return field;
+    if (typeof field === 'string') {
+      try { return JSON.parse(field); } catch (e) { return []; }
+    }
+    return [];
+  };
+
   return {
     ...data,
-    amenities: Array.isArray(data.amenities) 
-      ? data.amenities 
-      : (typeof data.amenities === 'string' ? JSON.parse(data.amenities) : []),
-    photos: Array.isArray(data.photos) ? data.photos : (data.photos ? [data.photos] : [])
+    amenities: parseJsonField(data.amenities),
+    photos: Array.isArray(data.photos) ? data.photos : (data.photos ? [data.photos] : []),
+    parsedBedrooms: parseJsonField(data.bedrooms),
+    parsedBathrooms: parseJsonField(data.bathrooms),
   };
 };
 
@@ -42,6 +53,20 @@ const PropertyDetailPage = () => {
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeImg, setActiveImg] = useState(0);
+
+  // Helper to calculate totals
+  const getTotal = (arr) => {
+    if (!Array.isArray(arr)) return 0;
+    // Handle case where arr might be legacy number wrapped in array or just the new objects
+    return arr.reduce((acc, curr) => acc + (Number(curr.count) || (typeof curr === 'number' ? curr : 0)), 0);
+  };
+  
+  // Try to handle legacy simple numbers if the backend returns them instead of JSON for old properties
+  const getDisplayCount = (raw, parsed) => {
+    const t = getTotal(parsed);
+    if (t > 0) return t;
+    return Number(raw) || 0;
+  };
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -124,14 +149,14 @@ const PropertyDetailPage = () => {
             <div className="feature-box">
               <BiBed className="f-icon"/>
               <div>
-                <strong>{property.bedrooms || 0}</strong>
+                <strong>{getDisplayCount(property.bedrooms, property.parsedBedrooms)}</strong>
                 <span>Bedrooms</span>
               </div>
             </div>
             <div className="feature-box">
               <BiBath className="f-icon"/>
               <div>
-                <strong>{property.bathrooms || 0}</strong>
+                <strong>{getDisplayCount(property.bathrooms, property.parsedBathrooms)}</strong>
                 <span>Bathrooms</span>
               </div>
             </div>
@@ -158,6 +183,42 @@ const PropertyDetailPage = () => {
             <h3>About this space</h3>
             <p>{property.description || "No description provided."}</p>
           </div>
+
+          {/* Bedroom/Bathroom Breakdown */}
+          {(property.parsedBedrooms?.length > 0 || property.parsedBathrooms?.length > 0) && (
+            <>
+              <div className="divider"></div>
+              <div className="text-section">
+                <h3>Room Arrangements</h3>
+                <div className="room-breakdown-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                  {property.parsedBedrooms?.length > 0 && (
+                    <div className="room-group">
+                      <h4>Bedrooms</h4>
+                      <ul style={{ listStyle: 'none', padding: 0, color: '#555' }}>
+                        {property.parsedBedrooms.map((curr, i) => (
+                           <li key={i} style={{ marginBottom: '4px' }}>
+                             <strong>{curr.count}</strong> × {curr.type}
+                           </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                   {property.parsedBathrooms?.length > 0 && (
+                    <div className="room-group">
+                      <h4>Bathrooms</h4>
+                      <ul style={{ listStyle: 'none', padding: 0, color: '#555' }}>
+                        {property.parsedBathrooms.map((curr, i) => (
+                           <li key={i} style={{ marginBottom: '4px' }}>
+                             <strong>{curr.count}</strong> × {curr.type}
+                           </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
 
           <div className="divider"></div>
 

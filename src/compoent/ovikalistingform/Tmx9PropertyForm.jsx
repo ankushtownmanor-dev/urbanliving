@@ -92,9 +92,12 @@ const Tmx9PropertyForm = () => {
     city: "",
     latitude: "",
     longitude: "",
-    bedrooms: 1,
+    latitude: "",
+    longitude: "",
+    // Detail arrays for JSON support
+    bedroomDetails: [{ id: 0, type: "Master Bedroom", count: 1 }],
+    bathroomDetails: [{ id: 0, type: "Attached", count: 1 }],
     beds: 1,
-    bathrooms: 1,
     area: "",
     amenities: {},
     checkInTime: "15:00:00",
@@ -161,9 +164,17 @@ const Tmx9PropertyForm = () => {
     }
 
     if (s === 1) {
-      if (form.bedrooms === "" || form.bedrooms < 0) newErrors.bedrooms = "Bedrooms required (>= 0)";
+      const totalBedrooms = form.bedroomDetails.reduce((sum, item) => sum + (Number(item.count) || 0), 0);
+      const totalBathrooms = form.bathroomDetails.reduce((sum, item) => sum + (Number(item.count) || 0), 0);
+
+      if (totalBedrooms <= 0) newErrors.bedrooms = "At least one bedroom is required";
+      if (form.bedroomDetails.some(d => !d.type)) newErrors.bedrooms = "Please select a type for all bedrooms";
+      
       if (form.beds === "" || form.beds <= 0) newErrors.beds = "At least one bed required";
-      if (form.bathrooms === "" || form.bathrooms <= 0) newErrors.bathrooms = "At least one bathroom required";
+      
+      if (totalBathrooms <= 0) newErrors.bathrooms = "At least one bathroom is required";
+      if (form.bathroomDetails.some(d => !d.type)) newErrors.bathrooms = "Please select a type for all bathrooms";
+
       if (!form.area?.trim()) newErrors.area = "Area is required";
       else if (form.area.length > 20) newErrors.area = "Area should not exceed 20 characters";
     }
@@ -401,9 +412,10 @@ const Tmx9PropertyForm = () => {
       const meta = {
         propertyType: form.propertyType,
         propertyCategory: form.propertyCategory,
-        bedrooms: form.bedrooms,
+        // Send JSON data for bedrooms/bathrooms
+        bedrooms: form.bedroomDetails.map(d => ({ type: d.type, count: d.count })),
         beds: form.beds,
-        bathrooms: form.bathrooms,
+        bathrooms: form.bathroomDetails.map(d => ({ type: d.type, count: d.count })),
         area: form.area,
         amenities: Object.keys(form.amenities || {}).filter((k) => form.amenities[k]),
         checkInTime: form.checkInTime,
@@ -489,6 +501,22 @@ const Tmx9PropertyForm = () => {
   // ---------- JSX (UI) ----------
   return (
     <form className="tmx9pf-root tmx9pf-paginated" onSubmit={handleSubmit} noValidate>
+      <style>{`
+        .tmx9pf-dynamic-row {
+          display: flex;
+          gap: 10px;
+          margin-bottom: 8px;
+          align-items: center;
+        }
+        .tmx9pf-small-btn.danger {
+          background: #ffe5e5;
+          color: #d32f2f;
+          border: 1px solid #ffbcbc;
+        }
+        .tmx9pf-small-btn.danger:hover {
+          background: #ffbcbc;
+        }
+      `}</style>
       <header className="tmx9pf-header">
         <h1 className="tmx9pf-title">Create <span className="span-data-setup">Property</span> Listing</h1>
         <p className="tmx9pf-sub">Fill the sections below carefully. Use Next / Previous to navigate steps.</p>
@@ -579,21 +607,128 @@ const Tmx9PropertyForm = () => {
           <section className="tmx9pf-section">
             <h2 className="tmx9pf-section-title">Property Details &amp; Features</h2>
             <div className="tmx9pf-grid">
-              <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Bedrooms *</label>
-                <input name="bedrooms" type="number" min="0" value={form.bedrooms} onChange={handleNumChange} className={`tmx9pf-input ${errors.bedrooms ? "tmx9pf-input--error" : ""}`} />
+              {/* --- ROOM CONFIGURATION SECTION --- */}
+              <div className="tmx9pf-field full">
+                <label className="tmx9pf-label">Bedroom Configuration *</label>
+                <div className="tmx9pf-dynamic-list">
+                  {form.bedroomDetails.map((item, index) => (
+                    <div key={item.id} className="tmx9pf-dynamic-row">
+                      <select
+                        value={item.type}
+                        onChange={(e) => {
+                          const newDetails = [...form.bedroomDetails];
+                          newDetails[index].type = e.target.value;
+                          setForm(f => ({ ...f, bedroomDetails: newDetails }));
+                        }}
+                        className="tmx9pf-select"
+                        style={{ flex: 2 }}
+                      >
+                        <option value="">Select Room Type</option>
+                        {["Master Bedroom", "Standard Bedroom", "Guest Room", "Studio", "Family Room", "Dorm", "Other"].map(opt => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
+                      </select>
+                      <input
+                        type="number"
+                        min="1"
+                        placeholder="Count"
+                        value={item.count}
+                        onChange={(e) => {
+                          const newDetails = [...form.bedroomDetails];
+                          newDetails[index].count = Number(e.target.value);
+                          setForm(f => ({ ...f, bedroomDetails: newDetails }));
+                        }}
+                        className="tmx9pf-input"
+                        style={{ flex: 1 }}
+                      />
+                      {form.bedroomDetails.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newDetails = form.bedroomDetails.filter((_, i) => i !== index);
+                            setForm(f => ({ ...f, bedroomDetails: newDetails }));
+                          }}
+                          className="tmx9pf-small-btn danger"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => setForm(f => ({ ...f, bedroomDetails: [...f.bedroomDetails, { id: Date.now(), type: "Standard Bedroom", count: 1 }] }))}
+                    className="tmx9pf-small-btn"
+                    style={{ marginTop: "8px" }}
+                  >
+                    + Add Bedroom Type
+                  </button>
+                </div>
                 {renderError("bedrooms")}
               </div>
 
               <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Beds (count) *</label>
+                <label className="tmx9pf-label">Total Beds *</label>
                 <input name="beds" type="number" min="1" value={form.beds} onChange={handleNumChange} className={`tmx9pf-input ${errors.beds ? "tmx9pf-input--error" : ""}`} />
                 {renderError("beds")}
               </div>
 
-              <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Bathrooms *</label>
-                <input name="bathrooms" type="number" min="1" value={form.bathrooms} onChange={handleNumChange} className={`tmx9pf-input ${errors.bathrooms ? "tmx9pf-input--error" : ""}`} />
+              <div className="tmx9pf-field full">
+                <label className="tmx9pf-label">Bathroom Configuration *</label>
+                <div className="tmx9pf-dynamic-list">
+                  {form.bathroomDetails.map((item, index) => (
+                    <div key={item.id} className="tmx9pf-dynamic-row">
+                      <select
+                        value={item.type}
+                        onChange={(e) => {
+                          const newDetails = [...form.bathroomDetails];
+                          newDetails[index].type = e.target.value;
+                          setForm(f => ({ ...f, bathroomDetails: newDetails }));
+                        }}
+                        className="tmx9pf-select"
+                        style={{ flex: 2 }}
+                      >
+                        <option value="">Select Bathroom Type</option>
+                        {["Attached", "Common", "En-suite", "Jack & Jill", "Separate", "Other"].map(opt => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
+                      </select>
+                      <input
+                        type="number"
+                        min="1"
+                        placeholder="Count"
+                        value={item.count}
+                        onChange={(e) => {
+                          const newDetails = [...form.bathroomDetails];
+                          newDetails[index].count = Number(e.target.value);
+                          setForm(f => ({ ...f, bathroomDetails: newDetails }));
+                        }}
+                        className="tmx9pf-input"
+                        style={{ flex: 1 }}
+                      />
+                      {form.bathroomDetails.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newDetails = form.bathroomDetails.filter((_, i) => i !== index);
+                            setForm(f => ({ ...f, bathroomDetails: newDetails }));
+                          }}
+                          className="tmx9pf-small-btn danger"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => setForm(f => ({ ...f, bathroomDetails: [...f.bathroomDetails, { id: Date.now(), type: "Attached", count: 1 }] }))}
+                    className="tmx9pf-small-btn"
+                    style={{ marginTop: "8px" }}
+                  >
+                    + Add Bathroom Type
+                  </button>
+                </div>
                 {renderError("bathrooms")}
               </div>
 

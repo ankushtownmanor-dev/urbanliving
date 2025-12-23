@@ -17,6 +17,37 @@ const PropertyCard = ({ property }) => {
     navigate(`/property/${property.id}`);
   };
 
+  // Helper to get total count from JSON or number
+  const getCount = (val) => {
+    if (typeof val === 'number') return val;
+    if (Array.isArray(val)) {
+      return val.reduce((acc, curr) => acc + (Number(curr.count) || 0), 0);
+    }
+    // Try parsing if string
+    if (typeof val === 'string') {
+      try {
+        const parsed = JSON.parse(val);
+        if (Array.isArray(parsed)) {
+          return parsed.reduce((acc, curr) => acc + (Number(curr.count) || 0), 0);
+        }
+      } catch (e) {
+        return parseInt(val) || 0;
+      }
+    }
+    return 0;
+  };
+  
+  // Helper to generate a summary string (e.g. "2 Master, 1 Guest")
+  const getSummary = (val) => {
+    let arr = [];
+    if (Array.isArray(val)) arr = val;
+    else if (typeof val === 'string') {
+      try { arr = JSON.parse(val); } catch(e) {}
+    }
+    if (!Array.isArray(arr) || arr.length === 0) return null;
+    return arr.map(i => `${i.count} ${i.type}`).join(', ');
+  };
+
   const toggleFavorite = (e) => {
     e.stopPropagation();
     setIsFavorite(!isFavorite);
@@ -74,10 +105,13 @@ const PropertyCard = ({ property }) => {
 
         <div className="card-features">
           <div className="feature-item">
-            <BiBed /> <span>{property.bedrooms || 0} Beds</span>
+            <BiBed /> 
+            <span>{getCount(property.bedrooms)} Beds</span>
+            {/* Optional: Tooltip or small text for breakdown? for now just total */}
           </div>
           <div className="feature-item">
-            <BiBath /> <span>{property.bathrooms || 0} Baths</span>
+            <BiBath /> 
+            <span>{getCount(property.bathrooms)} Baths</span>
           </div>
           <div className="feature-item">
             <BiArea /> <span>{property.area || 0} sqft</span>
