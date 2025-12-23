@@ -209,6 +209,7 @@ import RefundAndCancellation from "./compoent/RefundAndCancellation/RefundAndCan
 import FAQ from "./compoent/FAQ/FAQ";
 import { useContext } from "react";
 import { Subsriptionmain } from "./compoent/SubsriptionNew/Subsriptionmain";
+import SuperAdminDashboard from './compoent/AdminDashBoard/SuperAdmin/SuperAdminDashboard';
 
 
 // 🔒 Protected Route Component
@@ -282,6 +283,9 @@ function App() {
             <Route path="support" element={<Support />} />
             <Route path="listed" element={<PropertyListingForm />} />
           </Route>
+
+
+          <Route path="/admin-control-panel" element={<RequireAuth><SuperAdminDashboard /></RequireAuth>} />
         </Routes>
 
         {/* Bottom Footer */}
