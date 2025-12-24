@@ -21,14 +21,14 @@ export default function OvikaConsultForm() {
   return (
     <section className="ovk-wrap">
       {/* Top header */}
-      <header className="ovk-top">
+      {/* <header className="ovk-top">
         <h2 className="ovk-top__title">
           Start sharing your property with <span className="ovk-orange">OvikaLiving</span> today !
         </h2>
         <p className="ovk-top__sub">
           Ready to unlock your property potential? Choose your preferred way to connect with us below
         </p>
-      </header>
+      </header> */}
 
       {/* Hero with overlay */}
       <div className="ovk-hero">
