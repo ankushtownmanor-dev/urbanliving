@@ -17,10 +17,14 @@ const AMENITIES = {
     "Fire extinguisher",
     "First aid kit",
   ],
-  Outdoor: ["Balcony/terrace", "Garden", "Parking space", "BBQ grill"],
+  Outdoor: ["Balcony/terrace", "Garden", "Parking space", "BBQ grill", "Tennis Court", "Golf Course"],
   Wellness: ["Pool", "Hot tub", "Sauna", "Gym"],
+  Accessibility: ["Wheelchair accessible", "Elevator", "Ramp access"],
   Services: [
-    "Breakfast included",
+    "Breakfast Included",
+    "Lunch Included",
+    "Dinner Included",
+    "All Meals Included",
     "Airport pick-up",
     "Luggage storage",
     "Cleaning on request",
@@ -95,7 +99,7 @@ const Tmx9PropertyForm = () => {
     latitude: "",
     longitude: "",
     // Detail arrays for JSON support
-    bedroomDetails: [{ id: 0, type: "Master Bedroom", count: 1 }],
+    bedroomDetails: [{ id: 0, type: "King Bed", count: 1 }],
     bathroomDetails: [{ id: 0, type: "Attached", count: 1 }],
     beds: 1,
     area: "",
@@ -105,6 +109,8 @@ const Tmx9PropertyForm = () => {
     smokingAllowed: false,
     petsAllowed: false,
     eventsAllowed: false,
+    drinkingAllowed: false,
+    outsideGuestsAllowed: false,
     quietHours: "22:00-07:00",
     maxGuests: 2,
     baseRate: "",
@@ -193,7 +199,7 @@ const Tmx9PropertyForm = () => {
       if (!form.baseRate && form.baseRate !== 0) newErrors.baseRate = "Base rate is required";
       if (form.baseRate && Number(form.baseRate) <= 0) newErrors.baseRate = "Rate must be positive";
       if (form.weeklyDiscountPct && (form.weeklyDiscountPct < 0 || form.weeklyDiscountPct > 100)) newErrors.weeklyDiscountPct = "Discount must be between 0 and 100";
-      if (!form.selfCheckIn?.trim()) newErrors.selfCheckIn = "Provide self-check-in method or note";
+      if (!form.selfCheckIn?.trim()) newErrors.selfCheckIn = "Please select self-check-in availability";
     }
 
     if (s === 5) {
@@ -423,6 +429,8 @@ const Tmx9PropertyForm = () => {
         smokingAllowed: form.smokingAllowed,
         petsAllowed: form.petsAllowed,
         eventsAllowed: form.eventsAllowed,
+        drinkingAllowed: form.drinkingAllowed,
+        outsideGuestsAllowed: form.outsideGuestsAllowed,
         maxGuests: form.maxGuests,
         weekendRate: form.weekendRate,
         weeklyDiscountPct: form.weeklyDiscountPct,
@@ -624,7 +632,7 @@ const Tmx9PropertyForm = () => {
                         style={{ flex: 2 }}
                       >
                         <option value="">Select Room Type</option>
-                        {["Master Bedroom", "Standard Bedroom", "Guest Room", "Studio", "Family Room", "Dorm", "Other"].map(opt => (
+                        {["King Bed", "Queen Bed", "Double Bed", "Single Bed", "Bunk Bed", "Sofa Bed"].map(opt => (
                           <option key={opt} value={opt}>{opt}</option>
                         ))}
                       </select>
@@ -657,7 +665,7 @@ const Tmx9PropertyForm = () => {
                   ))}
                   <button
                     type="button"
-                    onClick={() => setForm(f => ({ ...f, bedroomDetails: [...f.bedroomDetails, { id: Date.now(), type: "Standard Bedroom", count: 1 }] }))}
+                    onClick={() => setForm(f => ({ ...f, bedroomDetails: [...f.bedroomDetails, { id: Date.now(), type: "King Bed", count: 1 }] }))}
                     className="tmx9pf-small-btn"
                     style={{ marginTop: "8px" }}
                   >
@@ -793,6 +801,16 @@ const Tmx9PropertyForm = () => {
               </div>
 
               <div className="tmx9pf-field">
+                <label className="tmx9pf-label">Drinking Alcohol Allowed</label>
+                <Toggle name="drinkingAllowed" value={form.drinkingAllowed} onChange={(v) => setForm((s) => ({ ...s, drinkingAllowed: v }))} />
+              </div>
+
+              <div className="tmx9pf-field">
+                <label className="tmx9pf-label">Outside Guests Allowed</label>
+                <Toggle name="outsideGuestsAllowed" value={form.outsideGuestsAllowed} onChange={(v) => setForm((s) => ({ ...s, outsideGuestsAllowed: v }))} />
+              </div>
+
+              <div className="tmx9pf-field">
                 <label className="tmx9pf-label">Quiet Hours</label>
                 <input name="quietHours" value={form.quietHours} onChange={handleChange} className="tmx9pf-input" />
               </div>
@@ -865,8 +883,12 @@ const Tmx9PropertyForm = () => {
               </div>
 
               <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Self-check-in method *</label>
-                <input name="selfCheckIn" value={form.selfCheckIn} onChange={handleChange} className={`tmx9pf-input ${errors.selfCheckIn ? "tmx9pf-input--error" : ""}`} placeholder="e.g., Smart lock, Lockbox" />
+                <label className="tmx9pf-label">Self-check-in *</label>
+                <select name="selfCheckIn" value={form.selfCheckIn} onChange={handleChange} className={`tmx9pf-select ${errors.selfCheckIn ? "tmx9pf-input--error" : ""}`}>
+                  <option value="">Select option</option>
+                  <option value="Available">Available</option>
+                  <option value="Not Available">Not Available</option>
+                </select>
                 {renderError("selfCheckIn")}
               </div>
             </div>
@@ -896,6 +918,9 @@ const Tmx9PropertyForm = () => {
                 <select value={policy} onChange={(e) => setPolicy(e.target.value)} className="tmx9pf-select">
                   {DEFAULT_CANCELLATION_POLICIES.map((p) => <option key={p} value={p}>{p}</option>)}
                 </select>
+                <div className="tmx9pf-muted">
+                  See our <a href="/refund-cancellation-policy" target="_blank" rel="noopener noreferrer">Refund &amp; Cancellation Policy</a> for details on Flexible, Moderate, and Strict tiers.
+                </div>
               </div>
 
               <div className="tmx9pf-field">
