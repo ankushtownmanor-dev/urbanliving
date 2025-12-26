@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
-  FiArrowLeft, FiMapPin, FiShare, FiHeart, FiCheck, 
+  FiArrowLeft, FiMapPin, FiShare, FiHeart, FiCheck, FiXCircle,
   FiUser, FiCalendar, FiShield, FiStar 
 } from 'react-icons/fi';
 import { BiBed, BiBath, BiArea, BiBuildingHouse } from 'react-icons/bi';
@@ -236,6 +236,148 @@ const PropertyDetailPage = () => {
 
           <div className="divider"></div>
 
+          {/* House Rules & Policies */}
+          <div className="text-section">
+            <h3>House Rules & Policies</h3>
+            <div className="amenities-grid">
+              <div className="amenity-card rule-card">
+                 <div className="rule-icon">
+                    {property.smoking_allowed 
+                      ? <FiCheck className="text-green" /> 
+                      : <FiXCircle className="text-red" />}
+                 </div>
+                 <div className="rule-info">
+                   <span className="rule-label">Smoking</span>
+                   <strong className={property.smoking_allowed ? "text-green" : "text-gray"}>
+                     {property.smoking_allowed ? 'Allowed' : 'Not allowed'}
+                   </strong>
+                 </div>
+              </div>
+
+              <div className="amenity-card rule-card">
+                 <div className="rule-icon">
+                    {property.pets_allowed 
+                      ? <FiCheck className="text-green" /> 
+                      : <FiXCircle className="text-red" />}
+                 </div>
+                 <div className="rule-info">
+                   <span className="rule-label">Pets</span>
+                   <strong className={property.pets_allowed ? "text-green" : "text-gray"}>
+                     {property.pets_allowed ? 'Allowed' : 'Not allowed'}
+                   </strong>
+                 </div>
+              </div>
+
+              <div className="amenity-card rule-card">
+                 <div className="rule-icon">
+                    {property.events_allowed 
+                      ? <FiCheck className="text-green" /> 
+                      : <FiXCircle className="text-red" />}
+                 </div>
+                 <div className="rule-info">
+                   <span className="rule-label">Events</span>
+                   <strong className={property.events_allowed ? "text-green" : "text-gray"}>
+                     {property.events_allowed ? 'Allowed' : 'Not allowed'}
+                   </strong>
+                 </div>
+              </div>
+
+              <div className="amenity-card rule-card">
+                 <div className="rule-icon">
+                    {property.drinking_allowed 
+                      ? <FiCheck className="text-green" /> 
+                      : <FiXCircle className="text-red" />}
+                 </div>
+                 <div className="rule-info">
+                   <span className="rule-label">Alcohol</span>
+                   <strong className={property.drinking_allowed ? "text-green" : "text-gray"}>
+                     {property.drinking_allowed ? 'Allowed' : 'Not allowed'}
+                   </strong>
+                 </div>
+              </div>
+
+              <div className="amenity-card rule-card">
+                 <div className="rule-icon">
+                    {property.outside_guests_allowed 
+                      ? <FiCheck className="text-green" /> 
+                      : <FiXCircle className="text-red" />}
+                 </div>
+                 <div className="rule-info">
+                   <span className="rule-label">Outside Guests</span>
+                   <strong className={property.outside_guests_allowed ? "text-green" : "text-gray"}>
+                     {property.outside_guests_allowed ? 'Allowed' : 'Not allowed'}
+                   </strong>
+                 </div>
+              </div>
+            </div>
+            
+            {(property.cancellation_policy && property.cancellation_policy !== 'undefined') && (
+              <div style={{ marginTop: '1rem', padding: '12px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                <strong style={{ display: 'block', marginBottom: '4px', fontSize: '0.9rem' }}>Cancellation Policy</strong>
+                <span style={{ color: '#475569' }}>{property.cancellation_policy}</span>
+              </div>
+            )}
+          </div>
+
+          <div className="divider"></div>
+
+            {/* Booking Card Section (Moved here) */}
+          <div style={{ margin: '2rem 0' }}>
+            <div className="booking-card" style={{ position: 'static', maxWidth: 'none', boxShadow: 'none', border: '1px solid #e2e8f0', background: '#f8fafc' }}>
+              <div className="card-header">
+                <div className="price-area">
+                  <span className="amount">₹{formatCurrency(baseRate)}</span>
+                  <span className="unit">/{property.billing_cycle || 'month'}</span>
+                </div>
+                <div className="review-badge">
+                  <FiStar /> <span>New</span>
+                </div>
+              </div>
+
+              <div className="booking-details">
+                <div className="date-picker-mock">
+                  <div className="date-box">
+                    <label>CHECK-IN</label>
+                    <span>{property.check_in_time || '12:00 PM'}</span>
+                  </div>
+                  <div className="date-box">
+                    <label>CHECK-OUT</label>
+                    <span>{property.check_out_time || '11:00 AM'}</span>
+                  </div>
+                </div>
+                
+                <div className="price-breakdown">
+                  <div className="row">
+                    <span>Base Fare</span>
+                    <span>₹{formatCurrency(baseRate * nights)}</span>
+                  </div>
+                  {(property.cleaning_fee > 0) && (
+                    <div className="row">
+                      <span>Cleaning Fee</span>
+                      <span>₹{formatCurrency(property.cleaning_fee)}</span>
+                    </div>
+                  )}
+                  <div className="row total">
+                    <span>Total before taxes</span>
+                    <span>₹{formatCurrency(total)}</span>
+                  </div>
+                </div>
+
+                <div style={{ margin: '1.5rem 0' }}>
+                   <button className="reserve-btn">Reserve Now</button>
+                   <p className="hint" style={{ marginBottom: 0 }}>You won't be charged yet</p>
+                </div>
+              </div>
+
+              <div className="card-footer">
+                <FiShield className="shield-icon"/>
+                <span>Secure Booking Guaranteed</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="divider"></div>
+
           {/* Host Info */}
           <div className="host-card">
             <div className="host-avatar">
@@ -248,59 +390,6 @@ const PropertyDetailPage = () => {
             </div>
           </div>
 
-        </div>
-
-        {/* --- Right Column: Sticky Booking Card --- */}
-        <div className="sidebar-column">
-          <div className="booking-card">
-            <div className="card-header">
-              <div className="price-area">
-                <span className="amount">₹{formatCurrency(baseRate)}</span>
-                <span className="unit">/{property.billing_cycle || 'month'}</span>
-              </div>
-              <div className="review-badge">
-                <FiStar /> <span>New</span>
-              </div>
-            </div>
-
-            <div className="booking-details">
-              <div className="date-picker-mock">
-                <div className="date-box">
-                  <label>CHECK-IN</label>
-                  <span>{property.check_in_time || '12:00 PM'}</span>
-                </div>
-                <div className="date-box">
-                  <label>CHECK-OUT</label>
-                  <span>{property.check_out_time || '11:00 AM'}</span>
-                </div>
-              </div>
-              
-              <button className="reserve-btn">Reserve Now</button>
-              <p className="hint">You won't be charged yet</p>
-
-              <div className="price-breakdown">
-                <div className="row">
-                  <span>Base Fare</span>
-                  <span>₹{formatCurrency(baseRate * nights)}</span>
-                </div>
-                {(property.cleaning_fee > 0) && (
-                  <div className="row">
-                    <span>Cleaning Fee</span>
-                    <span>₹{formatCurrency(property.cleaning_fee)}</span>
-                  </div>
-                )}
-                <div className="row total">
-                  <span>Total before taxes</span>
-                  <span>₹{formatCurrency(total)}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="card-footer">
-              <FiShield className="shield-icon"/>
-              <span>Secure Booking Guaranteed</span>
-            </div>
-          </div>
         </div>
       </div>
     </div>
