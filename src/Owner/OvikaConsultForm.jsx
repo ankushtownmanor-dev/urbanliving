@@ -37,9 +37,9 @@ export default function OvikaConsultForm() {
         <div className="ovk-hero__overlay">
           {/* Left text block */}
           <div className="ovk-left">
-            <h3 className="ovk-left__title">Ready to Unlock your property's Potential with OvikaLiving</h3>
+            <h3 className="ovk-left__title">Want to know more before you host?</h3>
             <p className="ovk-left__desc">
-              Fill out the form to schedule a free non obligation consultation with one of our property experts.
+              Fill out the form and get a free, no-obligation consultation with our hosting experts.
             </p>
           </div>
 

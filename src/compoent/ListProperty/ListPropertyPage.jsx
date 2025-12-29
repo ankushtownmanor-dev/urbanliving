@@ -172,9 +172,9 @@ const ListPropertyPage = () => {
             <div className="wm-card">
               <div className="wm-card-content">
                 <div className="wm-card-text">
-                  <h3>Host your property. We take care of everything</h3>
+                  <h3>Host your Property. We Promote & Monetize</h3>
                   <p>
-                    List your homestay, B&B, or property on OVIKALIVING. We manage bookings, guests, and payouts — you enjoy the income.
+                    List your homestay, B&B, or property on OVIKALIVING. We manage  marketing and bookings, guests, and payouts — you enjoy the income.
                   </p>
                   <a href="/ownermain" target="_blank" className="wm-cta">
                     Check out process
@@ -205,7 +205,7 @@ const ListPropertyPage = () => {
             <div className="wm-card">
               <div className="wm-card-content">
                 <div className="wm-card-text">
-                  <h3>Unused or Old Property? Not Rentable? Share with Us — We Renovate & Share Profits</h3>
+                  <h3>Unused or Old Property? Not Rentable? Partner with us — We Renovate & Share Profits</h3>
                   <p>
                     Have an unused or old property that's losing its charm or sitting idle? With Ovika, you can turn it into
                     a profitable investment without lifting a finger. Simply share your property with us, and our expert team will
