@@ -327,7 +327,7 @@ const PropertyDetailPage = () => {
               <div className="card-header">
                 <div className="price-area">
                   <span className="amount">₹{formatCurrency(baseRate)}</span>
-                  <span className="unit">/{property.billing_cycle || 'month'}</span>
+                  <span className="unit">/{property.billing_cycle || 'night'}</span>
                 </div>
                 <div className="review-badge">
                   <FiStar /> <span>New</span>
