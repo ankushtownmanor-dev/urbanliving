@@ -2305,6 +2305,11 @@
 // }
 
 // export default Payment;
+
+
+
+
+
 // Payment.jsx
 import { useState, useEffect, useRef } from 'react';
 import { CheckCircle, XCircle, UploadCloud, Loader, ChevronLeft, ChevronRight } from 'lucide-react';
