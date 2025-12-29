@@ -283,6 +283,42 @@ const getPropertyPhoto = (prop) => {
   return "/public/image 68.png";
 };
 
+const getRoomCount = (val) => {
+  if (val === undefined || val === null) return 0;
+  if (typeof val === 'number') return val;
+  
+  // Try parsing if string
+  let parsed = val;
+  if (typeof val === 'string') {
+    // If it's a simple number-like string, just return that
+    if (!isNaN(val) && !val.trim().startsWith('[')) {
+      return Number(val);
+    }
+    try {
+      parsed = JSON.parse(val);
+    } catch (e) {
+      // If parsing fails but it's not a simple number, fallback to 0 or 1?
+      // Maybe check for "1" vs "1 bedroom"
+      return parseFloat(val) || 0;
+    }
+  }
+
+  // If we have a number now
+  if (typeof parsed === 'number') return parsed;
+
+  // If array (from JSON parse or original)
+  if (Array.isArray(parsed)) {
+    return parsed.reduce((acc, item) => {
+      // If item has count, use it. Default to 1 if item exists but no count?
+      // The schema usually has count.
+      const c = Number(item.count);
+      return acc + (isNaN(c) ? 1 : c);
+    }, 0);
+  }
+  
+  return 0;
+};
+
 export default function DashBoardAdmin() {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -535,8 +571,11 @@ export default function DashBoardAdmin() {
 
               const detailsPieces = [];
               if (prop.property_type) detailsPieces.push(prop.property_type);
-              if (prop.bedrooms !== undefined && prop.bedrooms !== null) detailsPieces.push(`${prop.bedrooms} BR`);
-              if (prop.bathrooms !== undefined && prop.bathrooms !== null) detailsPieces.push(`${prop.bathrooms} BA`);
+              const bedroomCount = prop.total_bedrooms || getRoomCount(prop.bedrooms);
+              if (bedroomCount > 0) detailsPieces.push(`${bedroomCount} BR`);
+              
+              const bathroomCount = prop.total_bathrooms || getRoomCount(prop.bathrooms);
+              if (bathroomCount > 0) detailsPieces.push(`${bathroomCount} BA`);
               if (prop.max_guests !== undefined && prop.max_guests !== null) detailsPieces.push(`Up to ${prop.max_guests} guests`);
               const details = detailsPieces.join(" • ");
 
