@@ -269,7 +269,7 @@ export default function SuperAdminDashboard() {
                         <div className="sa-stat-val">{stats.totalProps}</div>
                     </div>
                     <div className="sa-stat-card">
-                        <div className="sa-stat-title">Total Valuation (Est)</div>
+                        <div className="sa-stat-title">Total Asset Value</div>
                         <div className="sa-stat-val">₹{stats.totalVal.toLocaleString()}</div>
                     </div>
                     <div className="sa-stat-card">
