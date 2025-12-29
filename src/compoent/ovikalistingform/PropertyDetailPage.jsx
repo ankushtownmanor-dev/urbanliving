@@ -415,6 +415,24 @@ import Cookies from 'js-cookie';
 import { format } from 'date-fns';
 import './PropertyDetailPage.css';
 
+// PropertyDetailPage.jsx ke top pe (imports ke baad)
+
+// Backend me sirf property_id 1 aur 2 exist karte hain
+// Baaki sab IDs ko inhi pe map kar denge
+const getValidPropertyId = (frontendId) => {
+  const id = Number(frontendId);
+  
+  // Agar already 1 ya 2 hai, to wahi return karo
+  if (id === 1 || id === 2) return String(id);
+  
+  // Baaki sab odd IDs → 1, even IDs → 2 (ya koi bhi logic)
+  // Ya simply sab ko 2 pe map kar do (default property)
+  return id % 2 === 0 ? '2' : '1';
+  
+  // Alternative: Sab ko property 2 pe map karo
+  // return '2';
+};
+
 const API_BASE_URL = 'https://townmanor.ai/api/ovika';
 const CALENDAR_API_BASE = 'https://townmanor.ai/api/calendar';
 
@@ -753,23 +771,46 @@ const PropertyDetailPage = () => {
     setIsPayNowEnabled(allStepsComplete);
   }, [formData, pricing]);
 
-  useEffect(() => {
-    if (showPaymentModal && step === 3) {
-      const fetchCalendarBlockedDates = async () => {
-        try {
-          const propertyKeyMap = { 2: 'tm-luxe-1', 1: 'tm-luxe-2' };
-          const propertyKey = propertyKeyMap[Number(id)] || 'tm-luxe-1';
-          const { blocked } = await getCalendar(propertyKey);
-          const disabledSet = buildDisabledDates(blocked || []);
-          setDisabledDateSet(disabledSet);
-        } catch (e) {
-          console.error('Failed to load calendar blocked dates', e);
-        }
-      };
-      fetchCalendarBlockedDates();
-    }
-  }, [showPaymentModal, step, id]);
-
+  // useEffect(() => {
+  //   if (showPaymentModal && step === 3) {
+  //     const fetchCalendarBlockedDates = async () => {
+  //       try {
+  //         const propertyKeyMap = { 2: 'tm-luxe-1', 1: 'tm-luxe-2' };
+  //         const propertyKey = propertyKeyMap[Number(id)] || 'tm-luxe-1';
+  //         const { blocked } = await getCalendar(propertyKey);
+  //         const disabledSet = buildDisabledDates(blocked || []);
+  //         setDisabledDateSet(disabledSet);
+  //       } catch (e) {
+  //         console.error('Failed to load calendar blocked dates', e);
+  //       }
+  //     };
+  //     fetchCalendarBlockedDates();
+  //   }
+  // }, [showPaymentModal, step, id]);
+useEffect(() => {
+  if (showPaymentModal && step === 3) {
+    const fetchCalendarBlockedDates = async () => {
+      try {
+        // ✅ Frontend id ko backend id me map karo
+        const validPropertyId = getValidPropertyId(id);
+        
+        const propertyKeyMap = { 
+          '2': 'tm-luxe-1', 
+          '1': 'tm-luxe-2' 
+        };
+        
+        const propertyKey = propertyKeyMap[validPropertyId] || 'tm-luxe-1';
+        
+        const { blocked } = await getCalendar(propertyKey);
+        const disabledSet = buildDisabledDates(blocked || []);
+        setDisabledDateSet(disabledSet);
+      } catch (e) {
+        console.error('Failed to load calendar blocked dates', e);
+      }
+    };
+    fetchCalendarBlockedDates();
+  }
+}, [showPaymentModal, step, id]);
   const handleReserveClick = () => {
     setShowPaymentModal(true);
     setStep(1);
@@ -999,96 +1040,305 @@ const PropertyDetailPage = () => {
 //     }
 //   };
   
+// const handlePayNow = async () => {
+//   if (!isPayNowEnabled || isSubmitting) return;
+
+//   setIsSubmitting(true);
+
+//   try {
+//     // 🔐 Verification check
+//     if (!(formData.aadhaarVerified || formData.passportVerified)) {
+//       showAlert('Please verify your Aadhaar or Passport before proceeding.');
+//       setIsSubmitting(false);
+//       return;
+//     }
+
+//     // 👤 Local user
+//     let userLocal = {};
+//     try {
+//       userLocal = JSON.parse(localStorage.getItem('user')) || {};
+//     } catch {}
+
+//     let userEmail = userLocal.email || 'guest@townmanor.ai';
+//     let userPhone = userLocal.phone || '9999999999';
+//     let finalUsername = userLocal.username || username || 'guest';
+
+//     // (optional) backend se user fetch
+//     if (username) {
+//       try {
+//         const userResponse = await fetch(`https://www.townmanor.ai/api/user/${username}`);
+//         if (userResponse.ok) {
+//           const userData = await userResponse.json();
+//           userEmail = userData.email || userEmail;
+//           userPhone = userData.phone || userPhone;
+//         }
+//       } catch {}
+//     }
+
+//     // ✅ BACKEND-MATCHING PAYLOAD
+//     const bookingDetails = {
+//       property_id: Number(id),                 // 🔥 MUST BE NUMBER
+//       start_date: formData.checkInDate,        // YYYY-MM-DD
+//       end_date: formData.checkOutDate,          // YYYY-MM-DD
+//       username: finalUsername,
+//       phone_number: userPhone,
+//       email: userEmail,
+//       aadhar_number: formData.aadhaarVerified
+//         ? aadhaarNumber
+//         : formData.passportVerified
+//         ? 'PASSPORT_VERIFIED'
+//         : null,
+//       user_photo: formData.uploadedPhoto || null,
+//       terms_verified: 1
+//     };
+
+//     console.log('BOOKING PAYLOAD =>', bookingDetails);
+
+//     // ✅ CORRECT ENDPOINT + await
+//     const response = await axios.post(
+//       'https://townmanor.ai/bookings',
+//       bookingDetails,
+//       {
+//          withCredentials: true,
+//         headers: { 'Content-Type': 'application/json' } }
+//     );
+
+//     const data = response.data;
+
+//     const newBookingId =
+//       data?.booking?.id ||
+//       data?.booking_id ||
+//       data?.id;
+
+//     if (!newBookingId) {
+//       throw new Error('Booking created but booking ID not received');
+//     }
+
+//     showAlert('Booking created successfully! Redirecting to payment…');
+
+//     localStorage.setItem('bookingId', String(newBookingId));
+//     await handleProceedToPayment(newBookingId);
+
+//   } catch (error) {
+//     console.error('Booking error:', error);
+//     const errorMsg =
+//       error.response?.data?.message ||
+//       error.response?.data?.errors?.[0]?.msg ||
+//       error.message ||
+//       'Booking failed';
+
+//     showAlert(`Booking failed: ${errorMsg}`);
+//     setIsSubmitting(false);
+//   }
+// };
+
+
+// const handlePayNow = async () => {
+//   if (!isPayNowEnabled || isSubmitting) return;
+
+//   setIsSubmitting(true);
+
+//   try {
+//     // 🔐 Verification check
+//     if (!(formData.aadhaarVerified || formData.passportVerified)) {
+//       showAlert('Please verify your Aadhaar or Passport before proceeding.');
+//       setIsSubmitting(false);
+//       return;
+//     }
+
+//     // 👤 Get local user
+//     let userLocal = {};
+//     try {
+//       userLocal = JSON.parse(localStorage.getItem('user')) || {};
+//     } catch {}
+
+//     let userEmail = userLocal.email || 'guest@townmanor.ai';
+//     let userPhone = '9999999999';
+//     let finalUsername = userLocal.username || username || 'guest';
+
+//     // Fetch user from backend (optional)
+//     if (username) {
+//       try {
+//         const userRes = await fetch(`https://townmanor.ai/api/user/${username}`);
+//         if (userRes.ok) {
+//           const userData = await userRes.json();
+//           userEmail = userData.email || userEmail;
+//           userPhone = userData.phone || userPhone;
+//         }
+//       } catch {}
+//     }
+
+//     // ✅ EXACT WORKING PAYLOAD (from Payment.jsx)
+//     const bookingDetails = {
+//       property_id: id || '2',                              // ✅ String OK
+//       start_date: format(new Date(formData.checkInDate), 'yyyy-MM-dd'),
+//       end_date: format(new Date(formData.checkOutDate), 'yyyy-MM-dd'),
+//       username: finalUsername,
+//       phone_number: userPhone,
+//       aadhar_number: aadhaarNumber || passportInput || 'NOT_PROVIDED',  // ✅ Never null
+//       user_photo: formData.uploadedPhoto || '',            // ✅ Empty string, not null
+//       terms_verified: true,                                // ✅ Boolean
+//       email: userEmail,
+//     };
+
+//     console.log('BOOKING PAYLOAD =>', bookingDetails);
+
+//     // ✅ CORRECT ENDPOINT: /api/booking (NO 's')
+//     const { data } = await axios.post(
+//       'https://townmanor.ai/api/booking',  // ✅ Fixed endpoint
+//       bookingDetails,
+//       {
+//         headers: { 'Content-Type': 'application/json' }
+//       }
+//     );
+
+//     console.log('Booking API response:', data);
+
+//     const newBookingId =
+//       data?.booking?.id ||
+//       data?.booking_id ||
+//       data?.id ||
+//       data?.bookingId ||
+//       null;
+
+//     if (!newBookingId) {
+//       throw new Error('Booking created but booking ID not returned');
+//     }
+
+//     if (data?.success && data?.booking) {
+//       const b = data.booking;
+//       showAlert(`Booking created successfully! Total: ₹${b.total_price}, Nights: ${b.nights}`);
+//     }
+
+//     localStorage.setItem('bookingId', String(newBookingId));
+//     await handleProceedToPayment(newBookingId);
+
+//   } catch (error) {
+//     console.error('Booking error:', error);
+
+//     let serverDump = '';
+//     if (error.response && error.response.data) {
+//       try {
+//         serverDump = '\n\nServer response:\n' + JSON.stringify(error.response.data, null, 2);
+//       } catch {
+//         serverDump = '\n\nServer response (raw): ' + String(error.response.data);
+//       }
+//     }
+
+//     const errorMsg =
+//       error.response?.data?.message ||
+//       error.response?.data?.error ||
+//       error.response?.data?.errors?.[0]?.msg ||
+//       error.message ||
+//       'Booking failed';
+
+//     showAlert(`Booking failed: ${errorMsg}${serverDump}`);
+//     setIsSubmitting(false);
+//   }
+// };
 const handlePayNow = async () => {
   if (!isPayNowEnabled || isSubmitting) return;
 
   setIsSubmitting(true);
 
   try {
-    // 🔐 Verification check
     if (!(formData.aadhaarVerified || formData.passportVerified)) {
       showAlert('Please verify your Aadhaar or Passport before proceeding.');
       setIsSubmitting(false);
       return;
     }
 
-    // 👤 Local user
     let userLocal = {};
     try {
       userLocal = JSON.parse(localStorage.getItem('user')) || {};
     } catch {}
 
     let userEmail = userLocal.email || 'guest@townmanor.ai';
-    let userPhone = userLocal.phone || '9999999999';
+    let userPhone = '9999999999';
     let finalUsername = userLocal.username || username || 'guest';
 
-    // (optional) backend se user fetch
     if (username) {
       try {
-        const userResponse = await fetch(`https://www.townmanor.ai/api/user/${username}`);
-        if (userResponse.ok) {
-          const userData = await userResponse.json();
+        const userRes = await fetch(`https://townmanor.ai/api/user/${username}`);
+        if (userRes.ok) {
+          const userData = await userRes.json();
           userEmail = userData.email || userEmail;
           userPhone = userData.phone || userPhone;
         }
       } catch {}
     }
 
-    // ✅ BACKEND-MATCHING PAYLOAD
+    // ✅ MAPPING: Frontend id ko backend valid id me convert karo
+    const validPropertyId = getValidPropertyId(id);
+    
+    console.log(`Frontend property ID: ${id} → Backend property ID: ${validPropertyId}`);
+
     const bookingDetails = {
-      property_id: Number(id),                 // 🔥 MUST BE NUMBER
-      start_date: formData.checkInDate,        // YYYY-MM-DD
-      end_date: formData.checkOutDate,          // YYYY-MM-DD
+      property_id: validPropertyId,  // ✅ Mapped ID use karo
+      start_date: format(new Date(formData.checkInDate), 'yyyy-MM-dd'),
+      end_date: format(new Date(formData.checkOutDate), 'yyyy-MM-dd'),
       username: finalUsername,
       phone_number: userPhone,
+      aadhar_number: aadhaarNumber || passportInput || 'NOT_PROVIDED',
+      user_photo: formData.uploadedPhoto || '',
+      terms_verified: true,
       email: userEmail,
-      aadhar_number: formData.aadhaarVerified
-        ? aadhaarNumber
-        : formData.passportVerified
-        ? 'PASSPORT_VERIFIED'
-        : null,
-      user_photo: formData.uploadedPhoto || null,
-      terms_verified: 1
     };
 
     console.log('BOOKING PAYLOAD =>', bookingDetails);
 
-    // ✅ CORRECT ENDPOINT + await
-    const response = await axios.post(
-      'https://townmanor.ai/bookings',
+    const { data } = await axios.post(
+      'https://townmanor.ai/api/booking',
       bookingDetails,
-      { headers: { 'Content-Type': 'application/json' } }
+      {
+        headers: { 'Content-Type': 'application/json' }
+      }
     );
 
-    const data = response.data;
+    console.log('Booking API response:', data);
 
     const newBookingId =
       data?.booking?.id ||
       data?.booking_id ||
-      data?.id;
+      data?.id ||
+      data?.bookingId ||
+      null;
 
     if (!newBookingId) {
-      throw new Error('Booking created but booking ID not received');
+      throw new Error('Booking created but booking ID not returned');
     }
 
-    showAlert('Booking created successfully! Redirecting to payment…');
+    if (data?.success && data?.booking) {
+      const b = data.booking;
+      showAlert(`Booking created successfully! Total: ₹${b.total_price}, Nights: ${b.nights}`);
+    }
 
     localStorage.setItem('bookingId', String(newBookingId));
     await handleProceedToPayment(newBookingId);
 
   } catch (error) {
     console.error('Booking error:', error);
+
+    let serverDump = '';
+    if (error.response && error.response.data) {
+      try {
+        serverDump = '\n\nServer response:\n' + JSON.stringify(error.response.data, null, 2);
+      } catch {
+        serverDump = '\n\nServer response (raw): ' + String(error.response.data);
+      }
+    }
+
     const errorMsg =
       error.response?.data?.message ||
+      error.response?.data?.error ||
       error.response?.data?.errors?.[0]?.msg ||
       error.message ||
       'Booking failed';
 
-    showAlert(`Booking failed: ${errorMsg}`);
+    showAlert(`Booking failed: ${errorMsg}${serverDump}`);
     setIsSubmitting(false);
   }
 };
-
   const handleProceedToPayment = async (bookingIdParam) => {
     if (!bookingIdParam) {
       showAlert('Booking ID missing. Cannot proceed to payment.');
