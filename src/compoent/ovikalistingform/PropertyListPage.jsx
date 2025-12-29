@@ -89,7 +89,7 @@ const PropertyCard = ({ property }) => {
         </button>
         <div className="price-tag">
           {formatPrice(property.base_rate)}
-          <span className="period">{property.base_rate ? '/mo' : ''}</span>
+          <span className="period">{property.base_rate ? '/night' : ''}</span>
         </div>
       </div>
 

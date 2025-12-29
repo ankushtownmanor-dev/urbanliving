@@ -27,18 +27,18 @@ const PropertyConsultForm = () => {
   return (
     <div className="property-consult-wrapper">
       {/* Top Heading Section */}
-      <h1 className="main-page-title">
+      {/* <h1 className="main-page-title">
         Start sharing your property with <span className="brand-highlight">Ovika</span> today!
       </h1>
       <p className="main-page-subtitle">
         Ready to unlock your property potential? Choose your preferred way to connect with us below
-      </p>
+      </p> */}
 
       {/* Hero Section with Form */}
       <div className="hero-form-container">
         {/* Left Side Text */}
         <div className="hero-text-content">
-          <h2 className="hero-main-heading">Ready to Unlock your property's Potential</h2>
+          <h2 className="hero-main-heading"> Want to Consult before initiating listing process?</h2>
           <p className="hero-description">
             Fill out the form to schedule a free non obligation consultation with one of our property experts.
           </p>
