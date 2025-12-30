@@ -131,6 +131,12 @@ const Tmx9PropertyForm = () => {
   const [insurance, setInsurance] = useState(false);
   const [damageProtection, setDamageProtection] = useState(false);
 
+  // Identity Verification State
+  const [idMethod, setIdMethod] = useState("file"); // 'file' or 'aadhaar'
+  const [aadhaarNumber, setAadhaarNumber] = useState("");
+  const [aadhaarVerified, setAadhaarVerified] = useState(false);
+  const [isVerifyingAadhaar, setIsVerifyingAadhaar] = useState(false);
+
   const STEPS = [
     { id: 1, title: "Basic & Description" },
     { id: 2, title: "Details & Amenities" },
@@ -203,7 +209,8 @@ const Tmx9PropertyForm = () => {
     }
 
     if (s === 5) {
-      if (idFiles.length === 0) newErrors.idFiles = "Please upload at least one ID / document";
+      if (idMethod === "file" && idFiles.length === 0) newErrors.idFiles = "Please upload ID documents or Verify Aadhaar";
+      if (idMethod === "aadhaar" && !aadhaarVerified) newErrors.idFiles = "Please verify your Aadhaar number";
     }
 
     setErrors(newErrors);
@@ -283,7 +290,7 @@ const Tmx9PropertyForm = () => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) {
       setIdFiles([]);
-      setErrors((prev) => ({ ...prev, idFiles: undefined }));
+      if (!aadhaarVerified) setErrors((prev) => ({ ...prev, idFiles: undefined }));
       return;
     }
 
@@ -305,6 +312,42 @@ const Tmx9PropertyForm = () => {
     }
 
     setIdFiles(accepted);
+  };
+
+  const verifyAadhaar = async () => {
+    if (!aadhaarNumber || !/^\d{12}$/.test(aadhaarNumber)) {
+      alert("Please enter a valid 12-digit Aadhaar number.");
+      return;
+    }
+    
+    setIsVerifyingAadhaar(true);
+    try {
+      // Using SurePass API as requested
+      const res = await fetch("https://kyc-api.surepass.app/api/v1/aadhaar-validation/aadhaar-validation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg"
+        },
+        body: JSON.stringify({ id_number: aadhaarNumber })
+      });
+      
+      const data = await res.json();
+      
+      if (data.success || data.status_code === 200) {
+        setAadhaarVerified(true);
+        setErrors(prev => ({ ...prev, idFiles: undefined })); // Clear ID error
+        alert("Aadhaar Verified Successfully!");
+      } else {
+        setAadhaarVerified(false);
+        alert("Verification Failed: " + (data.message || "Invalid Aadhaar"));
+      }
+    } catch (err) {
+      console.error("Aadhaar verification error", err);
+      alert("Verification Error. Please try again or use file upload.");
+    } finally {
+      setIsVerifyingAadhaar(false);
+    }
   };
 
   const handleSelfie = (e) => setSelfieFile(e.target.files?.[0] || null);
@@ -447,6 +490,7 @@ const Tmx9PropertyForm = () => {
         registrationNumber: form.registrationNumber,
         localCompliance: form.localCompliance,
         ownerId: ownerId,
+        identityVerification: aadhaarVerified ? { type: "aadhaar", number: aadhaarNumber } : { type: "file" }
       };
       fd.append("meta", JSON.stringify(meta));
 
@@ -900,12 +944,81 @@ const Tmx9PropertyForm = () => {
           <section className="tmx9pf-section">
             <h2 className="tmx9pf-section-title">Identity &amp; Legal</h2>
             <div className="tmx9pf-grid">
+              
               <div className="tmx9pf-field full">
-                <label className="tmx9pf-label">Government ID / Business documents *</label>
-                <input type="file" accept="image/*,application/pdf" multiple onChange={handleIdFiles} className="tmx9pf-file" />
-                {renderError("idFiles")}
-                <div className="tmx9pf-muted">Files selected: {idFiles.length}</div>
+                <label className="tmx9pf-label">Identity Verification Method *</label>
+                <div style={{ display: 'flex', gap: '20px', marginBottom: '16px' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '8px' }}>
+                    <input 
+                      type="radio" 
+                      name="idMethod" 
+                      value="file" 
+                      checked={idMethod === "file"} 
+                      onChange={() => setIdMethod("file")} 
+                    />
+                    Upload Documents
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '8px' }}>
+                    <input 
+                      type="radio" 
+                      name="idMethod" 
+                      value="aadhaar" 
+                      checked={idMethod === "aadhaar"} 
+                      onChange={() => setIdMethod("aadhaar")} 
+                    />
+                    Verify Aadhaar Number (Instant)
+                  </label>
+                </div>
               </div>
+
+              {idMethod === "file" ? (
+                <div className="tmx9pf-field full">
+                  <label className="tmx9pf-label">Government ID / Business documents *</label>
+                  <input type="file" accept="image/*,application/pdf" multiple onChange={handleIdFiles} className="tmx9pf-file" />
+                  {renderError("idFiles")}
+                  <div className="tmx9pf-muted">Files selected: {idFiles.length}</div>
+                </div>
+              ) : (
+                <div className="tmx9pf-field full" style={{ background: '#f8fafc', padding: '16px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                   <label className="tmx9pf-label">Enter Aadhaar Number *</label>
+                   <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                     <div style={{ flex: 1 }}>
+                        <input 
+                          type="text" 
+                          maxLength="12"
+                          placeholder="12-digit Aadhaar Number" 
+                          value={aadhaarNumber} 
+                          onChange={(e) => {
+                            const val = e.target.value.replace(/\D/g, '').slice(0, 12);
+                            setAadhaarNumber(val);
+                            if (aadhaarVerified) setAadhaarVerified(false); // Reset verification on change
+                          }}
+                          className={`tmx9pf-input ${errors.idFiles ? "tmx9pf-input--error" : ""}`}
+                          disabled={aadhaarVerified}
+                          style={{ borderColor: aadhaarVerified ? '#22c55e' : '' }}
+                        />
+                        {renderError("idFiles")}
+                     </div>
+                     <button 
+                        type="button" 
+                        onClick={verifyAadhaar} 
+                        disabled={aadhaarVerified || isVerifyingAadhaar || aadhaarNumber.length !== 12}
+                        className="tmx9pf-small-btn"
+                        style={{ 
+                          height: '42px', 
+                          padding: '0 20px', 
+                          background: aadhaarVerified ? '#22c55e' : '#3b82f6', 
+                          color: 'white', 
+                          border: 'none',
+                          cursor: (aadhaarVerified || isVerifyingAadhaar) ? 'default' : 'pointer'
+                        }}
+                     >
+                       {isVerifyingAadhaar ? "Verifying..." : aadhaarVerified ? "Verified ✓" : "Verify Now"}
+                     </button>
+                   </div>
+                   {aadhaarVerified && <p style={{ color: '#166534', fontSize: '13px', marginTop: '8px' }}>✓ Aadhaar verification successful. You can proceed.</p>}
+                </div>
+              )}
 
               <div className="tmx9pf-field">
                 <label className="tmx9pf-label">Selfie verification (optional)</label>
