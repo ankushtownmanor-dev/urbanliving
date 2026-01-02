@@ -547,7 +547,7 @@ export default function DashBoardAdmin() {
   return (
     <div className={styles.page}>
       <div className={styles.topbar}></div>
-      <section className={styles.hero}>
+      <section style={{marginTop:"-3px"}} className={styles.hero}>
         <img className={styles.heroBg} src="/public/Group 89.png" alt="hero background" />
         <div className={styles.heroOverlay} />
         <div className={styles.heroContent}>

@@ -1,15 +1,50 @@
-import React from "react";
+// import React from "react";
+// import { Outlet } from "react-router-dom";
+// import Sidebar from "./Sidebar/Sidebar";
+// import "./AdminDashboardLayout.css";
+
+// const AdminDashboardLayout = () => {
+//   return (
+//     <div className="admin-dashboard-layout">
+//       <Sidebar />
+//       <div className="admin-dashboard-content">
+//         <Outlet />
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default AdminDashboardLayout;
+
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
+import { FaBars } from "react-icons/fa";
 import Sidebar from "./Sidebar/Sidebar";
 import "./AdminDashboardLayout.css";
 
 const AdminDashboardLayout = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="admin-dashboard-layout">
-      <Sidebar />
+
+      {/* Mobile Topbar */}
+      <div className="mobile-topbar">
+        <FaBars onClick={() => setSidebarOpen(true)} />
+        <span>Dashboard</span>
+      </div>
+
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+
       <div className="admin-dashboard-content">
         <Outlet />
       </div>
+
+      {/* Overlay */}
+      {sidebarOpen && <div className="overlay" onClick={() => setSidebarOpen(false)} />}
     </div>
   );
 };
