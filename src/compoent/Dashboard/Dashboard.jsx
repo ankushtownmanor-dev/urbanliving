@@ -1,218 +1,483 @@
+// import React, { useState, useEffect } from "react";
+// import {
+//   FaHome,
+//   FaBookmark,
+//   FaGift,
+//   FaBuilding,
+//   FaCommentDots,
+//   FaBell,
+// } from "react-icons/fa";
+// import "./Dashboard.css";
+// import BookingDashboard from "./BookingDashboard";
+// import BookingDetail from "./BookingDetail";
+// import ProfilePage from "./ProfilePage";
+// import { useNavigate } from "react-router";
+
+// const Dashboard = () => {
+//   const [user, setUser] = useState(null);
+//   const [navigation, setNavigation] = useState("dashboard");
+
+//   // 🔔 booking-request notification
+//   const [bookingRequest, setBookingRequest] = useState(null);
+//   const [loadingNotification, setLoadingNotification] = useState(false);
+
+//   const navigate = useNavigate();
+
+//   const itemClass = (key) =>
+//     navigation === key ? "sidebar-menu-item active" : "sidebar-menu-item";
+
+//   // Load user
+//   useEffect(() => {
+//     try {
+//       const raw = localStorage.getItem("user");
+//       if (raw) {
+//         setUser(JSON.parse(raw));
+//       }
+//     } catch (err) {
+//       console.error("User parse error", err);
+//     }
+//   }, []);
+
+//   // 🔔 Fetch booking-request (API exactly as screenshot)
+//   const fetchBookingRequest = async () => {
+//     if (!user?.id) return;
+
+//     setLoadingNotification(true);
+//     try {
+//       const res = await fetch(
+//         `https://townmanor.ai/api/booking-request/${user.id}`
+//       );
+//       const result = await res.json();
+
+//       if (result?.success) {
+//         setBookingRequest(result.data);
+//       } else {
+//         setBookingRequest(null);
+//       }
+//     } catch (err) {
+//       console.error("Booking request API error", err);
+//       setBookingRequest(null);
+//     } finally {
+//       setLoadingNotification(false);
+//     }
+//   };
+
+//   // When Notification tab opens
+//   useEffect(() => {
+//     if (navigation === "notification") {
+//       fetchBookingRequest();
+//     }
+//   }, [navigation]);
+
+//   return (
+//     <>
+//       <div className="dashboard-container">
+//         {/* SIDEBAR */}
+//         <aside className="dashboard-sidebar">
+//           <div className="sidebar-profile">
+//             <img
+//               src="/user.png"
+//               alt="user"
+//               className="sidebar-profile-image"
+//             />
+//             <div>
+//               <h3 className="sidebar-profile-name">
+//                 {user?.username || "Guest"}
+//               </h3>
+//               <p className="sidebar-profile-role">TM Member</p>
+//             </div>
+//           </div>
+
+//           <ul className="sidebar-menu">
+//             <li
+//               className={itemClass("dashboard")}
+//               onClick={() => setNavigation("dashboard")}
+//             >
+//               <FaHome className="sidebar-menu-icon" /> Dashboard
+//             </li>
+
+//             <li
+//               className={itemClass("booking")}
+//               onClick={() => setNavigation("booking")}
+//             >
+//               <FaBookmark className="sidebar-menu-icon" /> Bookings
+//             </li>
+
+//             <li className="sidebar-menu-item">
+//               <FaGift className="sidebar-menu-icon" /> Rewards
+//             </li>
+
+//             <li
+//               className="sidebar-menu-item"
+//               onClick={() => navigate("/tmluxe")}
+//             >
+//               <FaBuilding className="sidebar-menu-icon" /> Explore Properties
+//             </li>
+
+//             <li
+//               className={itemClass("profile")}
+//               onClick={() => setNavigation("profile")}
+//             >
+//               <FaCommentDots className="sidebar-menu-icon" /> Update Profile
+//             </li>
+
+//             <li
+//               className={itemClass("notification")}
+//               onClick={() => setNavigation("notification")}
+//             >
+//               <FaBell className="sidebar-menu-icon" /> Notifications
+//             </li>
+//           </ul>
+//         </aside>
+
+//         {/* MAIN CONTENT */}
+//         <main className="dashboard-main">
+//           <div className="dashboard-topbar">
+//             <h1 className="dashboard-welcome">
+//               Welcome Back, {user?.username || "Guest"} 👋
+//             </h1>
+//             <FaBell size={30} color="#b60000" />
+//           </div>
+
+//           {/* DASHBOARD */}
+//           {navigation === "dashboard" && <BookingDashboard />}
+
+//           {/* BOOKINGS */}
+//           {navigation === "booking" && <BookingDetail />}
+
+//           {/* PROFILE */}
+//           {navigation === "profile" && <ProfilePage />}
+
+//           {/* 🔔 NOTIFICATION */}
+//           {navigation === "notification" && (
+//             <div className="notification-wrapper">
+//               <h2 className="section-title">Booking Request</h2>
+
+//               {loadingNotification && <p>Loading booking request...</p>}
+
+//               {!loadingNotification && !bookingRequest && (
+//                 <p>No booking request found.</p>
+//               )}
+
+//               {bookingRequest && (
+//                 <div className="notification-card-advanced">
+//                   <div className="notification-left">
+//                     <FaBell className="notification-big-icon" />
+//                   </div>
+
+//                   <div className="notification-content">
+//                     <h3>
+//                       Booking Request #{bookingRequest.id}{" "}
+//                       <span className="status-accepted">
+//                         {bookingRequest.status.toUpperCase()}
+//                       </span>
+//                     </h3>
+
+//                     <p>
+//                       <strong>User:</strong> {bookingRequest.username}
+//                     </p>
+
+//                     <p>
+//                       <strong>Stay:</strong>{" "}
+//                       {new Date(
+//                         bookingRequest.start_date
+//                       ).toDateString()}{" "}
+//                       →{" "}
+//                       {new Date(
+//                         bookingRequest.end_date
+//                       ).toDateString()}
+//                     </p>
+
+//                     <p>
+//                       <strong>Requested On:</strong>{" "}
+//                       {new Date(
+//                         bookingRequest.created_at
+//                       ).toLocaleString()}
+//                     </p>
+
+//                     <div className="notification-actions">
+//                       <button
+//                         className="book-btn"
+//                         onClick={() =>
+//                           navigate(
+//                             `/property/${bookingRequest.property_id}`
+//                           )
+//                         }
+//                       >
+//                         View & Book Property
+//                       </button>
+//                     </div>
+//                   </div>
+//                 </div>
+//               )}
+//             </div>
+//           )}
+//         </main>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default Dashboard;
 import React, { useState, useEffect } from "react";
-import { FaHome, FaBookmark, FaGift, FaBuilding, FaCommentDots, FaBell } from "react-icons/fa";
+import {
+  FaHome,
+  FaBookmark,
+  FaGift,
+  FaBuilding,
+  FaCommentDots,
+  FaBell,
+} from "react-icons/fa";
 import "./Dashboard.css";
-import Navbar from "../Homepage/Navbar";
 import BookingDashboard from "./BookingDashboard";
 import BookingDetail from "./BookingDetail";
-import { useNavigate } from "react-router";
 import ProfilePage from "./ProfilePage";
+import { useNavigate } from "react-router";
+
+/* ===========================
+   DASHBOARD COMPONENT
+=========================== */
 
 const Dashboard = () => {
-  const [showMore, setShowMore] = useState(false);
   const [user, setUser] = useState(null);
-  const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [ navigation , setnavigation]=useState("dashboard");
-  const itemClass = (key) => (navigation === key ? "sidebar-menu-item active" : "sidebar-menu-item");
+  const [navigation, setNavigation] = useState("dashboard");
+
+  // 🔔 notifications
+  const [bookingRequests, setBookingRequests] = useState([]);
+  const [loadingNotification, setLoadingNotification] = useState(false);
+
+  const navigate = useNavigate();
+
+  const itemClass = (key) =>
+    navigation === key
+      ? "sidebar-menu-item active"
+      : "sidebar-menu-item";
+
+  /* ===========================
+     LOAD USER
+  =========================== */
   useEffect(() => {
-    // Load user from localStorage
     try {
       const raw = localStorage.getItem("user");
-      console.log(raw)
       if (raw) {
-        const parsed = JSON.parse(raw);
-        setUser(parsed);
+        setUser(JSON.parse(raw));
       }
-    } catch (e) {
-      console.error("Failed to parse user from localStorage", e);
+    } catch (err) {
+      console.error("User parse error", err);
     }
   }, []);
-  const navigate  = useNavigate();
-  useEffect(() => {
-    // Fetch bookings when user is available
-    const fetchBookings = async () => {
-      if (!user?.id) return;
-      setLoading(true);
-      setError("");
-      try {
-        const res = await fetch(`https://townmanor.ai/api/booking/user/${user.id}`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        if (data?.success && Array.isArray(data.bookings)) {
-          setBookings(data.bookings);
-        } else {
-          setBookings([]);
-        }
-      } catch (err) {
-        console.error("Error fetching bookings", err);
-        setError("Failed to load bookings. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchBookings();
-  }, [user]);
+  /* ===========================
+     FETCH USER BOOKING UPDATES
+     (ACCEPT / REJECT / PENDING)
+  =========================== */
+  const fetchBookingRequests = async () => {
+    if (!user?.username) return;
 
-  const cancelBooking = async (bookingId) => {
-    const confirmCancel = window.confirm("Are you sure you want to cancel this booking?");
-    if (!confirmCancel) return;
+    setLoadingNotification(true);
 
     try {
-      const res = await fetch(`https://townmanor.ai/api/booking/${bookingId}/cancel`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: bookingId, user_id: user?.id }),
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      if (!data?.success) {
-        throw new Error(data?.message || "Cancel failed");
-      }
-      // Update local state on success
-      setBookings((prev) =>
-        prev.map((b) => (b.id === bookingId ? { ...b, cancelled: 1, booking_status: "cancelled" } : b))
+      const res = await fetch(
+        "https://townmanor.ai/api/booking-request"
       );
-      alert(data.message || "Booking cancelled successfully.");
-    } catch (e) {
-      console.error("Failed to cancel booking", e);
-      alert("Failed to cancel booking. Please try again.");
+      const result = await res.json();
+
+      let list = [];
+      if (Array.isArray(result)) list = result;
+      else if (Array.isArray(result?.data)) list = result.data;
+
+      // ✅ filter only logged-in user's requests
+      const userRequests = list.filter(
+        (r) => r.username === user.username
+      );
+
+      // latest first
+      userRequests.sort(
+        (a, b) =>
+          new Date(b.created_at || b.updated_at) -
+          new Date(a.created_at || a.updated_at)
+      );
+
+      setBookingRequests(userRequests);
+    } catch (err) {
+      console.error("Booking request fetch error", err);
+      setBookingRequests([]);
+    } finally {
+      setLoadingNotification(false);
     }
   };
 
+  /* ===========================
+     LOAD WHEN NOTIFICATION TAB
+  =========================== */
+  useEffect(() => {
+    if (navigation === "notification") {
+      fetchBookingRequests();
+    }
+  }, [navigation, user]);
+
+  /* ===========================
+     UI
+  =========================== */
   return (
-    <>
-      {/* <Navbar/> */}
-      <div className="dashboard-container">
-        {/* Sidebar */}
-        <aside className="dashboard-sidebar">
-          <div className="sidebar-profile">
-            <img
-              src="user.png"
-              alt="user avatar"
-              className="sidebar-profile-image"
-            />
-            <div>
-              <h3 className="sidebar-profile-name">{user?.username || "Guest"}</h3>
-              <p className="sidebar-profile-role">TM Member</p>
-            </div>
+    <div className="dashboard-container">
+      {/* ================= SIDEBAR ================= */}
+      <aside className="dashboard-sidebar">
+        <div className="sidebar-profile">
+          <img
+            src="/user.png"
+            alt="user"
+            className="sidebar-profile-image"
+          />
+          <div>
+            <h3 className="sidebar-profile-name">
+              {user?.username || "Guest"}
+            </h3>
+            <p className="sidebar-profile-role">TM Member</p>
+          </div>
+        </div>
+
+        <ul className="sidebar-menu">
+          <li
+            className={itemClass("dashboard")}
+            onClick={() => setNavigation("dashboard")}
+          >
+            <FaHome /> Dashboard
+          </li>
+
+          <li
+            className={itemClass("booking")}
+            onClick={() => setNavigation("booking")}
+          >
+            <FaBookmark /> Bookings
+          </li>
+
+          <li className="sidebar-menu-item">
+            <FaGift /> Rewards
+          </li>
+
+          <li
+            className="sidebar-menu-item"
+            onClick={() => navigate("/tmluxe")}
+          >
+            <FaBuilding /> Explore Properties
+          </li>
+
+          <li
+            className={itemClass("profile")}
+            onClick={() => setNavigation("profile")}
+          >
+            <FaCommentDots /> Update Profile
+          </li>
+
+          <li
+            className={itemClass("notification")}
+            onClick={() => setNavigation("notification")}
+          >
+            <FaBell /> Notifications
+          </li>
+        </ul>
+      </aside>
+
+      {/* ================= MAIN ================= */}
+      <main className="dashboard-main">
+        <div className="dashboard-topbar">
+          <h1>
+            Welcome Back, {user?.username || "Guest"} 👋
+          </h1>
+          <FaBell size={26} color="#b60000" />
+        </div>
+
+        {/* DASHBOARD */}
+        {navigation === "dashboard" && <BookingDashboard />}
+
+        {/* BOOKINGS */}
+        {navigation === "booking" && <BookingDetail />}
+
+        {/* PROFILE */}
+        {navigation === "profile" && <ProfilePage />}
+
+        {/* ================= NOTIFICATIONS ================= */}
+       {navigation === "notification" && (
+  <div className="notification-wrapper">
+    <h2 className="section-title">Booking Updates</h2>
+
+    {loadingNotification && (
+      <p className="loading-text">Fetching latest updates…</p>
+    )}
+
+    {!loadingNotification && bookingRequests.length === 0 && (
+      <p className="empty-text">No booking updates yet.</p>
+    )}
+
+    {bookingRequests.map((req, index) => (
+      <div
+        key={req.id}
+        className={`notification-card animated-card ${
+          req.status === "accepted"
+            ? "card-accepted"
+            : req.status === "rejected"
+            ? "card-rejected"
+            : "card-pending"
+        }`}
+        style={{ animationDelay: `${index * 0.1}s` }}
+      >
+        <div className="notification-left">
+          <FaBell className="notification-icon-animated" />
+        </div>
+
+        <div className="notification-content">
+          <div className="notification-header">
+            <h3>{req.property?.name}</h3>
+
+            <span
+              className={`status-badge ${
+                req.status === "accepted"
+                  ? "status-accepted"
+                  : req.status === "rejected"
+                  ? "status-rejected"
+                  : "status-pending"
+              }`}
+            >
+              {req.status.toUpperCase()}
+            </span>
           </div>
 
-          <ul className="sidebar-menu">
-            <li className={itemClass('dashboard')} onClick={()=>setnavigation('dashboard')}>
-              <FaHome className="sidebar-menu-icon"  size={20}/> Dashboard
-            </li>
-            <li className={itemClass('booking')} onClick={() => setnavigation('booking')}>
-              <FaBookmark className="sidebar-menu-icon" size={20} /> Bookings
-            </li>
-            <li className="sidebar-menu-item" onClick={() => alert("This functionality is coming soon") }>
-              <FaGift className="sidebar-menu-icon" size={20} /> Rewards
-            </li>
-            <li className="sidebar-menu-item" onClick={()=>navigate('/tmluxe')}>
-              <FaBuilding className="sidebar-menu-icon" size={20} /> Explore Properties
-            </li>
-            <li className={itemClass('profile')} onClick={()=>setnavigation('profile')}>
-              <FaCommentDots className="sidebar-menu-icon" size={20} /> Update profile
-            </li>
-          </ul>
-        </aside>
+          <p>
+            <strong>City:</strong> {req.property?.city}
+          </p>
 
-        {/* Main Content */}
-        <main className="dashboard-main">
-          {/* Top Bar */}
-          <div className="dashboard-topbar">
-            <h1 className="dashboard-welcome">Welcome Back ! {user?.username || "Guest"}</h1>
-            <div className="">
-              <FaBell className="dot" color="#6E0B0C" size={35} />
-            </div>
-          </div>
+          <p>
+            <strong>Stay:</strong>{" "}
+            {new Date(req.start_date).toDateString()} →{" "}
+            {new Date(req.end_date).toDateString()}
+          </p>
 
-          {/* Profile Section */}
-          <div className="dashboard-profile-section">
-            <img
-              src="user.png"
-              alt="profile avatar"
-              className="dashboard-profile-image"
-            />
-            <div className="dashboard-profile-details">
-              <h2 className="dashboard-profile-heading">Profile</h2>
-              <p className="dashboard-profile-name">{user?.username || "Guest"}</p>
-              <p className="dashboard-profile-role">TM Member</p>
-              <p className="dashboard-profile-actions" onClick={()=>setnavigation('profile')}>
-                Quick Actions : Edit Profile | Setting
-              </p>
-            </div>
-          </div>
-        </main>
+          <p className="date-text">
+            Updated:{" "}
+            {new Date(
+              req.updated_at || req.created_at
+            ).toLocaleString()}
+          </p>
+
+          {req.status === "accepted" && (
+            <button
+              className="proceed-btn"
+              onClick={() =>
+                navigate(`/property/${req.property_id}`)
+              }
+            >
+              Proceed to Booking →
+            </button>
+          )}
+        </div>
       </div>
-      
-      {/* 
-      
-      <div className="dashboard-notification-section">
-        <h2 className="dashboard-notification-heading">Notification</h2>
+    ))}
+  </div>
+)}
 
-        <div className="notification-card">
-          <FaBell className="notification-icon" />
-          <div>
-            <p className="notification-title">Exclusive offer: 20% off on your next Stay.</p>
-            <p className="notification-desc">Expires in 7 Days.</p>
-          </div>
-        </div>
-
-        <div className="notification-card">
-          <FaBell className="notification-icon" />
-          <div>
-            <p className="notification-title">Upcoming Stays: Cozy Cabins.</p>
-            <p className="notification-desc">Reminder check-in is Tomorrow.</p>
-          </div>
-        </div>
-
-        <div className="notification-card">
-          <FaBell className="notification-icon" />
-          <div>
-            <p className="notification-title">TM updates</p>
-            <p className="notification-desc">Check what is new.</p>
-          </div>
-        </div>
-      </div>
-      
-      <div className="dashboard-support-section">
-        <h2 className="dashboard-support-heading">Support & Help</h2>
-
-        <div className="support-options">
-          <div className="support-card">
-            <span className="support-icon">❓</span>
-            <p className="support-text">FAQ</p>
-          </div>
-
-          <div className="support-card">
-            <span className="support-icon">💬</span>
-            <p className="support-text">Chat with support</p>
-          </div>
-
-          <div className="support-card">
-            <span className="support-icon">📞</span>
-            <p className="support-text">Call Us</p>
-          </div>
-        </div>
-      </div> */}
-      { navigation === 'dashboard' && (
-        <>
-        <BookingDashboard/>
-         </>
-      )}
-        { navigation === 'booking' && (
-        <>
-        <BookingDetail/>
-         </>
-      )}
-      { navigation === 'profile' && (
-        <>
-        <ProfilePage/>
-         </>
-      )}
-    </>
+      </main>
+    </div>
   );
 };
 

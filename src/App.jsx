@@ -210,6 +210,7 @@ import FAQ from "./compoent/FAQ/FAQ";
 import { useContext } from "react";
 import { Subsriptionmain } from "./compoent/SubsriptionNew/Subsriptionmain";
 import SuperAdminDashboard from './compoent/AdminDashBoard/SuperAdmin/SuperAdminDashboard';
+import { Notification } from "./compoent/Dashboard/Notification";
 
 
 // 🔒 Protected Route Component
@@ -251,6 +252,7 @@ function App() {
           <Route path="/renovation" element={<FifthMain />} />
           <Route path="/listed" element={<PropertyListingForm />} />
           <Route path="/subsription" element={<Subsriptionmain/>}/>
+          <Route path="/notification" element={<Notification/>}/>
 
           {/* ✅ PROTECTED ROUTE – only after login */}
           <Route

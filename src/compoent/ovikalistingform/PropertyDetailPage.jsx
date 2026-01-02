@@ -432,6 +432,7 @@ const getValidPropertyId = (frontendId) => {
 
 const API_BASE_URL = 'https://townmanor.ai/api/ovika';
 const CALENDAR_API_BASE = 'https://townmanor.ai/api/calendar';
+const BOOKING_REQUEST_API = ' https://townmanor.ai/api/booking-request';
 
 const getPhotoUrl = (photo) => {
   if (!photo) return null;
@@ -506,6 +507,8 @@ async function getCalendar(propertyKey) {
     return { blocked: [] };
   }
 }
+
+
 
 // Calendar Component
 const Calendar = ({ selectedDates, onDateSelect, minDate = new Date(), disabledDateSet = new Set(), onInvalidRange }) => {
@@ -658,6 +661,12 @@ const PropertyDetailPage = () => {
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeImg, setActiveImg] = useState(0);
+  const [showAvailabilityCalendar, setShowAvailabilityCalendar] = useState(false);
+const [availabilityDates, setAvailabilityDates] = useState({
+  checkInDate: '',
+  checkOutDate: ''
+});
+
   
   // Payment modal state - EXACT 6 STEPS FROM PAYMENT.JS
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -670,7 +679,7 @@ const PropertyDetailPage = () => {
     uploadedPhoto: null,
     termsAgreed: false,
   });
-
+const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
   const [aadhaarNumber, setAadhaarNumber] = useState('');
   const [isAadhaarLoading, setIsAadhaarLoading] = useState(false);
   const [verificationMethod, setVerificationMethod] = useState('aadhaar');
@@ -681,6 +690,16 @@ const PropertyDetailPage = () => {
   const fileInputRef = useRef(null);
   const [disabledDateSet, setDisabledDateSet] = useState(new Set());
   const [alertMessage, setAlertMessage] = useState(null);
+    // ✅ CHECK AVAILABILITY HANDLER (INSIDE COMPONENT)
+  const handleCheckAvailability = () => {
+  if (!user) {
+    navigate('/login', { state: { from: location } });
+    return;
+  }
+  setShowAvailabilityCalendar(true);
+};
+
+
   
   // Passport verification states
   const [passportFile, setPassportFile] = useState(null);
@@ -1135,6 +1154,87 @@ const PropertyDetailPage = () => {
   const nights = Number(property.number_of_nights) || 1;
   const fees = (Number(property.cleaning_fee)||0) + (Number(property.service_fee)||0);
   const total = (baseRate * nights) + fees;
+
+// const confirmAvailabilityCheck = async () => {
+//   if (!availabilityDates.checkInDate || !availabilityDates.checkOutDate) {
+//     showAlert('Please select check-in and check-out dates');
+//     return;
+//   }
+
+//   setIsCheckingAvailability(true);
+
+//   try {
+//     const payload = {
+//       property_id: getValidPropertyId(id),
+//       username: user.username,
+//       start_date: availabilityDates.checkInDate,
+//       end_date: availabilityDates.checkOutDate
+//     };
+
+//     console.log('📤 Availability payload:', payload);
+
+//     const res = await axios.post(
+//       'https://townmanor.ai/api/booking-request',
+//       payload,
+//       { headers: { 'Content-Type': 'application/json' } }
+//     );
+
+//     showAlert(res.data.message || 'Request sent to owner');
+//     setShowAvailabilityCalendar(false);
+
+//   } catch (err) {
+//     console.error(err);
+//     showAlert(err.response?.data?.message || 'Failed to check availability');
+//   } finally {
+//     setIsCheckingAvailability(false);
+//   }
+// };
+const confirmAvailabilityCheck = async () => {
+  if (!availabilityDates.checkInDate || !availabilityDates.checkOutDate) {
+    showAlert('Please select check-in and check-out dates');
+    return;
+  }
+
+  setIsCheckingAvailability(true);
+
+  try {
+    const payload = {
+      property_id: property.id, // ✅ REAL BACKEND ID
+      username: user.username,
+      start_date: availabilityDates.checkInDate,
+      end_date: availabilityDates.checkOutDate
+    };
+
+    console.log('📤 Availability payload:', payload);
+
+    const res = await axios.post(
+      'https://townmanor.ai/api/booking-request',
+      payload,
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+
+    if (res.data?.success && res.data?.data?.length) {
+      const req = res.data.data[0];
+      showAlert(
+        `Request sent successfully!\n\n` +
+        `Property: ${req.property.name}\n` +
+        `City: ${req.property.city}\n` +
+        `Status: ${req.status}`
+      );
+    } else {
+      showAlert('Request sent to owner');
+    }
+
+    setShowAvailabilityCalendar(false);
+
+  } catch (err) {
+    console.error(err);
+    showAlert(err.response?.data?.message || 'Failed to send request');
+  } finally {
+    setIsCheckingAvailability(false);
+  }
+};
+
 
   return (
     <div className="detail-page-wrapper">
@@ -1839,12 +1939,75 @@ const PropertyDetailPage = () => {
                     <span>₹{formatCurrency(total)}</span>
                   </div>
                 </div>
+                <button
+  onClick={handleCheckAvailability}
+  disabled={isCheckingAvailability}
+  className="check-availability-btn"
+  style={{
+    width: '100%', padding: '1rem', background: 'white',
+    color: '#8b0000', border: '2px solid #8b0000', borderRadius: '8px',
+    fontSize: '1rem', fontWeight: '600', cursor: isCheckingAvailability ? 'not-allowed' : 'pointer',
+    marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
+    gap: '0.5rem', opacity: isCheckingAvailability ? 0.6 : 1
+  }}
+>
+  {isCheckingAvailability ? (
+    <>
+      <Loader className="animate-spin" size={18} />
+      Checking...
+    </>
+  ) : (
+    <>
+      <FiCalendar />
+      Check Availability
+    </>
+  )}
+</button>
+{showAvailabilityCalendar && (
+  <div
+    style={{
+      marginTop: '1rem',
+      padding: '1rem',
+      background: '#ffffff',
+      border: '1px solid #e5e7eb',
+      borderRadius: '10px'
+    }}
+  >
+    <Calendar
+      selectedDates={availabilityDates}
+      onDateSelect={(dates) => setAvailabilityDates(dates)}
+      minDate={new Date()}
+      disabledDateSet={disabledDateSet}
+      onInvalidRange={showAlert}
+    />
+
+    <button
+      onClick={confirmAvailabilityCheck}
+      style={{
+        width: '100%',
+        marginTop: '1rem',
+        padding: '12px',
+        background: '#8b0000',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '8px',
+        fontWeight: '600',
+        cursor: 'pointer'
+      }}
+    >
+      Confirm Availability
+    </button>
+  </div>
+)}
 
                 <div style={{ margin: '1.5rem 0' }}>
                   <button className="reserve-btn" onClick={handleReserveClick}>Reserve Now</button>
                   <p className="hint" style={{ marginBottom: 0 }}>You won't be charged yet</p>
                 </div>
               </div>
+            
+
+
 
               <div className="card-footer">
                 <FiShield className="shield-icon"/>
