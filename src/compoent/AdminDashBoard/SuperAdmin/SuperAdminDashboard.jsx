@@ -36,19 +36,32 @@ ChartJS.register(
   ArcElement
 );
 
-const API_MSG = "https://townmanor.ai/api/ovika";
+const API_PROPERTIES = "https://townmanor.ai/api/ovika/properties";
+const API_BOOKINGS = "https://townmanor.ai/api/booking-request";
 
-  export default function SuperAdminDashboard() {
-  const [view, setView] = useState('dashboard'); // 'dashboard', 'properties', 'users', 'bookings', 'settings'
+export default function SuperAdminDashboard() {
+  const [view, setView] = useState('dashboard'); // 'dashboard', 'properties', 'users', 'bookings', 'finance', 'settings'
   const [properties, setProperties] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState({ totalProps: 0, totalVal: 0, activeUsers: 0, totalBookings: 0, pendingBookings: 0, confirmedBookings: 0, cancelledBookings: 0, totalRevenue: 0, pendingRevenue: 0 });
-  const [derivedUsers, setDerivedUsers] = useState([]); // Users aggregated from props
+  const [stats, setStats] = useState({ 
+    totalProps: 0, 
+    totalVal: 0, 
+    activeUsers: 0, 
+    totalBookings: 0, 
+    pendingBookings: 0, 
+    confirmedBookings: 0, 
+    cancelledBookings: 0, 
+    totalRevenue: 0, 
+    pendingRevenue: 0 
+  });
+  
+  const [derivedUsers, setDerivedUsers] = useState([]); // Users aggregated from props (Owners)
+  const [derivedGuests, setDerivedGuests] = useState([]); // Users aggregated from bookings (Guests)
   const [editingProp, setEditingProp] = useState(null); // For edit modal
   const [searchTerm, setSearchTerm] = useState("");
   const [bookingFilter, setBookingFilter] = useState("ALL");
-
+  const [filterType, setFilterType] = useState("ALL");
   
   // Settings State
   const [settings, setSettings] = useState({
@@ -67,17 +80,14 @@ const API_MSG = "https://townmanor.ai/api/ovika";
 
   const fetchAllProperties = async () => {
     try {
-      const res = await axios.get(`${API_MSG}/properties`, {
-        validateStatus: false
-      });
-      // Normalize data: support { data: [...] } or direct array
+      const res = await axios.get(API_PROPERTIES, { validateStatus: false });
+      // Normalize data
       let data = [];
       if (res.data && Array.isArray(res.data)) {
         data = res.data;
       } else if (res.data && res.data.data && Array.isArray(res.data.data)) {
         data = res.data.data;
       }
-      
       setProperties(data);
     } catch (e) {
       console.error("SuperAdmin load props failed", e);
@@ -86,44 +96,72 @@ const API_MSG = "https://townmanor.ai/api/ovika";
 
   const fetchAllBookings = async () => {
     try {
-        // Attempt to fetch bookings - fallback to mock if 404/error
-        const res = await axios.get(`${API_MSG}/bookings`, { validateStatus: false });
+        const res = await axios.get(API_BOOKINGS, { validateStatus: false });
         let data = [];
         if (res.status === 200 && Array.isArray(res.data)) {
-            data = res.data;
-        } else if (res.status === 200 && res.data.data && Array.isArray(res.data.data)) {
-            data = res.data.data;
-        } else {
-            // No mock data - strict real data only
-            data = [];
+             data = res.data; 
+        } else if (res.data && res.data.data && Array.isArray(res.data.data)) {
+             data = res.data.data;
         }
         setBookings(data);
     } catch (e) {
         console.error("Fetch bookings failed", e);
-        // Handle error gracefully, maybe show empty list
         setBookings([]); 
     }
   };
 
   useEffect(() => {
-    if(properties.length > 0) calculateStats(properties, bookings);
+    calculateStats(properties, bookings);
   }, [properties, bookings]);
+
+  // --- Helpers ---
+  const calculateDays = (start, end) => {
+      if(!start || !end) return 1;
+      const d1 = new Date(start);
+      const d2 = new Date(end);
+      if(isNaN(d1.getTime()) || isNaN(d2.getTime())) return 1;
+      const diff = d2 - d1;
+      const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+      return days > 0 ? days : 1;
+  };
+
+  const calculateBookingAmount = (b) => {
+    let price = 0;
+    if (b.property && b.property.price) {
+        price = Number(b.property.price);
+    } 
+    else {
+        const p = properties.find(p => p.id === b.property_id || p._id === b.property_id);
+        price = p ? (Number(p.price) || 0) : 0;
+    }
+    const days = calculateDays(b.start_date, b.end_date);
+    return days * price;
+  };
 
   const calculateStats = (propsData, bookingsData) => {
     const totalProps = propsData.length;
-    // Mock valuation or price sum
+    
+    // Valuation
     const totalVal = propsData.reduce((acc, curr) => acc + (Number(curr.price) || 0), 0);
-    // Mock user count from unique owner_ids
+    
+    // Owners
     const owners = new Set(propsData.map(p => p.owner_id).filter(Boolean));
     
     // Booking Stats
-    const pending = bookingsData.filter(b => b.status === "Pending").length;
-    const confirmed = bookingsData.filter(b => b.status === "Confirmed").length;
-    const cancelled = bookingsData.filter(b => b.status === "Cancelled").length;
+    const pending = bookingsData.filter(b => (b.status||'').toLowerCase() === "pending").length;
+    const confirmed = bookingsData.filter(b => (b.status||'').toLowerCase() === "accepted" || (b.status||'').toLowerCase() === "confirmed").length;
+    const cancelled = bookingsData.filter(b => (b.status||'').toLowerCase() === "rejected" || (b.status||'').toLowerCase() === "cancelled").length;
     
-    // Revenue Stats
-    const totalRevenue = bookingsData.filter(b => b.status === "Confirmed").reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0);
-    const pendingRevenue = bookingsData.filter(b => b.status === "Pending").reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0);
+    // Revenue
+    let totalRev = 0;
+    let pendingRev = 0;
+
+    bookingsData.forEach(b => {
+        const amt = calculateBookingAmount(b);
+        const st = (b.status || '').toLowerCase();
+        if(st === 'accepted' || st === 'confirmed') totalRev += amt;
+        if(st === 'pending') pendingRev += amt;
+    });
     
     setStats({
       totalProps,
@@ -133,11 +171,11 @@ const API_MSG = "https://townmanor.ai/api/ovika";
       pendingBookings: pending,
       confirmedBookings: confirmed,
       cancelledBookings: cancelled,
-      totalRevenue,
-      pendingRevenue
+      totalRevenue: totalRev,
+      pendingRevenue: pendingRev
     });
 
-    // Aggregate Users
+    // 1. Aggregate Owners (Who Listed)
     const userMap = {};
     propsData.forEach(p => {
         const oid = p.owner_id || "Unclaimed";
@@ -145,13 +183,37 @@ const API_MSG = "https://townmanor.ai/api/ovika";
             userMap[oid] = { 
                 id: oid, 
                 count: 0, 
-                totalVal: 0 
+                totalVal: 0,
+                name: p.owner_name || `Owner ${oid.toString().slice(-4)}`
             };
         }
         userMap[oid].count += 1;
         userMap[oid].totalVal += (Number(p.price) || 0);
     });
     setDerivedUsers(Object.values(userMap));
+
+    // 2. Aggregate Guests (Who Booked)
+    const guestMap = {};
+    bookingsData.forEach(b => {
+         const uid = b.user_id || b.username || "Guest";
+         const uName = b.username || "Unknown Guest";
+         
+         if (!guestMap[uid]) {
+             guestMap[uid] = {
+                 id: uid,
+                 name: uName,
+                 count: 0,
+                 spent: 0
+             };
+         }
+         guestMap[uid].count += 1;
+         
+         const st = (b.status || '').toLowerCase();
+         if(st === 'accepted' || st === 'confirmed') {
+             guestMap[uid].spent += calculateBookingAmount(b);
+         }
+    });
+    setDerivedGuests(Object.values(guestMap));
   };
 
   useEffect(() => {
@@ -163,39 +225,18 @@ const API_MSG = "https://townmanor.ai/api/ovika";
     if (!window.confirm("SUPER ADMIN ACTION:\nAre you sure you want to PERMANENTLY delete this property? This cannot be undone.")) return;
     
     try {
-      await axios.delete(`${API_MSG}/properties/${id}`);
+      await axios.delete(`${API_PROPERTIES}/${id}`);
       setProperties(prev => prev.filter(p => (p.id || p._id) !== id));
       alert("Property deleted successfully.");
     } catch(e) {
-        // Log basic error first
         console.error("Delete failed:", e);
-        
-        let msg = "Delete failed.";
-        
-        if (e.response) {
-            // Server responded with a status code outside 2xx range
-            msg += ` Server Error: ${e.response.status}`;
-            if (e.response.data && e.response.data.message) {
-                msg += ` - ${e.response.data.message}`;
-            } else {
-                 // Try to stringify data if it's an object
-                 msg += ` - ${JSON.stringify(e.response.data)}`;
-            }
-        } else if (e.request) {
-            // Request was made but no response was received
-            msg += " No response received from server. Check network or CORS.";
-        } else {
-            // Something happened in setting up the request
-            msg += ` Request Error: ${e.message}`;
-        }
-    
-        alert(msg);
+        alert("Delete failed: " + (e.response?.data?.message || e.message));
     }
   };
   
   // --- Edit Handlers ---
   const handleEditClick = (prop) => {
-      setEditingProp({ ...prop }); // Copy object to avoid direct mutation
+      setEditingProp({ ...prop }); 
   };
 
   const handleEditChange = (e) => {
@@ -210,60 +251,42 @@ const API_MSG = "https://townmanor.ai/api/ovika";
         const payload = {
             property_name: editingProp.property_name || editingProp.name,
             description: editingProp.description,
-            price: editingProp.price,
+            price: Number(editingProp.price),
             address: editingProp.address,
             city: editingProp.city,
-             // Add other fields as necessary from your schema
+            ...editingProp
         };
-        
-        await axios.put(`${API_MSG}/properties/${id}`, payload);
-        alert("Property updated by Super Admin.");
+        await axios.put(`${API_PROPERTIES}/${id}`, payload);
+        alert("Property updated successfully.");
         setEditingProp(null);
         fetchAllProperties(); // Refresh list
     } catch(e) {
         console.error(e);
-        alert("Failed to update property: " + (e.response?.data?.message || e.message));
+        alert("Update failed: " + (e.response?.data?.message || e.message));
     }
   };
 
-  const handleBookingAction = async (id, status) => {
-    if (!window.confirm(`Are you sure you want to change status to ${status}?`)) return;
+  const handleBookingAction = async (id, action) => {
+    const confirmMsg = action === 'accept' ? 'Accept this booking?' : 'Reject this booking?';
+    if (!window.confirm(confirmMsg)) return;
+
     try {
-        await axios.put(`${API_MSG}/bookings/${id}`, { status });
-        // Update local state
-        setBookings(prev => prev.map(b => (b.id === id || b._id === id) ? { ...b, status } : b));
-        // alert(`Booking ${status}`);
+        const url = `${API_BOOKINGS}/${id}/${action}`; 
+        const body = action === 'reject' ? { owner_note: 'Action by Super Admin' } : {};
+        
+        await axios.patch(url, body);
+        
+        const newStatus = action === 'accept' ? 'accepted' : 'rejected';
+        setBookings(prev => prev.map(b => (b.id === id || b._id === id) ? { ...b, status: newStatus } : b));
+        
+        alert(`Booking ${newStatus} successfully.`);
     } catch (e) {
         console.error(e);
         alert("Action failed: " + (e.response?.data?.message || e.message));
     }
   };
 
-  const [filterType, setFilterType] = useState("ALL");
-
-  // --- Filtering ---
-  const filteredProperties = properties.filter(p => {
-      // Type Filter
-      let type = p.property_type || "N/A";
-      if (!p.property_type && p.meta) {
-          try {
-             const meta = typeof p.meta === 'string' ? JSON.parse(p.meta) : p.meta;
-             if (meta.propertyType) type = meta.propertyType;
-             if (meta.type) type = meta.type; // PGListingForm sets type: 'PG'
-          } catch(e) {}
-      }
-      
-      if (filterType !== 'ALL' && type !== filterType) return false;
-
-      if(!searchTerm) return true;
-      const s = searchTerm.toLowerCase();
-      const name = (p.property_name || p.name || "").toLowerCase();
-      const loc = (p.city || "").toLowerCase();
-      const owner = (String(p.owner_id || "")).toLowerCase();
-      return name.includes(s) || loc.includes(s) || owner.includes(s);
-  });
-
-  // --- Charts Data (Mock) ---
+  // --- Charts Data ---
   const lineData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [{
@@ -284,6 +307,28 @@ const API_MSG = "https://townmanor.ai/api/ovika";
     }]
   };
 
+  // --- Filtering ---
+  const filteredProperties = properties.filter(p => {
+      // Type Filter
+      let type = p.property_type || "N/A";
+      if (!p.property_type && p.meta) {
+          try {
+             const meta = typeof p.meta === 'string' ? JSON.parse(p.meta) : p.meta;
+             if (meta.propertyType) type = meta.propertyType;
+             if (meta.type) type = meta.type;
+          } catch(e) {}
+      }
+      
+      if (filterType !== 'ALL' && type !== filterType) return false;
+
+      if(!searchTerm) return true;
+      const s = searchTerm.toLowerCase();
+      const name = (p.property_name || p.name || "").toLowerCase();
+      const loc = (p.city || "").toLowerCase();
+      const owner = (String(p.owner_id || "")).toLowerCase();
+      return name.includes(s) || loc.includes(s) || owner.includes(s);
+  });
+
   // --- Render ---
   if (loading) return <div className="sa-loading-screen">Loading Super Admin Dashboard...</div>;
 
@@ -300,10 +345,10 @@ const API_MSG = "https://townmanor.ai/api/ovika";
                     <span className="sa-nav-icon"><Icons.Dashboard /></span> Dashboard
                 </button>
                 <button className={view === 'properties' ? 'active' : ''} onClick={() => setView('properties')}>
-                    <span className="sa-nav-icon"><Icons.Properties /></span> All Properties
+                    <span className="sa-nav-icon"><Icons.Properties /></span> Properties
                 </button>
                 <button className={view === 'users' ? 'active' : ''} onClick={() => setView('users')}>
-                    <span className="sa-nav-icon"><Icons.Users /></span> Users
+                    <span className="sa-nav-icon"><Icons.Users /></span> Users & Activity
                 </button>
                 <button className={view === 'bookings' ? 'active' : ''} onClick={() => setView('bookings')}>
                     <span className="sa-nav-icon"><Icons.Bookings /></span> Bookings
@@ -317,7 +362,7 @@ const API_MSG = "https://townmanor.ai/api/ovika";
             </nav>
         </div>
         <div style={{ marginTop: 'auto', color: '#6b7280', fontSize: '12px' }}>
-            v2.1.0 Build 492
+            v2.1.0 Build 495
         </div>
       </aside>
 
@@ -381,36 +426,38 @@ const API_MSG = "https://townmanor.ai/api/ovika";
             {(view === 'properties' || view === 'dashboard') && (
                 <div className="sa-table-container" style={{ marginTop: view === 'dashboard' ? '0' : '0' }}>
                      <div className="sa-table-header-row">
-                        <h3>All Properties Database</h3>
-                        <input 
-                            type="text" 
-                            placeholder="Search properties..." 
-                            className="sa-search-input"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                        <select 
-                            className="sa-search-input" 
-                            style={{width: '150px'}}
-                            value={filterType}
-                            onChange={(e) => setFilterType(e.target.value)}
-                        >
-                            <option value="ALL">All Types</option>
-                            <option value="PG">PG / Hostel</option>
-                            <option value="Apartment">Apartment</option>
-                            <option value="House">House</option>
-                        </select>
+                        <h3>Properties Database</h3>
+                        <div style={{display:'flex', gap:'12px'}}>
+                            <input 
+                                type="text" 
+                                placeholder="Search properties..." 
+                                className="sa-search-input"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                            <select 
+                                className="sa-search-input" 
+                                style={{width: '150px'}}
+                                value={filterType}
+                                onChange={(e) => setFilterType(e.target.value)}
+                            >
+                                <option value="ALL">All Types</option>
+                                <option value="PG">PG / Hostel</option>
+                                <option value="Apartment">Apartment</option>
+                                <option value="House">House</option>
+                            </select>
+                        </div>
                      </div>
                      <table className="sa-table">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>Ref ID</th>
                                 <th>Thumbnail</th>
                                 <th>Name</th>
                                 <th>Type</th>
                                 <th>Location</th>
                                 <th>Price</th>
-                                <th>Owner ID</th>
+                                <th>Listed By (Owner)</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -418,7 +465,6 @@ const API_MSG = "https://townmanor.ai/api/ovika";
                             {filteredProperties.slice(0, 50).map(p => {
                                 const img = (Array.isArray(p.photos) ? p.photos[0] : (p.photos ? p.photos.split(',')[0] : '')) || 'https://via.placeholder.com/60';
                                 
-                                // Parse Type
                                 let type = p.property_type || "N/A";
                                 if (!p.property_type && p.meta) {
                                     try {
@@ -434,7 +480,7 @@ const API_MSG = "https://townmanor.ai/api/ovika";
                                         <td><img src={img} alt="thumb" className="sa-prop-img" /></td>
                                         <td>
                                             <span className="sa-prop-name">{p.property_name || p.name || "Untitled"}</span>
-                                            <span className="sa-prop-meta">Added: {new Date(p.created_at || Date.now()).toLocaleDateString()}</span>
+                                            <span className="sa-prop-meta">Updated: {new Date(p.updated_at || Date.now()).toLocaleDateString()}</span>
                                         </td>
                                         <td>
                                             <span className={`sa-badge-type ${type === 'PG' ? 'pg' : 'standard'}`}>
@@ -444,14 +490,17 @@ const API_MSG = "https://townmanor.ai/api/ovika";
                                         <td style={{ fontWeight: '500' }}>{p.city || p.address || "-"}</td>
                                         <td style={{ fontFamily: 'Inter', fontWeight: '600' }}>₹{Number(p.price).toLocaleString()}</td>
                                         <td>
-                                            <span style={{ background: '#f1f5f9', color: '#475569', padding: '2px 8px', borderRadius: '4px', fontSize: '11px', border: '1px solid #e2e8f0' }}>
-                                              {p.owner_name || p.owner_id || "Unclaimed"}
+                                            <div style={{fontWeight:'600', color:'#1e293b', fontSize:'13px'}}>
+                                                {p.owner_name || "Unknown"}
+                                            </div>
+                                            <span style={{ background: '#f1f5f9', color: '#64748b', padding: '1px 6px', borderRadius: '4px', fontSize: '10px' }}>
+                                              ID: {p.owner_id}
                                             </span>
                                         </td>
                                         <td>
                                             <div className="sa-actions">
                                                 <button className="sa-btn-primary" onClick={() => handleEditClick(p)}>Edit</button>
-                                                <button className="sa-btn-danger" onClick={() => handleDelete(p.id || p._id)}>Delete</button>
+                                                <button className="sa-btn-danger" onClick={() => handleDelete(p.id || p._id)}>Del</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -459,7 +508,7 @@ const API_MSG = "https://townmanor.ai/api/ovika";
                             })}
                             {filteredProperties.length === 0 && (
                                 <tr>
-                                    <td colSpan="7" className="sa-empty">No properties found matching criteria.</td>
+                                    <td colSpan="8" className="sa-empty">No properties found matching criteria.</td>
                                 </tr>
                             )}
                         </tbody>
@@ -467,41 +516,80 @@ const API_MSG = "https://townmanor.ai/api/ovika";
                 </div>
             )}
             
-            {/* VIEW: USERS (Derived from Properties) */}
+            {/* VIEW: USERS (Derived from Properties & Bookings) */}
             {view === 'users' && (
-                <div className="sa-table-container">
-                    <div className="sa-table-header-row">
-                        <h3>Active Owners (Verified by Listings)</h3>
-                    </div>
-                     <table className="sa-table">
-                        <thead>
-                            <tr>
-                                <th>Owner ID</th>
-                                <th>Properties Uploaded</th>
-                                <th>Estimated Portfolio Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {derivedUsers.map(u => (
-                                <tr key={u.id}>
-                                    <td style={{ fontFamily: 'monospace', color: '#6b7280' }}>
-                                        {u.id}
-                                    </td>
-                                    <td>
-                                        <span style={{ fontWeight: '700', fontSize: '15px' }}>{u.count}</span> Properties
-                                    </td>
-                                     <td>
-                                        ₹{u.totalVal.toLocaleString()}
-                                    </td>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                    
+                    {/* OWNERS TABLE */}
+                    <div className="sa-table-container">
+                        <div className="sa-table-header-row">
+                            <h3>Property Owners (Listed)</h3>
+                        </div>
+                        <table className="sa-table">
+                            <thead>
+                                <tr>
+                                    <th>Owner Desc</th>
+                                    <th>Listings</th>
+                                    <th>Portfolio Value</th>
                                 </tr>
-                            ))}
-                             {derivedUsers.length === 0 && (
-                                 <tr>
-                                     <td colSpan="3" className="sa-empty">No active owners found from property data.</td>
-                                 </tr>
-                             )}
-                        </tbody>
-                     </table>
+                            </thead>
+                            <tbody>
+                                {derivedUsers.map(u => (
+                                    <tr key={u.id}>
+                                        <td>
+                                            <div style={{ fontWeight: '600', color: '#1e293b' }}>{u.name}</div>
+                                            <div style={{ fontFamily: 'monospace', color: '#6b7280', fontSize: '11px' }}>ID: {u.id}</div>
+                                        </td>
+                                        <td>
+                                            <span style={{ fontWeight: '700', fontSize: '15px' }}>{u.count}</span> Assets
+                                        </td>
+                                         <td>
+                                            ₹{u.totalVal.toLocaleString()}
+                                        </td>
+                                    </tr>
+                                ))}
+                                {derivedUsers.length === 0 && (
+                                    <tr><td colSpan="3" className="sa-empty">No owners found.</td></tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* GUESTS TABLE */}
+                    <div className="sa-table-container">
+                        <div className="sa-table-header-row">
+                            <h3>Aactive Guests (Booked)</h3>
+                        </div>
+                         <table className="sa-table">
+                            <thead>
+                                <tr>
+                                    <th>Guest Info</th>
+                                    <th>Bookings</th>
+                                    <th>Total Spent</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {derivedGuests.map(u => (
+                                    <tr key={u.id}>
+                                        <td>
+                                            <div style={{ fontWeight: '600', color: '#0f766e' }}>{u.name}</div>
+                                            <div style={{ fontFamily: 'monospace', color: '#6b7280', fontSize: '11px' }}>ID: {u.id}</div>
+                                        </td>
+                                        <td>
+                                            <span style={{ fontWeight: '700', fontSize: '15px' }}>{u.count}</span> Requests
+                                        </td>
+                                         <td>
+                                            ₹{u.spent.toLocaleString()}
+                                        </td>
+                                    </tr>
+                                ))}
+                                 {derivedGuests.length === 0 && (
+                                     <tr><td colSpan="3" className="sa-empty">No guest activity found.</td></tr>
+                                 )}
+                            </tbody>
+                         </table>
+                    </div>
+
                 </div>
             )}
 
@@ -523,7 +611,7 @@ const API_MSG = "https://townmanor.ai/api/ovika";
                         <div className="sa-stat-val" style={{ color: '#059669' }}>{stats.confirmedBookings}</div>
                     </div>
                     <div className="sa-stat-card" style={{ padding: '20px', borderLeft: '4px solid #ef4444' }}>
-                        <div className="sa-stat-title" style={{ color: '#dc2626' }}>Cancelled</div>
+                        <div className="sa-stat-title" style={{ color: '#dc2626' }}>Cancelled/Rejected</div>
                         <div className="sa-stat-val" style={{ color: '#dc2626' }}>{stats.cancelledBookings}</div>
                     </div>
                 </div>
@@ -539,9 +627,9 @@ const API_MSG = "https://townmanor.ai/api/ovika";
                                 onChange={(e) => setBookingFilter(e.target.value)}
                             >
                                 <option value="ALL">All Status</option>
-                                <option value="Pending">Pending Review</option>
-                                <option value="Confirmed">Confirmed</option>
-                                <option value="Cancelled">Cancelled</option>
+                                <option value="pending">Pending</option>
+                                <option value="accepted">Accepted</option>
+                                <option value="rejected">Rejected</option>
                             </select>
                         </div>
                         <div className="sa-actions">
@@ -551,65 +639,90 @@ const API_MSG = "https://townmanor.ai/api/ovika";
                      <table className="sa-table">
                         <thead>
                             <tr>
-                                <th>Booking ID</th>
+                                <th>Req ID</th>
                                 <th>Property</th>
-                                <th>Guest</th>
-                                <th>Check-In</th>
+                                <th>Booked By (Guest)</th>
+                                <th>Dates</th>
                                 <th>Status</th>
-                                <th>Amount</th>
+                                <th>Value</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {bookings
-                                .filter(b => bookingFilter === 'ALL' || b.status === bookingFilter)
-                                .map(b => (
-                                <tr key={b.id || b._id}>
-                                    <td style={{ fontFamily: 'monospace', color: '#6b7280' }}>{(b.id || b._id || '').slice(-6)}</td>
-                                    <td style={{ fontWeight: '600' }}>{b.property_name}</td>
-                                    <td>{b.user_name}</td>
-                                    <td>{new Date(b.check_in).toLocaleDateString()}</td>
-                                    <td>
-                                        <span className={`sa-badge-type`} style={{
-                                            background: b.status === 'Confirmed' ? '#dcfce7' : b.status === 'Cancelled' ? '#fee2e2' : '#fef3c7',
-                                            color: b.status === 'Confirmed' ? '#166534' : b.status === 'Cancelled' ? '#991b1b' : '#92400e'
-                                        }}>
-                                            {b.status}
-                                        </span>
-                                    </td>
-                                    <td style={{ fontFamily: 'Inter', fontWeight: 'bold' }}>₹{Number(b.amount).toLocaleString()}</td>
-                                    <td>
-                                        <div className="sa-actions">
-                                            {b.status === 'Pending' && (
-                                                <>
-                                                 <button 
-                                                    className="sa-btn-primary" 
-                                                    style={{ background: '#10b981', padding: '6px 10px' }}
-                                                    onClick={() => handleBookingAction(b.id || b._id, 'Confirmed')}
-                                                    title="Confirm Booking"
-                                                 >
-                                                    ✓
-                                                 </button>
-                                                 <button 
-                                                    className="sa-btn-danger" 
-                                                    style={{ padding: '6px 10px' }}
-                                                    onClick={() => handleBookingAction(b.id || b._id, 'Cancelled')}
-                                                    title="Cancel Booking"
-                                                 >
-                                                    ✕
-                                                 </button>
-                                                </>
-                                            )}
-                                            {b.status !== 'Pending' && (
-                                                <button className="sa-btn-primary" style={{padding:'6px 12px', fontSize:'12px', background: 'transparent', color: '#3b82f6', border: '1px solid #e2e8f0'}}>
-                                                    Details
-                                                </button>
-                                            )}
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                             {bookings.filter(b => bookingFilter === 'ALL' || b.status === bookingFilter).length === 0 && (
+                                .filter(b => bookingFilter === 'ALL' || (b.status||'').toLowerCase() === bookingFilter.toLowerCase())
+                                .map(b => {
+                                    // Resolve name from property object or lookup
+                                    let propName = "Unknown Property";
+                                    let propCity = "";
+                                    if(b.property) {
+                                        propName = b.property.name || b.property.property_name;
+                                        propCity = b.property.city;
+                                    } else {
+                                        const found = properties.find(p => p.id === b.property_id || p._id === b.property_id);
+                                        if(found) {
+                                            propName = found.property_name || found.name;
+                                            propCity = found.city;
+                                        }
+                                    }
+
+                                    const amount = calculateBookingAmount(b);
+
+                                    return (
+                                        <tr key={b.id || b._id}>
+                                            <td style={{ fontFamily: 'monospace', color: '#6b7280' }}>#{(b.id || b._id || '').toString().slice(-4)}</td>
+                                            <td>
+                                                <div style={{ fontWeight: '600' }}>{propName}</div>
+                                                <div style={{ fontSize: '11px', color: '#64748b' }}>{propCity}</div>
+                                            </td>
+                                            <td>
+                                                <div style={{ fontWeight: '500', fontSize:'14px' }}>{b.username}</div>
+                                                <div style={{ fontSize: '11px', color: '#64748b' }}>UID: {b.user_id}</div>
+                                            </td>
+                                            <td style={{ fontSize: '13px' }}>
+                                                {new Date(b.start_date).toLocaleDateString()} <br/>to {new Date(b.end_date).toLocaleDateString()}
+                                            </td>
+                                            <td>
+                                                <span className={`sa-badge-type`} style={{
+                                                    background: (b.status||'').toLowerCase() === 'accepted' ? '#dcfce7' : (b.status||'').toLowerCase() === 'rejected' ? '#fee2e2' : '#fef3c7',
+                                                    color: (b.status||'').toLowerCase() === 'accepted' ? '#166534' : (b.status||'').toLowerCase() === 'rejected' ? '#991b1b' : '#92400e',
+                                                    textTransform: 'capitalize'
+                                                }}>
+                                                    {b.status || 'Pending'}
+                                                </span>
+                                            </td>
+                                            <td style={{ fontFamily: 'Inter', fontWeight: 'bold' }}>₹{amount.toLocaleString()}</td>
+                                            <td>
+                                                <div className="sa-actions">
+                                                    {(b.status||'').toLowerCase() === 'pending' && (
+                                                        <>
+                                                         <button 
+                                                            className="sa-btn-primary" 
+                                                            style={{ background: '#10b981', padding: '6px 12px' }}
+                                                            onClick={() => handleBookingAction(b.id || b._id, 'accept')}
+                                                            title="Accept"
+                                                         >
+                                                            Accept
+                                                         </button>
+                                                         <button 
+                                                            className="sa-btn-danger" 
+                                                            style={{ padding: '6px 12px' }}
+                                                            onClick={() => handleBookingAction(b.id || b._id, 'reject')}
+                                                            title="Reject"
+                                                         >
+                                                            Reject
+                                                         </button>
+                                                        </>
+                                                    )}
+                                                    {(b.status||'').toLowerCase() !== 'pending' && (
+                                                        <span style={{ fontSize: '12px', color: '#94a3b8' }}>Processed</span>
+                                                    )}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                             {bookings.filter(b => bookingFilter === 'ALL' || (b.status||'').toLowerCase() === bookingFilter.toLowerCase()).length === 0 && (
                                  <tr>
                                      <td colSpan="7" className="sa-empty">No bookings found for this filter.</td>
                                  </tr>
@@ -637,53 +750,8 @@ const API_MSG = "https://townmanor.ai/api/ovika";
                          <div className="sa-stat-val">₹{stats.totalBookings > 0 ? Math.round((stats.totalRevenue + stats.pendingRevenue) / stats.totalBookings).toLocaleString() : 0}</div>
                     </div>
                 </div>
-
-                <div className="sa-table-container">
-                    <div className="sa-table-header-row">
-                        <h3>Recent Transactions</h3>
-                        <button className="sa-btn-primary" style={{background:'white', color:'#3b82f6', border:'1px solid #3b82f6'}}>Download Report</button>
-                    </div>
-                    <table className="sa-table">
-                        <thead>
-                            <tr>
-                                <th>Transaction ID</th>
-                                <th>Date</th>
-                                <th>Payer</th>
-                                <th>Property</th>
-                                <th>Status</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {bookings.map(b => (
-                                <tr key={b.id || b._id}>
-                                    <td style={{ fontFamily: 'monospace', color: '#6b7280' }}>TX-{(b.id || b._id || '').slice(-6)}</td>
-                                    <td>{new Date(b.check_in).toLocaleDateString()}</td>
-                                    <td>
-                                        <div style={{fontWeight:'500'}}>{b.user_name}</div>
-                                        <div style={{fontSize:'11px', color:'#94a3b8'}}>Via Online Payment</div>
-                                    </td>
-                                    <td style={{fontSize:'13px'}}>{b.property_name}</td>
-                                    <td>
-                                         <span className={`sa-badge-type`} style={{
-                                            background: b.status === 'Confirmed' ? '#dcfce7' : b.status === 'Cancelled' ? '#fee2e2' : '#fef3c7',
-                                            color: b.status === 'Confirmed' ? '#166534' : b.status === 'Cancelled' ? '#991b1b' : '#92400e'
-                                        }}>
-                                            {b.status === 'Confirmed' ? 'Paid' : b.status === 'Cancelled' ? 'Refunded' : 'Pending'}
-                                        </span>
-                                    </td>
-                                    <td style={{ fontFamily: 'Inter', fontWeight: 'bold', color: b.status==='Confirmed' ? '#059669' : 'inherit' }}>
-                                        {b.status === 'Confirmed' ? '+' : ''}₹{Number(b.amount).toLocaleString()}
-                                    </td>
-                                </tr>
-                            ))}
-                             {bookings.length === 0 && (
-                                 <tr>
-                                     <td colSpan="6" className="sa-empty">No transaction data available.</td>
-                                 </tr>
-                             )}
-                        </tbody>
-                    </table>
+                <div className="sa-chart-box" style={{ textAlign:'center', padding:'40px' }}>
+                    <p style={{ color:'#64748b' }}>Detailed Transaction Logs are currently being synchronized with the Payment Gateway.</p>
                 </div>
                 </>
             )}
