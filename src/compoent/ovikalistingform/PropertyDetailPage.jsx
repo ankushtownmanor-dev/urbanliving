@@ -837,7 +837,7 @@ const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
       if (matchedUser) {
         setHostUser({
           name: matchedUser.username,
-          created_at: matchedUser.created_at,
+          // created_at: matchedUser.created_at,
         });
       }
     } catch (err) {
@@ -2074,7 +2074,7 @@ const confirmAvailabilityCheck = async () => {
    
       <p style={{ color: "#555", fontSize: "0.9rem" }}>
         {/* Joined at */}
-        {hostUser.created_at}
+      
       </p>
    
 
