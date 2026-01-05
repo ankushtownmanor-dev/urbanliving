@@ -431,9 +431,297 @@
 // };
 
 // export default InquiriesBookings;
-import React, { useEffect, useState, useContext } from "react";
+
+// import React, { useEffect, useState, useContext } from "react";
+// import axios from "axios";
+// import { CheckCircle, XCircle, Loader, Calendar, MapPin, User } from "lucide-react";
+// import { AuthContext } from "../../Login/AuthContext";
+
+// /* ================= HELPERS ================= */
+
+// const extractOwnerId = (obj) => {
+//   if (!obj || typeof obj !== "object") return null;
+//   return (
+//     obj.id ||
+//     obj.user_id ||
+//     obj.userId ||
+//     obj.owner_id ||
+//     obj.ownerId ||
+//     (obj.user && extractOwnerId(obj.user)) ||
+//     null
+//   );
+// };
+
+// const formatDate = (d) =>
+//   d ? new Date(d).toLocaleDateString("en-IN", {
+//     day: "numeric",
+//     month: "short",
+//     year: "numeric",
+//   }) : "-";
+
+// /* ================= COMPONENT ================= */
+
+// const InquiriesBookings = () => {
+//   const { user } = useContext(AuthContext);
+
+//   const [ownerId, setOwnerId] = useState(null);
+//   const [requests, setRequests] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [actionLoadingId, setActionLoadingId] = useState(null);
+
+//   /* ---------- Resolve Owner ID ---------- */
+//   useEffect(() => {
+//     const idFromContext = extractOwnerId(user);
+//     if (idFromContext) {
+//       setOwnerId(Number(idFromContext));
+//       return;
+//     }
+
+//     try {
+//       const raw = localStorage.getItem("user");
+//       if (!raw) return;
+//       const parsed = JSON.parse(raw);
+//       const idFromStorage = extractOwnerId(parsed);
+//       if (idFromStorage) setOwnerId(Number(idFromStorage));
+//     } catch {}
+//   }, [user]);
+
+//   /* ---------- Fetch Bookings ---------- */
+//   const fetchRequests = async () => {
+//     try {
+//       setLoading(true);
+
+//       const res = await axios.get("https://townmanor.ai/api/booking-request");
+
+//       let list = [];
+//       if (Array.isArray(res.data)) list = res.data;
+//       else if (Array.isArray(res.data?.data)) list = res.data.data;
+
+
+
+//       setRequests(list);
+//     } catch (err) {
+//       console.error(err);
+//       setRequests([]);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchRequests();
+//   }, [ownerId]);
+
+//   /* ---------- Accept / Reject ---------- */
+//   const handleAction = async (id, action) => {
+//     setActionLoadingId(id);
+//     try {
+//       await axios.patch(
+//         `https://townmanor.ai/api/booking-request/${id}/${action}`
+//       );
+//       fetchRequests();
+//     } catch {
+//       alert("Action failed");
+//     } finally {
+//       setActionLoadingId(null);
+//     }
+//   };
+
+//   /* ================= UI ================= */
+
+//   if (loading) {
+//     return (
+//       <div style={{ padding: "4rem", textAlign: "center" }}>
+//         <Loader size={40} className="animate-spin" />
+//         <p style={{ marginTop: 12 }}>Loading enquiries…</p>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div
+//       style={{
+//         padding: "2rem",
+//         background: "#f1f5f9",
+//         minHeight: "100vh",
+//       }}
+//     >
+//       <h2 style={{ fontSize: 26, marginBottom: 20 }}>
+//         Property Enquiries
+//       </h2>
+
+//       {requests.length === 0 ? (
+//         <p>No enquiries yet.</p>
+//       ) : (
+//         <div
+//           style={{
+//             display: "grid",
+//             gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+//             gap: "20px",
+//           }}
+//         >
+//           {requests.map((req) => (
+//             <div
+//               key={req.id}
+//               style={{
+//                 background: "#fff",
+//                 borderRadius: 16,
+//                 overflow: "hidden",
+//                 boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
+//                 transition: "transform .3s",
+//               }}
+//               onMouseEnter={(e) =>
+//                 (e.currentTarget.style.transform = "translateY(-6px)")
+//               }
+//               onMouseLeave={(e) =>
+//                 (e.currentTarget.style.transform = "translateY(0)")
+//               }
+//             >
+//               {/* IMAGE */}
+//               <div style={{ height: 180, overflow: "hidden" }}>
+//                 <img
+//                   src={req.property?.image}
+//                   alt={req.property?.name}
+//                   style={{
+//                     width: "100%",
+//                     height: "100%",
+//                     objectFit: "cover",
+//                   }}
+//                 />
+//               </div>
+
+//               {/* BODY */}
+//               <div style={{ padding: 16 }}>
+//                 <h3 style={{ margin: "0 0 6px" }}>
+//                   {req.property?.name}
+//                 </h3>
+
+//                 <p style={{ color: "#64748b", fontSize: 14 }}>
+//                   <MapPin size={14} /> {req.property?.city}
+//                 </p>
+
+//                 <p style={{ marginTop: 6, fontWeight: 600 }}>
+//                   ₹{req.property?.price} / night
+//                 </p>
+
+//                 <div
+//                   style={{
+//                     display: "flex",
+//                     justifyContent: "space-between",
+//                     marginTop: 12,
+//                     fontSize: 13,
+//                     color: "#475569",
+//                   }}
+//                 >
+//                   <span>
+//                     <Calendar size={14} /> {formatDate(req.start_date)}
+//                   </span>
+//                   <span>
+//                     <Calendar size={14} /> {formatDate(req.end_date)}
+//                   </span>
+//                 </div>
+
+//                 <div
+//                   style={{
+//                     marginTop: 10,
+//                     fontSize: 13,
+//                     display: "flex",
+//                     alignItems: "center",
+//                     gap: 6,
+//                   }}
+//                 >
+//                   <User size={14} /> {req.username}
+//                 </div>
+
+//                 {/* STATUS */}
+//                 <div style={{ marginTop: 14 }}>
+//                   <span
+//                     style={{
+//                       padding: "6px 12px",
+//                       borderRadius: 999,
+//                       fontSize: 12,
+//                       fontWeight: 600,
+//                       background:
+//                         req.status === "pending"
+//                           ? "#fef3c7"
+//                           : req.status === "accepted"
+//                           ? "#dcfce7"
+//                           : "#fee2e2",
+//                       color:
+//                         req.status === "pending"
+//                           ? "#92400e"
+//                           : req.status === "accepted"
+//                           ? "#166534"
+//                           : "#991b1b",
+//                     }}
+//                   >
+//                     {req.status.toUpperCase()}
+//                   </span>
+//                 </div>
+
+//                 {/* ACTIONS */}
+//                 {req.status === "pending" && (
+//                   <div
+//                     style={{
+//                       display: "flex",
+//                       gap: 10,
+//                       marginTop: 16,
+//                     }}
+//                   >
+//                     <button
+//                       onClick={() => handleAction(req.id, "accept")}
+//                       disabled={actionLoadingId === req.id}
+//                       style={{
+//                         flex: 1,
+//                         padding: "10px",
+//                         borderRadius: 10,
+//                         border: "none",
+//                         background: "#16a34a",
+//                         color: "#fff",
+//                         fontWeight: 600,
+//                         cursor: "pointer",
+//                       }}
+//                     >
+//                       {actionLoadingId === req.id ? (
+//                         <Loader size={16} className="animate-spin" />
+//                       ) : (
+//                         "Accept"
+//                       )}
+//                     </button>
+
+//                     <button
+//                       onClick={() => handleAction(req.id, "reject")}
+//                       disabled={actionLoadingId === req.id}
+//                       style={{
+//                         flex: 1,
+//                         padding: "10px",
+//                         borderRadius: 10,
+//                         border: "none",
+//                         background: "#dc2626",
+//                         color: "#fff",
+//                         fontWeight: 600,
+//                         cursor: "pointer",
+//                       }}
+//                     >
+//                       Reject
+//                     </button>
+//                   </div>
+//                 )}
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default InquiriesBookings;
+
+
+ import React, { useEffect, useState, useContext, useCallback } from "react";
 import axios from "axios";
-import { CheckCircle, XCircle, Loader, Calendar, MapPin, User } from "lucide-react";
+import { Loader, Calendar, MapPin, User } from "lucide-react";
 import { AuthContext } from "../../Login/AuthContext";
 
 /* ================= HELPERS ================= */
@@ -441,22 +729,24 @@ import { AuthContext } from "../../Login/AuthContext";
 const extractOwnerId = (obj) => {
   if (!obj || typeof obj !== "object") return null;
   return (
+    obj.owner_id ||
+    obj.ownerId ||
     obj.id ||
     obj.user_id ||
     obj.userId ||
-    obj.owner_id ||
-    obj.ownerId ||
     (obj.user && extractOwnerId(obj.user)) ||
     null
   );
 };
 
 const formatDate = (d) =>
-  d ? new Date(d).toLocaleDateString("en-IN", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }) : "-";
+  d
+    ? new Date(d).toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
+    : "-";
 
 /* ================= COMPONENT ================= */
 
@@ -464,50 +754,97 @@ const InquiriesBookings = () => {
   const { user } = useContext(AuthContext);
 
   const [ownerId, setOwnerId] = useState(null);
+  const [ownerPropertyIds, setOwnerPropertyIds] = useState([]);
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoadingId, setActionLoadingId] = useState(null);
 
   /* ---------- Resolve Owner ID ---------- */
-  useEffect(() => {
+  const resolveOwnerId = useCallback(() => {
     const idFromContext = extractOwnerId(user);
-    if (idFromContext) {
-      setOwnerId(Number(idFromContext));
+    if (idFromContext) return String(idFromContext);
+
+    try {
+      const raw = localStorage.getItem("user");
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return extractOwnerId(parsed)?.toString() || null;
+    } catch {
+      return null;
+    }
+  }, [user]);
+
+  useEffect(() => {
+    const id = resolveOwnerId();
+    setOwnerId(id);
+  }, [resolveOwnerId]);
+
+  /* ---------- STEP 1: Fetch OWNER PROPERTIES ---------- */
+  const fetchOwnerProperties = useCallback(async () => {
+    if (!ownerId) return [];
+
+    const res = await axios.get(
+      "https://townmanor.ai/api/ovika/properties"
+    );
+
+    let list = [];
+    if (Array.isArray(res.data)) list = res.data;
+    else if (Array.isArray(res.data?.data)) list = res.data.data;
+
+    const ownerProps = list.filter(
+      (p) =>
+        String(p.owner_id || p.ownerId) === String(ownerId)
+    );
+
+    const ids = ownerProps.map((p) => Number(p.id));
+    console.log("OWNER PROPERTY IDS:", ids);
+
+    return ids;
+  }, [ownerId]);
+
+  /* ---------- STEP 2: Fetch & FILTER ENQUIRIES ---------- */
+  const fetchRequests = useCallback(async () => {
+    if (!ownerId) {
+      setRequests([]);
+      setLoading(false);
       return;
     }
 
     try {
-      const raw = localStorage.getItem("user");
-      if (!raw) return;
-      const parsed = JSON.parse(raw);
-      const idFromStorage = extractOwnerId(parsed);
-      if (idFromStorage) setOwnerId(Number(idFromStorage));
-    } catch {}
-  }, [user]);
-
-  /* ---------- Fetch Bookings ---------- */
-  const fetchRequests = async () => {
-    try {
       setLoading(true);
 
-      const res = await axios.get("https://townmanor.ai/api/booking-request");
+      const propertyIds = await fetchOwnerProperties();
+      setOwnerPropertyIds(propertyIds);
+
+      const res = await axios.get(
+        "https://townmanor.ai/api/booking-request"
+      );
 
       let list = [];
       if (Array.isArray(res.data)) list = res.data;
       else if (Array.isArray(res.data?.data)) list = res.data.data;
 
-      setRequests(list);
+      console.log("ALL BOOKINGS:", list);
+
+      // 🔥 FINAL FILTER (FRONTEND JOIN)
+      const filtered = list.filter((req) =>
+        propertyIds.includes(Number(req.property_id))
+      );
+
+      console.log("FILTERED BOOKINGS:", filtered);
+
+      setRequests(filtered);
     } catch (err) {
-      console.error(err);
+      console.error("Failed to load enquiries", err);
       setRequests([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [ownerId, fetchOwnerProperties]);
 
   useEffect(() => {
     fetchRequests();
-  }, [ownerId]);
+  }, [fetchRequests]);
 
   /* ---------- Accept / Reject ---------- */
   const handleAction = async (id, action) => {
@@ -536,25 +873,19 @@ const InquiriesBookings = () => {
   }
 
   return (
-    <div
-      style={{
-        padding: "2rem",
-        background: "#f1f5f9",
-        minHeight: "100vh",
-      }}
-    >
+    <div style={{ padding: "2rem", background: "#f1f5f9", minHeight: "100vh" }}>
       <h2 style={{ fontSize: 26, marginBottom: 20 }}>
-        Property Enquiries
+        My Property Enquiries
       </h2>
 
       {requests.length === 0 ? (
-        <p>No enquiries yet.</p>
+        <p>No enquiries for your properties.</p>
       ) : (
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-            gap: "20px",
+            gap: 20,
           }}
         >
           {requests.map((req) => (
@@ -563,53 +894,22 @@ const InquiriesBookings = () => {
               style={{
                 background: "#fff",
                 borderRadius: 16,
-                overflow: "hidden",
                 boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
-                transition: "transform .3s",
+                overflow: "hidden",
               }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = "translateY(-6px)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "translateY(0)")
-              }
             >
-              {/* IMAGE */}
-              <div style={{ height: 180, overflow: "hidden" }}>
-                <img
-                  src={req.property?.image}
-                  alt={req.property?.name}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
-                />
-              </div>
-
-              {/* BODY */}
               <div style={{ padding: 16 }}>
-                <h3 style={{ margin: "0 0 6px" }}>
-                  {req.property?.name}
-                </h3>
+                <h3>{req.property?.name}</h3>
 
                 <p style={{ color: "#64748b", fontSize: 14 }}>
                   <MapPin size={14} /> {req.property?.city}
                 </p>
 
-                <p style={{ marginTop: 6, fontWeight: 600 }}>
+                <p style={{ fontWeight: 600 }}>
                   ₹{req.property?.price} / night
                 </p>
 
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginTop: 12,
-                    fontSize: 13,
-                    color: "#475569",
-                  }}
-                >
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
                   <span>
                     <Calendar size={14} /> {formatDate(req.start_date)}
                   </span>
@@ -618,72 +918,26 @@ const InquiriesBookings = () => {
                   </span>
                 </div>
 
-                <div
-                  style={{
-                    marginTop: 10,
-                    fontSize: 13,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 6,
-                  }}
-                >
+                <div style={{ marginTop: 8, fontSize: 13 }}>
                   <User size={14} /> {req.username}
                 </div>
 
-                {/* STATUS */}
-                <div style={{ marginTop: 14 }}>
-                  <span
-                    style={{
-                      padding: "6px 12px",
-                      borderRadius: 999,
-                      fontSize: 12,
-                      fontWeight: 600,
-                      background:
-                        req.status === "pending"
-                          ? "#fef3c7"
-                          : req.status === "accepted"
-                          ? "#dcfce7"
-                          : "#fee2e2",
-                      color:
-                        req.status === "pending"
-                          ? "#92400e"
-                          : req.status === "accepted"
-                          ? "#166534"
-                          : "#991b1b",
-                    }}
-                  >
-                    {req.status.toUpperCase()}
-                  </span>
-                </div>
-
-                {/* ACTIONS */}
                 {req.status === "pending" && (
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: 10,
-                      marginTop: 16,
-                    }}
-                  >
+                  <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
                     <button
                       onClick={() => handleAction(req.id, "accept")}
                       disabled={actionLoadingId === req.id}
                       style={{
                         flex: 1,
-                        padding: "10px",
+                        padding: 10,
                         borderRadius: 10,
                         border: "none",
                         background: "#16a34a",
                         color: "#fff",
                         fontWeight: 600,
-                        cursor: "pointer",
                       }}
                     >
-                      {actionLoadingId === req.id ? (
-                        <Loader size={16} className="animate-spin" />
-                      ) : (
-                        "Accept"
-                      )}
+                      Accept
                     </button>
 
                     <button
@@ -691,13 +945,12 @@ const InquiriesBookings = () => {
                       disabled={actionLoadingId === req.id}
                       style={{
                         flex: 1,
-                        padding: "10px",
+                        padding: 10,
                         borderRadius: 10,
                         border: "none",
                         background: "#dc2626",
                         color: "#fff",
                         fontWeight: 600,
-                        cursor: "pointer",
                       }}
                     >
                       Reject

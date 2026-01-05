@@ -2018,7 +2018,7 @@ const confirmAvailabilityCheck = async () => {
 
           <div className="divider"></div>
 
-          <div className="host-card">
+          {/* <div className="host-card">
             <div className="host-avatar">
               <FiUser />
             </div>
@@ -2027,7 +2027,7 @@ const confirmAvailabilityCheck = async () => {
               <p>Joined in 2024 • Responsive Host</p>
               {property.contact?.phone && <p className="contact-link">📞 {property.contact.phone}</p>}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
