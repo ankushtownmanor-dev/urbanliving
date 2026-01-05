@@ -414,6 +414,7 @@ import { format } from 'date-fns';
 import './PropertyDetailPage.css';
 import { AuthContext } from '../Login/AuthContext'; // ✅ AUTH CONTEXT IMPORT
 
+
 // Backend me sirf property_id 1 aur 2 exist karte hain
 // Baaki sab IDs ko inhi pe map kar denge
 const getValidPropertyId = (frontendId) => {
@@ -653,6 +654,8 @@ const Calendar = ({ selectedDates, onDateSelect, minDate = new Date(), disabledD
 };
 
 const PropertyDetailPage = () => {
+  const [hostUser, setHostUser] = useState(null);
+
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation(); // ✅ CURRENT PAGE LOCATION
@@ -815,6 +818,36 @@ const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
       fetchCalendarBlockedDates();
     }
   }, [showPaymentModal, step, id]);
+
+  useEffect(() => {
+  const fetchHostUser = async () => {
+    if (!property?.owner_id) return;
+
+    try {
+      const res = await axios.get(
+        "https://townmanor.ai/api/users-list"
+      );
+
+      const users = Array.isArray(res.data) ? res.data : [];
+
+      const matchedUser = users.find(
+        (u) => String(u.id) === String(property.owner_id)
+      );
+
+      if (matchedUser) {
+        setHostUser({
+          name: matchedUser.username,
+          created_at: matchedUser.created_at,
+        });
+      }
+    } catch (err) {
+      console.error("Failed to fetch host user", err);
+    }
+  };
+
+  fetchHostUser();
+}, [property]);
+
 
   // ✅ MODIFIED RESERVE CLICK HANDLER
   const handleReserveClick = () => {
@@ -2028,6 +2061,29 @@ const confirmAvailabilityCheck = async () => {
               {property.contact?.phone && <p className="contact-link">📞 {property.contact.phone}</p>}
             </div>
           </div> */}
+          <div className="host-card">
+  <div className="host-avatar">
+    <FiUser />
+  </div>
+
+  <div className="host-info">
+    <h4>
+      Hosted by {hostUser?.name || "Loading..."}
+    </h4>
+
+   
+      <p style={{ color: "#555", fontSize: "0.9rem" }}>
+        {/* Joined at */}
+        {hostUser.created_at}
+      </p>
+   
+
+    <p style={{ fontSize: "0.85rem", color: "#777" }}>
+      Property Owner
+    </p>
+  </div>
+</div>
+
         </div>
       </div>
     </div>
