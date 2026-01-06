@@ -62,34 +62,58 @@
   margin: 1.5rem 0 1rem;
 }
 
-/* Refund table */
-.refund-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1.5rem 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.refund-row {
+/* Policy Cards */
+.policy-cards-container {
   display: flex;
-  border-bottom: 1px solid #eee;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0;
 }
 
-.refund-row.header {
-  background-color: #f8f9fa;
+.policy-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.policy-card:hover {
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  transform: translateY(-2px);
+  border-color: #d0d0d0;
+}
+
+.policy-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.policy-card h4 {
+  margin: 0;
+  font-size: 1.15rem;
   font-weight: 600;
   color: #2c3e50;
-  border-bottom: 2px solid #ddd;
 }
 
-.refund-col {
-  flex: 1;
-  padding: 12px 15px;
-  text-align: left;
+.policy-card ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #555;
 }
 
-.refund-row:not(.header):hover {
-  background-color: #f8f9fa;
+.policy-card li {
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.policy-card li:last-child {
+  margin-bottom: 0;
 }
 
 /* Lists */
@@ -170,26 +194,5 @@
     font-size: 1.8rem;
   }
   
-  .refund-row {
-    flex-direction: column;
-  }
-  
-  .refund-col {
-    padding: 8px 10px;
-  }
-  
-  .refund-row.header {
-    display: none;
-  }
-  
-  .refund-row:not(.header) .refund-col:first-child {
-    font-weight: 600;
-    padding-top: 12px;
-    padding-bottom: 0;
-  }
-  
-  .refund-row:not(.header) .refund-col:last-child {
-    padding-top: 0;
-    padding-bottom: 12px;
-  }
+
 }

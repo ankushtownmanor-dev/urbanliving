@@ -114,6 +114,7 @@ const Tmx9PropertyForm = () => {
     quietHours: "22:00-07:00",
     maxGuests: 2,
     baseRate: "",
+    bookingType: 0, // 0 = Approval Required, 1 = Instant Booking
     weekendRate: "",
     weeklyDiscountPct: "",
     monthlyDiscountPct: "",
@@ -465,6 +466,7 @@ const Tmx9PropertyForm = () => {
       fd.append("city", form.city || "");
       fd.append("address", form.address || "");
       if (form.baseRate !== "" && form.baseRate !== null) fd.append("price", Number(form.baseRate).toFixed(2));
+      fd.append("booking_type", String(form.bookingType));
       fd.append("owner_id", String(ownerId));
 
       const meta = {
@@ -934,6 +936,20 @@ const Tmx9PropertyForm = () => {
               <div className="tmx9pf-field">
                 <label className="tmx9pf-label">Cleaning fee</label>
                 <input name="cleaningFee" value={form.cleaningFee} onChange={handleChange} className="tmx9pf-input" />
+              </div>
+
+              <div className="tmx9pf-field">
+                <label className="tmx9pf-label">Instant Booking</label>
+                <div style={{ marginBottom: "8px", fontSize: "0.85rem", color: "#64748b" }}>
+                  {form.bookingType === 1 
+                    ? "Guests can book instantly without your approval." 
+                    : "You must approve each booking request."}
+                </div>
+                <Toggle 
+                  name="bookingType" 
+                  value={form.bookingType === 1} 
+                  onChange={(v) => setForm((s) => ({ ...s, bookingType: v ? 1 : 0 }))} 
+                />
               </div>
 
               <div className="tmx9pf-field">

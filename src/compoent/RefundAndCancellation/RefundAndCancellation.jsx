@@ -60,27 +60,46 @@ const RefundAndCancellation = () => {
           <h2>3. Guest-Initiated Cancellations (Time-Based Refund Structure)</h2>
           <p>If a guest cancels a confirmed booking, refunds shall be processed according to the time remaining before the scheduled check-in date and time, as outlined below:</p>
           
-          <h3>3.1 Standard Refund Slabs</h3>
-          <div className="refund-table">
-            <div className="refund-row header">
-              <div className="refund-col">Cancellation Timing (Before Check-in)</div>
-              <div className="refund-col">Refund Eligibility</div>
+          <h3>Short-term stays</h3>
+          <div className="policy-cards-container">
+            <div className="policy-card">
+              <div className="policy-card-header">
+                <h4>Flexible</h4>
+              </div>
+              <ul>
+                <li>Full refund at least 1 day before check-in</li>
+                <li>Partial refund within 1 day of check-in</li>
+              </ul>
             </div>
-            <div className="refund-row">
-              <div className="refund-col">More than 72 hours</div>
-              <div className="refund-col">100% refund of the booking amount</div>
+            
+            <div className="policy-card">
+              <div className="policy-card-header">
+                <h4>Moderate</h4>
+              </div>
+              <ul>
+                <li>Full refund at least 5 days before check-in</li>
+                <li>Partial refund within 5 days of check-in</li>
+              </ul>
             </div>
-            <div className="refund-row">
-              <div className="refund-col">Between 72 hours and 48 hours</div>
-              <div className="refund-col">50% refund of the booking amount</div>
+
+            <div className="policy-card">
+              <div className="policy-card-header">
+                <h4>Standard</h4>
+              </div>
+              <ul>
+                <li>Full refund at least 14 days before check-in</li>
+                <li>Partial refund 7–14 days before check-in</li>
+              </ul>
             </div>
-            <div className="refund-row">
-              <div className="refund-col">Between 48 hours and 24 hours</div>
-              <div className="refund-col">25% refund of the booking amount</div>
-            </div>
-            <div className="refund-row">
-              <div className="refund-col">Within 24 hours</div>
-              <div className="refund-col">No refund</div>
+
+            <div className="policy-card">
+              <div className="policy-card-header">
+                <h4>Not Flexible</h4>
+              </div>
+              <ul>
+                <li>Full refund at least 30 days before check-in</li>
+                <li>Partial refund 7–30 days before check-in</li>
+              </ul>
             </div>
           </div>
           
