@@ -953,7 +953,7 @@ const InquiriesBookings = () => {
                         fontWeight: 600,
                       }}
                     >
-                      Reject
+                      Decline
                     </button>
                   </div>
                 )}

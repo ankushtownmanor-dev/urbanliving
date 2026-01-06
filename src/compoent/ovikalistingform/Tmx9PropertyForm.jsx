@@ -121,6 +121,7 @@ const Tmx9PropertyForm = () => {
     selfCheckIn: "",
     registrationNumber: "",
     localCompliance: "",
+     bookingType: null,
   });
 
   const photoPreviews = useFilePreviews();
@@ -206,6 +207,14 @@ const Tmx9PropertyForm = () => {
       if (form.baseRate && Number(form.baseRate) <= 0) newErrors.baseRate = "Rate must be positive";
       if (form.weeklyDiscountPct && (form.weeklyDiscountPct < 0 || form.weeklyDiscountPct > 100)) newErrors.weeklyDiscountPct = "Discount must be between 0 and 100";
       if (!form.selfCheckIn?.trim()) newErrors.selfCheckIn = "Please select self-check-in availability";
+       if (s === 4) {
+
+  if (form.bookingType !== 0 && form.bookingType !== 1) {
+    newErrors.bookingType = "Please select booking type";
+  }
+}
+
+        // if (!form.bookingType) newErrors.bookingType = "Please select booking type";
     }
 
     if (s === 5) {
@@ -480,6 +489,7 @@ const Tmx9PropertyForm = () => {
         monthlyDiscountPct: form.monthlyDiscountPct,
         cleaningFee: form.cleaningFee,
         selfCheckIn: form.selfCheckIn,
+        bookingType: form.bookingType,
         cancellationPolicy: policy,
         insurance,
         damageProtection,
@@ -935,6 +945,26 @@ const Tmx9PropertyForm = () => {
                 </select>
                 {renderError("selfCheckIn")}
               </div>
+     <div className="tmx9pf-field">
+  <label className="tmx9pf-label">Booking Type *</label>
+  <select
+    value={form.bookingType}
+    onChange={(e) =>
+      setForm((s) => ({
+        ...s,
+        bookingType: e.target.value === "1" ? 1 : 0, // 🔥 SAFE
+      }))
+    }
+    className={`tmx9pf-select ${errors.bookingType ? "tmx9pf-input--error" : ""}`}
+  >
+    <option value="1">Accept (Approval Required)</option>
+    <option value="0">Not Accept (Instant Booking)</option>
+  </select>
+  {renderError("bookingType")}
+</div>
+
+
+
             </div>
           </section>
         )}
