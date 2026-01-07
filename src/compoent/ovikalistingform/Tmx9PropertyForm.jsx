@@ -942,8 +942,8 @@ const Tmx9PropertyForm = () => {
                 <label className="tmx9pf-label">Instant Booking</label>
                 <div style={{ marginBottom: "8px", fontSize: "0.85rem", color: "#64748b" }}>
                   {form.bookingType === 1 
-                    ? "Guests can book instantly without your approval." 
-                    : "You must approve each booking request."}
+                    ? "You must approve each booking request." 
+                    : "Guests can book instantly without your approval."}
                 </div>
                 <Toggle 
                   name="bookingType" 
