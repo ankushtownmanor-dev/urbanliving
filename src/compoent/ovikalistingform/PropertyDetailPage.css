@@ -114,9 +114,9 @@ body {
   gap: 1rem;
   overflow-x: auto;
   padding-bottom: 0.5rem;
-  scrollbar-width: none; /* Hide scrollbar Firefox */
+  scrollbar-width: none;
 }
-.thumbnail-strip::-webkit-scrollbar { display: none; } /* Hide Chrome */
+.thumbnail-strip::-webkit-scrollbar { display: none; }
 
 .thumb-item {
   width: 140px;
@@ -232,7 +232,7 @@ body {
   flex-shrink: 0;
 }
 
-/* Rule Cards (New) */
+/* Rule Cards */
 .rule-card {
   display: flex;
   align-items: center;
@@ -406,13 +406,366 @@ body {
   box-shadow: 0 4px 12px rgba(201, 139, 62, 0.4);
 }
 
-/* Mobile Responsive */
-@media (max-width: 900px) {
-  .content-grid {
-    grid-template-columns: 1fr; /* Stack layout on tablets/mobile */
-    gap: 2rem;
+/* =========================
+   ✅ PROFESSIONAL GUIDEBOOK UI (FIXED ALIGNMENT)
+   ========================= */
+.gbWrap {
+  margin: 32px 0 16px;
+}
+
+.gbHeader {
+  margin-bottom: 18px;
+}
+
+.gbTitle {
+  margin: 0 0 6px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #0f172a;
+  letter-spacing: 0.2px;
+}
+
+.gbSubTitle {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* ✅ GRID: Desktop 2 cols, Tablet 2 cols, Mobile 1 col */
+.gbGrid {
+  display: grid;
+   /* ✅ Force 50/50 split on desktop */
+  gap: 20px;
+  align-items: stretch; /* ✅ Dono cards ki height bhi barabar rahegi */
+  width: 100%;
+}
+
+/* ✅ Card spans full width when needed */
+.gbCardWide {
+  grid-column: 1 / -1;
+}
+
+.gbCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* ✅ Full width of the grid column */
+}
+
+.gbCard:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.gbCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid #eef2f7;
+  background: #fbfcfe;
+}
+
+.gbIconWrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(139, 0, 0, 0.08);
+  color: #8b0000;
+  border: 1px solid rgba(139, 0, 0, 0.12);
+  flex-shrink: 0;
+}
+
+.gbCardHeaderText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.gbCardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.gbCardMeta {
+  font-size: 0.82rem;
+  color: #64748b;
+  font-weight: 400;
+}
+
+/* ✅ Rows (Transport / Essentials) */
+.gbRows {
+  padding: 14px 16px 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.gbRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #eef2f7;
+  border-radius: 10px;
+  background: #ffffff;
+  min-width: 0;
+}
+
+.gbRowLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.gbRowIcon {
+  color: #334155;
+  flex-shrink: 0;
+}
+
+.gbRowLabel {
+  font-size: 0.9rem;
+  color: #334155;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.gbRowValue {
+  font-size: 0.9rem;
+  color: #0f172a;
+  font-weight: 500;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 50%;
+  flex-shrink: 0;
+}
+
+/* ✅ Table (Cafes) */
+.gbTableWrap {
+  width: 100%;
+  overflow-x: auto;
+  padding: 12px 16px 16px;
+}
+
+.gbTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 368px;
+}
+
+.gbTable thead th {
+  font-size: 0.8rem;
+  text-transform: none;
+  letter-spacing: 0.2px;
+  color: #64748b;
+  font-weight: 600;
+  padding: 10px 8px;
+  border-bottom: 1px solid #eef2f7;
+  text-align: left;
+}
+
+.gbTable tbody td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.92rem;
+  color: #0f172a;
+}
+
+.gbTdName {
+  font-weight: 500;
+}
+
+.gbThRight,
+.gbTdRight {
+text-align: right !important;
+  white-space: nowrap;
+  color: #334155;
+}
+
+/* ✅ List (Must Visit) */
+.gbList {
+  padding: 14px 16px 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.gbListItem {
+  border: 1px solid #eef2f7;
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #ffffff;
+}
+
+.gbListItemTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.gbListItemTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.gbListItemMeta {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  font-size: 0.86rem;
+}
+
+/* ✅ Tips */
+.gbTips {
+  list-style: none;
+  margin: 0;
+  padding: 14px 16px 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.gbTip {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #eef2f7;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.gbTipDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #8b0000;
+  margin-top: 7px;
+  flex-shrink: 0;
+}
+
+.gbTipText {
+  font-size: 0.92rem;
+  color: #334155;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* ✅ TABLET (860px and below) → 2 columns still */
+@media (max-width: 860px) {
+  .gbGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
   }
-  
+  .gbCardWide {
+  grid-column: 1 / -1; 
+}
+}
+
+/* ✅ MOBILE (640px and below) → 1 column */
+@media (max-width: 640px) {
+  .detail-page-wrapper {
+    padding: 1rem;
+  }
+
+ .gbGrid {
+    grid-template-columns: 1fr; /* ✅ Mobile pe single column */
+    gap: 16px;
+  }
+
+  .gbCardWide {
+    grid-column: auto;
+  }
+
+  .gbTitle {
+    font-size: 1.2rem;
+  }
+
+  .gbSubTitle {
+    font-size: 0.88rem;
+  }
+
+  .gbCard {
+    border-radius: 12px;
+  }
+
+  .gbCardHeader {
+    padding: 12px 14px 10px;
+  }
+
+  .gbIconWrap {
+    width: 36px;
+    height: 36px;
+  }
+
+  .gbCardTitle {
+    font-size: 0.95rem;
+  }
+
+  .gbCardMeta {
+    font-size: 0.78rem;
+  }
+
+  .gbRows,
+  .gbList,
+  .gbTips,
+  .gbTableWrap {
+    padding: 12px 14px 14px;
+  }
+  .gbTable {
+    /* min-width: 0;      ✅ remove forced width */
+    width: 100%;
+    table-layout: fixed; /* ✅ prevent overflow */
+  }
+
+  .gbRow,
+  .gbTip {
+    padding: 10px;
+  }
+
+  .gbRowValue {
+    max-width: 45%;
+    font-size: 0.85rem;
+  }
+
+  .gbRowLabel {
+    font-size: 0.85rem;
+  }
+
+  .title-section h1 {
+    font-size: 1.5rem;
+  }
+
+  .main-frame {
+    height: 250px;
+  }
+
+  .amenities-grid, .room-breakdown-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
   .features-bar {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -420,26 +773,17 @@ body {
   }
 }
 
-@media (max-width: 640px) {
-  .detail-page-wrapper {
-    padding: 1rem;
+/* ✅ EXTRA SMALL (480px and below) */
+@media (max-width: 480px) {
+  .gbTitle {
+    font-size: 1.1rem;
   }
-  
-  .title-section h1 {
-    font-size: 1.5rem;
+
+  .gbSubTitle {
+    font-size: 0.85rem;
   }
-  
-  .main-frame {
-    height: 250px;
-  }
-  
-  .amenities-grid, .room-breakdown-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .feature-box {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+
+  .gbRowValue {
+    max-width: 40%;
   }
 }

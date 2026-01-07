@@ -84,19 +84,21 @@
 //   });
 //   return set;
 // }
-
 // async function getCalendar(propertyKey) {
 //   try {
-//     const res = await fetch(`${CALENDAR_API_BASE}/${propertyKey}`, { 
-//       credentials: 'include',
-//       headers: { 'Content-Type': 'application/json' }
-//     });
-//     if (!res.ok) return { blocked: [] };
+//     const res = await fetch(`${CALENDAR_API_BASE}/${propertyKey}`);
+//     if (!res.ok) {
+//       console.warn('Calendar API failed, continuing without blocked dates');
+//       return { blocked: [] };
+//     }
 //     return await res.json();
 //   } catch (error) {
+//     console.warn('Calendar API error:', error);
 //     return { blocked: [] };
 //   }
 // }
+
+
 
 // // 🔥 NEW IMAGE VIEWER COMPONENT
 // const ImageViewer = ({ images, initialIndex, onClose }) => {
@@ -122,11 +124,20 @@
 //     setPosition({ x: 0, y: 0 });
 //   }, [currentIndex]);
 
-//   const handleNext = () => {
-//     if (currentIndex < images.length - 1) {
-//       setCurrentIndex(currentIndex + 1);
+//  const handleNext = () => {
+//   // Step 3 guard
+//   if (step === 3) {
+//     if (!formData.checkInDate || !formData.checkOutDate) return;
+
+//     if (bookingType === 1 && ownerApprovalStatus !== 'accepted') {
+//       showAlert('Please wait for owner approval before continuing.');
+//       return;
 //     }
-//   };
+//   }
+
+//   if (step < steps.length) setStep(step + 1);
+// };
+
 
 //   const handlePrev = () => {
 //     if (currentIndex > 0) {
@@ -595,11 +606,7 @@
 //   const [property, setProperty] = useState(null);
 //   const [loading, setLoading] = useState(true);
 //   const [activeImg, setActiveImg] = useState(0);
-//   const [showAvailabilityCalendar, setShowAvailabilityCalendar] = useState(false);
-//   const [availabilityDates, setAvailabilityDates] = useState({
-//     checkInDate: '',
-//     checkOutDate: ''
-//   });
+ 
   
 //   // 🔥 NEW STATE FOR IMAGE VIEWER
 //   const [showImageViewer, setShowImageViewer] = useState(false);
@@ -615,7 +622,8 @@
 //     uploadedPhoto: null,
 //     termsAgreed: false,
 //   });
-//   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
+// const [availabilityRequested, setAvailabilityRequested] = useState(false);
+
 //   const [aadhaarNumber, setAadhaarNumber] = useState('');
 //   const [isAadhaarLoading, setIsAadhaarLoading] = useState(false);
 //   const [verificationMethod, setVerificationMethod] = useState('aadhaar');
@@ -626,11 +634,17 @@
 //   const fileInputRef = useRef(null);
 //   const [disabledDateSet, setDisabledDateSet] = useState(new Set());
 //   const [alertMessage, setAlertMessage] = useState(null);
+//   const [showRequestSentPopup, setShowRequestSentPopup] = useState(false);
+
   
 //   const [passportFile, setPassportFile] = useState(null);
 //   const [isPassportLoading, setIsPassportLoading] = useState(false);
 //   const [passportError, setPassportError] = useState('');
 //   const [passportInput, setPassportInput] = useState('');
+//   const [bookingType, setBookingType] = useState(0); // 0 = direct, 1 = approval
+// const [ownerApprovalStatus, setOwnerApprovalStatus] = useState(null);
+// // null | pending | accepted | rejected
+
 
 //   const token = Cookies.get('jwttoken');
 //   let username = '';
@@ -686,21 +700,26 @@
 //     setShowImageViewer(true);
 //   };
 
-//   useEffect(() => {
-//     const fetchProperty = async () => {
-//       try {
-//         const res = await fetch(`${API_BASE_URL}/properties/${id}`);
-//         if (!res.ok) throw new Error('Failed to load');
-//         const data = await res.json();
-//         setProperty(transformPropertyData(data?.data || data));
-//       } catch (err) {
-//         console.error(err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     if (id) fetchProperty();
-//   }, [id]);
+// useEffect(() => {
+//   const fetchProperty = async () => {
+//     try {
+//       const res = await fetch(`${API_BASE_URL}/properties/${id}`);
+//       const data = await res.json();
+//       const transformed = transformPropertyData(data?.data || data);
+//       setProperty(transformed);
+
+//       // 🔥 NEW
+//       setBookingType(Number(transformed.booking_type || 0));
+
+//     } catch (err) {
+//       console.error(err);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+//   fetchProperty();
+// }, [id]);
+
 
 //   useEffect(() => {
 //     if (formData.checkInDate && formData.checkOutDate && property) {
@@ -761,22 +780,74 @@
 //     fetchHostUser();
 //   }, [property]);
 
-//   const handleCheckAvailability = () => {
-//     if (!user) {
-//       navigate('/login', { state: { from: location } });
-//       return;
-//     }
-//     setShowAvailabilityCalendar(true);
-//   };
+ 
 
-//   const handleReserveClick = () => {
-//     if (!user) {
-//       navigate('/login', { state: { from: location } });
-//       return;
+// const handleReserveClick = () => {
+//   if (!user) {
+//     navigate('/login', { state: { from: location } });
+//     return;
+//   }
+//   setAvailabilityRequested(false);
+//   setOwnerApprovalStatus(null);
+//   setShowPaymentModal(true);
+//   setStep(1);
+// };
+
+// const sendAvailabilityRequest = async ({ checkInDate, checkOutDate }) => {
+//   try {
+//     setOwnerApprovalStatus('pending');
+
+//     const payload = {
+//       property_id: property.id,
+//       username: username,
+//       start_date: checkInDate,
+//       end_date: checkOutDate
+//     };
+
+//     await axios.post(
+//       'https://townmanor.ai/api/booking-request',
+//       payload,
+//       { headers: { 'Content-Type': 'application/json' } }
+//     );
+
+//     // 🔥 IMPORTANT UX FLOW
+//     showAlert('Request sent to owner for date confirmation.');
+//     setShowRequestSentPopup(true);
+
+//   } catch (err) {
+//     console.error(err);
+//     showAlert('Failed to send availability request');
+//     setOwnerApprovalStatus(null);
+//   }
+// };
+
+// const pollOwnerApproval = (requestId) => {
+//   const interval = setInterval(async () => {
+//     try {
+//       const res = await axios.get(
+//         `https://townmanor.ai/api/booking-request/${requestId}`
+//       );
+
+//       const status = res.data?.status;
+
+//       if (status === 'accepted') {
+//         clearInterval(interval);
+//         setOwnerApprovalStatus('accepted');
+//         showAlert('Owner approved your request. You may continue.');
+//       }
+
+//       if (status === 'rejected') {
+//         clearInterval(interval);
+//         setOwnerApprovalStatus('rejected');
+//         showAlert('Owner rejected your request.');
+//       }
+
+//     } catch (e) {
+//       console.error(e);
 //     }
-//     setShowPaymentModal(true);
-//     setStep(1);
-//   };
+//   }, 5000); // every 5 sec
+// };
+
 
 //   const handleNext = () => {
 //     if (step === 2 && !formData.termsAgreed) return;
@@ -1077,51 +1148,6 @@
 //     }
 //   };
 
-//   const confirmAvailabilityCheck = async () => {
-//     if (!availabilityDates.checkInDate || !availabilityDates.checkOutDate) {
-//       showAlert('Please select check-in and check-out dates');
-//       return;
-//     }
-
-//     setIsCheckingAvailability(true);
-
-//     try {
-//       const payload = {
-//         property_id: property.id,
-//         username: user.username,
-//         start_date: availabilityDates.checkInDate,
-//         end_date: availabilityDates.checkOutDate
-//       };
-
-//       console.log('📤 Availability payload:', payload);
-
-//       const res = await axios.post(
-//         'https://townmanor.ai/api/booking-request',
-//         payload,
-//         { headers: { 'Content-Type': 'application/json' } }
-//       );
-
-//       if (res.data?.success && res.data?.data?.length) {
-//         const req = res.data.data[0];
-//         showAlert(
-//           `Request sent successfully!\n\n` +
-//           `Property: ${req.property.name}\n` +
-//           `City: ${req.property.city}\n` +
-//           `Status: ${req.status}`
-//         );
-//       } else {
-//         showAlert('Request sent to owner');
-//       }
-
-//       setShowAvailabilityCalendar(false);
-
-//     } catch (err) {
-//       console.error(err);
-//       showAlert(err.response?.data?.message || 'Failed to send request');
-//     } finally {
-//       setIsCheckingAvailability(false);
-//     }
-//   };
 
 //   if (loading) return <div className="loader-screen"><div className="spinner"></div></div>;
 //   if (!property) return <div className="error-screen">Property not found</div>;
@@ -1135,6 +1161,60 @@
 //   return (
 //     <div className="detail-page-wrapper">
 //       {alertMessage && <CustomAlert message={alertMessage} onClose={closeAlert} />}
+//       {showRequestSentPopup && (
+//   <div
+//     style={{
+//       position: 'fixed',
+//       top: 0,
+//       left: 0,
+//       right: 0,
+//       bottom: 0,
+//       background: 'rgba(0,0,0,0.6)',
+//       display: 'flex',
+//       alignItems: 'center',
+//       justifyContent: 'center',
+//       zIndex: 10001
+//     }}
+//   >
+//     <div
+//       style={{
+//         background: 'white',
+//         padding: '2rem',
+//         borderRadius: '10px',
+//         maxWidth: '400px',
+//         width: '90%',
+//         textAlign: 'center'
+//       }}
+//     >
+//       <h3 style={{ marginBottom: '1rem', color: '#8b0000' }}>
+//         Request Sent
+//       </h3>
+
+//       <p style={{ marginBottom: '1.5rem', color: '#555' }}>
+//         Your request has been sent to the owner for date confirmation.
+//         You will be notified once it is approved.
+//       </p>
+
+//       <button
+//         onClick={() => navigate('/')}
+//         style={{
+//           width: '100%',
+//           padding: '12px',
+//           background: '#8b0000',
+//           color: 'white',
+//           border: 'none',
+//           borderRadius: '6px',
+//           fontSize: '1rem',
+//           fontWeight: '600',
+//           cursor: 'pointer'
+//         }}
+//       >
+//         Go to Home
+//       </button>
+//     </div>
+//   </div>
+// )}
+
       
 //       {/* 🔥 IMAGE VIEWER MODAL */}
 //       {showImageViewer && (
@@ -1261,13 +1341,49 @@
 //                   <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Dates & Pricing</h2>
 //                   <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem' }}>
 //                     <div>
-//                       <Calendar
-//                         selectedDates={{ checkInDate: formData.checkInDate, checkOutDate: formData.checkOutDate }}
-//                         onDateSelect={(dates) => setFormData({ ...formData, ...dates })}
-//                         minDate={new Date()}
-//                         disabledDateSet={disabledDateSet}
-//                         onInvalidRange={showAlert}
-//                       />
+//                       {bookingType === 1 && ownerApprovalStatus === 'pending' && (
+//   <div
+//     style={{
+//       marginBottom: '1rem',
+//       padding: '12px',
+//       background: '#fff7ed',
+//       border: '1px solid #fed7aa',
+//       borderRadius: '6px',
+//       color: '#92400e',
+//       fontSize: '0.9rem',
+//       fontWeight: '500'
+//     }}
+//   >
+//     ⏳ Request sent for date confirmation.  
+//     Please wait for owner approval.
+//   </div>
+// )}
+
+//                     <Calendar
+//   selectedDates={{
+//     checkInDate: formData.checkInDate,
+//     checkOutDate: formData.checkOutDate
+//   }}
+// onDateSelect={async (dates) => {
+//   setFormData({ ...formData, ...dates });
+
+//   if (
+//     bookingType === 1 &&
+//     dates.checkInDate &&
+//     dates.checkOutDate &&
+//     !availabilityRequested
+//   ) {
+//     setAvailabilityRequested(true);
+//     await sendAvailabilityRequest(dates);
+//   }
+// }}
+
+
+//   minDate={new Date()}
+//   disabledDateSet={disabledDateSet}
+//   onInvalidRange={showAlert}
+// />
+
 //                     </div>
                     
 //                     <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '8px', height: 'fit-content' }}>
@@ -1582,22 +1698,24 @@
 //               >
 //                 ← Previous
 //               </button>
-//               <button 
-//                 onClick={handleNext} 
-//                 disabled={step === steps.length} 
-//                 style={{ 
-//                   padding: '12px 32px', 
-//                   background: step === steps.length ? '#eee' : '#8b0000', 
-//                   color: step === steps.length ? '#999' : 'white', 
-//                   border: 'none', 
-//                   borderRadius: '8px', 
-//                   cursor: step === steps.length ? 'not-allowed' : 'pointer',
-//                   fontSize: '1rem',
-//                   fontWeight: '600'
-//                 }}
-//               >
-//                 Next →
-//               </button>
+//              {!(bookingType === 1 && ownerApprovalStatus === 'pending') && (
+//   <button 
+//     onClick={handleNext}
+//     style={{ 
+//       padding: '12px 32px',
+//       background: '#8b0000',
+//       color: 'white',
+//       border: 'none',
+//       borderRadius: '8px',
+//       fontSize: '1rem',
+//       fontWeight: '600',
+//       cursor: 'pointer'
+//     }}
+//   >
+//     Next →
+//   </button>
+// )}
+
 //             </div>
 //           </div>
 //         </div>
@@ -1849,72 +1967,30 @@
 //                   </div>
 //                 </div>
                 
-//                 <button
-//                   onClick={handleCheckAvailability}
-//                   disabled={isCheckingAvailability}
-//                   className="check-availability-btn"
-//                   style={{
-//                     width: '100%', padding: '1rem', background: 'white',
-//                     color: '#8b0000', border: '2px solid #8b0000', borderRadius: '8px',
-//                     fontSize: '1rem', fontWeight: '600', cursor: isCheckingAvailability ? 'not-allowed' : 'pointer',
-//                     marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
-//                     gap: '0.5rem', opacity: isCheckingAvailability ? 0.6 : 1
-//                   }}
-//                 >
-//                   {isCheckingAvailability ? (
-//                     <>
-//                       <Loader className="animate-spin" size={18} />
-//                       Checking...
-//                     </>
-//                   ) : (
-//                     <>
-//                       <FiCalendar />
-//                       Check Availability
-//                     </>
-//                   )}
-//                 </button>
-
-//                 {showAvailabilityCalendar && (
-//                   <div
-//                     style={{
-//                       marginTop: '1rem',
-//                       padding: '1rem',
-//                       background: '#ffffff',
-//                       border: '1px solid #e5e7eb',
-//                       borderRadius: '10px'
-//                     }}
-//                   >
-//                     <Calendar
-//                       selectedDates={availabilityDates}
-//                       onDateSelect={(dates) => setAvailabilityDates(dates)}
-//                       minDate={new Date()}
-//                       disabledDateSet={disabledDateSet}
-//                       onInvalidRange={showAlert}
-//                     />
-
-//                     <button
-//                       onClick={confirmAvailabilityCheck}
-//                       style={{
-//                         width: '100%',
-//                         marginTop: '1rem',
-//                         padding: '12px',
-//                         background: '#8b0000',
-//                         color: '#fff',
-//                         border: 'none',
-//                         borderRadius: '8px',
-//                         fontWeight: '600',
-//                         cursor: 'pointer'
-//                       }}
-//                     >
-//                       Confirm Availability
-//                     </button>
-//                   </div>
-//                 )}
+             
 
 //                 <div style={{ margin: '1.5rem 0' }}>
 //                   <button className="reserve-btn" onClick={handleReserveClick}>Reserve Now</button>
 //                   <p className="hint" style={{ marginBottom: 0 }}>You won't be charged yet</p>
 //                 </div>
+//  {bookingType === 1 && (
+//   <div
+//     style={{
+//       marginTop: '8px',
+//       padding: '10px',
+//       background: '#fff7ed',
+//       border: '1px solid #fed7aa',
+//       borderRadius: '6px',
+//       fontSize: '0.8rem',
+//       color: '#92400e'
+//     }}
+//   >
+//     ⚠️ <strong>Owner approval required</strong><br />
+//     Please select your dates. The owner will confirm availability before you can book.
+//   </div>
+// )}
+
+
 //               </div>
 
 //               <div className="card-footer">
@@ -1953,7 +2029,24 @@ import {
   FiUser, FiCalendar, FiShield, FiStar, FiX, FiZoomIn, FiZoomOut
 } from 'react-icons/fi';
 import { BiBed, BiBath, BiArea } from 'react-icons/bi';
-import { CheckCircle, XCircle, UploadCloud, Loader, ChevronLeft, ChevronRight } from 'lucide-react';
+import { 
+  CheckCircle, 
+  XCircle, 
+  UploadCloud, 
+  Loader, 
+  ChevronLeft, 
+  ChevronRight,
+  Car,
+  ParkingCircle,
+  Bus,
+  UtensilsCrossed,
+  Landmark,
+  ShoppingBasket,
+  HeartPulse,
+  Lightbulb,
+  Clock,
+  MapPin as MapPinIcon
+} from 'lucide-react';
 import { MdCurrencyRupee, MdOutlineCurrencyRupee } from 'react-icons/md';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
@@ -1970,7 +2063,7 @@ const getValidPropertyId = (frontendId) => {
 
 const API_BASE_URL = 'https://townmanor.ai/api/ovika';
 const CALENDAR_API_BASE = 'https://townmanor.ai/api/calendar';
-const BOOKING_REQUEST_API = ' https://townmanor.ai/api/booking-request';
+const BOOKING_REQUEST_API = 'https://townmanor.ai/api/booking-request';
 
 const getPhotoUrl = (photo) => {
   if (!photo) return null;
@@ -2031,6 +2124,7 @@ function buildDisabledDates(blockedRanges = []) {
   });
   return set;
 }
+
 async function getCalendar(propertyKey) {
   try {
     const res = await fetch(`${CALENDAR_API_BASE}/${propertyKey}`);
@@ -2045,9 +2139,7 @@ async function getCalendar(propertyKey) {
   }
 }
 
-
-
-// 🔥 NEW IMAGE VIEWER COMPONENT
+// IMAGE VIEWER COMPONENT
 const ImageViewer = ({ images, initialIndex, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [scale, setScale] = useState(1);
@@ -2059,8 +2151,8 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowLeft') handlePrev();
-      if (e.key === 'ArrowRight') handleNext();
+      if (e.key === 'ArrowLeft') handlePrevImage();
+      if (e.key === 'ArrowRight') handleNextImage();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -2071,22 +2163,13 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
     setPosition({ x: 0, y: 0 });
   }, [currentIndex]);
 
- const handleNext = () => {
-  // Step 3 guard
-  if (step === 3) {
-    if (!formData.checkInDate || !formData.checkOutDate) return;
-
-    if (bookingType === 1 && ownerApprovalStatus !== 'accepted') {
-      showAlert('Please wait for owner approval before continuing.');
-      return;
+  const handleNextImage = () => {
+    if (currentIndex < images.length - 1) {
+      setCurrentIndex(currentIndex + 1);
     }
-  }
+  };
 
-  if (step < steps.length) setStep(step + 1);
-};
-
-
-  const handlePrev = () => {
+  const handlePrevImage = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
     }
@@ -2172,7 +2255,6 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Header */}
       <div style={{
         position: 'absolute',
         top: 0,
@@ -2208,7 +2290,6 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
         </button>
       </div>
 
-      {/* Main Image */}
       <div 
         style={{
           flex: 1,
@@ -2241,7 +2322,6 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
         />
       </div>
 
-      {/* Controls */}
       <div style={{
         position: 'absolute',
         bottom: '2rem',
@@ -2255,7 +2335,6 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
         borderRadius: '50px',
         backdropFilter: 'blur(10px)'
       }}>
-        {/* Zoom Out */}
         <button
           onClick={handleZoomOut}
           disabled={scale <= 1}
@@ -2277,7 +2356,6 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
           <FiZoomOut />
         </button>
 
-        {/* Scale Indicator */}
         <span style={{
           color: 'white',
           fontSize: '0.9rem',
@@ -2288,7 +2366,6 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
           {Math.round(scale * 100)}%
         </span>
 
-        {/* Zoom In */}
         <button
           onClick={handleZoomIn}
           disabled={scale >= 4}
@@ -2311,10 +2388,9 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
         </button>
       </div>
 
-      {/* Navigation Arrows */}
       {currentIndex > 0 && (
         <button
-          onClick={handlePrev}
+          onClick={handlePrevImage}
           style={{
             position: 'absolute',
             left: '1rem',
@@ -2340,7 +2416,7 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
 
       {currentIndex < images.length - 1 && (
         <button
-          onClick={handleNext}
+          onClick={handleNextImage}
           style={{
             position: 'absolute',
             right: '1rem',
@@ -2364,7 +2440,6 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
         </button>
       )}
 
-      {/* Thumbnail Strip */}
       <div style={{
         position: 'absolute',
         bottom: '6rem',
@@ -2402,6 +2477,7 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
   );
 };
 
+// CALENDAR COMPONENT
 const Calendar = ({ selectedDates, onDateSelect, minDate = new Date(), disabledDateSet = new Set(), onInvalidRange }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [checkInDate, setCheckInDate] = useState(selectedDates.checkInDate ? new Date(selectedDates.checkInDate) : null);
@@ -2543,6 +2619,7 @@ const Calendar = ({ selectedDates, onDateSelect, minDate = new Date(), disabledD
   );
 };
 
+// MAIN COMPONENT
 const PropertyDetailPage = () => {
   const [hostUser, setHostUser] = useState(null);
   const { id } = useParams();
@@ -2553,9 +2630,7 @@ const PropertyDetailPage = () => {
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeImg, setActiveImg] = useState(0);
- 
   
-  // 🔥 NEW STATE FOR IMAGE VIEWER
   const [showImageViewer, setShowImageViewer] = useState(false);
   const [viewerImageIndex, setViewerImageIndex] = useState(0);
   
@@ -2569,7 +2644,7 @@ const PropertyDetailPage = () => {
     uploadedPhoto: null,
     termsAgreed: false,
   });
-const [availabilityRequested, setAvailabilityRequested] = useState(false);
+  const [availabilityRequested, setAvailabilityRequested] = useState(false);
 
   const [aadhaarNumber, setAadhaarNumber] = useState('');
   const [isAadhaarLoading, setIsAadhaarLoading] = useState(false);
@@ -2583,15 +2658,12 @@ const [availabilityRequested, setAvailabilityRequested] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
   const [showRequestSentPopup, setShowRequestSentPopup] = useState(false);
 
-  
   const [passportFile, setPassportFile] = useState(null);
   const [isPassportLoading, setIsPassportLoading] = useState(false);
   const [passportError, setPassportError] = useState('');
   const [passportInput, setPassportInput] = useState('');
-  const [bookingType, setBookingType] = useState(0); // 0 = direct, 1 = approval
-const [ownerApprovalStatus, setOwnerApprovalStatus] = useState(null);
-// null | pending | accepted | rejected
-
+  const [bookingType, setBookingType] = useState(0);
+  const [ownerApprovalStatus, setOwnerApprovalStatus] = useState(null);
 
   const token = Cookies.get('jwttoken');
   let username = '';
@@ -2636,7 +2708,6 @@ const [ownerApprovalStatus, setOwnerApprovalStatus] = useState(null);
     </div>
   );
 
-  // 🔥 IMAGE CLICK HANDLERS
   const handleMainImageClick = () => {
     setViewerImageIndex(activeImg);
     setShowImageViewer(true);
@@ -2647,26 +2718,22 @@ const [ownerApprovalStatus, setOwnerApprovalStatus] = useState(null);
     setShowImageViewer(true);
   };
 
-useEffect(() => {
-  const fetchProperty = async () => {
-    try {
-      const res = await fetch(`${API_BASE_URL}/properties/${id}`);
-      const data = await res.json();
-      const transformed = transformPropertyData(data?.data || data);
-      setProperty(transformed);
-
-      // 🔥 NEW
-      setBookingType(Number(transformed.booking_type || 0));
-
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-  fetchProperty();
-}, [id]);
-
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/properties/${id}`);
+        const data = await res.json();
+        const transformed = transformPropertyData(data?.data || data);
+        setProperty(transformed);
+        setBookingType(Number(transformed.booking_type || 0));
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProperty();
+  }, [id]);
 
   useEffect(() => {
     if (formData.checkInDate && formData.checkOutDate && property) {
@@ -2727,76 +2794,53 @@ useEffect(() => {
     fetchHostUser();
   }, [property]);
 
- 
-
-const handleReserveClick = () => {
-  if (!user) {
-    navigate('/login', { state: { from: location } });
-    return;
-  }
-  setAvailabilityRequested(false);
-  setOwnerApprovalStatus(null);
-  setShowPaymentModal(true);
-  setStep(1);
-};
-
-const sendAvailabilityRequest = async ({ checkInDate, checkOutDate }) => {
-  try {
-    setOwnerApprovalStatus('pending');
-
-    const payload = {
-      property_id: property.id,
-      username: username,
-      start_date: checkInDate,
-      end_date: checkOutDate
-    };
-
-    await axios.post(
-      'https://townmanor.ai/api/booking-request',
-      payload,
-      { headers: { 'Content-Type': 'application/json' } }
-    );
-
-    // 🔥 IMPORTANT UX FLOW
-    showAlert('Request sent to owner for date confirmation.');
-    setShowRequestSentPopup(true);
-
-  } catch (err) {
-    console.error(err);
-    showAlert('Failed to send availability request');
+  const handleReserveClick = () => {
+    if (!user) {
+      navigate('/login', { state: { from: location } });
+      return;
+    }
+    setAvailabilityRequested(false);
     setOwnerApprovalStatus(null);
-  }
-};
+    setShowPaymentModal(true);
+    setStep(1);
+  };
 
-const pollOwnerApproval = (requestId) => {
-  const interval = setInterval(async () => {
+  const sendAvailabilityRequest = async ({ checkInDate, checkOutDate }) => {
     try {
-      const res = await axios.get(
-        `https://townmanor.ai/api/booking-request/${requestId}`
+      setOwnerApprovalStatus('pending');
+
+      const payload = {
+        property_id: property.id,
+        username: username,
+        start_date: checkInDate,
+        end_date: checkOutDate
+      };
+
+      await axios.post(
+        'https://townmanor.ai/api/booking-request',
+        payload,
+        { headers: { 'Content-Type': 'application/json' } }
       );
 
-      const status = res.data?.status;
+      showAlert('Request sent to owner for date confirmation.');
+      setShowRequestSentPopup(true);
 
-      if (status === 'accepted') {
-        clearInterval(interval);
-        setOwnerApprovalStatus('accepted');
-        showAlert('Owner approved your request. You may continue.');
-      }
-
-      if (status === 'rejected') {
-        clearInterval(interval);
-        setOwnerApprovalStatus('rejected');
-        showAlert('Owner rejected your request.');
-      }
-
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      console.error(err);
+      showAlert('Failed to send availability request');
+      setOwnerApprovalStatus(null);
     }
-  }, 5000); // every 5 sec
-};
-
+  };
 
   const handleNext = () => {
+    if (step === 3) {
+      if (!formData.checkInDate || !formData.checkOutDate) return;
+      if (bookingType === 1 && ownerApprovalStatus !== 'accepted') {
+        showAlert('Please wait for owner approval before continuing.');
+        return;
+      }
+    }
+
     if (step === 2 && !formData.termsAgreed) return;
     if (step === 3 && (!formData.checkInDate || !formData.checkOutDate || pricing.total <= 0)) return;
     if (step === 4 && !(formData.aadhaarVerified || formData.passportVerified)) return;
@@ -2977,7 +3021,6 @@ const pollOwnerApproval = (requestId) => {
       }
 
       const validPropertyId = getValidPropertyId(id);
-      console.log(`Frontend property ID: ${id} → Backend property ID: ${validPropertyId}`);
 
       const bookingDetails = {
         property_id: validPropertyId,
@@ -2991,15 +3034,11 @@ const pollOwnerApproval = (requestId) => {
         email: userEmail,
       };
 
-      console.log('BOOKING PAYLOAD =>', bookingDetails);
-
       const { data } = await axios.post(
         'https://townmanor.ai/api/booking',
         bookingDetails,
         { headers: { 'Content-Type': 'application/json' } }
       );
-
-      console.log('Booking API response:', data);
 
       const newBookingId = data?.booking?.id || data?.booking_id || data?.id || data?.bookingId || null;
 
@@ -3017,16 +3056,8 @@ const pollOwnerApproval = (requestId) => {
 
     } catch (error) {
       console.error('Booking error:', error);
-      let serverDump = '';
-      if (error.response && error.response.data) {
-        try {
-          serverDump = '\n\nServer response:\n' + JSON.stringify(error.response.data, null, 2);
-        } catch {
-          serverDump = '\n\nServer response (raw): ' + String(error.response.data);
-        }
-      }
-      const errorMsg = error.response?.data?.message || error.response?.data?.error || error.response?.data?.errors?.[0]?.msg || error.message || 'Booking failed';
-      showAlert(`Booking failed: ${errorMsg}${serverDump}`);
+      const errorMsg = error.response?.data?.message || error.response?.data?.error || error.message || 'Booking failed';
+      showAlert(`Booking failed: ${errorMsg}`);
       setIsSubmitting(false);
     }
   };
@@ -3095,7 +3126,6 @@ const pollOwnerApproval = (requestId) => {
     }
   };
 
-
   if (loading) return <div className="loader-screen"><div className="spinner"></div></div>;
   if (!property) return <div className="error-screen">Property not found</div>;
 
@@ -3108,62 +3138,21 @@ const pollOwnerApproval = (requestId) => {
   return (
     <div className="detail-page-wrapper">
       {alertMessage && <CustomAlert message={alertMessage} onClose={closeAlert} />}
-      {showRequestSentPopup && (
-  <div
-    style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: 'rgba(0,0,0,0.6)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 10001
-    }}
-  >
-    <div
-      style={{
-        background: 'white',
-        padding: '2rem',
-        borderRadius: '10px',
-        maxWidth: '400px',
-        width: '90%',
-        textAlign: 'center'
-      }}
-    >
-      <h3 style={{ marginBottom: '1rem', color: '#8b0000' }}>
-        Request Sent
-      </h3>
-
-      <p style={{ marginBottom: '1.5rem', color: '#555' }}>
-        Your request has been sent to the owner for date confirmation.
-        You will be notified once it is approved.
-      </p>
-
-      <button
-        onClick={() => navigate('/')}
-        style={{
-          width: '100%',
-          padding: '12px',
-          background: '#8b0000',
-          color: 'white',
-          border: 'none',
-          borderRadius: '6px',
-          fontSize: '1rem',
-          fontWeight: '600',
-          cursor: 'pointer'
-        }}
-      >
-        Go to Home
-      </button>
-    </div>
-  </div>
-)}
-
       
-      {/* 🔥 IMAGE VIEWER MODAL */}
+      {showRequestSentPopup && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10001 }}>
+          <div style={{ background: 'white', padding: '2rem', borderRadius: '10px', maxWidth: '400px', width: '90%', textAlign: 'center' }}>
+            <h3 style={{ marginBottom: '1rem', color: '#8b0000' }}>Request Sent</h3>
+            <p style={{ marginBottom: '1.5rem', color: '#555' }}>
+              Your request has been sent to the owner for date confirmation. You will be notified once it is approved.
+            </p>
+            <button onClick={() => navigate('/')} style={{ width: '100%', padding: '12px', background: '#8b0000', color: 'white', border: 'none', borderRadius: '6px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer' }}>
+              Go to Home
+            </button>
+          </div>
+        </div>
+      )}
+
       {showImageViewer && (
         <ImageViewer
           images={photos}
@@ -3171,8 +3160,7 @@ const pollOwnerApproval = (requestId) => {
           onClose={() => setShowImageViewer(false)}
         />
       )}
-      
-      {/* Payment Modal - EXACT 6 STEPS FLOW */}
+
       {showPaymentModal && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 9999, overflow: 'auto', padding: '2rem 0' }}>
           <div style={{ maxWidth: '900px', margin: '0 auto', background: 'white', borderRadius: '12px', padding: '2rem', position: 'relative' }}>
@@ -3180,44 +3168,18 @@ const pollOwnerApproval = (requestId) => {
               <FiX />
             </button>
 
-            {/* Progress Bar - 6 Steps */}
             <div style={{ marginBottom: '2rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem' }}>
                 {steps.map((stepName, index) => (
                   <div key={index} style={{ flex: 1, position: 'relative' }}>
                     {index < steps.length - 1 && (
-                      <div style={{ 
-                        position: 'absolute', 
-                        top: '15px', 
-                        left: '50%', 
-                        right: '-50%', 
-                        height: '3px', 
-                        background: index < step ? '#8b0000' : '#e5e5e5',
-                        zIndex: 0 
-                      }}></div>
+                      <div style={{ position: 'absolute', top: '15px', left: '50%', right: '-50%', height: '3px', background: index < step ? '#8b0000' : '#e5e5e5', zIndex: 0 }}></div>
                     )}
                     <div style={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
-                      <div style={{
-                        width: '30px',
-                        height: '30px',
-                        borderRadius: '50%',
-                        background: index + 1 <= step ? '#8b0000' : '#e5e5e5',
-                        color: index + 1 <= step ? 'white' : '#999',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        margin: '0 auto 0.5rem',
-                        fontSize: '0.85rem',
-                        fontWeight: '600'
-                      }}>
+                      <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: index + 1 <= step ? '#8b0000' : '#e5e5e5', color: index + 1 <= step ? 'white' : '#999', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.5rem', fontSize: '0.85rem', fontWeight: '600' }}>
                         {index + 1}
                       </div>
-                      <span style={{ 
-                        fontSize: '0.75rem', 
-                        fontWeight: index + 1 === step ? '600' : 'normal', 
-                        color: index + 1 === step ? '#8b0000' : '#666',
-                        display: 'block'
-                      }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: index + 1 === step ? '600' : 'normal', color: index + 1 === step ? '#8b0000' : '#666', display: 'block' }}>
                         {stepName}
                       </span>
                     </div>
@@ -3227,16 +3189,11 @@ const pollOwnerApproval = (requestId) => {
             </div>
 
             <div style={{ minHeight: '450px' }}>
-              {/* STEP 1: Property Details */}
               {step === 1 && (
                 <div>
                   <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Property Details</h2>
                   <div style={{ display: 'flex', gap: '1.5rem', padding: '1.5rem', background: '#f8fafc', borderRadius: '8px' }}>
-                    <img
-                      src={getPhotoUrl(property.photos?.[0]) || 'https://via.placeholder.com/300x200'}
-                      alt="Property"
-                      style={{ width: '300px', height: '200px', objectFit: 'cover', borderRadius: '8px' }}
-                    />
+                    <img src={getPhotoUrl(property.photos?.[0]) || 'https://via.placeholder.com/300x200'} alt="Property" style={{ width: '300px', height: '200px', objectFit: 'cover', borderRadius: '8px' }} />
                     <div style={{ flex: 1 }}>
                       <h3 style={{ fontSize: '1.3rem', marginBottom: '0.5rem' }}>{property.property_name}</h3>
                       <p style={{ color: '#666', marginBottom: '0.5rem' }}>{property.address}, {property.city}</p>
@@ -3250,34 +3207,23 @@ const pollOwnerApproval = (requestId) => {
                 </div>
               )}
 
-              {/* REST OF THE STEPS - Keeping them exactly as before */}
               {step === 2 && (
                 <div>
                   <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Terms & Conditions</h2>
                   <div style={{ maxHeight: '400px', overflow: 'auto', padding: '1.5rem', background: '#f8fafc', borderRadius: '8px', marginBottom: '1.5rem' }}>
                     <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>1. Booking Agreement</p>
-                    <p style={{ marginBottom: '1rem' }}>By confirming this booking, you agree to abide by all house rules, including check-in/check-out times, noise restrictions, and guest limits. Violation of these terms may result in a fine or cancellation of your reservation without a refund.</p>
-                    
+                    <p style={{ marginBottom: '1rem' }}>By confirming this booking, you agree to abide by all house rules, including check-in/check-out times, noise restrictions, and guest limits.</p>
                     <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>2. Cancellation Policy</p>
-                    <p style={{ marginBottom: '1rem' }}>A full refund will be provided for cancellations made within 48 hours of booking, if the check-in date is at least 14 days away. 50% refund for cancellations made 7 days before check-in. No refund for cancellations within 7 days of check-in.</p>
-                    
+                    <p style={{ marginBottom: '1rem' }}>A full refund will be provided for cancellations made within 48 hours of booking, if the check-in date is at least 14 days away.</p>
                     <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>3. Damage & Liability</p>
-                    <p style={{ marginBottom: '1rem' }}>Guests are responsible for any damage caused to the property and its contents during their stay. The host reserves the right to charge the guest for repair or replacement costs.</p>
-                    
+                    <p style={{ marginBottom: '1rem' }}>Guests are responsible for any damage caused to the property and its contents during their stay.</p>
                     <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>4. Payment & Pricing</p>
-                    <p style={{ marginBottom: '1rem' }}>All prices are final and non-negotiable. Additional taxes and service fees are included in the final price. Payment must be completed in full before the reservation is confirmed.</p>
-                    
+                    <p style={{ marginBottom: '1rem' }}>All prices are final and non-negotiable. Payment must be completed in full before the reservation is confirmed.</p>
                     <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>5. Privacy</p>
-                    <p style={{ marginBottom: '1rem' }}>Your personal information will be used solely for the purpose of this booking and will not be shared with third parties.</p>
+                    <p style={{ marginBottom: '1rem' }}>Your personal information will be used solely for the purpose of this booking.</p>
                   </div>
-                  
                   <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', padding: '1rem', background: '#f8fafc', borderRadius: '8px' }}>
-                    <input 
-                      type="checkbox" 
-                      checked={formData.termsAgreed} 
-                      onChange={(e) => setFormData({ ...formData, termsAgreed: e.target.checked })} 
-                      style={{ marginRight: '0.75rem', width: '20px', height: '20px', cursor: 'pointer' }} 
-                    />
+                    <input type="checkbox" checked={formData.termsAgreed} onChange={(e) => setFormData({ ...formData, termsAgreed: e.target.checked })} style={{ marginRight: '0.75rem', width: '20px', height: '20px', cursor: 'pointer' }} />
                     <span style={{ fontSize: '1rem' }}>I have read and agree to the Terms & Conditions.</span>
                   </label>
                 </div>
@@ -3289,50 +3235,24 @@ const pollOwnerApproval = (requestId) => {
                   <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem' }}>
                     <div>
                       {bookingType === 1 && ownerApprovalStatus === 'pending' && (
-  <div
-    style={{
-      marginBottom: '1rem',
-      padding: '12px',
-      background: '#fff7ed',
-      border: '1px solid #fed7aa',
-      borderRadius: '6px',
-      color: '#92400e',
-      fontSize: '0.9rem',
-      fontWeight: '500'
-    }}
-  >
-    ⏳ Request sent for date confirmation.  
-    Please wait for owner approval.
-  </div>
-)}
-
-                    <Calendar
-  selectedDates={{
-    checkInDate: formData.checkInDate,
-    checkOutDate: formData.checkOutDate
-  }}
-onDateSelect={async (dates) => {
-  setFormData({ ...formData, ...dates });
-
-  if (
-    bookingType === 1 &&
-    dates.checkInDate &&
-    dates.checkOutDate &&
-    !availabilityRequested
-  ) {
-    setAvailabilityRequested(true);
-    await sendAvailabilityRequest(dates);
-  }
-}}
-
-
-  minDate={new Date()}
-  disabledDateSet={disabledDateSet}
-  onInvalidRange={showAlert}
-/>
-
+                        <div style={{ marginBottom: '1rem', padding: '12px', background: '#fff7ed', border: '1px solid #fed7aa', borderRadius: '6px', color: '#92400e', fontSize: '0.9rem', fontWeight: '500' }}>
+                          ⏳ Request sent for date confirmation. Please wait for owner approval.
+                        </div>
+                      )}
+                      <Calendar
+                        selectedDates={{ checkInDate: formData.checkInDate, checkOutDate: formData.checkOutDate }}
+                        onDateSelect={async (dates) => {
+                          setFormData({ ...formData, ...dates });
+                          if (bookingType === 1 && dates.checkInDate && dates.checkOutDate && !availabilityRequested) {
+                            setAvailabilityRequested(true);
+                            await sendAvailabilityRequest(dates);
+                          }
+                        }}
+                        minDate={new Date()}
+                        disabledDateSet={disabledDateSet}
+                        onInvalidRange={showAlert}
+                      />
                     </div>
-                    
                     <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '8px', height: 'fit-content' }}>
                       <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>Pricing Summary</h3>
                       <div style={{ marginBottom: '1rem' }}>
@@ -3357,33 +3277,15 @@ onDateSelect={async (dates) => {
               {step === 4 && (
                 <div>
                   <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Verification</h2>
-                  
                   <div style={{ marginBottom: '1.5rem', padding: '1rem', background: '#f8fafc', borderRadius: '8px' }}>
                     <label style={{ marginRight: '1.5rem', cursor: 'pointer' }}>
-                      <input 
-                        type="radio" 
-                        name="verif-method" 
-                        value="aadhaar" 
-                        checked={verificationMethod === 'aadhaar'} 
-                        onChange={() => setVerificationMethod('aadhaar')}
-                        style={{ marginRight: '0.5rem' }}
-                      /> 
+                      <input type="radio" name="verif-method" value="aadhaar" checked={verificationMethod === 'aadhaar'} onChange={() => setVerificationMethod('aadhaar')} style={{ marginRight: '0.5rem' }} />
                       <strong>Aadhaar Verification</strong>
                     </label>
                     <label style={{ cursor: 'pointer' }}>
-                      <input 
-                        type="radio" 
-                        name="verif-method" 
-                        value="passport" 
-                        checked={verificationMethod === 'passport'} 
-                        onChange={() => setVerificationMethod('passport')}
-                        style={{ marginRight: '0.5rem' }}
-                      /> 
+                      <input type="radio" name="verif-method" value="passport" checked={verificationMethod === 'passport'} onChange={() => setVerificationMethod('passport')} style={{ marginRight: '0.5rem' }} />
                       <strong>International Passport</strong>
                     </label>
-                    <p style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.5rem', marginLeft: '1.5rem' }}>
-                      {verificationMethod === 'passport' && 'For foreign customers or where Aadhaar is not available'}
-                    </p>
                   </div>
 
                   {verificationMethod === 'aadhaar' ? (
@@ -3394,48 +3296,20 @@ onDateSelect={async (dates) => {
                         <input
                           type="text"
                           inputMode="numeric"
-                          pattern="[0-9]*"
                           maxLength={12}
                           value={aadhaarNumber}
                           onChange={(e) => setAadhaarNumber(e.target.value.replace(/\D/g, ''))}
                           placeholder="12-digit Aadhaar number"
                           disabled={formData.aadhaarVerified}
-                          style={{ 
-                            width: '100%', 
-                            padding: '14px', 
-                            borderRadius: '6px', 
-                            border: '1px solid #ddd', 
-                            fontSize: '1rem',
-                            background: formData.aadhaarVerified ? '#e8f5e9' : 'white'
-                          }}
+                          style={{ width: '100%', padding: '14px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '1rem', background: formData.aadhaarVerified ? '#e8f5e9' : 'white' }}
                         />
                       </div>
                       <button
                         onClick={handleVerifyAadhaar}
                         disabled={formData.aadhaarVerified || !aadhaarNumber || isAadhaarLoading}
-                        style={{ 
-                          width: '100%', 
-                          padding: '14px', 
-                          background: formData.aadhaarVerified ? '#22c55e' : '#8b0000', 
-                          color: 'white', 
-                          border: 'none', 
-                          borderRadius: '6px', 
-                          cursor: formData.aadhaarVerified || !aadhaarNumber || isAadhaarLoading ? 'not-allowed' : 'pointer',
-                          fontSize: '1rem',
-                          fontWeight: '600',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '0.5rem'
-                        }}
+                        style={{ width: '100%', padding: '14px', background: formData.aadhaarVerified ? '#22c55e' : '#8b0000', color: 'white', border: 'none', borderRadius: '6px', cursor: formData.aadhaarVerified || !aadhaarNumber || isAadhaarLoading ? 'not-allowed' : 'pointer', fontSize: '1rem', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
                       >
-                        {formData.aadhaarVerified ? (
-                          <><CheckCircle size={20} /> Verified</>
-                        ) : isAadhaarLoading ? (
-                          <><Loader size={20} className="animate-spin" /> Verifying...</>
-                        ) : (
-                          'Verify Aadhaar'
-                        )}
+                        {formData.aadhaarVerified ? <><CheckCircle size={20} /> Verified</> : isAadhaarLoading ? <><Loader size={20} className="animate-spin" /> Verifying...</> : 'Verify Aadhaar'}
                       </button>
                     </div>
                   ) : (
@@ -3448,14 +3322,7 @@ onDateSelect={async (dates) => {
                           accept="image/*,application/pdf"
                           onChange={handlePassportFileSelect}
                           disabled={formData.passportVerified || isPassportLoading}
-                          style={{ 
-                            width: '100%', 
-                            padding: '14px', 
-                            borderRadius: '6px', 
-                            border: '1px solid #ddd',
-                            background: formData.passportVerified ? '#e8f5e9' : 'white',
-                            cursor: formData.passportVerified || isPassportLoading ? 'not-allowed' : 'pointer'
-                          }}
+                          style={{ width: '100%', padding: '14px', borderRadius: '6px', border: '1px solid #ddd', background: formData.passportVerified ? '#e8f5e9' : 'white', cursor: formData.passportVerified || isPassportLoading ? 'not-allowed' : 'pointer' }}
                         />
                         {passportFile && (
                           <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666' }}>
@@ -3466,29 +3333,9 @@ onDateSelect={async (dates) => {
                       <button
                         onClick={handleVerifyPassport}
                         disabled={formData.passportVerified || !passportFile || isPassportLoading}
-                        style={{ 
-                          width: '100%', 
-                          padding: '14px', 
-                          background: formData.passportVerified ? '#22c55e' : '#8b0000', 
-                          color: 'white', 
-                          border: 'none', 
-                          borderRadius: '6px', 
-                          cursor: formData.passportVerified || !passportFile || isPassportLoading ? 'not-allowed' : 'pointer',
-                          fontSize: '1rem',
-                          fontWeight: '600',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '0.5rem'
-                        }}
+                        style={{ width: '100%', padding: '14px', background: formData.passportVerified ? '#22c55e' : '#8b0000', color: 'white', border: 'none', borderRadius: '6px', cursor: formData.passportVerified || !passportFile || isPassportLoading ? 'not-allowed' : 'pointer', fontSize: '1rem', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
                       >
-                        {formData.passportVerified ? (
-                          <><CheckCircle size={20} /> Verified</>
-                        ) : isPassportLoading ? (
-                          <><Loader size={20} className="animate-spin" /> Verifying...</>
-                        ) : (
-                          'Verify Passport'
-                        )}
+                        {formData.passportVerified ? <><CheckCircle size={20} /> Verified</> : isPassportLoading ? <><Loader size={20} className="animate-spin" /> Verifying...</> : 'Verify Passport'}
                       </button>
                       {passportError && <p style={{ color: 'red', marginTop: '1rem', fontSize: '0.9rem' }}>{passportError}</p>}
                     </div>
@@ -3503,15 +3350,7 @@ onDateSelect={async (dates) => {
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleFileDrop}
                     onClick={() => !isPhotoUploading && fileInputRef.current.click()}
-                    style={{ 
-                      padding: '4rem 2rem', 
-                      border: '3px dashed #ddd', 
-                      borderRadius: '12px', 
-                      textAlign: 'center', 
-                      cursor: isPhotoUploading ? 'not-allowed' : 'pointer', 
-                      background: '#f8fafc',
-                      transition: 'all 0.3s'
-                    }}
+                    style={{ padding: '4rem 2rem', border: '3px dashed #ddd', borderRadius: '12px', textAlign: 'center', cursor: isPhotoUploading ? 'not-allowed' : 'pointer', background: '#f8fafc', transition: 'all 0.3s' }}
                   >
                     {isPhotoUploading ? (
                       <div>
@@ -3526,32 +3365,13 @@ onDateSelect={async (dates) => {
                       </>
                     )}
                   </div>
-                  <input 
-                    type="file" 
-                    ref={fileInputRef} 
-                    style={{ display: 'none' }} 
-                    onChange={handleFileChange} 
-                    accept="image/*" 
-                  />
-                  
+                  <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} accept="image/*" />
                   {formData.uploadedPhoto && (
                     <div style={{ marginTop: '2rem', textAlign: 'center' }}>
                       <h3 style={{ marginBottom: '1rem' }}>Preview</h3>
                       <div style={{ display: 'inline-block', position: 'relative' }}>
-                        <img 
-                          src={formData.uploadedPhoto} 
-                          alt="Uploaded Preview" 
-                          style={{ maxWidth: '300px', maxHeight: '300px', borderRadius: '12px', border: '2px solid #22c55e' }} 
-                        />
-                        <div style={{ 
-                          position: 'absolute', 
-                          top: '10px', 
-                          right: '10px', 
-                          background: '#22c55e', 
-                          color: 'white', 
-                          padding: '8px', 
-                          borderRadius: '50%' 
-                        }}>
+                        <img src={formData.uploadedPhoto} alt="Uploaded Preview" style={{ maxWidth: '300px', maxHeight: '300px', borderRadius: '12px', border: '2px solid #22c55e' }} />
+                        <div style={{ position: 'absolute', top: '10px', right: '10px', background: '#22c55e', color: 'white', padding: '8px', borderRadius: '50%' }}>
                           <CheckCircle size={24} />
                         </div>
                       </div>
@@ -3571,7 +3391,6 @@ onDateSelect={async (dates) => {
                         {pricing.total.toFixed(2)}
                       </p>
                     </div>
-                    
                     <div style={{ marginBottom: '2rem', padding: '1rem', background: 'white', borderRadius: '8px', textAlign: 'left' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                         <span>Check-in:</span>
@@ -3586,39 +3405,18 @@ onDateSelect={async (dates) => {
                         <strong>{property.property_name}</strong>
                       </div>
                     </div>
-                    
                     <button
                       onClick={handlePayNow}
                       disabled={!isPayNowEnabled || isSubmitting}
-                      style={{ 
-                        width: '100%',
-                        padding: '18px', 
-                        background: isPayNowEnabled && !isSubmitting ? '#8b0000' : '#ccc', 
-                        color: 'white', 
-                        border: 'none', 
-                        borderRadius: '8px', 
-                        fontSize: '1.2rem', 
-                        cursor: isPayNowEnabled && !isSubmitting ? 'pointer' : 'not-allowed', 
-                        fontWeight: '700',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '0.75rem'
-                      }}
+                      style={{ width: '100%', padding: '18px', background: isPayNowEnabled && !isSubmitting ? '#8b0000' : '#ccc', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.2rem', cursor: isPayNowEnabled && !isSubmitting ? 'pointer' : 'not-allowed', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}
                     >
-                      {isSubmitting ? (
-                        <><Loader size={24} className="animate-spin" /> Processing Payment...</>
-                      ) : (
-                        <>Pay Now <FiShield size={24} /></>
-                      )}
+                      {isSubmitting ? <><Loader size={24} className="animate-spin" /> Processing Payment...</> : <>Pay Now <FiShield size={24} /></>}
                     </button>
-                    
                     {!isPayNowEnabled && (
                       <p style={{ marginTop: '1rem', color: '#ef4444', fontSize: '0.9rem' }}>
                         Please complete all previous steps to enable payment
                       </p>
                     )}
-                    
                     <p style={{ marginTop: '1.5rem', fontSize: '0.85rem', color: '#666' }}>
                       <FiShield style={{ display: 'inline', verticalAlign: 'middle' }} /> Secure payment powered by PayU
                     </p>
@@ -3627,42 +3425,15 @@ onDateSelect={async (dates) => {
               )}
             </div>
 
-            {/* Navigation Buttons */}
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '2px solid #eee' }}>
-              <button 
-                onClick={handlePrev} 
-                disabled={step === 1} 
-                style={{ 
-                  padding: '12px 32px', 
-                  background: step === 1 ? '#eee' : '#f8fafc', 
-                  border: '2px solid #ddd', 
-                  borderRadius: '8px', 
-                  cursor: step === 1 ? 'not-allowed' : 'pointer',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  color: step === 1 ? '#999' : '#333'
-                }}
-              >
+              <button onClick={handlePrev} disabled={step === 1} style={{ padding: '12px 32px', background: step === 1 ? '#eee' : '#f8fafc', border: '2px solid #ddd', borderRadius: '8px', cursor: step === 1 ? 'not-allowed' : 'pointer', fontSize: '1rem', fontWeight: '600', color: step === 1 ? '#999' : '#333' }}>
                 ← Previous
               </button>
-             {!(bookingType === 1 && ownerApprovalStatus === 'pending') && (
-  <button 
-    onClick={handleNext}
-    style={{ 
-      padding: '12px 32px',
-      background: '#8b0000',
-      color: 'white',
-      border: 'none',
-      borderRadius: '8px',
-      fontSize: '1rem',
-      fontWeight: '600',
-      cursor: 'pointer'
-    }}
-  >
-    Next →
-  </button>
-)}
-
+              {!(bookingType === 1 && ownerApprovalStatus === 'pending') && (
+                <button onClick={handleNext} style={{ padding: '12px 32px', background: '#8b0000', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer' }}>
+                  Next →
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -3694,15 +3465,7 @@ onDateSelect={async (dates) => {
         </div>
         <div className="thumbnail-strip">
           {photos.map((p, idx) => (
-            <div 
-              key={idx} 
-              className={`thumb-item ${activeImg === idx ? 'active' : ''}`} 
-              onClick={() => {
-                setActiveImg(idx);
-                handleThumbnailClick(idx);
-              }}
-              style={{ cursor: 'pointer' }}
-            >
+            <div key={idx} className={`thumb-item ${activeImg === idx ? 'active' : ''}`} onClick={() => { setActiveImg(idx); handleThumbnailClick(idx); }} style={{ cursor: 'pointer' }}>
               <img src={getPhotoUrl(p)} alt={`Thumb ${idx}`} />
             </div>
           ))}
@@ -3871,6 +3634,223 @@ onDateSelect={async (dates) => {
             )}
           </div>
 
+          {/* ✅ PROFESSIONAL GUIDEBOOK SECTION */}
+         {/* ✅ PROFESSIONAL GUIDEBOOK SECTION */}
+{property?.guidebook && (
+  <>
+    <div className="divider"></div>
+
+    <section className="gbWrap">
+      <div className="gbHeader">
+        <div>
+          <h3 className="gbTitle">Local Guide</h3>
+          <p className="gbSubTitle">
+            Helpful local information for your stay (transport, dining, essentials, places).
+          </p>
+        </div>
+      </div>
+
+      <div className="gbGrid">
+        {/* Transport */}
+        {property.guidebook?.transport_tips && (
+          <div className="gbCard">
+            <div className="gbCardHeader">
+              <div className="gbIconWrap">
+                <Car size={18} />
+              </div>
+              <div className="gbCardHeaderText">
+                <div className="gbCardTitle">Transport</div>
+                <div className="gbCardMeta">Getting around nearby</div>
+              </div>
+            </div>
+
+            <div className="gbRows">
+              {property.guidebook.transport_tips.taxi && (
+                <div className="gbRow">
+                  <div className="gbRowLeft">
+                    <MapPinIcon size={16} className="gbRowIcon" />
+                    <span className="gbRowLabel">Taxi / Cab</span>
+                  </div>
+                  <div className="gbRowValue">{property.guidebook.transport_tips.taxi}</div>
+                </div>
+              )}
+
+              {property.guidebook.transport_tips.parking && (
+                <div className="gbRow">
+                  <div className="gbRowLeft">
+                    <ParkingCircle size={16} className="gbRowIcon" />
+                    <span className="gbRowLabel">Parking</span>
+                  </div>
+                  <div className="gbRowValue">{property.guidebook.transport_tips.parking}</div>
+                </div>
+              )}
+
+              {property.guidebook.transport_tips.local_travel && (
+                <div className="gbRow">
+                  <div className="gbRowLeft">
+                    <Bus size={16} className="gbRowIcon" />
+                    <span className="gbRowLabel">Local Travel</span>
+                  </div>
+                  <div className="gbRowValue">{property.guidebook.transport_tips.local_travel}</div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Cafes & Restaurants */}
+        {Array.isArray(property.guidebook?.cafes_restaurants) &&
+          property.guidebook.cafes_restaurants.length > 0 && (
+            <div className="gbCard gbCardWide">
+              <div className="gbCardHeader">
+                <div className="gbIconWrap">
+                  <UtensilsCrossed size={18} />
+                </div>
+                <div className="gbCardHeaderText">
+                  <div className="gbCardTitle">Cafes & Restaurants</div>
+                  <div className="gbCardMeta">
+                    {property.guidebook.cafes_restaurants.length} nearby options
+                  </div>
+                </div>
+              </div>
+
+              <div className="gbTableWrap">
+                <table className="gbTable">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th className="gbThRight">Distance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {property.guidebook.cafes_restaurants.map((item, idx) => (
+                      <tr key={idx}>
+                        <td className="gbTdName">{item?.name || '-'}</td>
+                        <td className="gbTdRight">
+                          {typeof item?.distance_m === 'number'
+                            ? `${item.distance_m} m`
+                            : (item?.distance_m ?? '-')}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+        {/* Essentials */}
+        {property.guidebook?.essentials_nearby && (
+          <div className="gbCard">
+            <div className="gbCardHeader">
+              <div className="gbIconWrap">
+                <ShoppingBasket size={18} />
+              </div>
+              <div className="gbCardHeaderText">
+                <div className="gbCardTitle">Essentials Nearby</div>
+                <div className="gbCardMeta">Daily needs & services</div>
+              </div>
+            </div>
+
+            <div className="gbRows">
+              {property.guidebook.essentials_nearby.atm && (
+                <div className="gbRow">
+                  <div className="gbRowLeft">
+                    <Landmark size={16} className="gbRowIcon" />
+                    <span className="gbRowLabel">ATM</span>
+                  </div>
+                  <div className="gbRowValue">{property.guidebook.essentials_nearby.atm}</div>
+                </div>
+              )}
+
+              {property.guidebook.essentials_nearby.grocery && (
+                <div className="gbRow">
+                  <div className="gbRowLeft">
+                    <ShoppingBasket size={16} className="gbRowIcon" />
+                    <span className="gbRowLabel">Grocery</span>
+                  </div>
+                  <div className="gbRowValue">{property.guidebook.essentials_nearby.grocery}</div>
+                </div>
+              )}
+
+              {property.guidebook.essentials_nearby.medical && (
+                <div className="gbRow">
+                  <div className="gbRowLeft">
+                    <HeartPulse size={16} className="gbRowIcon" />
+                    <span className="gbRowLabel">Medical</span>
+                  </div>
+                  <div className="gbRowValue">{property.guidebook.essentials_nearby.medical}</div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Must Visit */}
+        {Array.isArray(property.guidebook?.must_visit_places) &&
+          property.guidebook.must_visit_places.length > 0 && (
+            <div className="gbCard">
+              <div className="gbCardHeader">
+                <div className="gbIconWrap">
+                  <MapPinIcon size={18} />
+                </div>
+                <div className="gbCardHeaderText">
+                  <div className="gbCardTitle">Must-Visit Places</div>
+                  <div className="gbCardMeta">
+                    {property.guidebook.must_visit_places.length} recommendations
+                  </div>
+                </div>
+              </div>
+
+              <div className="gbList">
+                {property.guidebook.must_visit_places.map((p, idx) => (
+                  <div className="gbListItem" key={idx}>
+                    <div className="gbListItemTop">
+                      <span className="gbListItemTitle">{p?.place || '-'}</span>
+                    </div>
+                    {p?.best_time && (
+                      <div className="gbListItemMeta">
+                        <Clock size={14} />
+                        <span>Best time: {p.best_time}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+        {/* House Tips */}
+        {Array.isArray(property.guidebook?.house_specific_tips) &&
+          property.guidebook.house_specific_tips.length > 0 && (
+            <div className="gbCard gbCardWide">
+              <div className="gbCardHeader">
+                <div className="gbIconWrap">
+                  <Lightbulb size={18} />
+                </div>
+                <div className="gbCardHeaderText">
+                  <div className="gbCardTitle">House Tips</div>
+                  <div className="gbCardMeta">
+                    {property.guidebook.house_specific_tips.length} tips from host
+                  </div>
+                </div>
+              </div>
+
+              <ul className="gbTips">
+                {property.guidebook.house_specific_tips.map((tip, idx) => (
+                  <li key={idx} className="gbTip">
+                    <span className="gbTipDot" />
+                    <span className="gbTipText">{tip}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+      </div>
+    </section>
+  </>
+)}
+
           <div className="divider"></div>
 
           <div style={{ margin: '2rem 0' }}>
@@ -3913,31 +3893,18 @@ onDateSelect={async (dates) => {
                     <span>₹{formatCurrency(total)}</span>
                   </div>
                 </div>
-                
-             
 
                 <div style={{ margin: '1.5rem 0' }}>
                   <button className="reserve-btn" onClick={handleReserveClick}>Reserve Now</button>
                   <p className="hint" style={{ marginBottom: 0 }}>You won't be charged yet</p>
                 </div>
- {bookingType === 1 && (
-  <div
-    style={{
-      marginTop: '8px',
-      padding: '10px',
-      background: '#fff7ed',
-      border: '1px solid #fed7aa',
-      borderRadius: '6px',
-      fontSize: '0.8rem',
-      color: '#92400e'
-    }}
-  >
-    ⚠️ <strong>Owner approval required</strong><br />
-    Please select your dates. The owner will confirm availability before you can book.
-  </div>
-)}
 
-
+                {bookingType === 1 && (
+                  <div style={{ marginTop: '8px', padding: '10px', background: '#fff7ed', border: '1px solid #fed7aa', borderRadius: '6px', fontSize: '0.8rem', color: '#92400e' }}>
+                    ⚠️ <strong>Owner approval required</strong><br />
+                    Please select your dates. The owner will confirm availability before you can book.
+                  </div>
+                )}
               </div>
 
               <div className="card-footer">
@@ -3967,3 +3934,4 @@ onDateSelect={async (dates) => {
 };
 
 export default PropertyDetailPage;
+
