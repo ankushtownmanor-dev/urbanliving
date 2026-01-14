@@ -3858,6 +3858,9 @@ const Tmx9PropertyForm = () => {
                   <label className="tmx9pf-label">Government ID / Business documents *</label>
                   <input type="file" accept="image/*,application/pdf" multiple onChange={handleIdFiles} className="tmx9pf-file" />
                   {renderError("idFiles")}
+                  <p style={{ fontSize: '13px', color: '#d32f2f', margin: '4px 0 0' }}>
+                     * Document size should be only 500KB.
+                  </p>
                   <div className="tmx9pf-muted">Files selected: {idFiles.length}</div>
                 </div>
               ) : (
