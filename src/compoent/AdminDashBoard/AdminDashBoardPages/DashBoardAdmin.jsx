@@ -94,11 +94,15 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
       const payload = {};
       if (formData.property_name) payload.property_name = formData.property_name;
       if (formData.description) payload.description = formData.description;
-      if (formData.price) payload.price = formData.price; // backend often accepts number or string
+      if (formData.price) payload.price = formData.price;
 
       // Address fields
       if (formData.address) payload.address = formData.address;
       if (formData.city) payload.city = formData.city;
+
+      // Send complex objects (arrays) as JSON strings
+      if (formData.bedrooms) payload.bedrooms = JSON.stringify(formData.bedrooms); 
+      if (formData.bathrooms) payload.bathrooms = JSON.stringify(formData.bathrooms);
 
       // Core fields requested
       if (Number(formData.weekendRate)) payload.weekend_rate = formData.weekendRate;
@@ -108,6 +112,8 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
       if (formData.area) payload.area = formData.area;
       if (formData.checkInTime) payload.check_in_time = formData.checkInTime;
       if (formData.checkOutTime) payload.check_out_time = formData.checkOutTime;
+      if (formData.cancellationPolicy) payload.cancellation_policy = formData.cancellationPolicy;
+      if (formData.beds) payload.beds = formData.beds;
 
       // Meta: only send if necessary. Often backend adds 'meta' column last.
       // We will skip sending meta for now to test if it resolves the Syntax Error. 
@@ -148,6 +154,22 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
   const labelStyle = { fontSize: '13px', fontWeight: '600', color: '#555' };
   const btnGroupStyle = { display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '12px' };
   const btnStyle = { padding: '10px 20px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: '500' };
+  const dynamicRowStyle = { display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' };
+
+  // Simple handlers for dynamic lists
+  const handleAddList = (field) => {
+      setFormData(prev => ({ ...prev, [field]: [...(prev[field]||[]), { type: "", count: 1 }] }));
+  };
+  const handleRemoveList = (field, idx) => {
+      setFormData(prev => ({ ...prev, [field]: (prev[field]||[]).filter((_, i) => i !== idx) }));
+  };
+  const handleListChange = (field, idx, key, val) => {
+      setFormData(prev => {
+          const list = [...(prev[field]||[])];
+          list[idx] = { ...list[idx], [key]: val };
+          return { ...prev, [field]: list };
+      });
+  };
 
   return (
     <div style={modalOverlayStyle}>
@@ -180,6 +202,91 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
                 <label style={labelStyle}>Area (sq ft)</label>
                 <input name="area" type="number" value={formData.area} onChange={handleChange} style={inputStyle} />
              </div>
+        </div>
+
+        {/* Bedroom Configuration */}
+        <div style={{ marginBottom: '16px' }}>
+            <label style={labelStyle}>Bedroom Configuration</label>
+            <div style={{ border: '1px solid #ddd', padding: '12px', borderRadius: '8px', background: '#fafafa' }}>
+                {(formData.bedrooms || []).map((bed, idx) => (
+                    <div key={idx} style={dynamicRowStyle}>
+                         <select
+                            value={bed.type || ""} 
+                            onChange={(e) => handleListChange('bedrooms', idx, 'type', e.target.value)}
+                            style={{ ...inputStyle, margin: 0, flex: 2 }} 
+                         >
+                            <option value="">Select Bed Type</option>
+                            {["King Bed", "Queen Bed", "Double Bed", "Single Bed", "Bunk Bed", "Sofa Bed"].map(opt => (
+                              <option key={opt} value={opt}>{opt}</option>
+                            ))}
+                         </select>
+                         <input 
+                            type="number" 
+                            min="1"
+                            placeholder="Count" 
+                            value={bed.count || 1} 
+                            onChange={(e) => handleListChange('bedrooms', idx, 'count', Number(e.target.value))}
+                            style={{ ...inputStyle, margin: 0, flex: 1 }} 
+                         />
+                         <button onClick={() => handleRemoveList('bedrooms', idx)} style={{ color: '#ef4444', border: '1px solid #ef4444', background: '#fff', borderRadius: '4px', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <i className="fa-solid fa-times" />
+                         </button>
+                    </div>
+                ))}
+                <button 
+                  onClick={() => handleAddList('bedrooms')} 
+                  style={{ ...btnStyle, background: '#fff', border: '1px dashed #999', color: '#555', fontSize: '13px', padding: '8px 16px', width: '100%' }}
+                >
+                  + Add Bedroom Type
+                </button>
+            </div>
+             
+             {/* Total Beds */}
+             <div style={{ marginTop: '12px' }}>
+                <label style={labelStyle}>Total Beds *</label>
+                <input name="beds" type="number" min="1" value={formData.beds} onChange={handleChange} style={inputStyle} />
+             </div>
+        </div>
+
+        {/* Bathroom Configuration */}
+        <div style={{ marginBottom: '16px' }}>
+            <label style={labelStyle}>Bathroom Configuration</label>
+             <div style={{ border: '1px solid #ddd', padding: '12px', borderRadius: '8px', background: '#fafafa' }}>
+                {(formData.bathrooms || []).map((bath, idx) => (
+                    <div key={idx} style={dynamicRowStyle}>
+                         <select 
+                            value={bath.type || ""} 
+                            onChange={(e) => handleListChange('bathrooms', idx, 'type', e.target.value)}
+                            style={{ ...inputStyle, margin: 0, flex: 2 }} 
+                         >
+                            <option value="">Select Bath Type</option>
+                            <option value="Attached">Attached</option>
+                            <option value="Common">Common</option>
+                            <option value="En-suite">En-suite</option>
+                            <option value="Jack & Jill">Jack & Jill</option>
+                            <option value="Separate">Separate</option>
+                            <option value="Other">Other</option>
+                         </select>
+                         <input 
+                            type="number" 
+                            min="1"
+                            placeholder="Count" 
+                            value={bath.count || 1} 
+                            onChange={(e) => handleListChange('bathrooms', idx, 'count', Number(e.target.value))}
+                            style={{ ...inputStyle, margin: 0, flex: 1 }} 
+                         />
+                         <button onClick={() => handleRemoveList('bathrooms', idx)} style={{ color: '#ef4444', border: '1px solid #ef4444', background: '#fff', borderRadius: '4px', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <i className="fa-solid fa-times" />
+                         </button>
+                    </div>
+                ))}
+                <button 
+                  onClick={() => handleAddList('bathrooms')} 
+                  style={{ ...btnStyle, background: '#fff', border: '1px dashed #999', color: '#555', fontSize: '13px', padding: '8px 16px', width: '100%' }}
+                >
+                  + Add Bathroom Type
+                </button>
+            </div>
         </div>
 
         {/* 3. Price */}
