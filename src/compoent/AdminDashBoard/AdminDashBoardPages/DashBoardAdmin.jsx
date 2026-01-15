@@ -68,6 +68,7 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
     cleaningFee: getMeta('cleaningFee'),
     weeklyDiscountPct: getMeta('weeklyDiscountPct'),
     maxGuests: getMeta('maxGuests', 1),
+    area: property.area || getMeta('area') || "",
     // Address fields
     address: property.address || "",
     city: property.city || "",
@@ -102,6 +103,7 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
       if (Number(formData.cleaningFee)) payload.cleaning_fee = formData.cleaningFee;
       if (Number(formData.weeklyDiscountPct)) payload.weekly_discount_pct = formData.weeklyDiscountPct;
       if (Number(formData.maxGuests)) payload.max_guests = formData.maxGuests;
+      if (formData.area) payload.area = formData.area;
 
       // Meta: only send if necessary. Often backend adds 'meta' column last.
       // We will skip sending meta for now to test if it resolves the Syntax Error. 
@@ -160,8 +162,8 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
            <textarea name="description" value={formData.description} onChange={handleChange} rows={3} style={{ ...inputStyle, fontFamily: 'inherit' }} />
         </div>
 
-        {/* 2.5. Address & City */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+        {/* 2.5. Address & City & Area */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
              <div>
                 <label style={labelStyle}>Address</label>
                 <input name="address" value={formData.address} onChange={handleChange} style={inputStyle} />
@@ -169,6 +171,10 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
              <div>
                 <label style={labelStyle}>City</label>
                 <input name="city" value={formData.city} onChange={handleChange} style={inputStyle} />
+             </div>
+             <div>
+                <label style={labelStyle}>Area (sq ft)</label>
+                <input name="area" type="number" value={formData.area} onChange={handleChange} style={inputStyle} />
              </div>
         </div>
 
