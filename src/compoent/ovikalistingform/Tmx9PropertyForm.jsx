@@ -2969,10 +2969,19 @@ const Tmx9PropertyForm = () => {
   const [insurance, setInsurance] = useState(false);
   const [damageProtection, setDamageProtection] = useState(false);
 
-  const [idMethod, setIdMethod] = useState("file");
+  const [idMethod, setIdMethod] = useState("aadhaar");
   const [aadhaarNumber, setAadhaarNumber] = useState("");
   const [aadhaarVerified, setAadhaarVerified] = useState(false);
   const [isVerifyingAadhaar, setIsVerifyingAadhaar] = useState(false);
+
+  // Phone Verification State
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneOtp, setPhoneOtp] = useState("");
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpClientId, setOtpClientId] = useState(null);
 
   const STEPS = [
     { id: 1, title: "Basic & Description" },
@@ -3041,8 +3050,7 @@ const Tmx9PropertyForm = () => {
     }
 
     if (s === 5) {
-      if (idMethod === "file" && idFiles.length === 0) newErrors.idFiles = "Please upload ID documents or Verify Aadhaar";
-      if (idMethod === "aadhaar" && !aadhaarVerified) newErrors.idFiles = "Please verify your Aadhaar number";
+      if (!aadhaarVerified) newErrors.idFiles = "Please verify your Aadhaar number";
     }
 
     setErrors(newErrors);
@@ -3175,6 +3183,71 @@ const Tmx9PropertyForm = () => {
       alert("Verification Error. Please try again or use file upload.");
     } finally {
       setIsVerifyingAadhaar(false);
+    }
+  };
+
+  const sendPhoneOtp = async () => {
+    if (!phoneNumber || phoneNumber.length < 10) {
+      alert("Please enter a valid phone number");
+      return;
+    }
+    setIsSendingOtp(true);
+    try {
+      const res = await fetch("https://kyc-api.surepass.app/api/v1/telecom/generate-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg"
+        },
+        body: JSON.stringify({ id_number: phoneNumber })
+      });
+      
+      const data = await res.json();
+      
+      if (data.success || data.status_code === 200) {
+        setOtpSent(true);
+        setOtpClientId(data.data?.client_id || data.client_id); 
+        alert("OTP Sent Successfully!");
+      } else {
+        alert("Failed to send OTP: " + (data.message || "Unknown error"));
+      }
+    } catch (err) {
+      console.error("Phone OTP error", err);
+      alert("Error sending OTP. Please try again.");
+    } finally {
+      setIsSendingOtp(false);
+    }
+  };
+
+  const verifyPhoneOtp = async () => {
+    if (!phoneOtp) return;
+    setIsVerifyingOtp(true);
+    try {
+      const res = await fetch("https://kyc-api.surepass.app/api/v1/telecom/submit-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg"
+        },
+        body: JSON.stringify({ client_id: otpClientId, otp: phoneOtp })
+      });
+      
+      const data = await res.json();
+      
+      if (data.success || data.status_code === 200) {
+        setIsPhoneVerified(true);
+        setOtpSent(false);
+        setErrors(prev => ({ ...prev, phone: undefined }));
+        alert("Phone Verified Successfully!");
+      } else {
+        setIsPhoneVerified(false);
+        alert("Verification Failed: " + (data.message || "Invalid OTP"));
+      }
+    } catch (err) {
+      console.error("Phone verification error", err);
+      alert("Verification Error. Please try again.");
+    } finally {
+      setIsVerifyingOtp(false);
     }
   };
 
@@ -3334,6 +3407,7 @@ const Tmx9PropertyForm = () => {
         localCompliance: form.localCompliance,
         ownerId: ownerId,
         identityVerification: aadhaarVerified ? { type: "aadhaar", number: aadhaarNumber } : { type: "file" },
+        phoneVerification: isPhoneVerified ? { number: phoneNumber } : null,
         guidebook: guidebook
       };
       fd.append("meta", JSON.stringify(meta));
@@ -3840,70 +3914,139 @@ const Tmx9PropertyForm = () => {
             <div className="tmx9pf-grid">
               
               <div className="tmx9pf-field full">
-                <label className="tmx9pf-label">Identity Verification Method *</label>
-                <div style={{ display: 'flex', gap: '20px', marginBottom: '16px' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '8px' }}>
-                    <input type="radio" name="idMethod" value="file" checked={idMethod === "file"} onChange={() => setIdMethod("file")} />
-                    Upload Documents
-                  </label>
-                  <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '8px' }}>
-                    <input type="radio" name="idMethod" value="aadhaar" checked={idMethod === "aadhaar"} onChange={() => setIdMethod("aadhaar")} />
-                    Verify Aadhaar Number (Instant)
-                  </label>
-                </div>
+                <label className="tmx9pf-label">Identity Verification *</label>
               </div>
 
-              {idMethod === "file" ? (
-                <div className="tmx9pf-field full">
-                  <label className="tmx9pf-label">Government ID / Business documents *</label>
-                  <input type="file" accept="image/*,application/pdf" multiple onChange={handleIdFiles} className="tmx9pf-file" />
-                  {renderError("idFiles")}
-                  <p style={{ fontSize: '13px', color: '#d32f2f', margin: '4px 0 0' }}>
-                     * Document size should be only 500KB.
-                  </p>
-                  <div className="tmx9pf-muted">Files selected: {idFiles.length}</div>
+              <div className="tmx9pf-field full" style={{ background: '#f8fafc', padding: '16px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                <label className="tmx9pf-label">Enter Aadhaar Number *</label>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                  <div style={{ flex: 1 }}>
+                    <input 
+                      type="text" 
+                      maxLength="12"
+                      placeholder="12-digit Aadhaar Number" 
+                      value={aadhaarNumber} 
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, '').slice(0, 12);
+                        setAadhaarNumber(val);
+                        if (aadhaarVerified) setAadhaarVerified(false); // Reset verification on change
+                      }}
+                      className={`tmx9pf-input ${errors.idFiles ? "tmx9pf-input--error" : ""}`}
+                      disabled={aadhaarVerified}
+                      style={{ borderColor: aadhaarVerified ? '#22c55e' : '' }}
+                    />
+                    {renderError("idFiles")}
+                  </div>
+                  <button 
+                    type="button" 
+                    onClick={verifyAadhaar} 
+                    disabled={aadhaarVerified || isVerifyingAadhaar || aadhaarNumber.length !== 12}
+                    className="tmx9pf-small-btn"
+                    style={{ 
+                      height: '42px', 
+                      padding: '0 20px', 
+                      background: aadhaarVerified ? '#22c55e' : '#3b82f6', 
+                      color: 'white', 
+                      border: 'none',
+                      cursor: (aadhaarVerified || isVerifyingAadhaar) ? 'default' : 'pointer'
+                    }}
+                  >
+                    {isVerifyingAadhaar ? "Verifying..." : aadhaarVerified ? "Verified ✓" : "Verify Now"}
+                  </button>
                 </div>
-              ) : (
-                                <div className="tmx9pf-field full" style={{ background: '#f8fafc', padding: '16px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                    <label className="tmx9pf-label">Enter Aadhaar Number *</label>
-                    <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                      <div style={{ flex: 1 }}>
-                       <input 
-                          type="text" 
-                          maxLength="12"
-                          placeholder="12-digit Aadhaar Number" 
-                          value={aadhaarNumber} 
-                          onChange={(e) => {
-                            const val = e.target.value.replace(/\D/g, '').slice(0, 12);
-                            setAadhaarNumber(val);
-                            if (aadhaarVerified) setAadhaarVerified(false); // Reset verification on change
-                          }}
-                          className={`tmx9pf-input ${errors.idFiles ? "tmx9pf-input--error" : ""}`}
-                          disabled={aadhaarVerified}
-                          style={{ borderColor: aadhaarVerified ? '#22c55e' : '' }}
-                        />
-                        {renderError("idFiles")}
-                     </div>
-                     <button 
+                {aadhaarVerified && <p style={{ color: '#166534', fontSize: '13px', marginTop: '8px' }}>✓ Aadhaar verification successful. You can proceed.</p>}
+              </div>
+
+
+
+              {/* Phone Verification Section */}
+              <div className="tmx9pf-field full" style={{ background: '#f8fafc', padding: '16px', borderRadius: '8px', border: '1px solid #e2e8f0', marginTop: '16px' }}>
+                <label className="tmx9pf-label">Phone Verification *</label>
+                <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
+                  
+                  {/* Phone Input Row */}
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center', width: '100%' }}>
+                    <input 
+                      type="text" 
+                      maxLength="10"
+                      placeholder="10-digit Phone Number" 
+                      value={phoneNumber} 
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                        setPhoneNumber(val);
+                        if (isPhoneVerified) setIsPhoneVerified(false);
+                        if (otpSent) setOtpSent(false); // Reset OTP flow if number changes
+                      }}
+                      className={`tmx9pf-input`}
+                      disabled={isPhoneVerified || otpSent}
+                      style={{ flex: 1, borderColor: isPhoneVerified ? '#22c55e' : '' }}
+                    />
+                    
+                    {!otpSent && !isPhoneVerified && (
+                      <button 
                         type="button" 
-                        onClick={verifyAadhaar} 
-                        disabled={aadhaarVerified || isVerifyingAadhaar || aadhaarNumber.length !== 12}
+                        onClick={sendPhoneOtp}
+                        disabled={isSendingOtp || phoneNumber.length !== 10}
                         className="tmx9pf-small-btn"
                         style={{ 
                           height: '42px', 
                           padding: '0 20px', 
-                          background: aadhaarVerified ? '#22c55e' : '#3b82f6', 
+                          whiteSpace: 'nowrap',
+                          background: '#3b82f6', 
                           color: 'white', 
                           border: 'none',
-                          cursor: (aadhaarVerified || isVerifyingAadhaar) ? 'default' : 'pointer'
+                          cursor: (isSendingOtp || phoneNumber.length !== 10) ? 'default' : 'pointer',
+                          opacity: (isSendingOtp || phoneNumber.length !== 10) ? 0.7 : 1
                         }}
-                     >
-                       {isVerifyingAadhaar ? "Verifying..." : aadhaarVerified ? "Verified ✓" : "Verify Now"}
-                     </button>
-                   </div>
-                   {aadhaarVerified && <p style={{ color: '#166534', fontSize: '13px', marginTop: '8px' }}>✓ Aadhaar verification successful. You can proceed.</p>}
+                      >
+                        {isSendingOtp ? "Sending..." : "Send OTP"}
+                      </button>
+                    )}
+
+                    {isPhoneVerified && (
+                      <span style={{ color: '#166534', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                        ✓ Verified
+                      </span>
+                    )}
+                  </div>
+
+                  {/* OTP Input Row */}
+                  {otpSent && !isPhoneVerified && (
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center', width: '100%', marginTop: '10px' }}>
+                      <input 
+                        type="text" 
+                        maxLength="6"
+                        placeholder="Enter OTP" 
+                        value={phoneOtp} 
+                        onChange={(e) => setPhoneOtp(e.target.value.replace(/\D/g, ''))}
+                        className="tmx9pf-input"
+                        style={{ flex: 1 }}
+                      />
+                      <button 
+                        type="button" 
+                        onClick={verifyPhoneOtp}
+                        disabled={isVerifyingOtp || phoneOtp.length < 4}
+                        className="tmx9pf-small-btn"
+                        style={{ 
+                          height: '42px', 
+                          padding: '0 20px', 
+                          whiteSpace: 'nowrap',
+                          background: '#10b981', 
+                          color: 'white', 
+                          border: 'none',
+                          cursor: (isVerifyingOtp || phoneOtp.length < 4) ? 'default' : 'pointer',
+                          opacity: (isVerifyingOtp || phoneOtp.length < 4) ? 0.7 : 1
+                        }}
+                      >
+                        {isVerifyingOtp ? "Verifying..." : "Verify OTP"}
+                      </button>
+                    </div>
+                  )}
+                  
+                  {isPhoneVerified && <p style={{ color: '#166534', fontSize: '13px', margin: 0 }}>✓ Phone number verified successfully.</p>}
+                  
                 </div>
-              )}
+              </div>
 
               <div className="tmx9pf-field">
                 <label className="tmx9pf-label">Selfie verification (optional)</label>
