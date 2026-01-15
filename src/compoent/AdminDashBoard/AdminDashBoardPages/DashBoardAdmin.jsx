@@ -69,6 +69,8 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
     weeklyDiscountPct: getMeta('weeklyDiscountPct'),
     maxGuests: getMeta('maxGuests', 1),
     area: property.area || getMeta('area') || "",
+    checkInTime: property.check_in_time || getMeta('checkInTime') || "",
+    checkOutTime: property.check_out_time || getMeta('checkOutTime') || "",
     // Address fields
     address: property.address || "",
     city: property.city || "",
@@ -104,6 +106,8 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
       if (Number(formData.weeklyDiscountPct)) payload.weekly_discount_pct = formData.weeklyDiscountPct;
       if (Number(formData.maxGuests)) payload.max_guests = formData.maxGuests;
       if (formData.area) payload.area = formData.area;
+      if (formData.checkInTime) payload.check_in_time = formData.checkInTime;
+      if (formData.checkOutTime) payload.check_out_time = formData.checkOutTime;
 
       // Meta: only send if necessary. Often backend adds 'meta' column last.
       // We will skip sending meta for now to test if it resolves the Syntax Error. 
@@ -184,10 +188,20 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
            <input name="price" type="number" value={formData.price} onChange={handleChange} style={inputStyle} />
         </div>
 
-        {/* 4. Weekly Price (Using Weekend Rate logic if that's the intention, or just a new field) */}
-        <div>
-           <label style={labelStyle}>Weekend/Weekly Rate</label>
-           <input name="weekendRate" type="number" value={formData.weekendRate} onChange={handleChange} style={inputStyle} placeholder="Optional" />
+        {/* 4. Weekly Price & Check-in/out */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
+           <div>
+              <label style={labelStyle}>Weekend Rate</label>
+              <input name="weekendRate" type="number" value={formData.weekendRate} onChange={handleChange} style={inputStyle} placeholder="Optional" />
+           </div>
+           <div>
+              <label style={labelStyle}>Check-in Time</label>
+              <input name="checkInTime" value={formData.checkInTime} onChange={handleChange} style={inputStyle} placeholder="e.g. 03:00 PM" />
+           </div>
+           <div>
+              <label style={labelStyle}>Check-out Time</label>
+              <input name="checkOutTime" value={formData.checkOutTime} onChange={handleChange} style={inputStyle} placeholder="e.g. 11:00 AM" />
+           </div>
         </div>
 
         {/* 5. Cleaning Cost */}
