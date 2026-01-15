@@ -2140,13 +2140,349 @@ async function getCalendar(propertyKey) {
 }
 
 // IMAGE VIEWER COMPONENT
+// const ImageViewer = ({ images, initialIndex, onClose }) => {
+//   const [currentIndex, setCurrentIndex] = useState(initialIndex);
+//   const [scale, setScale] = useState(1);
+//   const [position, setPosition] = useState({ x: 0, y: 0 });
+//   const [isDragging, setIsDragging] = useState(false);
+//   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+//   const imageRef = useRef(null);
+
+//   useEffect(() => {
+//     const handleKeyDown = (e) => {
+//       if (e.key === 'Escape') onClose();
+//       if (e.key === 'ArrowLeft') handlePrevImage();
+//       if (e.key === 'ArrowRight') handleNextImage();
+//     };
+//     window.addEventListener('keydown', handleKeyDown);
+//     return () => window.removeEventListener('keydown', handleKeyDown);
+//   }, [currentIndex]);
+
+//   useEffect(() => {
+//     setScale(1);
+//     setPosition({ x: 0, y: 0 });
+//   }, [currentIndex]);
+
+//   const handleNextImage = () => {
+//     if (currentIndex < images.length - 1) {
+//       setCurrentIndex(currentIndex + 1);
+//     }
+//   };
+
+//   const handlePrevImage = () => {
+//     if (currentIndex > 0) {
+//       setCurrentIndex(currentIndex - 1);
+//     }
+//   };
+
+//   const handleZoomIn = () => {
+//     setScale(prev => Math.min(prev + 0.5, 4));
+//   };
+
+//   const handleZoomOut = () => {
+//     setScale(prev => {
+//       const newScale = Math.max(prev - 0.5, 1);
+//       if (newScale === 1) {
+//         setPosition({ x: 0, y: 0 });
+//       }
+//       return newScale;
+//     });
+//   };
+
+//   const handleMouseDown = (e) => {
+//     if (scale > 1) {
+//       setIsDragging(true);
+//       setDragStart({
+//         x: e.clientX - position.x,
+//         y: e.clientY - position.y
+//       });
+//     }
+//   };
+
+//   const handleMouseMove = (e) => {
+//     if (isDragging && scale > 1) {
+//       setPosition({
+//         x: e.clientX - dragStart.x,
+//         y: e.clientY - dragStart.y
+//       });
+//     }
+//   };
+
+//   const handleMouseUp = () => {
+//     setIsDragging(false);
+//   };
+
+//   const handleTouchStart = (e) => {
+//     if (scale > 1 && e.touches.length === 1) {
+//       setIsDragging(true);
+//       setDragStart({
+//         x: e.touches[0].clientX - position.x,
+//         y: e.touches[0].clientY - position.y
+//       });
+//     }
+//   };
+
+//   const handleTouchMove = (e) => {
+//     if (isDragging && scale > 1 && e.touches.length === 1) {
+//       setPosition({
+//         x: e.touches[0].clientX - dragStart.x,
+//         y: e.touches[0].clientY - dragStart.y
+//       });
+//     }
+//   };
+
+//   const handleTouchEnd = () => {
+//     setIsDragging(false);
+//   };
+
+//   return (
+//     <div 
+//       style={{
+//         position: 'fixed',
+//         top: 0,
+//         left: 0,
+//         right: 0,
+//         bottom: 0,
+//         background: 'rgba(0, 0, 0, 0.95)',
+//         zIndex: 10000,
+//         display: 'flex',
+//         alignItems: 'center',
+//         justifyContent: 'center',
+//         flexDirection: 'column'
+//       }}
+//       onMouseMove={handleMouseMove}
+//       onMouseUp={handleMouseUp}
+//       onTouchMove={handleTouchMove}
+//       onTouchEnd={handleTouchEnd}
+//     >
+//       <div style={{
+//         position: 'absolute',
+//         top: 0,
+//         left: 0,
+//         right: 0,
+//         padding: '1rem 1.5rem',
+//         background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), transparent)',
+//         display: 'flex',
+//         justifyContent: 'space-between',
+//         alignItems: 'center',
+//         zIndex: 10001
+//       }}>
+//         <span style={{ color: 'white', fontSize: '1rem', fontWeight: '500' }}>
+//           {currentIndex + 1} / {images.length}
+//         </span>
+//         <button 
+//           onClick={onClose}
+//           style={{
+//             background: 'rgba(255,255,255,0.2)',
+//             border: 'none',
+//             borderRadius: '50%',
+//             width: '40px',
+//             height: '40px',
+//             display: 'flex',
+//             alignItems: 'center',
+//             justifyContent: 'center',
+//             cursor: 'pointer',
+//             color: 'white',
+//             fontSize: '1.5rem'
+//           }}
+//         >
+//           <FiX />
+//         </button>
+//       </div>
+
+//       <div 
+//         style={{
+//           flex: 1,
+//           display: 'flex',
+//           alignItems: 'center',
+//           justifyContent: 'center',
+//           width: '100%',
+//           overflow: 'hidden',
+//           cursor: scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default'
+//         }}
+//         onMouseDown={handleMouseDown}
+//         onTouchStart={handleTouchStart}
+//       >
+//         <img
+//           ref={imageRef}
+//           src={getPhotoUrl(images[currentIndex])}
+//           alt={`Property ${currentIndex + 1}`}
+//           style={{
+//             maxWidth: scale === 1 ? '90%' : 'none',
+//             maxHeight: scale === 1 ? '90%' : 'none',
+//             width: scale > 1 ? `${scale * 100}%` : 'auto',
+//             height: 'auto',
+//             objectFit: 'contain',
+//             transform: `translate(${position.x}px, ${position.y}px)`,
+//             transition: isDragging ? 'none' : 'transform 0.3s ease',
+//             userSelect: 'none',
+//             pointerEvents: scale > 1 ? 'auto' : 'none'
+//           }}
+//           draggable={false}
+//         />
+//       </div>
+
+//       <div style={{
+//         position: 'absolute',
+//         bottom: '2rem',
+//         left: '50%',
+//         transform: 'translateX(-50%)',
+//         display: 'flex',
+//         gap: '1rem',
+//         alignItems: 'center',
+//         background: 'rgba(0,0,0,0.7)',
+//         padding: '1rem 1.5rem',
+//         borderRadius: '50px',
+//         backdropFilter: 'blur(10px)'
+//       }}>
+//         <button
+//           onClick={handleZoomOut}
+//           disabled={scale <= 1}
+//           style={{
+//             background: scale <= 1 ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.2)',
+//             border: 'none',
+//             borderRadius: '50%',
+//             width: '44px',
+//             height: '44px',
+//             display: 'flex',
+//             alignItems: 'center',
+//             justifyContent: 'center',
+//             cursor: scale <= 1 ? 'not-allowed' : 'pointer',
+//             color: 'white',
+//             fontSize: '1.2rem',
+//             transition: 'background 0.2s'
+//           }}
+//         >
+//           <FiZoomOut />
+//         </button>
+
+//         <span style={{
+//           color: 'white',
+//           fontSize: '0.9rem',
+//           fontWeight: '500',
+//           minWidth: '60px',
+//           textAlign: 'center'
+//         }}>
+//           {Math.round(scale * 100)}%
+//         </span>
+
+//         <button
+//           onClick={handleZoomIn}
+//           disabled={scale >= 4}
+//           style={{
+//             background: scale >= 4 ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.2)',
+//             border: 'none',
+//             borderRadius: '50%',
+//             width: '44px',
+//             height: '44px',
+//             display: 'flex',
+//             alignItems: 'center',
+//             justifyContent: 'center',
+//             cursor: scale >= 4 ? 'not-allowed' : 'pointer',
+//             color: 'white',
+//             fontSize: '1.2rem',
+//             transition: 'background 0.2s'
+//           }}
+//         >
+//           <FiZoomIn />
+//         </button>
+//       </div>
+
+//       {currentIndex > 0 && (
+//         <button
+//           onClick={handlePrevImage}
+//           style={{
+//             position: 'absolute',
+//             left: '1rem',
+//             top: '50%',
+//             transform: 'translateY(-50%)',
+//             background: 'rgba(0,0,0,0.5)',
+//             border: 'none',
+//             borderRadius: '50%',
+//             width: '50px',
+//             height: '50px',
+//             display: 'flex',
+//             alignItems: 'center',
+//             justifyContent: 'center',
+//             cursor: 'pointer',
+//             color: 'white',
+//             fontSize: '1.5rem',
+//             backdropFilter: 'blur(10px)'
+//           }}
+//         >
+//           <ChevronLeft size={28} />
+//         </button>
+//       )}
+
+//       {currentIndex < images.length - 1 && (
+//         <button
+//           onClick={handleNextImage}
+//           style={{
+//             position: 'absolute',
+//             right: '1rem',
+//             top: '50%',
+//             transform: 'translateY(-50%)',
+//             background: 'rgba(0,0,0,0.5)',
+//             border: 'none',
+//             borderRadius: '50%',
+//             width: '50px',
+//             height: '50px',
+//             display: 'flex',
+//             alignItems: 'center',
+//             justifyContent: 'center',
+//             cursor: 'pointer',
+//             color: 'white',
+//             fontSize: '1.5rem',
+//             backdropFilter: 'blur(10px)'
+//           }}
+//         >
+//           <ChevronRight size={28} />
+//         </button>
+//       )}
+
+//       <div style={{
+//         position: 'absolute',
+//         bottom: '6rem',
+//         left: '50%',
+//         transform: 'translateX(-50%)',
+//         display: 'flex',
+//         gap: '0.5rem',
+//         padding: '0.75rem',
+//         background: 'rgba(0,0,0,0.7)',
+//         borderRadius: '12px',
+//         maxWidth: '90%',
+//         overflowX: 'auto',
+//         backdropFilter: 'blur(10px)'
+//       }}>
+//         {images.map((img, idx) => (
+//           <img
+//             key={idx}
+//             src={getPhotoUrl(img)}
+//             alt={`Thumbnail ${idx + 1}`}
+//             onClick={() => setCurrentIndex(idx)}
+//             style={{
+//               width: '60px',
+//               height: '60px',
+//               objectFit: 'cover',
+//               borderRadius: '6px',
+//               cursor: 'pointer',
+//               border: currentIndex === idx ? '3px solid #8b0000' : '3px solid transparent',
+//               opacity: currentIndex === idx ? 1 : 0.6,
+//               transition: 'all 0.2s'
+//             }}
+//           />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+// IMAGE VIEWER COMPONENT (responsive — no overflow on mobile)
 const ImageViewer = ({ images, initialIndex, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const imageRef = useRef(null);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -2156,6 +2492,7 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex]);
 
   useEffect(() => {
@@ -2164,27 +2501,19 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
   }, [currentIndex]);
 
   const handleNextImage = () => {
-    if (currentIndex < images.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
+    if (currentIndex < images.length - 1) setCurrentIndex(currentIndex + 1);
   };
 
   const handlePrevImage = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
+    if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
   };
 
-  const handleZoomIn = () => {
-    setScale(prev => Math.min(prev + 0.5, 4));
-  };
+  const handleZoomIn = () => setScale((prev) => Math.min(prev + 0.5, 4));
 
   const handleZoomOut = () => {
-    setScale(prev => {
+    setScale((prev) => {
       const newScale = Math.max(prev - 0.5, 1);
-      if (newScale === 1) {
-        setPosition({ x: 0, y: 0 });
-      }
+      if (newScale === 1) setPosition({ x: 0, y: 0 });
       return newScale;
     });
   };
@@ -2208,9 +2537,7 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
     }
   };
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
+  const handleMouseUp = () => setIsDragging(false);
 
   const handleTouchStart = (e) => {
     if (scale > 1 && e.touches.length === 1) {
@@ -2231,245 +2558,76 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
     }
   };
 
-  const handleTouchEnd = () => {
-    setIsDragging(false);
-  };
+  const handleTouchEnd = () => setIsDragging(false);
 
   return (
-    <div 
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: 'rgba(0, 0, 0, 0.95)',
-        zIndex: 10000,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column'
-      }}
+    <div
+      className="ivOverlay"
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        padding: '1rem 1.5rem',
-        background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), transparent)',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        zIndex: 10001
-      }}>
-        <span style={{ color: 'white', fontSize: '1rem', fontWeight: '500' }}>
+      <div className="ivTopbar">
+        <span className="ivCounter">
           {currentIndex + 1} / {images.length}
         </span>
-        <button 
-          onClick={onClose}
-          style={{
-            background: 'rgba(255,255,255,0.2)',
-            border: 'none',
-            borderRadius: '50%',
-            width: '40px',
-            height: '40px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            color: 'white',
-            fontSize: '1.5rem'
-          }}
-        >
+
+        <button className="ivCloseBtn" onClick={onClose} aria-label="Close viewer">
           <FiX />
         </button>
       </div>
 
-      <div 
-        style={{
-          flex: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-          overflow: 'hidden',
-          cursor: scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default'
-        }}
+      <div
+        className="ivMain"
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
+        style={{ cursor: scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default' }}
       >
         <img
-          ref={imageRef}
+          className="ivImg"
           src={getPhotoUrl(images[currentIndex])}
           alt={`Property ${currentIndex + 1}`}
-          style={{
-            maxWidth: scale === 1 ? '90%' : 'none',
-            maxHeight: scale === 1 ? '90%' : 'none',
-            width: scale > 1 ? `${scale * 100}%` : 'auto',
-            height: 'auto',
-            objectFit: 'contain',
-            transform: `translate(${position.x}px, ${position.y}px)`,
-            transition: isDragging ? 'none' : 'transform 0.3s ease',
-            userSelect: 'none',
-            pointerEvents: scale > 1 ? 'auto' : 'none'
-          }}
           draggable={false}
+          style={{
+            transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
+            transition: isDragging ? 'none' : 'transform 0.2s ease'
+          }}
         />
       </div>
 
-      <div style={{
-        position: 'absolute',
-        bottom: '2rem',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        display: 'flex',
-        gap: '1rem',
-        alignItems: 'center',
-        background: 'rgba(0,0,0,0.7)',
-        padding: '1rem 1.5rem',
-        borderRadius: '50px',
-        backdropFilter: 'blur(10px)'
-      }}>
-        <button
-          onClick={handleZoomOut}
-          disabled={scale <= 1}
-          style={{
-            background: scale <= 1 ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.2)',
-            border: 'none',
-            borderRadius: '50%',
-            width: '44px',
-            height: '44px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: scale <= 1 ? 'not-allowed' : 'pointer',
-            color: 'white',
-            fontSize: '1.2rem',
-            transition: 'background 0.2s'
-          }}
-        >
+      <div className="ivControls">
+        <button className="ivCtrlBtn" onClick={handleZoomOut} disabled={scale <= 1} aria-label="Zoom out">
           <FiZoomOut />
         </button>
 
-        <span style={{
-          color: 'white',
-          fontSize: '0.9rem',
-          fontWeight: '500',
-          minWidth: '60px',
-          textAlign: 'center'
-        }}>
-          {Math.round(scale * 100)}%
-        </span>
+        <span className="ivZoomText">{Math.round(scale * 100)}%</span>
 
-        <button
-          onClick={handleZoomIn}
-          disabled={scale >= 4}
-          style={{
-            background: scale >= 4 ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.2)',
-            border: 'none',
-            borderRadius: '50%',
-            width: '44px',
-            height: '44px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: scale >= 4 ? 'not-allowed' : 'pointer',
-            color: 'white',
-            fontSize: '1.2rem',
-            transition: 'background 0.2s'
-          }}
-        >
+        <button className="ivCtrlBtn" onClick={handleZoomIn} disabled={scale >= 4} aria-label="Zoom in">
           <FiZoomIn />
         </button>
       </div>
 
       {currentIndex > 0 && (
-        <button
-          onClick={handlePrevImage}
-          style={{
-            position: 'absolute',
-            left: '1rem',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            background: 'rgba(0,0,0,0.5)',
-            border: 'none',
-            borderRadius: '50%',
-            width: '50px',
-            height: '50px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            color: 'white',
-            fontSize: '1.5rem',
-            backdropFilter: 'blur(10px)'
-          }}
-        >
-          <ChevronLeft size={28} />
+        <button className="ivNavBtn ivPrev" onClick={handlePrevImage} aria-label="Previous image">
+          <ChevronLeft size={24} />
         </button>
       )}
 
       {currentIndex < images.length - 1 && (
-        <button
-          onClick={handleNextImage}
-          style={{
-            position: 'absolute',
-            right: '1rem',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            background: 'rgba(0,0,0,0.5)',
-            border: 'none',
-            borderRadius: '50%',
-            width: '50px',
-            height: '50px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            color: 'white',
-            fontSize: '1.5rem',
-            backdropFilter: 'blur(10px)'
-          }}
-        >
-          <ChevronRight size={28} />
+        <button className="ivNavBtn ivNext" onClick={handleNextImage} aria-label="Next image">
+          <ChevronRight size={24} />
         </button>
       )}
 
-      <div style={{
-        position: 'absolute',
-        bottom: '6rem',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        display: 'flex',
-        gap: '0.5rem',
-        padding: '0.75rem',
-        background: 'rgba(0,0,0,0.7)',
-        borderRadius: '12px',
-        maxWidth: '90%',
-        overflowX: 'auto',
-        backdropFilter: 'blur(10px)'
-      }}>
+      <div className="ivThumbs">
         {images.map((img, idx) => (
           <img
             key={idx}
             src={getPhotoUrl(img)}
             alt={`Thumbnail ${idx + 1}`}
             onClick={() => setCurrentIndex(idx)}
-            style={{
-              width: '60px',
-              height: '60px',
-              objectFit: 'cover',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              border: currentIndex === idx ? '3px solid #8b0000' : '3px solid transparent',
-              opacity: currentIndex === idx ? 1 : 0.6,
-              transition: 'all 0.2s'
-            }}
+            className={`ivThumb ${currentIndex === idx ? 'ivThumbActive' : ''}`}
           />
         ))}
       </div>
@@ -3452,7 +3610,7 @@ const PropertyDetailPage = () => {
       <section className="title-section">
         <h1>{property.property_name}</h1>
         <div className="location-row">
-          <FiMapPin className="icon" />
+          {/* <FiMapPin className="icon" /> */}
           <span>{property.address}, {property.city}</span>
           <span className="dot">•</span>
           <span className="rating"><FiStar className="star" /> New Listing</span>
@@ -3507,10 +3665,14 @@ const PropertyDetailPage = () => {
 
           <div className="divider"></div>
 
-          <div className="text-section">
-            <h3>About this space</h3>
-            <p>{property.description || "No description provided."}</p>
-          </div>
+       <div className="text-section about-mobile-wrap">
+  <h3>About this space</h3>
+
+  <div className="about-mobile-card">
+    <p>{property.description || "No description provided."}</p>
+  </div>
+</div>
+
 
           {(property.parsedBedrooms?.length > 0 || property.parsedBathrooms?.length > 0) && (
             <>
