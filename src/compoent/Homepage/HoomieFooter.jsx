@@ -554,6 +554,12 @@ const HoomieFooter = () => {
                 <div
                   style={{ display: "flex", alignItems: "center", gap: "10px" }}
                 >
+                  <Phone size={16} />
+                  <span>Technical Support: 9319392227</span>
+                </div>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "10px" }}
+                >
                   <Mail size={16} />
                   <a
                     href="mailto:enquiry@ovikaliving.com"
@@ -637,6 +643,12 @@ const HoomieFooter = () => {
                 >
                   <Smartphone size={16} />
                   <span>7042888903</span>
+                </div>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "10px" }}
+                >
+                  <Phone size={16} />
+                  <span>Technical Support:9319392227</span>
                 </div>
                 <div
                   style={{ display: "flex", alignItems: "center", gap: "10px" }}
