@@ -516,7 +516,7 @@ table {
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  background: linear-gradient(rgb(243 165 68) 0%, rgb(197 133 51) 100%);
+  background: rgb(248, 250, 252);
   padding: 2rem;
   border-radius: var(--radius-xl);
   border: 1px solid var(--gray-200);
