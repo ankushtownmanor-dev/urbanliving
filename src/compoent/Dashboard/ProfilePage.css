@@ -1,180 +1,345 @@
+/* ===============================================
+   PREMIUM PROFILE PAGE - MODERN GLASS UI
+   =============================================== */
+
+:root {
+  --brand-red: #b60000;
+  --brand-dark: #8b0000;
+  --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --input-bg: #f8fafc;
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
 body {
-    font-family: "Arial", sans-serif;
-    background: #fff;
-    color: #212121;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* MAIN CONTAINER */
+.profilePage__container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* CARD STYLING (Glass Morphism) */
+.profilePage__card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 32px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+}
+
+.profilePage__card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* HEADER */
+.profilePage__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.profilePage__title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+/* EDIT BUTTON */
+.profilePage__editBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--brand-red), var(--brand-dark));
+  color: #ffffff;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(182, 0, 0, 0.25);
+}
+
+.profilePage__editBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(182, 0, 0, 0.35);
+}
+
+.profilePage__editBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* FORM GROUP */
+.profilePage__formGroup {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profilePage__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.profilePage__input {
+  padding: 14px 16px;
+  font-size: 15px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: var(--input-bg);
+  color: var(--text-main);
+  outline: none;
+  transition: all 0.2s ease;
+  font-weight: 400;
+}
+
+.profilePage__input:focus {
+  border-color: var(--brand-red);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(182, 0, 0, 0.1);
+}
+
+.profilePage__input:disabled {
+  background: #f1f5f9;
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* PASSWORD FIELD WITH ICON */
+.profilePage__passwordField {
+  position: relative;
+}
+
+.profilePage__passwordField .profilePage__input {
+  padding-right: 48px;
+}
+
+.profilePage__icon {
+  position: absolute;
+  right: 16px;
+  top: 42px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 18px;
+  transition: color 0.2s ease;
+}
+
+.profilePage__icon:hover {
+  color: var(--brand-red);
+}
+
+/* NOTE TEXT */
+.profilePage__note {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 12px 0 20px;
+  font-weight: 400;
+}
+
+/* UPDATE BUTTON */
+.profilePage__updateBtn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--brand-red), var(--brand-dark));
+  color: #ffffff;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(182, 0, 0, 0.25);
+}
+
+.profilePage__updateBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(182, 0, 0, 0.35);
+}
+
+.profilePage__updateBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ========== MODAL ========== */
+.profilePage__modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.profilePage__modal {
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 24px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.3s ease-out;
+}
+
+.profilePage__modalTitle {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+/* MODAL ACTIONS */
+.profilePage__modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.profilePage__cancelBtn {
+  background: #f1f5f9;
+  color: var(--text-main);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profilePage__cancelBtn:hover {
+  background: #e2e8f0;
+}
+
+.profilePage__saveBtn {
+  background: linear-gradient(135deg, var(--brand-red), var(--brand-dark));
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(182, 0, 0, 0.25);
+}
+
+.profilePage__saveBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(182, 0, 0, 0.35);
+}
+
+.profilePage__saveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
   .profilePage__container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 20px;
+    padding: 24px 16px;
   }
-  
+
   .profilePage__card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 25px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    padding: 24px 20px;
+    border-radius: 20px;
   }
-  
+
   .profilePage__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
   }
-  
+
   .profilePage__title {
     font-size: 20px;
-    font-weight: 600;
   }
-  
+
   .profilePage__editBtn {
-    background: #b71c1c;
-    color: #fff;
-    padding: 8px 16px;
-    font-size: 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  
-  .profilePage__editBtn:hover {
-    background: #9a0007;
-  }
-  
-  .profilePage__formGroup {
-    margin: 15px 0;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .profilePage__label {
-    margin-bottom: 6px;
-    font-weight: 500;
-    font-size: 14px;
-  }
-  
-  .profilePage__input {
-    padding: 12px;
-    font-size: 14px;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    outline: none;
-    background: #f9f9f9;
-  }
-  
-  .profilePage__passwordField {
-    position: relative;
-  }
-  
-  .profilePage__passwordField .profilePage__input {
-    padding-right: 40px;
-  }
-  
-  .profilePage__icon {
-    position: absolute;
-    right: 12px;
-    top: 38px;
-    cursor: pointer;
-    color: #555;
-  }
-  
-  .profilePage__note {
-    font-size: 13px;
-    color: #555;
-    margin: 10px 0;
-  }
-  
-  .profilePage__updateBtn {
     width: 100%;
-    background: #b71c1c;
-    color: white;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-  }
-  
-  .profilePage__updateBtn:hover {
-    background: #9a0007;
-  }
-  
-  /* Modal */
-  .profilePage__modalOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
     justify-content: center;
-    align-items: center;
   }
-  
+
   .profilePage__modal {
-    background: #fff;
-    padding: 25px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 450px;
+    padding: 24px;
+    width: 95%;
   }
-  
-  .profilePage__modalTitle {
-    margin-bottom: 15px;
-    font-size: 18px;
-    font-weight: 600;
-  }
-  
+
   .profilePage__modalActions {
-    display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
     gap: 10px;
-    margin-top: 20px;
   }
-  
-  .profilePage__cancelBtn {
-    background: #ccc;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
+
+  .profilePage__cancelBtn,
   .profilePage__saveBtn {
-    background: #b71c1c;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    cursor: pointer;
+    width: 100%;
   }
-  
-  /* Mobile Responsive */
-  @media (max-width: 600px) {
-    .profilePage__container {
-      padding: 10px;
-    }
-  
-    .profilePage__card {
-      padding: 15px;
-    }
-  
-    .profilePage__editBtn {
-      font-size: 12px;
-      padding: 6px 12px;
-    }
-  
-    .profilePage__input {
-      font-size: 13px;
-      padding: 10px;
-    }
-  
-    .profilePage__updateBtn {
-      font-size: 14px;
-      padding: 10px;
-    }
+}
+
+@media (max-width: 480px) {
+  .profilePage__input {
+    font-size: 14px;
+    padding: 12px 14px;
   }
+
+  .profilePage__updateBtn {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .profilePage__icon {
+    top: 40px;
+  }
+}
