@@ -921,7 +921,7 @@ export default function Navbar() {
                   <span style={iconBoxStyle}>📊</span>
                   <div style={{ textAlign: "left" }}>
                     <div style={{ fontSize: 14, fontWeight: 500, color: "#232323" }}>
-                      Dashboard
+                      Profile
                     </div>
                     <div style={{ fontSize: 12, color: "#8a8a8a" }}>
                       View your bookings & performance
