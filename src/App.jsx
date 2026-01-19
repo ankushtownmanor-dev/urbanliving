@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import "./App.css";
+import AnalyticsTracker from "./AnalyticsTracker";
 
 // Common components
 import Navbar from "./compoent/Homepage/Navbar";
@@ -64,6 +65,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <AnalyticsTracker />
         {/* Top Navbar */}
         <Navbar />
 
