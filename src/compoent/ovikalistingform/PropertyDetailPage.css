@@ -350,9 +350,9 @@ table {
    Room Breakdown
    ========================= */
 .room-breakdown-grid {
-  display: grid;
+  display: flex;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  gap: 2rem;
   margin-bottom: 2rem;
   min-width: 0;
 }
@@ -364,7 +364,7 @@ table {
   border: 1px solid var(--gray-200);
   box-shadow: var(--shadow-xs);
   transition: all 0.2s;
-  min-width: 0;
+  min-width: 180px;
 }
 
 .room-group:hover {

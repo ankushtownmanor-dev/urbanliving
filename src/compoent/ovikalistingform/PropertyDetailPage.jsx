@@ -1678,7 +1678,7 @@ useEffect(() => {
               <div className="divider"></div>
               <div className="text-section">
                 <h3>Room Arrangements</h3>
-                <div className="room-breakdown-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                <div className="room-breakdown-grid" style={{ marginLeft: "6px", display: 'flex', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem' }}>
                   {property.parsedBedrooms?.length > 0 && (
                     <div className="room-group">
                       <h4>Bedrooms</h4>
@@ -1787,12 +1787,45 @@ useEffect(() => {
               </div>
             </div>
             
-            {(property.cancellation_policy && property.cancellation_policy !== 'undefined') && (
-              <div style={{ marginTop: '1rem', padding: '12px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                <strong style={{ display: 'block', marginBottom: '4px', fontSize: '0.9rem' }}>Cancellation Policy</strong>
-                <span style={{ color: '#475569' }}>{property.cancellation_policy}</span>
-              </div>
-            )}
+         {(property.cancellation_policy && property.cancellation_policy !== 'undefined') && (
+  <div
+    style={{
+      marginTop: '1rem',
+      padding: '12px',
+      background: '#f8fafc',
+      borderRadius: '8px',
+      border: '1px solid #e2e8f0'
+    }}
+  >
+    <strong
+      style={{
+        display: 'block',
+        marginBottom: '6px',
+        fontSize: '0.9rem'
+      }}
+    >
+      Cancellation Policy
+    </strong>
+
+    <span style={{ color: '#475569' }}>
+      {property.cancellation_policy}{' '}
+      <a
+        href="/refund-cancellation-policy"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          marginLeft: '6px',
+          color: '#8b0000',
+          fontWeight: '600',
+          textDecoration: 'underline'
+        }}
+      >
+        Read full policy
+      </a>
+    </span>
+  </div>
+)}
+
           </div>
 
           {/* ✅ PROFESSIONAL GUIDEBOOK SECTION */}
