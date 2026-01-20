@@ -442,7 +442,7 @@ table {
   background: var(--primary-light);
   padding: 6px;
   border-radius: 50%;
-  font-size: 1rem;
+  font-size: 2rem;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -1168,7 +1168,7 @@ table {
   }
 
   .check-icon {
-    font-size: 0.9rem;
+    font-size: 1.9rem;
     padding: 6px;
     background: #ffe5e5;
     color: #8b0000;
