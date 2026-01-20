@@ -107,6 +107,7 @@ const Tmx9PropertyForm = () => {
     houseSpecificTips: [""],
     familyAllowed: false,
   unmarriedCoupleAllowed: false,
+   bachelorAllowed: false,
 
   });
 
@@ -559,8 +560,9 @@ const Tmx9PropertyForm = () => {
         phoneVerification: isPhoneVerified ? { number: phoneNumber } : null,
         guidebook: guidebook,
          guest_policy: {
-    family_allowed: form.familyAllowed,
-    unmarried_couple_allowed: form.unmarriedCoupleAllowed,
+   family_allowed: Boolean(form.familyAllowed),
+    unmarried_couple_allowed: Boolean(form.unmarriedCoupleAllowed),
+    bachelors_allowed: Boolean(form.bachelorAllowed),
   },
       };
       fd.append("meta", JSON.stringify(meta));
@@ -569,6 +571,7 @@ const Tmx9PropertyForm = () => {
   JSON.stringify({
     family_allowed: form.familyAllowed,
     unmarried_couple_allowed: form.unmarriedCoupleAllowed,
+     bachelors_allowed:form.bachelorAllowed,
   })
 );
 
@@ -936,9 +939,9 @@ const Tmx9PropertyForm = () => {
                 <Toggle name="outsideGuestsAllowed" value={form.outsideGuestsAllowed} onChange={(v) => setForm((s) => ({ ...s, outsideGuestsAllowed: v }))} />
               </div>
 <div className="tmx9pf-field">
-  <label className="tmx9pf-label">Family Allowed</label>
+  <label className="tmx9pf-label">Only Family Allowed</label>
   <Toggle
-    name="familyAllowed"
+    name="familyAllowed" 
     value={form.familyAllowed}
     onChange={(v) =>
       setForm((s) => ({ ...s, familyAllowed: v }))
@@ -956,6 +959,17 @@ const Tmx9PropertyForm = () => {
     }
   />
 </div>
+<div className="tmx9pf-field">
+  <label className="tmx9pf-label">Bachelor Allowed</label>
+  <Toggle
+    name="bachelorAllowed"
+    value={form.bachelorAllowed}
+    onChange={(v) =>
+      setForm((s) => ({ ...s, bachelorAllowed: v }))
+    }
+  />
+</div>
+
 
               <div className="tmx9pf-field">
                 <label className="tmx9pf-label">Quiet Hours</label>

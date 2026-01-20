@@ -1821,6 +1821,29 @@ const guestPolicy = property?.guest_policy || {};
       </strong>
     </div>
   </div>
+  {/* Bachelor Allowed */}
+<div className="amenity-card rule-card">
+  <div className="rule-icon">
+    {(guestPolicy.bachelors_allowed || guestPolicy.Bechelors) ? (
+      <FiCheck className="text-green" />
+    ) : (
+      <FiXCircle className="text-red" />
+    )}
+  </div>
+  <div className="rule-info">
+    <span className="rule-label">Bachelor</span>
+    <strong
+      className={(guestPolicy.bachelors_allowed || guestPolicy.Bechelors)
+        ? "text-green"
+        : "text-gray"}
+    >
+      {(guestPolicy.bachelors_allowed || guestPolicy.Bechelors)
+        ? "Allowed"
+        : "Not allowed"}
+    </strong>
+  </div>
+</div>
+
 
 </div>
 
