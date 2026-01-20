@@ -104,7 +104,10 @@ const Tmx9PropertyForm = () => {
       medical: ""
     },
     mustVisitPlaces: [{ id: 0, place: "", bestTime: "" }],
-    houseSpecificTips: [""]
+    houseSpecificTips: [""],
+    familyAllowed: false,
+  unmarriedCoupleAllowed: false,
+
   });
 
   const photoPreviews = useFilePreviews();
@@ -554,9 +557,21 @@ const Tmx9PropertyForm = () => {
         ownerId: ownerId,
         identityVerification: aadhaarVerified ? { type: "aadhaar", number: aadhaarNumber } : { type: "file" },
         phoneVerification: isPhoneVerified ? { number: phoneNumber } : null,
-        guidebook: guidebook
+        guidebook: guidebook,
+         guest_policy: {
+    family_allowed: form.familyAllowed,
+    unmarried_couple_allowed: form.unmarriedCoupleAllowed,
+  },
       };
       fd.append("meta", JSON.stringify(meta));
+      fd.append(
+  "guest_policy",
+  JSON.stringify({
+    family_allowed: form.familyAllowed,
+    unmarried_couple_allowed: form.unmarriedCoupleAllowed,
+  })
+);
+
 
       photoPreviews.previews.forEach((p, i) => {
         if (p && p.file) fd.append("photos", p.file, p.name || `photo-${i}`);
@@ -920,6 +935,27 @@ const Tmx9PropertyForm = () => {
                 <label className="tmx9pf-label">Outside Guests Allowed</label>
                 <Toggle name="outsideGuestsAllowed" value={form.outsideGuestsAllowed} onChange={(v) => setForm((s) => ({ ...s, outsideGuestsAllowed: v }))} />
               </div>
+<div className="tmx9pf-field">
+  <label className="tmx9pf-label">Family Allowed</label>
+  <Toggle
+    name="familyAllowed"
+    value={form.familyAllowed}
+    onChange={(v) =>
+      setForm((s) => ({ ...s, familyAllowed: v }))
+    }
+  />
+</div>
+
+<div className="tmx9pf-field">
+  <label className="tmx9pf-label">Unmarried Couple Allowed</label>
+  <Toggle
+    name="unmarriedCoupleAllowed"
+    value={form.unmarriedCoupleAllowed}
+    onChange={(v) =>
+      setForm((s) => ({ ...s, unmarriedCoupleAllowed: v }))
+    }
+  />
+</div>
 
               <div className="tmx9pf-field">
                 <label className="tmx9pf-label">Quiet Hours</label>

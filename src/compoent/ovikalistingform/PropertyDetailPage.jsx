@@ -1088,6 +1088,8 @@ useEffect(() => {
       setIsAadhaarLoading(false);
     }
   };
+const guestPolicy = property?.guest_policy || {};
+
 
   const handlePassportFileSelect = (e) => {
     const file = e.target.files?.[0];
@@ -1724,68 +1726,104 @@ useEffect(() => {
           <div className="divider"></div>
 
           <div className="text-section">
-            <h3>House Rules & Policies</h3>
-            <div className="amenities-grid">
-              <div className="amenity-card rule-card">
-                <div className="rule-icon">
-                  {property.smoking_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
-                </div>
-                <div className="rule-info">
-                  <span className="rule-label">Smoking</span>
-                  <strong className={property.smoking_allowed ? "text-green" : "text-gray"}>
-                    {property.smoking_allowed ? 'Allowed' : 'Not allowed'}
-                  </strong>
-                </div>
-              </div>
+            
+        <h3>House Rules & Policies</h3>
 
-              <div className="amenity-card rule-card">
-                <div className="rule-icon">
-                  {property.pets_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
-                </div>
-                <div className="rule-info">
-                  <span className="rule-label">Pets</span>
-                  <strong className={property.pets_allowed ? "text-green" : "text-gray"}>
-                    {property.pets_allowed ? 'Allowed' : 'Not allowed'}
-                  </strong>
-                </div>
-              </div>
+<div className="amenities-grid">
 
-              <div className="amenity-card rule-card">
-                <div className="rule-icon">
-                  {property.events_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
-                </div>
-                <div className="rule-info">
-                  <span className="rule-label">Events</span>
-                  <strong className={property.events_allowed ? "text-green" : "text-gray"}>
-                    {property.events_allowed ? 'Allowed' : 'Not allowed'}
-                  </strong>
-                </div>
-              </div>
+  {/* Smoking */}
+  <div className="amenity-card rule-card">
+    <div className="rule-icon">
+      {property.smoking_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
+    </div>
+    <div className="rule-info">
+      <span className="rule-label">Smoking</span>
+      <strong className={property.smoking_allowed ? "text-green" : "text-gray"}>
+        {property.smoking_allowed ? 'Allowed' : 'Not allowed'}
+      </strong>
+    </div>
+  </div>
 
-              <div className="amenity-card rule-card">
-                <div className="rule-icon">
-                  {property.drinking_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
-                </div>
-                <div className="rule-info">
-                  <span className="rule-label">Alcohol</span>
-                  <strong className={property.drinking_allowed ? "text-green" : "text-gray"}>
-                    {property.drinking_allowed ? 'Allowed' : 'Not allowed'}
-                  </strong>
-                </div>
-              </div>
+  {/* Pets */}
+  <div className="amenity-card rule-card">
+    <div className="rule-icon">
+      {property.pets_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
+    </div>
+    <div className="rule-info">
+      <span className="rule-label">Pets</span>
+      <strong className={property.pets_allowed ? "text-green" : "text-gray"}>
+        {property.pets_allowed ? 'Allowed' : 'Not allowed'}
+      </strong>
+    </div>
+  </div>
 
-              <div className="amenity-card rule-card">
-                <div className="rule-icon">
-                  {property.outside_guests_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
-                </div>
-                <div className="rule-info">
-                  <span className="rule-label">Outside Guests</span>
-                  <strong className={property.outside_guests_allowed ? "text-green" : "text-gray"}>
-                    {property.outside_guests_allowed ? 'Allowed' : 'Not allowed'}
-                  </strong>
-                </div>
-              </div>
-            </div>
+  {/* Events */}
+  <div className="amenity-card rule-card">
+    <div className="rule-icon">
+      {property.events_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
+    </div>
+    <div className="rule-info">
+      <span className="rule-label">Events</span>
+      <strong className={property.events_allowed ? "text-green" : "text-gray"}>
+        {property.events_allowed ? 'Allowed' : 'Not allowed'}
+      </strong>
+    </div>
+  </div>
+
+  {/* Alcohol */}
+  <div className="amenity-card rule-card">
+    <div className="rule-icon">
+      {property.drinking_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
+    </div>
+    <div className="rule-info">
+      <span className="rule-label">Alcohol</span>
+      <strong className={property.drinking_allowed ? "text-green" : "text-gray"}>
+        {property.drinking_allowed ? 'Allowed' : 'Not allowed'}
+      </strong>
+    </div>
+  </div>
+
+  {/* Outside Guests */}
+  <div className="amenity-card rule-card">
+    <div className="rule-icon">
+      {property.outside_guests_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
+    </div>
+    <div className="rule-info">
+      <span className="rule-label">Outside Guests</span>
+      <strong className={property.outside_guests_allowed ? "text-green" : "text-gray"}>
+        {property.outside_guests_allowed ? 'Allowed' : 'Not allowed'}
+      </strong>
+    </div>
+  </div>
+
+  {/* Family Allowed */}
+  <div className="amenity-card rule-card">
+    <div className="rule-icon">
+      {guestPolicy.family_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
+    </div>
+    <div className="rule-info">
+      <span className="rule-label">Family</span>
+      <strong className={guestPolicy.family_allowed ? "text-green" : "text-gray"}>
+        {guestPolicy.family_allowed ? 'Allowed' : 'Not allowed'}
+      </strong>
+    </div>
+  </div>
+
+  {/* Unmarried Couples */}
+  <div className="amenity-card rule-card">
+    <div className="rule-icon">
+      {guestPolicy.unmarried_couple_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
+    </div>
+    <div className="rule-info">
+      <span className="rule-label">Unmarried Couples</span>
+      <strong className={guestPolicy.unmarried_couple_allowed ? "text-green" : "text-gray"}>
+        {guestPolicy.unmarried_couple_allowed ? 'Allowed' : 'Not allowed'}
+      </strong>
+    </div>
+  </div>
+
+</div>
+
             
          {(property.cancellation_policy && property.cancellation_policy !== 'undefined') && (
   <div
