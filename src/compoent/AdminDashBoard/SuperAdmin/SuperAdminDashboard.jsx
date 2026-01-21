@@ -37,12 +37,15 @@ ChartJS.register(
 );
 
 const API_PROPERTIES = "https://townmanor.ai/api/ovika/properties";
+const API_PROPERTIES_UPLOAD = "https://townmanor.ai/api/ovika/properties/upload";
 const API_BOOKINGS = "https://townmanor.ai/api/booking-request";
+const API_USERS = "https://townmanor.ai/api/users-list";
 
 export default function SuperAdminDashboard() {
   const [view, setView] = useState('dashboard'); // 'dashboard', 'properties', 'users', 'bookings', 'finance', 'settings'
   const [properties, setProperties] = useState([]);
   const [bookings, setBookings] = useState([]);
+  const [usersList, setUsersList] = useState([]); // Real users from API
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ 
     totalProps: 0, 
@@ -59,6 +62,12 @@ export default function SuperAdminDashboard() {
   const [derivedUsers, setDerivedUsers] = useState([]); // Users aggregated from props (Owners)
   const [derivedGuests, setDerivedGuests] = useState([]); // Users aggregated from bookings (Guests)
   const [editingProp, setEditingProp] = useState(null); // For edit modal
+  const [isCreatingProp, setIsCreatingProp] = useState(false); // Mode for property modal
+  
+  /* User Management State */
+  const [editingUser, setEditingUser] = useState(null); 
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [userForm, setUserForm] = useState({ username: '', email: '', phone_number: '', role: 'user', password: '' });
   const [searchTerm, setSearchTerm] = useState("");
   const [bookingFilter, setBookingFilter] = useState("ALL");
   const [filterType, setFilterType] = useState("ALL");
@@ -74,7 +83,7 @@ export default function SuperAdminDashboard() {
   // --- Fetch Data ---
   const fetchAllData = async () => {
     setLoading(true);
-    await Promise.all([fetchAllProperties(), fetchAllBookings()]);
+    await Promise.all([fetchAllProperties(), fetchAllBookings(), fetchAllUsers()]);
     setLoading(false);
   };
 
@@ -107,6 +116,21 @@ export default function SuperAdminDashboard() {
     } catch (e) {
         console.error("Fetch bookings failed", e);
         setBookings([]); 
+    }
+  };
+
+  const fetchAllUsers = async () => {
+    try {
+        const res = await axios.get(API_USERS, { validateStatus: false });
+        let data = [];
+        if (res.data && Array.isArray(res.data)) {
+            data = res.data;
+        } else if (res.data && res.data.data && Array.isArray(res.data.data)) {
+            data = res.data.data;
+        }
+        setUsersList(data);
+    } catch (e) {
+        console.error("Fetch users failed", e);
     }
   };
 
@@ -221,22 +245,17 @@ export default function SuperAdminDashboard() {
   }, []);
 
   // --- Handlers ---
-  const handleDelete = async (id) => {
-    if (!window.confirm("SUPER ADMIN ACTION:\nAre you sure you want to PERMANENTLY delete this property? This cannot be undone.")) return;
-    
-    try {
-      await axios.delete(`${API_PROPERTIES}/${id}`);
-      setProperties(prev => prev.filter(p => (p.id || p._id) !== id));
-      alert("Property deleted successfully.");
-    } catch(e) {
-        console.error("Delete failed:", e);
-        alert("Delete failed: " + (e.response?.data?.message || e.message));
-    }
-  };
+
   
   // --- Edit Handlers ---
   const handleEditClick = (prop) => {
       setEditingProp({ ...prop }); 
+      setIsCreatingProp(false);
+  };
+
+  const handleCreatePropClick = () => {
+      setEditingProp({ property_name: '', price: '', city: '', address: '', description: '', owner_name: 'Admin', owner_id: 'admin' });
+      setIsCreatingProp(true);
   };
 
   const handleEditChange = (e) => {
@@ -246,7 +265,7 @@ export default function SuperAdminDashboard() {
   
   const handleSaveEdit = async () => {
     if(!editingProp) return;
-    const id = editingProp.id || editingProp._id;
+    
     try {
         const payload = {
             property_name: editingProp.property_name || editingProp.name,
@@ -256,14 +275,59 @@ export default function SuperAdminDashboard() {
             city: editingProp.city,
             ...editingProp
         };
-        await axios.put(`${API_PROPERTIES}/${id}`, payload);
-        alert("Property updated successfully.");
+
+        if (isCreatingProp) {
+            // Create
+            await axios.post(API_PROPERTIES_UPLOAD, payload);
+            alert("Property created successfully.");
+        } else {
+            // Update
+            const id = editingProp.id || editingProp._id;
+            await axios.put(`${API_PROPERTIES}/${id}`, payload);
+            alert("Property updated successfully.");
+        }
+        
         setEditingProp(null);
+        setIsCreatingProp(false);
         fetchAllProperties(); // Refresh list
     } catch(e) {
         console.error(e);
-        alert("Update failed: " + (e.response?.data?.message || e.message));
+        alert("Operation failed: " + (e.response?.data?.message || e.message));
     }
+  };
+
+  // --- User Form Handlers ---
+  const openUserModal = (user = null) => {
+      if(user) {
+          setEditingUser(user);
+          setUserForm({ ...user, password: '' }); // Don't show password
+      } else {
+          setEditingUser(null);
+          setUserForm({ username: '', email: '', phone_number: '', role: 'user', password: '' });
+      }
+      setIsUserModalOpen(true);
+  };
+
+  const handleUserFormChange = (e) => {
+      setUserForm({ ...userForm, [e.target.name]: e.target.value });
+  };
+
+  const handleUserSubmit = async () => {
+      try {
+          if (editingUser) {
+              const id = editingUser.id || editingUser._id;
+              await axios.put(`${API_USERS}/${id}`, userForm);
+              alert("User updated.");
+          } else {
+              await axios.post(API_USERS, userForm);
+              alert("User created.");
+          }
+          setIsUserModalOpen(false);
+          fetchAllUsers();
+      } catch(e) {
+          console.error(e);
+          alert("User save failed: " + (e.response?.data?.message || e.message));
+      }
   };
 
   const handleBookingAction = async (id, action) => {
@@ -428,6 +492,7 @@ export default function SuperAdminDashboard() {
                      <div className="sa-table-header-row">
                         <h3>Properties Database</h3>
                         <div style={{display:'flex', gap:'12px'}}>
+                            <button className="sa-btn-primary" onClick={handleCreatePropClick} style={{backgroundColor:'#10b981'}}>+ Add Property</button>
                             <input 
                                 type="text" 
                                 placeholder="Search properties..." 
@@ -500,7 +565,6 @@ export default function SuperAdminDashboard() {
                                         <td>
                                             <div className="sa-actions">
                                                 <button className="sa-btn-primary" onClick={() => handleEditClick(p)}>Edit</button>
-                                                <button className="sa-btn-danger" onClick={() => handleDelete(p.id || p._id)}>Del</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -518,7 +582,72 @@ export default function SuperAdminDashboard() {
             
             {/* VIEW: USERS (Derived from Properties & Bookings) */}
             {view === 'users' && (
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+                    
+                    {/* PRIMARY USER TABLE (REAL API) */}
+                    <div className="sa-table-container">
+                        <div className="sa-table-header-row">
+                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <h3>Registered Users</h3>
+                                <div className="sa-badge" style={{background:'#eff6ff', color:'#3b82f6', border:'none'}}>{usersList.length} Total</div>
+                             </div>
+                             <button className="sa-btn-primary" onClick={() => openUserModal()}>+ Add User</button>
+                        </div>
+                        <table className="sa-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User Profile</th>
+                                    <th>Contact Info</th>
+                                    <th>Status</th>
+                                    <th>Joined</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {usersList.slice(0, 50).map(u => (
+                                    <tr key={u.id || u._id}>
+                                        <td style={{fontFamily:'monospace', color:'#64748b'}}>#{(u.id||u._id || '').toString().slice(-4)}</td>
+                                        <td>
+                                            <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
+                                                <img 
+                                                    src={u.profile_photo || 'https://via.placeholder.com/40'} 
+                                                    alt="av" 
+                                                    style={{width:'36px', height:'36px', borderRadius:'50%', objectFit:'cover', border:'1px solid #e2e8f0'}}
+                                                />
+                                                <div style={{fontWeight:'600', color:'#1e293b'}}>{u.username || "No Name"}</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{fontSize:'13px', fontWeight:'500'}}>{u.email}</div>
+                                            <div style={{fontSize:'11px', color:'#64748b'}}>{u.phone_number || u.phone || "N/A"}</div>
+                                        </td>
+                                        <td>
+                                            <div style={{display:'flex', gap:'4px'}}>
+                                                {u.aadhaar_verified ? (
+                                                    <span style={{fontSize:'10px', background:'#dcfce7', color:'#166534', padding:'2px 6px', borderRadius:'4px'}}>Aadhaar</span>
+                                                ) : <span style={{fontSize:'10px', background:'#f1f5f9', color:'#94a3b8', padding:'2px 6px', borderRadius:'4px'}}>No KYC</span>}
+                                            </div>
+                                        </td>
+                                        <td style={{fontSize:'12px', color:'#475569'}}>
+                                            {u.created_at ? new Date(u.created_at).toLocaleDateString() : '-'}
+                                        </td>
+                                        <td>
+                                            <div className="sa-actions">
+                                                <button className="sa-btn-primary" style={{padding:'4px 8px', fontSize:'11px'}} onClick={() => openUserModal(u)}>Edit</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                                {usersList.length === 0 && (
+                                    <tr><td colSpan="5" className="sa-empty">No registered users found.</td></tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 style={{ margin: '0 0 10px 0', color: '#475569', fontSize: '16px' }}>Activity Analysis</h3>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
                     
                     {/* OWNERS TABLE */}
                     <div className="sa-table-container">
@@ -588,6 +717,8 @@ export default function SuperAdminDashboard() {
                                  )}
                             </tbody>
                          </table>
+                    </div>
+
                     </div>
 
                 </div>
@@ -826,11 +957,11 @@ export default function SuperAdminDashboard() {
                 </div>
             )}
 
-            {/* EDIT MODAL */}
+            {/* EDIT PROPERTY MODAL */}
             {editingProp && (
                 <div className="sa-modal-overlay">
                     <div className="sa-modal-content">
-                        <h3 style={{ marginBottom: '20px' }}>Edit Property</h3>
+                        <h3 style={{ marginBottom: '20px' }}>{isCreatingProp ? 'Create Property' : 'Edit Property'}</h3>
                         
                         <div style={{ display: 'grid', gap: '0' }}>
                              <div className="sa-input-group">
@@ -875,6 +1006,73 @@ export default function SuperAdminDashboard() {
                         <div style={{ marginTop: '25px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
                             <button className="sa-btn-danger" style={{ background:'#f3f4f6', color:'#374151', border:'1px solid #d1d5db' }} onClick={() => setEditingProp(null)}>Cancel</button>
                             <button className="sa-btn-primary" onClick={handleSaveEdit}>Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* USER MODAL */}
+            {isUserModalOpen && (
+                <div className="sa-modal-overlay">
+                    <div className="sa-modal-content" style={{maxWidth:'400px'}}>
+                        <h3 style={{ marginBottom: '20px' }}>{editingUser ? 'Edit User' : 'Add New User'}</h3>
+                        
+                        <div style={{ display: 'grid', gap: '0' }}>
+                             <div className="sa-input-group">
+                                 <label>User Name</label>
+                                 <input 
+                                    name="username" 
+                                    value={userForm.username || ""} 
+                                    onChange={handleUserFormChange} 
+                                 />
+                             </div>
+                             <div className="sa-input-group">
+                                 <label>Email Address</label>
+                                 <input 
+                                    name="email" 
+                                    type="email"
+                                    value={userForm.email} 
+                                    onChange={handleUserFormChange} 
+                                 />
+                             </div>
+                             <div className="sa-input-group">
+                                 <label>Phone Number</label>
+                                 <input 
+                                    name="phone_number" 
+                                    value={userForm.phone_number || ""} 
+                                    onChange={handleUserFormChange} 
+                                 />
+                             </div>
+                             {!editingUser && (
+                                <div className="sa-input-group">
+                                    <label>Password</label>
+                                    <input 
+                                        name="password" 
+                                        type="password"
+                                        value={userForm.password} 
+                                        onChange={handleUserFormChange} 
+                                    />
+                                </div>
+                             )}
+                             <div className="sa-input-group">
+                                 <label>Role</label>
+                                 <select 
+                                    name="role"
+                                    value={userForm.role}
+                                    onChange={handleUserFormChange}
+                                    className="sa-search-input" // Reuse style
+                                    style={{width:'100%'}}
+                                 >
+                                    <option value="user">User</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="superadmin">Super Admin</option>
+                                 </select>
+                             </div>
+                        </div>
+
+                        <div style={{ marginTop: '25px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                            <button className="sa-btn-danger" style={{ background:'#f3f4f6', color:'#374151', border:'1px solid #d1d5db' }} onClick={() => setIsUserModalOpen(false)}>Cancel</button>
+                            <button className="sa-btn-primary" onClick={handleUserSubmit}>Save User</button>
                         </div>
                     </div>
                 </div>
