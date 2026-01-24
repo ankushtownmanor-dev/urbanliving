@@ -1,43 +1,37 @@
-/* Wrapper */
+/* ===============================
+   Season Offer Styles
+================================ */
 .season-offer-wrapper {
   width: 100%;
   padding: 40px 20px;
-  box-sizing: border-box;
 }
 
-/* Main Container */
 .season-offer-container {
-  max-width: 1200px;
+  max-width: 800px;
   margin: 0 auto;
-  background: linear-gradient(rgb(228, 157, 70) 0%, rgb(221, 148, 53) 100%);
+  background: linear-gradient(rgb(228, 157, 70), rgb(221, 148, 53));
   border-radius: 18px;
   padding: 50px 30px;
   text-align: center;
 }
 
-/* Title */
 .season-offer-title {
   font-size: 38px;
   font-weight: 700;
-  color: #1f1f1f;
   margin-bottom: 18px;
 }
 
-/* Text */
 .season-offer-text {
   font-size: 18px;
   line-height: 1.6;
-  color: #3a3a3a;
   max-width: 900px;
   margin: 0 auto 35px;
 }
 
 .season-offer-text span {
   font-weight: 700;
-  color: #000;
 }
 
-/* Button */
 .season-offer-btn {
   background: linear-gradient(135deg, #ff4b4b, #d93636);
   color: #fff;
@@ -47,71 +41,157 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.season-offer-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+/* ===============================
+   MODAL OVERLAY
+================================ */
+body.modal-open {
+  overflow: hidden;
 }
 
-/* ===========================
-   Responsive (Mobile)
-=========================== */
-/* ===========================
-   Enhanced Mobile View
-=========================== */
-@media (max-width: 768px) {
-  .season-offer-wrapper {
-    padding: 24px 14px;
-  }
+/* MODAL SHOULD BE ABOVE EVERYTHING */
+.tm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
 
-  .season-offer-container {
-    padding: 28px 18px;
-    border-radius: 14px;
-  }
+  z-index: 99999; /* 🔥 VERY IMPORTANT */
+}
 
+
+/* ===============================
+   MODAL CONTAINER
+================================ */
+.tm-modal {
+  background: #fff;
+  width: 100%;
+  max-width: 480px;      /* ✅ controlled width */
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 14px;
+  padding: 26px 22px;
+  position: relative;
+  animation: scaleIn 0.3s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.tm-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: none;
+  background: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* ===============================
+   MODAL TITLE
+================================ */
+.tm-modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+/* ===============================
+   FORM STYLES (COMPACT & CENTERED)
+================================ */
+.tm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 360px;      /* ✅ form narrow */
+  margin: 0 auto;
+}
+
+.tm-form label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tm-form input {
+  padding: 13px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  background: #fafafa;
+}
+
+.tm-form input:focus {
+  outline: none;
+  border-color: #ff4b4b;
+  background: #fff;
+}
+
+/* ===============================
+   SUBMIT BUTTON
+================================ */
+.tm-submit-btn {
+  margin-top: 16px;
+  background: linear-gradient(135deg, #ff4b4b, #b92c2c);
+  color: #fff;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  position: sticky;
+  bottom: 0;
+}
+
+/* ===============================
+   MOBILE RESPONSIVE
+================================ */
+@media (max-width: 600px) {
   .season-offer-title {
     font-size: 22px;
-    line-height: 1.3;
-    margin-bottom: 14px;
   }
 
   .season-offer-text {
     font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 24px;
-    color: #2f2f2f;
   }
 
-  .season-offer-text span {
-    display: inline-block;
-    font-weight: 700;
+  .tm-modal {
+    padding: 22px 16px;
   }
 
-  .season-offer-btn {
-    width: 100%;
-    max-width: 260px;
-    margin: 0 auto;
-    display: block;
-    font-size: 15px;
-    padding: 12px 20px;
-    border-radius: 6px;
+  .tm-form {
+    max-width: 320px;
   }
 }
 
-/* Extra small devices (very small phones) */
+/* ===============================
+   VERY SMALL DEVICES
+================================ */
 @media (max-width: 420px) {
-  .season-offer-title {
-    font-size: 20px;
+  .tm-modal-title {
+    font-size: 17px;
   }
 
-  .season-offer-text {
+  .tm-form {
+    max-width: 300px;
+  }
+
+  .tm-form label {
     font-size: 13px;
-  }
-
-  .season-offer-btn {
-    font-size: 14px;
-    padding: 11px 18px;
   }
 }

@@ -202,6 +202,7 @@ const Tmx9PropertyForm = () => {
     if (s === 5) {
       if (!aadhaarVerified) newErrors.idFiles = "Please verify your Aadhaar number";
     }
+    
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
