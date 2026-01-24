@@ -46,7 +46,7 @@ import { useContext } from "react";
 import { Subsriptionmain } from "./compoent/SubsriptionNew/Subsriptionmain";
 import SuperAdminDashboard from './compoent/AdminDashBoard/SuperAdmin/SuperAdminDashboard';
 import { Notification } from "./compoent/Dashboard/Notification";
-
+import  ContactMain  from "./compoent/ContactUs/ContactMain";
 
 // 🔒 Protected Route Component
 function RequireAuth({ children }) {
@@ -89,6 +89,7 @@ function App() {
           <Route path="/listed" element={<PropertyListingForm />} />
           <Route path="/subsription" element={<Subsriptionmain/>}/>
           <Route path="/notification" element={<Notification/>}/>
+          <Route path="/contactus" element={<ContactMain/>}/>
 
           {/* ✅ PROTECTED ROUTE – only after login */}
           <Route

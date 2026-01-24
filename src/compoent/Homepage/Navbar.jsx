@@ -742,7 +742,7 @@ export default function Navbar() {
                 <button
                   onClick={() => {
                     setHamburgerMenuOpen(false);
-                    navigate("/contact");
+                    navigate("/contactus");
                   }}
                   style={{
                     ...panelButtonStyle,
@@ -981,7 +981,7 @@ export default function Navbar() {
                 <button
                   onClick={() => {
                     setSideMenuOpen(false);
-                    navigate("/contact");
+                    navigate("/contactus");
                   }}
                   style={panelButtonStyle}
                 >
