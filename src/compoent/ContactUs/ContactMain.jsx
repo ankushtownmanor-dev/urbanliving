@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 
 const ContactMain = () => {
@@ -8,6 +8,17 @@ const ContactMain = () => {
     phone: '',
     message: ''
   });
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -26,12 +37,16 @@ const ContactMain = () => {
   };
 
   return (
-    <div style={{ fontFamily: "'Poppins', 'Arial', sans-serif", background: '#f8f9fa' }}>
+    <div style={{ 
+      fontFamily: "'Poppins', 'Arial', sans-serif", 
+      background: '#f8f9fa',
+      minHeight: '100vh'
+    }}>
       {/* Header Section */}
       <div style={{
         background: 'linear-gradient(135deg, #C8965F 0%, #A67843 100%)',
         color: 'white',
-        padding: '80px 20px',
+        padding: isMobile ? '50px 20px' : '70px 20px',
         textAlign: 'center',
         position: 'relative',
         overflow: 'hidden'
@@ -46,7 +61,7 @@ const ContactMain = () => {
           opacity: 0.3
         }}></div>
         <h1 style={{ 
-          fontSize: '48px', 
+          fontSize: isMobile ? '32px' : '48px',
           margin: '0 0 15px 0', 
           fontWeight: '700',
           position: 'relative',
@@ -54,31 +69,32 @@ const ContactMain = () => {
           letterSpacing: '1px'
         }}>Get In Touch</h1>
         <p style={{ 
-          fontSize: '20px', 
+          fontSize: isMobile ? '16px' : '20px',
           margin: 0, 
           opacity: 0.95,
           position: 'relative',
           zIndex: 1,
           maxWidth: '600px',
           marginLeft: 'auto',
-          marginRight: 'auto'
+          marginRight: 'auto',
+          padding: '0 15px'
         }}>We'd love to hear from you. Reach out to us for any queries!</p>
       </div>
 
       {/* Map Section in Card */}
       <div style={{
-        maxWidth: '1400px',
-        margin: '-50px auto 60px',
-        padding: '0 20px',
+        maxWidth: '1200px',
+        margin: isMobile ? '30px auto 40px' : '-60px auto 60px',
+        padding: '0 15px',
         position: 'relative',
         zIndex: 2
       }}>
         <div style={{
           background: 'white',
-          borderRadius: '20px',
+          borderRadius: isMobile ? '15px' : '20px',
           boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
           overflow: 'hidden',
-          height: '500px'
+          height: isMobile ? '350px' : '450px'
         }}>
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3503.694774142383!2d77.36040731508097!3d28.568851082442856!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce5456d11b54f%3A0x65da969aa8a715c!2sEldeco%20Edge%2C%20Sector%2093A%2C%20Noida%2C%20Uttar%20Pradesh%20201304!5e0!3m2!1sen!2sin!4v1621234567890!5m2!1sen!2sin"
@@ -94,24 +110,30 @@ const ContactMain = () => {
 
       {/* Contact Info Cards */}
       <div style={{
-        maxWidth: '1400px',
+        maxWidth: '1200px',
         margin: '0 auto 60px',
-        padding: '0 20px'
+        padding: '0 15px'
       }}>
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '25px'
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: isMobile ? '20px' : '25px',
+          justifyContent: 'center'
         }}>
           {/* Address Card */}
           <div style={{
             background: 'white',
-            padding: '35px 25px',
+            padding: isMobile ? '30px 20px' : '35px 25px',
             borderRadius: '15px',
             boxShadow: '0 10px 40px rgba(0,0,0,0.08)',
             transition: 'all 0.3s ease',
             cursor: 'pointer',
-            border: '2px solid transparent'
+            border: '2px solid transparent',
+            width: isMobile ? '100%' : 'calc(25% - 19px)',
+            minWidth: isMobile ? '100%' : '250px',
+            maxWidth: isMobile ? '100%' : '280px',
+            textAlign: 'center',
+            flex: isMobile ? '1 1 100%' : '0 1 auto'
           }}
           onMouseOver={(e) => {
             e.currentTarget.style.transform = 'translateY(-8px)';
@@ -131,19 +153,19 @@ const ContactMain = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: '20px'
+              margin: '0 auto 20px'
             }}>
               <MapPin size={32} color="white" strokeWidth={2.5} />
             </div>
             <h3 style={{ 
               color: '#333', 
-              fontSize: '22px', 
+              fontSize: '20px', 
               margin: '0 0 12px 0',
               fontWeight: '600'
             }}>Our Office</h3>
             <p style={{ 
               color: '#666', 
-              fontSize: '15px', 
+              fontSize: '14px', 
               lineHeight: '1.7', 
               margin: 0 
             }}>
@@ -157,12 +179,17 @@ const ContactMain = () => {
           {/* Phone Card */}
           <div style={{
             background: 'white',
-            padding: '35px 25px',
+            padding: isMobile ? '30px 20px' : '35px 25px',
             borderRadius: '15px',
             boxShadow: '0 10px 40px rgba(0,0,0,0.08)',
             transition: 'all 0.3s ease',
             cursor: 'pointer',
-            border: '2px solid transparent'
+            border: '2px solid transparent',
+            width: isMobile ? '100%' : 'calc(25% - 19px)',
+            minWidth: isMobile ? '100%' : '250px',
+            maxWidth: isMobile ? '100%' : '280px',
+            textAlign: 'center',
+            flex: isMobile ? '1 1 100%' : '0 1 auto'
           }}
           onMouseOver={(e) => {
             e.currentTarget.style.transform = 'translateY(-8px)';
@@ -182,19 +209,19 @@ const ContactMain = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: '20px'
+              margin: '0 auto 20px'
             }}>
               <Phone size={32} color="white" strokeWidth={2.5} />
             </div>
             <h3 style={{ 
               color: '#333', 
-              fontSize: '22px', 
+              fontSize: '20px', 
               margin: '0 0 12px 0',
               fontWeight: '600'
             }}>Call Us</h3>
             <p style={{ 
               color: '#666', 
-              fontSize: '15px', 
+              fontSize: '14px', 
               margin: '8px 0',
               fontWeight: '500'
             }}>
@@ -202,7 +229,7 @@ const ContactMain = () => {
             </p>
             <p style={{ 
               color: '#666', 
-              fontSize: '15px', 
+              fontSize: '14px', 
               margin: '8px 0',
               fontWeight: '500'
             }}>
@@ -210,23 +237,28 @@ const ContactMain = () => {
             </p>
             <p style={{ 
               color: '#999', 
-              fontSize: '13px', 
+              fontSize: '12px', 
               margin: '12px 0 0 0',
               fontStyle: 'italic'
             }}>
-              Technical Support: 9319392227
+              Tech Support: 9319392227
             </p>
           </div>
 
           {/* Email Card */}
           <div style={{
             background: 'white',
-            padding: '35px 25px',
+            padding: isMobile ? '30px 20px' : '35px 25px',
             borderRadius: '15px',
             boxShadow: '0 10px 40px rgba(0,0,0,0.08)',
             transition: 'all 0.3s ease',
             cursor: 'pointer',
-            border: '2px solid transparent'
+            border: '2px solid transparent',
+            width: isMobile ? '100%' : 'calc(25% - 19px)',
+            minWidth: isMobile ? '100%' : '250px',
+            maxWidth: isMobile ? '100%' : '280px',
+            textAlign: 'center',
+            flex: isMobile ? '1 1 100%' : '0 1 auto'
           }}
           onMouseOver={(e) => {
             e.currentTarget.style.transform = 'translateY(-8px)';
@@ -246,19 +278,19 @@ const ContactMain = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: '20px'
+              margin: '0 auto 20px'
             }}>
               <Mail size={32} color="white" strokeWidth={2.5} />
             </div>
             <h3 style={{ 
               color: '#333', 
-              fontSize: '22px', 
+              fontSize: '20px', 
               margin: '0 0 12px 0',
               fontWeight: '600'
             }}>Email Us</h3>
             <p style={{ 
               color: '#666', 
-              fontSize: '15px', 
+              fontSize: '14px', 
               margin: '8px 0',
               fontWeight: '500',
               wordBreak: 'break-word'
@@ -267,23 +299,28 @@ const ContactMain = () => {
             </p>
             <p style={{ 
               color: '#999', 
-              fontSize: '13px', 
+              fontSize: '12px', 
               margin: '12px 0 0 0',
               fontStyle: 'italic'
             }}>
-              We'll respond within 24 hours
+              Reply within 24 hours
             </p>
           </div>
 
           {/* Working Hours Card */}
           <div style={{
             background: 'white',
-            padding: '35px 25px',
+            padding: isMobile ? '30px 20px' : '35px 25px',
             borderRadius: '15px',
             boxShadow: '0 10px 40px rgba(0,0,0,0.08)',
             transition: 'all 0.3s ease',
             cursor: 'pointer',
-            border: '2px solid transparent'
+            border: '2px solid transparent',
+            width: isMobile ? '100%' : 'calc(25% - 19px)',
+            minWidth: isMobile ? '100%' : '250px',
+            maxWidth: isMobile ? '100%' : '280px',
+            textAlign: 'center',
+            flex: isMobile ? '1 1 100%' : '0 1 auto'
           }}
           onMouseOver={(e) => {
             e.currentTarget.style.transform = 'translateY(-8px)';
@@ -303,35 +340,35 @@ const ContactMain = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: '20px'
+              margin: '0 auto 20px'
             }}>
               <Clock size={32} color="white" strokeWidth={2.5} />
             </div>
             <h3 style={{ 
               color: '#333', 
-              fontSize: '22px', 
+              fontSize: '20px', 
               margin: '0 0 12px 0',
               fontWeight: '600'
             }}>Working Hours</h3>
             <p style={{ 
               color: '#666', 
-              fontSize: '15px', 
+              fontSize: '14px', 
               margin: '8px 0',
               fontWeight: '500'
             }}>
-              Mon - Fri: 9:00 AM - 6:00 PM
+              Mon - Fri: 9 AM - 6 PM
             </p>
             <p style={{ 
               color: '#666', 
-              fontSize: '15px', 
+              fontSize: '14px', 
               margin: '8px 0',
               fontWeight: '500'
             }}>
-              Saturday: 9:00 AM - 2:00 PM
+              Saturday: 9 AM - 2 PM
             </p>
             <p style={{ 
               color: '#999', 
-              fontSize: '13px', 
+              fontSize: '12px', 
               margin: '12px 0 0 0',
               fontStyle: 'italic'
             }}>
@@ -343,50 +380,51 @@ const ContactMain = () => {
 
       {/* Contact Form Section */}
       <div style={{
-        maxWidth: '900px',
-        margin: '0 auto 100px',
-        padding: '0 20px'
+        maxWidth: '800px',
+        margin: '0 auto 80px',
+        padding: '0 15px'
       }}>
         <div style={{
           textAlign: 'center',
-          marginBottom: '50px'
+          marginBottom: isMobile ? '35px' : '45px'
         }}>
           <h2 style={{
             color: '#333',
-            fontSize: '42px',
+            fontSize: isMobile ? '28px' : '40px',
             marginBottom: '15px',
             fontWeight: '700'
           }}>Send Us a Message</h2>
           <p style={{
             color: '#666',
-            fontSize: '18px',
+            fontSize: isMobile ? '15px' : '17px',
             maxWidth: '600px',
-            margin: '0 auto'
+            margin: '0 auto',
+            padding: '0 15px'
           }}>
-            Have a question or feedback? Fill out the form below and we'll get back to you as soon as possible.
+            Have a question? Fill out the form and we'll respond quickly.
           </p>
         </div>
         
         <div style={{
           background: 'white',
-          padding: '50px',
-          borderRadius: '20px',
+          padding: isMobile ? '30px 20px' : '45px',
+          borderRadius: isMobile ? '15px' : '20px',
           boxShadow: '0 20px 60px rgba(0,0,0,0.1)'
         }}>
           {/* Name and Email Row */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '25px',
-            marginBottom: '25px'
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+            gap: '20px',
+            marginBottom: '20px'
           }}>
             <div>
               <label style={{
                 display: 'block',
                 color: '#333',
-                fontSize: '15px',
+                fontSize: '14px',
                 fontWeight: '600',
-                marginBottom: '10px'
+                marginBottom: '8px'
               }}>Full Name *</label>
               <input
                 type="text"
@@ -396,7 +434,7 @@ const ContactMain = () => {
                 placeholder="Enter your name"
                 style={{
                   width: '100%',
-                  padding: '14px 18px',
+                  padding: '14px 16px',
                   border: '2px solid #e8e8e8',
                   borderRadius: '10px',
                   fontSize: '15px',
@@ -420,9 +458,9 @@ const ContactMain = () => {
               <label style={{
                 display: 'block',
                 color: '#333',
-                fontSize: '15px',
+                fontSize: '14px',
                 fontWeight: '600',
-                marginBottom: '10px'
+                marginBottom: '8px'
               }}>Email Address *</label>
               <input
                 type="email"
@@ -432,7 +470,7 @@ const ContactMain = () => {
                 placeholder="your.email@example.com"
                 style={{
                   width: '100%',
-                  padding: '14px 18px',
+                  padding: '14px 16px',
                   border: '2px solid #e8e8e8',
                   borderRadius: '10px',
                   fontSize: '15px',
@@ -454,13 +492,13 @@ const ContactMain = () => {
           </div>
 
           {/* Phone */}
-          <div style={{ marginBottom: '25px' }}>
+          <div style={{ marginBottom: '20px' }}>
             <label style={{
               display: 'block',
               color: '#333',
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: '600',
-              marginBottom: '10px'
+              marginBottom: '8px'
             }}>Phone Number *</label>
             <input
               type="tel"
@@ -470,7 +508,7 @@ const ContactMain = () => {
               placeholder="+91 1234567890"
               style={{
                 width: '100%',
-                padding: '14px 18px',
+                padding: '14px 16px',
                 border: '2px solid #e8e8e8',
                 borderRadius: '10px',
                 fontSize: '15px',
@@ -491,23 +529,23 @@ const ContactMain = () => {
           </div>
 
           {/* Message */}
-          <div style={{ marginBottom: '30px' }}>
+          <div style={{ marginBottom: '25px' }}>
             <label style={{
               display: 'block',
               color: '#333',
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: '600',
-              marginBottom: '10px'
+              marginBottom: '8px'
             }}>Your Message *</label>
             <textarea
               name="message"
               value={formData.message}
               onChange={handleChange}
               placeholder="Tell us about your query..."
-              rows="6"
+              rows="5"
               style={{
                 width: '100%',
-                padding: '14px 18px',
+                padding: '14px 16px',
                 border: '2px solid #e8e8e8',
                 borderRadius: '10px',
                 fontSize: '15px',
@@ -516,7 +554,7 @@ const ContactMain = () => {
                 resize: 'vertical',
                 fontFamily: "'Poppins', 'Arial', sans-serif",
                 boxSizing: 'border-box',
-                minHeight: '150px'
+                minHeight: '140px'
               }}
               onFocus={(e) => {
                 e.target.style.borderColor = '#C8965F';
@@ -534,12 +572,12 @@ const ContactMain = () => {
             onClick={handleSubmit}
             style={{
               width: '100%',
-              padding: '18px',
+              padding: isMobile ? '16px' : '18px',
               background: 'linear-gradient(135deg, #C8965F 0%, #A67843 100%)',
               color: 'white',
               border: 'none',
               borderRadius: '10px',
-              fontSize: '17px',
+              fontSize: isMobile ? '16px' : '17px',
               fontWeight: '600',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
@@ -557,7 +595,7 @@ const ContactMain = () => {
           >
             Send Message →
           </button>
-        </div>
+        </div>  
       </div>
     </div>
   );
