@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { UserCircle } from "lucide-react";
+
 import { 
   FiArrowLeft, FiMapPin, FiShare, FiHeart, FiCheck, FiXCircle,
   FiUser, FiCalendar, FiShield, FiStar, FiX, FiZoomIn, FiZoomOut
@@ -2188,7 +2190,27 @@ border: "1px solid #e5e5e5",
       }}
     />
   ) : (
-    <FiUser />
+    // <FiUser style={{color:"black"}} />
+ 
+ <div
+  style={{
+    width: "70px",
+    height: "70px",
+    borderRadius: "50%",
+    background: "#ffffff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    border: "1px solid #e5e5e5",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
+  }}
+>
+  <UserCircle size={92} color="#c2772b"  />
+</div>
+
+
+
+
   )}
 </div>
 

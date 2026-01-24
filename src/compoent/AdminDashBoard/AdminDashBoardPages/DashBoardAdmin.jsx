@@ -992,7 +992,7 @@ export default function DashBoardAdmin() {
     <div className={styles.page}>
       <div className={styles.topbar}></div>
       <section style={{marginTop:"-3px"}} className={styles.hero}>
-        <img className={styles.heroBg} src="/public/Group 89.png" alt="hero background" />
+        <img className={styles.heroBg} src="/Group 89.png" alt="hero background" />
         <div className={styles.heroOverlay} />
         <div className={styles.heroContent}>
           <h1>Let's Ovika Renovate and Manage<br/>Your Property</h1>
