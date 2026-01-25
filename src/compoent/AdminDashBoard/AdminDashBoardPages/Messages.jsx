@@ -5,4 +5,4 @@ import React from 'react'
     <div>Messages</div>
   )
 }
-export default Messages
+export default Messages   
