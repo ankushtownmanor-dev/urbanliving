@@ -1,8 +1,11 @@
 import React from 'react'
+import ContactMain from '../../ContactUs/ContactMain'
 
  const Support = () => {
   return (
-    <div>Support</div>
+    <div>
+      <ContactMain/>
+    </div>
   )
 }
 export default Support

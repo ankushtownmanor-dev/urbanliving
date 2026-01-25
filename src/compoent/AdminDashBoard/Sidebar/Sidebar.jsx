@@ -120,17 +120,17 @@ function Sidebar({ isOpen, onClose }) {
             </NavLink>
           </li>
 
-          <li>
+          {/* <li>
             <NavLink to="/admindashboard/properties">
               <FaHome /> Properties
             </NavLink>
-          </li>
+          </li> */}
 
-          <li>
+          {/* <li>
             <NavLink to="/admindashboard/messages">
               <FaEnvelope /> Messages
             </NavLink>
-          </li>
+          </li> */}
 
           <li>
             <NavLink to="/admindashboard/documents">
@@ -140,7 +140,7 @@ function Sidebar({ isOpen, onClose }) {
 
           <li>
             <NavLink to="/admindashboard/support">
-              <FaHeadset /> Support
+              <FaHeadset /> Contactus / Support
             </NavLink>
           </li>
         </ul>
