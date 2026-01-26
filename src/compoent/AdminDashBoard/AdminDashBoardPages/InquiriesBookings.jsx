@@ -396,7 +396,7 @@ const InquiriesBookings = () => {
       {requests.length === 0 ? (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "50vh", padding: "40px 20px", background: "linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%)", borderRadius: "16px", boxShadow: "0 4px 6px rgba(0,0,0,0.05)" }}>
           <div style={{ background: "#fff", padding: "32px", borderRadius: "20px", boxShadow: "0 10px 25px rgba(0,0,0,0.1)", maxWidth: "400px", textAlign: "center" }}>
-            <div style={{ background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)", width: "80px", height: "80px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
+            <div style={{ background: "#c2772b", width: "80px", height: "80px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
               <Inbox size={40} style={{ color: "#fff" }} />
             </div>
             <h2 style={{ fontSize: "22px", fontWeight: 700, color: "#111827", marginBottom: "12px" }}>No Enquiries Yet</h2>
