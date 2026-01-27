@@ -45,17 +45,28 @@ const ProfilePage = () => {
       setEditEmail(user.email || "");
       setEditPhone(user.phone_number || "");
 
-      fetch(`${API_BASE}/user-details?user_id=${user.id}`, {
+      fetch(`${API_BASE}/users-list/${user.id}`, {
         credentials: "include"
       })
         .then(res => res.json())
         .then(data => {
-          if (data && !data.message) { // minimal validation
-            if (data.pan_number) setPanNumber(data.pan_number);
-            if (data.aadhaar_number) setAadhaarNumber(data.aadhaar_number);
+            const userData = data.data || data; // Handle potential wrapper
+            
+            // Helper to decode Buffer if present
+            const decodeValue = (val) => {
+                if (val && typeof val === 'object' && val.type === 'Buffer' && Array.isArray(val.data)) {
+                    return String.fromCharCode(...val.data);
+                }
+                return val;
+            };
+
+          if (userData) { 
+            if (userData.pan_number) setPanNumber(decodeValue(userData.pan_number));
+            if (userData.aadhaar_number) setAadhaarNumber(decodeValue(userData.aadhaar_number));
+            
             // Check verification status (boolean or 1/0)
-            setPanVerified(!!data.pan_verified);
-            setAadhaarVerified(!!data.aadhaar_verified);
+            setPanVerified(!!userData.pan_verified);
+            setAadhaarVerified(!!userData.aadhaar_verified);
           }
         })
         .catch(e => console.error("Error fetching user details", e));
@@ -106,13 +117,13 @@ const ProfilePage = () => {
   const updateProfile = async () => {
     setLoadingProfile(true);
     try {
-      // 1. Update Basic Info (Auth)
+      // 1. Update Basic Info (Auth) - Only if changed
       const basicChanges = {};
       if (editUsername !== user?.username) basicChanges.username = editUsername;
       if (editEmail !== user?.email) basicChanges.email = editEmail;
       if (editPhone !== (user?.phone_number || "")) basicChanges.phone_number = editPhone || null;
 
-      // Only call update-profile if there are actual changes to basic info
+      // Only call AUTH update-profile if there are actual changes to basic info
       if (Object.keys(basicChanges).length > 0) {
          if (user?.id) basicChanges.userId = user.id;
          
@@ -123,37 +134,87 @@ const ProfilePage = () => {
           body: JSON.stringify(basicChanges),
         });
         const data = await res.json();
+        
         if (!res.ok) {
-           // If it failed, throw error to stop execution or handle specific cases?
-           // The user might be just updating PAN, so maybe we shouldn't block the second part?
-           // But if basic info failed, we should probably let them know.
-           throw new Error(data?.message || "Failed to update basic profile");
+           throw new Error(data?.message || "Failed to update basic info");
         }
+        
         // Update local user context
         login({ ...(user || {}), ...data.user });
       }
 
-      // 2. Update Extended Details (PAN/Aadhaar)
-      // Always sending this if fields are populated, to ensure storage
-      const detailsPayload = {
-        user_id: user?.id,
-        pan_number: panNumber,
-        aadhaar_number: aadhaarNumber,
-        pan_verified: panVerified,
-        aadhaar_verified: aadhaarVerified
-      };
+      // 2. Update Verification/Extended Details via USERS-LIST API
+      // Logic: Try POST first (create). If duplicate (400/500), try PUT (update).
+      // 2. Update Verification/Extended Details via USER-DETAILS API
+      // Since the screenshot shows the data is in 'user_details' table, we use that endpoint.
+      let detailsSuccess = false;
+      try {
+        const basePayload = {
+            user_id: user?.id, // Crucial for user_details table
+            pan_number: panNumber,
+            aadhaar_number: aadhaarNumber,
+            pan_verified: panVerified ? 1 : 0,
+            aadhaar_verified: aadhaarVerified ? 1 : 0
+        };
 
-      const resDetails = await fetch(`${API_BASE}/user-details`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(detailsPayload),
-      });
-      
-      if (!resDetails.ok) {
-        const dError = await resDetails.json();
-        console.warn("Details update warning:", dError);
-        // We continue to show success if basic profile worked, but alert user
+        // Attempt POST (Create new entry in user_details)
+        console.log("Attempting POST to user-details...");
+        let resDetails = await fetch(`${API_BASE}/user-details`, {
+            method: "POST", 
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(basePayload),
+        });
+        
+        let dData = null;
+        if(resDetails.ok) {
+            dData = await resDetails.json();
+            console.log("Details saved (POST):", dData);
+            detailsSuccess = true;
+        } else {
+            const dErr = await resDetails.json();
+            console.warn("POST failed:", resDetails.status, dErr);
+
+            const sErrMsg = JSON.stringify(dErr).toLowerCase();
+            
+            // Checks for 'duplicate' or existing entry, then falls back to PUT
+            // Since this is user_details, typical error is "Duplicate entry for user_id"
+            if (resDetails.status === 500 || resDetails.status === 400 || resDetails.status === 409) {
+                 if (sErrMsg.includes("duplicate") || sErrMsg.includes("already exists")) {
+                     console.log("Entry exists, attempting PUT update to user-details...");
+                     
+                     // Fallback to PUT /user-details (which typically uses body, not ID in URL for this specific endpoint design seen before)
+                     // Or if it follows standard REST: /user-details (PUT with user_id in body) or /user-details?user_id=...
+                     // Based on previous context, we'll try the base endpoint with PUT or the logic we saw earlier.
+                     // IMPORTANT: Your previous code used `api/user-details` for POST. Let's assume PUT works there too or we need to handle it.
+                     // Actually, if POST fails, we just want to UPDATE.
+                     
+                     const resPut = await fetch(`${API_BASE}/user-details`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                        body: JSON.stringify(basePayload),
+                     });
+                     
+                     if (resPut.ok) {
+                         dData = await resPut.json();
+                         console.log("Details updated (Fallback PUT):", dData);
+                         detailsSuccess = true;
+                     } else {
+                         const putErr = await resPut.json();
+                         console.warn("Fallback PUT failed:", putErr);
+                         alert("Warning: Could not save verification details. " + (putErr.message || ""));
+                     }
+                 } else {
+                     alert("Warning: Verification details save failed. " + (dErr.message || ""));
+                 }
+            } else {
+                 alert("Warning: Verification details save failed. Status: " + resDetails.status);
+            }
+        }
+      } catch (e) {
+         console.error("Secondary update failed", e);
+         alert("Warning: Verification details could not be saved. Network error?");
       }
 
       alert("Profile updated successfully!");
@@ -247,7 +308,7 @@ const ProfilePage = () => {
              {panNumber && (
                 panVerified ? 
                 <span className="status-badge verified"><FaCheckCircle /> Verified</span> : 
-                <span className="status-badge pending"><FaTimesCircle /> Pending</span>
+                <span className="status-badge not-verified"><FaTimesCircle /> Not Verified</span>
              )}
           </div>
         </div>
@@ -259,7 +320,7 @@ const ProfilePage = () => {
             {aadhaarNumber && (
                 aadhaarVerified ? 
                 <span className="status-badge verified"><FaCheckCircle /> Verified</span> : 
-                <span className="status-badge pending"><FaTimesCircle /> Pending</span>
+                <span className="status-badge not-verified"><FaTimesCircle /> Not Verified</span>
             )}
            </div>
         </div>

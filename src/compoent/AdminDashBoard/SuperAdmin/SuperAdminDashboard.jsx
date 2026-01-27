@@ -69,6 +69,7 @@ export default function SuperAdminDashboard() {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [userForm, setUserForm] = useState({ username: '', email: '', phone_number: '', role: 'user', password: '' });
   const [searchTerm, setSearchTerm] = useState("");
+  const [userSearch, setUserSearch] = useState(""); // Search for Users
   const [bookingFilter, setBookingFilter] = useState("ALL");
   const [filterType, setFilterType] = useState("ALL");
   
@@ -591,7 +592,16 @@ export default function SuperAdminDashboard() {
                                 <h3>Registered Users</h3>
                                 <div className="sa-badge" style={{background:'#eff6ff', color:'#3b82f6', border:'none'}}>{usersList.length} Total</div>
                              </div>
-                             <button className="sa-btn-primary" onClick={() => openUserModal()}>+ Add User</button>
+                             <div style={{display: 'flex', gap: '10px'}}>
+                                <input 
+                                    type="text" 
+                                    placeholder="Search users..." 
+                                    className="sa-search-input"
+                                    value={userSearch}
+                                    onChange={(e) => setUserSearch(e.target.value)}
+                                />
+                                <button className="sa-btn-primary" onClick={() => openUserModal()}>+ Add User</button>
+                             </div>
                         </div>
                         <table className="sa-table">
                             <thead>
@@ -605,7 +615,15 @@ export default function SuperAdminDashboard() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {usersList.slice(0, 50).map(u => (
+                                {usersList
+                                .filter(u => {
+                                    if(!userSearch) return true;
+                                    const s = userSearch.toLowerCase();
+                                    return (u.username||'').toLowerCase().includes(s) || 
+                                           (u.email||'').toLowerCase().includes(s) || 
+                                           (u.phone_number||'').toString().includes(s);
+                                })
+                                .slice(0, 50).map(u => (
                                     <tr key={u.id || u._id}>
                                         <td style={{fontFamily:'monospace', color:'#64748b'}}>#{(u.id||u._id || '').toString().slice(-4)}</td>
                                         <td>
@@ -624,9 +642,9 @@ export default function SuperAdminDashboard() {
                                         </td>
                                         <td>
                                             <div style={{display:'flex', gap:'4px'}}>
-                                                {u.aadhaar_verified ? (
-                                                    <span style={{fontSize:'10px', background:'#dcfce7', color:'#166534', padding:'2px 6px', borderRadius:'4px'}}>Aadhaar</span>
-                                                ) : <span style={{fontSize:'10px', background:'#f1f5f9', color:'#94a3b8', padding:'2px 6px', borderRadius:'4px'}}>No KYC</span>}
+                                                {u.aadhaar_verified || u.pan_verified ? (
+                                                    <span style={{fontSize:'10px', background:'#dcfce7', color:'#166534', padding:'2px 6px', borderRadius:'4px'}}>Verified</span>
+                                                ) : <span style={{fontSize:'10px', background:'#f1f5f9', color:'#94a3b8', padding:'2px 6px', borderRadius:'4px'}}>Not Verified</span>}
                                             </div>
                                         </td>
                                         <td style={{fontSize:'12px', color:'#475569'}}>
