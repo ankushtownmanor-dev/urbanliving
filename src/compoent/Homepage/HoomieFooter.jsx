@@ -462,7 +462,7 @@ const HoomieFooter = () => {
               <img
                 src="/ovikalogo11.png"
                 alt="Urban Living Logo"
-                style={{ width: "200px", marginBottom: "10px" }}
+                style={{ width: "200px", marginBottom: "-90px" }}
               />
               <p
                 style={{
