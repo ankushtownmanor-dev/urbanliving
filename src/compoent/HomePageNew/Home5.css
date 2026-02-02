@@ -1,16 +1,20 @@
-/* ---------- Desktop / Tablet base (keep existing look) ---------- */
+* {
+  font-family: "Inter", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ---------- Desktop / Tablet base ---------- */
 .why-container-97 {
   background-color: #e6e7e6;
   text-align: center;
-  padding: 80px 20px;
-  max-width: 1200px;
+  padding: 80px 40px;
+  max-width: 1400px;
   margin: 0 auto;
   border-radius: 18px;
   box-sizing: border-box;
 }
 
 .why-heading-97 {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 500;
   color: #000;
   margin-bottom: 60px;
@@ -20,7 +24,10 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 30px;
+  gap: 35px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .why-card-97 {
@@ -28,7 +35,9 @@
   border-radius: 16px;
   box-shadow: 0 2px 1px 1px rgba(50, 48, 48, 0.2),
               0 0px 1px rgba(50, 48, 48, 0.2);
-  width: 240px;
+  flex: 1 1 calc(25% - 35px);
+  min-width: 240px;
+  max-width: 280px;
   padding: 40px 25px;
   transition: all 0.3s ease;
   box-sizing: border-box;
@@ -36,65 +45,138 @@
 
 .why-card-97:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
 }
 
 .why-icon-97 {
   margin-bottom: 18px;
   display: block;
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   object-fit: contain;
   margin-left: auto;
   margin-right: auto;
 }
 
 .why-title-97 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   color: #000;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .why-text-97 {
   font-size: 14px;
   color: #555;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-/* ---------- IMPORTANT: mobile/tablet overrides (placed AFTER base rules) ---------- */
-/* We target typical mobile widths and make a 2x2 grid like your image */
-@media (max-width: 786px) {
+/* Large Desktop */
+@media (min-width: 1440px) {
   .why-container-97 {
-    padding: 30px 14px;
-    border-radius: 14px;
-    margin: 12px;              /* give spacing from screen edges */
+    padding: 90px 80px;
+    max-width: 1600px;
   }
 
   .why-heading-97 {
-    font-size: 20px;
-    margin-bottom: 26px;
-    font-weight: 600;
+    font-size: 34px;
   }
 
-  /* use CSS grid to get exact 2 columns */
+  .why-grid-97 {
+    gap: 45px;
+    max-width: 1600px;
+  }
+
+  .why-card-97 {
+    max-width: 320px;
+    padding: 45px 28px;
+  }
+
+  .why-icon-97 {
+    width: 56px;
+    height: 56px;
+  }
+
+  .why-title-97 {
+    font-size: 19px;
+  }
+
+  .why-text-97 {
+    font-size: 15px;
+  }
+}
+
+/* Medium Desktop / Laptop */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .why-container-97 {
+    padding: 80px 60px;
+    max-width: 1400px;
+  }
+
+  .why-grid-97 {
+    gap: 20px;
+  }
+
+  .why-card-97 {
+    flex: 1 1 calc(25% - 30px);
+    max-width: 260px;
+  }
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1023px) {
+  .why-container-97 {
+    padding: 70px 40px;
+    max-width: 900px;
+  }
+
+  .why-heading-97 {
+    font-size: 28px;
+  }
+
+  .why-grid-97 {
+    gap: 25px;
+  }
+
+  .why-card-97 {
+    flex: 1 1 calc(50% - 25px);
+    max-width: 300px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .why-container-97 {
+    padding: 35px 16px;
+    border-radius: 14px;
+    margin: 12px;
+  }
+
+  .why-heading-97 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    font-weight: 500;
+  }
+
+  /* 2x2 grid for mobile */
   .why-grid-97 {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px 14px; /* row-gap col-gap */
+    gap: 16px 14px;
     justify-items: center;
     align-items: stretch;
     width: 100%;
-    box-sizing: border-box;
+    padding: 0;
   }
 
   .why-card-97 {
     width: 100%;
-    max-width: 320px;     /* card max width within grid cell */
-    padding: 22px 14px;
+    max-width: 320px;
+    min-width: unset;
+    padding: 24px 16px;
     border-radius: 12px;
     box-shadow: 0 2px 1px 2px rgba(50, 48, 48, 0.2),
-              0 0px 1px rgba(50, 48, 48, 0.2);
+                0 0px 1px rgba(50, 48, 48, 0.2);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -102,35 +184,56 @@
   }
 
   .why-icon-97 {
-    width: 44px;
-    height: 44px;
-    margin-bottom: 12px;
+    width: 46px;
+    height: 46px;
+    margin-bottom: 14px;
   }
 
   .why-title-97 {
     font-size: 15px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
 
   .why-text-97 {
-    font-size: 10px;
-    max-width: 90%;
+    font-size: 11px;
+    max-width: 92%;
     color: #555;
-    line-height: 1.45;
+    line-height: 1.5;
     margin: 0 auto;
   }
 }
 
+/* Extra Small Mobile */
+@media (max-width: 480px) {
+  .why-container-97 {
+    padding: 30px 12px;
+    margin: 10px;
+  }
 
+  .why-heading-97 {
+    font-size: 22px;
+    margin-bottom: 25px;
+  }
 
+  .why-grid-97 {
+    gap: 14px 12px;
+  }
 
-/* ///////////////////////////////////new */
+  .why-card-97 {
+    padding: 20px 14px;
+    max-width: 100%;
+  }
 
+  .why-icon-97 {
+    width: 42px;
+    height: 42px;
+  }
 
+  .why-title-97 {
+    font-size: 14px;
+  }
 
-
-
-
-
-
-
+  .why-text-97 {
+    font-size: 10px;
+  }
+}

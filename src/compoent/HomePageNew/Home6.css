@@ -8,7 +8,7 @@
   border-radius: 18px;
   margin: 0 auto;
   width: 100%;
-  max-width: 1100px;
+  max-width: 1400px;
 }
 
 .ovika-connect-title {
@@ -21,19 +21,19 @@
 }
 
 .ovika-title-highlight {
-  color: #c99b3b; /* matches golden color */
+  color: #c99b3b;
 }
 
 .ovika-connect-content {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  /* background: linear-gradient(103deg, #334145 36%, #292830 100%); */
-   background: url('/Group 167.png') no-repeat center center/cover;
+  background: url('/Group 167.png') no-repeat center center/cover;
   border-radius: 32px;
-  padding: 64px 30px;
+  padding: 64px 50px;
   position: relative;
-    /* background-size: 90% auto; */
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .ovika-connect-left {
@@ -47,17 +47,16 @@
 }
 
 .ovika-property-graphic {
-  /* You can add a background-image here if needed */
   position: absolute;
   top: 44px;
   left: 16px;
   width: 390px;
   height: 215px;
-  /* */
   opacity: 1;
   z-index: 1;
   pointer-events: none;
 }
+
 .ovika-property-heading {
   font-size: 3rem;
   font-weight: 400;
@@ -99,7 +98,7 @@
 
 .ovika-input {
   margin-bottom: 18px;
-  padding: 8px 44px 10px 25px; /* reduced left padding */
+  padding: 8px 44px 10px 25px;
   border-radius: 24px;
   border: none;
   outline: none;
@@ -109,13 +108,10 @@
               0 0px 1px rgba(50, 48, 48, 0.2); 
 }
 
-
 .ovika-input::placeholder {
   color: #888;
   font-size: 1.13rem;
   letter-spacing: 0.01em;
-  /* margin-left: -10px; */
-  /* padding-left: -10px; */
 }
 
 .ovika-submit-btn-homepage {
@@ -131,9 +127,11 @@
   transition: opacity 0.22s;
 }
 
-.ovika-submit-btn:hover {
+.ovika-submit-btn-homepage:hover {
   opacity: 0.89;
+  background-color: #a86424;
 }
+
 .form-heading-ovika-homepage {
   font-size: 1.6rem;
   font-weight: 500;
@@ -141,14 +139,14 @@
   margin-bottom: 20px;
   text-align: center;
 }
-/* ✅ Left-side Property Listing Button */
+
 .ovika-left-btn-property {
   background: #c2772b;
   color: #fff;
   border: none;
   border-radius: 28px;
   padding: 8px 0;
-  width: 230px; /* slightly wider */
+  width: 230px;
   font-size: 1.08rem;
   font-weight: 400;
   cursor: pointer;
@@ -156,95 +154,107 @@
   transition: all 0.3s ease;
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
   text-decoration: none;
-
-  /* ✅ Make text & icon aligned properly */
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px; /* space between text and arrow */
+  gap: 8px;
 }
 
-.ovika-left-btn:hover {
+.ovika-left-btn-property:hover {
   opacity: 0.9;
   transform: translateY(-2px);
+  background-color: #a86424;
 }
 
-/* ✅ Arrow animation on hover */
 .ovika-left-btn-arrow {
   width: 18px;
   height: 18px;
   transition: transform 0.3s ease;
 }
 
-.ovika-left-btn:hover .ovika-left-btn-arrow {
-  transform: translateX(4px); /* smooth arrow slide */
+.ovika-left-btn-property:hover .ovika-left-btn-arrow {
+  transform: translateX(4px);
 }
 
-/* ✅ Mobile view */
-@media (max-width: 768px) {
+/* Large Desktop */
+@media (min-width: 1440px) {
+  .ovika-connect-main {
+    max-width: 1600px;
+  }
+
+  .ovika-connect-content {
+    padding: 70px 80px;
+    max-width: 1600px;
+  }
+
+  .ovika-property-heading {
+    font-size: 3.3rem;
+  }
+
+  .ovika-property-desc {
+    font-size: 1.25rem;
+    max-width: 450px;
+  }
+
+  .ovika-connect-form {
+    min-width: 380px;
+    padding: 35px 32px;
+  }
+
   .ovika-left-btn-property {
-    width: 100%;
-    font-size: 1rem;
+    width: 250px;
+    font-size: 1.15rem;
     padding: 10px 0;
-    border-radius: 25px;
-    background: linear-gradient(to right, #cf1518, #1b0101);
-    gap: 6px;
-    text-decoration: none;
   }
 }
 
-@media (max-width: 900px) {
+/* Medium Desktop / Laptop */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .ovika-connect-main {
+    max-width: 1200px;
+  }
+
+  .ovika-connect-content {
+    padding: 60px 40px;
+  }
+
+  .ovika-property-heading {
+    font-size: 2.8rem;
+  }
+
+  .ovika-property-desc {
+    font-size: 1.15rem;
+  }
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1023px) {
   .ovika-connect-content {
     flex-direction: column;
-    padding: 22px 8vw;
+    padding: 40px 30px;
   }
+
   .ovika-property-heading {
-    font-size: 2.15rem;
+    font-size: 2.4rem;
   }
+
   .ovika-property-desc {
-    font-size: 1rem;
+    font-size: 1.1rem;
+    max-width: 100%;
   }
+
   .ovika-connect-form-wrapper {
     padding: 30px 0;
+    width: 100%;
   }
-}
 
-@media (max-width: 600px) {
-  .ovika-connect-main {
-    padding: 15px 0 0 0;
-  }
-  .ovika-connect-content {
-    padding: 14px 2vw;
-  }
-  .ovika-property-graphic {
-    width: 95vw;
-    height: 120px;
-    left: 0;
-    top: 28px;
-  }
   .ovika-connect-form {
-    min-width: 90vw;
-    padding: 18px 7vw;
+    width: 100%;
+    max-width: 450px;
   }
 }
 
-
-/* ✅ Mobile view adjustments */
-@media (max-width: 768px) {
-  .ovika-left-btn-property {
-    width: 75%;
-    font-size: 1rem;
-    padding: 10px 0;
-    border-radius: 25px;
-    text-decoration: none;
-    background: #c2772b; /* same as form button */
-    margin-left: 46px;
-    border-color: #c2772b;
-    color: white;
-  }
-}
-
-/* ✅ Perfect Mobile View - Matches Screenshot */
+/* Mobile */
 @media (max-width: 768px) {
   .ovika-connect-main {
     padding: 0;
@@ -272,6 +282,13 @@
     z-index: 2;
   }
 
+  .ovika-property-graphic {
+    width: 95vw;
+    height: 120px;
+    left: 0;
+    top: 28px;
+  }
+
   .ovika-property-heading {
     font-size: 1.8rem;
     font-weight: 500;
@@ -289,6 +306,18 @@
     margin-bottom: 45px;
   }
 
+  .ovika-left-btn-property {
+    width: 75%;
+    font-size: 1rem;
+    padding: 10px 0;
+    border-radius: 25px;
+    text-decoration: none;
+    background: #c2772b;
+    margin-left: 0;
+    border-color: #c2772b;
+    color: white;
+  }
+
   .ovika-connect-form-wrapper {
     width: 100%;
     display: flex;
@@ -304,24 +333,21 @@
     border-radius: 24px;
     padding: 25px 20px 25px 20px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    min-width: unset;
   }
 
-.ovika-input {
-  width: 100%;
-  padding: 10px 18px;
-  border-radius: 24px;
-  border: 2px solid red; /* base transparent border */
-  outline: none;
-  background: #fff;
-  box-shadow: 0 2px 1px 1px rgba(50, 48, 48, 0.2),
-              0 0px 1px rgba(50, 48, 48, 0.2);
-  font-size: 1rem;
-  margin-bottom: 14px;
-
-  /* ✅ gradient border applied */
- 
-}
-
+  .ovika-input {
+    width: 100%;
+    padding: 10px 18px;
+    border-radius: 24px;
+    border: none;
+    outline: none;
+    background: #fff;
+    box-shadow: 0 2px 1px 1px rgba(50, 48, 48, 0.2),
+                0 0px 1px rgba(50, 48, 48, 0.2);
+    font-size: 1rem;
+    margin-bottom: 14px;
+  }
 
   .ovika-input::placeholder {
     font-size: 1rem;
@@ -337,12 +363,41 @@
     border-radius: 25px;
     width: 100%;
   }
+
   .form-heading-ovika-homepage {
-  font-size: 1.6rem;
-  font-weight: 500;
-  color: #000;
-  margin-bottom: 20px;
-  text-align: center;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 20px;
+    text-align: center;
+  }
 }
-  
+
+/* Extra Small Mobile */
+@media (max-width: 480px) {
+  .ovika-connect-content {
+    padding: 35px 10px 60px 10px;
+  }
+
+  .ovika-property-heading {
+    font-size: 1.6rem;
+  }
+
+  .ovika-property-desc {
+    font-size: 0.88rem;
+  }
+
+  .ovika-left-btn-property {
+    width: 85%;
+    font-size: 0.95rem;
+  }
+
+  .ovika-connect-form {
+    width: 95%;
+    padding: 22px 18px;
+  }
+
+  .form-heading-ovika-homepage {
+    font-size: 1.4rem;
+  }
 }

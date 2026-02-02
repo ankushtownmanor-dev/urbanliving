@@ -51,6 +51,8 @@
 // };
 
 // export default Home2;
+
+
 import React from "react";
 import "./Home2.css";
 
