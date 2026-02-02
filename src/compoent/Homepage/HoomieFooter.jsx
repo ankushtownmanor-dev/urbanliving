@@ -471,7 +471,7 @@ const HoomieFooter = () => {
                   opacity: "0.95",
                 }}
               >
-                <span style={{ color: "" }}>OvikaLiving</span> is the flagship brand of{" "}
+                <span style={{ color: "" }}>OvikaLiving</span> is the flagship short-term rental brand of{" "}
                 <span style={{ color: "" }}>
                   Townmanor Technologies Pvt. Ltd.
                 </span>
@@ -782,7 +782,7 @@ const HoomieFooter = () => {
             >
               <span>Follow Us</span>
               <a
-                href="#linkedin"
+                href="https://www.linkedin.com/company/townmanor/"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -810,7 +810,7 @@ const HoomieFooter = () => {
                 <Linkedin size={22} fill="#fff" strokeWidth={0} />
               </a>
               <a
-                href="#instagram"
+                href="https://www.instagram.com/ovikaliving/"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -838,7 +838,7 @@ const HoomieFooter = () => {
                 <Instagram size={22} strokeWidth={2} />
               </a>
               <a
-                href="#facebook"
+                href="https://www.facebook.com/profile.php?id=61580058103004"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
