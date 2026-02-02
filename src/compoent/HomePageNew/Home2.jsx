@@ -59,21 +59,21 @@ import "./Home2.css";
 const Home2 = () => {
   const cards = [
      {
-      img: "/image 87.png",
+      img: "/image 86.png",
       title: "Luxury Living Spaces",
       text: "TM Luxe offers high-end, fully serviced apartments for those who value elegance, comfort, and privacy. With sophisticated interiors, modern amenities, and prime locations, TM Luxe is crafted for families, celeb business travelers, and individuals seeking a luxurious living experience.",
       btn: "Know more",
       link: "/tmluxe"
     },
     {
-      img: "/image 86.png",
+      img: "/image 91.png",
       title: "PG Living Spaces",
       text: "TM Stay offers fully managed and affordable PG rentals tailored for students and working professionals. With clean, secure, precious and comfortable living spaces, we ensure a hassle-free stay that feels just like home – only better.",
       btn: "Coming Soon",
       link: "/" // 👈 you can set any URL or route here
     },
     {
-      img: "/image 91.png",
+      img: "/image 87.png",
       title: "Co- Living Spaces",
       text: "TM Hive brings together vibrant communities in thoughtfully designed shared spaces. Whether you’re a young professional, a remote worker, or a creative soul, our co-living homes offer the perfect blend of privacy, social, and flexibility – so you can live, work, and grow together.",
       btn: "Coming Soon",
