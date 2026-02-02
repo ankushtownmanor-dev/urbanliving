@@ -12,14 +12,14 @@
 /* Hero wrapper (no shadow) */
 .tmxluxe2-hero{
   position: relative;
-  width: 100%;
+  width: calc(100% - 50px); /* space from sides */
   max-width: 1400px;
-  margin: 18px auto 28px;
-  border-radius: 22px;
+  margin: -55px auto 28px; /* space from navbar */
+  border-radius: 32px;
   overflow: hidden;
   font-family: var(--tmxluxe2-font);
   color: var(--tmxluxe2-text);
-  background:#000;            /* only as fallback behind image */
+  background:#000;
   min-height: 680px;
 }
 
@@ -41,7 +41,7 @@
 /* Content layout */
 .tmxluxe2-hero__content{
   position:relative; z-index:2;
-  padding: 40px 36px 44px;
+  padding: 60px 50px 60px;
   max-width: 900px;
 }
 
@@ -93,7 +93,7 @@
   border:2px solid var(--tmxluxe2-orange);
   border-radius:999px;  
   width: fit-content;
-  margin-left: auto;
+  margin-left: 0; /* align to left side */
   margin-right: auto;
   padding: 6px;
   gap: 0;
@@ -123,36 +123,98 @@
 }
 .tmxluxe2-cta__arrow{ margin-left:10px; font-size:1.25rem; }
 
-/* Desktop spacing polish */
-@media (min-width: 1025px){
-  .tmxluxe2-hero__content{ padding: 52px 64px 56px; }
-}
-
-/* Tablet */
-@media (max-width: 992px){
-  .tmxluxe2-hero{ width: 98%; }
-  .tmxluxe2-hero__content{ padding: 36px 24px 40px; }
-}
-
-/* Mobile */
-@media (max-width: 640px){
+/* Large Desktop (1920px+) */
+@media (min-width: 1920px){
   .tmxluxe2-hero{
-    width: 100%;
-    border-radius: 16px;
+    width: calc(100% - 120px);
+    max-width: 1800px;
+    margin: -55px auto 35px;
+    min-height: 750px;
+  }
+  .tmxluxe2-hero__content{ 
+    padding: 70px 70px 70px;
+    max-width: 1000px;
+  }
+}
+
+/* Desktop (1440px - 1919px) */
+@media (min-width: 1440px) and (max-width: 1919px){
+  .tmxluxe2-hero{
+    width: calc(100% - 50px);
+    max-width: 1600px;
+    margin: -55px auto 32px;
+    min-height: 700px;
+  }
+  .tmxluxe2-hero__content{ 
+    padding: 65px 60px 65px;
+  }
+}
+
+/* Medium Desktop (1200px - 1439px) */
+@media (min-width: 1200px) and (max-width: 1439px){
+  .tmxluxe2-hero{
+    width: calc(100% - 50px);
+    max-width: 1400px;
+    margin: -55px auto 28px;
+    min-height: 680px;
+  }
+  .tmxluxe2-hero__content{ 
+    padding: 60px 50px 60px;
+  }
+}
+
+/* Laptop (1024px - 1199px) */
+@media (min-width: 1024px) and (max-width: 1199px){
+  .tmxluxe2-hero{
+    width: calc(100% - 50px);
+    margin: -55px auto 26px;
+    min-height: 640px;
+  }
+  .tmxluxe2-hero__content{ 
+    padding: 52px 40px 52px;
+  }
+}
+
+/* Tablet (769px - 1023px) */
+@media (min-width: 769px) and (max-width: 1023px){
+  .tmxluxe2-hero{ 
+    width: calc(100% - 50px);
+    margin: -55px auto 24px;
+    min-height: 600px;
+  }
+  .tmxluxe2-hero__content{ 
+    padding: 40px 32px 40px;
+  }
+}
+
+/* Mobile (max 768px) */
+@media (max-width: 768px){
+  .tmxluxe2-hero{
+    width: calc(100% - 50px);
+    border-radius: 20px;
     min-height: 78vh;
+    margin: -55px auto 20px;
   }
   .tmxluxe2-hero__img{ object-position: center 30%; }
   .tmxluxe2-hero__content{
-    padding: 22vh 16px 24px;  /* keeps content lower like design */
+    padding: 22vh 20px 24px;
     text-align: left;
   }
   .tmxluxe2-brand{ gap:10px; }
+  .tmxluxe2-cta-pill{
+    margin-left: 0;
+  }
   .tmxluxe2-cta{ min-width: auto; padding: 12px 16px; }
   .tmxluxe2-cta--orange{ padding: 12px 22px; }
 }
 
-/* Very small phones */
+/* Very small phones (max 420px) */
 @media (max-width: 420px){
-  .tmxluxe2-hero__content{ padding: 24vh 14px 22px; }
+  .tmxluxe2-hero{
+    width: calc(100% - 16px);
+    border-radius: 16px;
+    margin: -55px auto 18px;
+  }
+  .tmxluxe2-hero__content{ padding: 24vh 16px 22px; }
   .tmxluxe2-cta{ font-size: 14px; }
 }

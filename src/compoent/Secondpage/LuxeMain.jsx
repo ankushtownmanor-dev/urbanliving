@@ -11,16 +11,16 @@ function LuxeMain() {
   return (
     <>
      <Helmet>
-      {/* 🔹 Title Tag */}
+
       <title>Ovika Luxe – Premium Apartments for Rent | Airbnb-Style Living</title>
 
-      {/* 🔹 Meta Description */}
+
       <meta
         name="description"
         content="Experience Ovika Luxe premium apartments with Airbnb-style flexibility. Stylish, fully furnished homes for short & long stays in Delhi, Noida & Gurgaon."
       />
 
-      {/* 🔹 Meta Keywords */}
+     
       <meta
         name="keywords"
         content="Ovika Luxe, premium apartments Delhi, Airbnb style apartments, luxury apartments Noida, serviced apartments Gurgaon, furnished apartments for rent, short stay apartments, monthly rentals Noida, flexible rentals Gurgaon"
