@@ -1495,13 +1495,13 @@ const HoomieFooter = () => {
                 }}
               >
                 <span style={{ lineHeight: "1.6" }}>
-                  GST NO: 09AAKCT6155G1ZZ
+                  GST No: 09AAKCT6155G1ZZ
                 </span>
                 <span style={{ lineHeight: "1.6" }}>
-                  PAN NO: AAKCT6155G
+                  PAN No: AAKCT6155G
                 </span>
                 <span style={{ lineHeight: "1.6" }}>
-                  STARTUPINDIA VERIFIED: DIPP151698
+                  Startup India Recognition Certificate no: DIPP151698
                 </span>
               </div>
             </div>
@@ -1618,13 +1618,13 @@ const HoomieFooter = () => {
                 }}
               >
                 <span style={{ lineHeight: "1.6" }}>
-                  GST NO: 09AAKCT6155G1ZZ
+                  GST No: 09AAKCT6155G1ZZ
                 </span>
                 <span style={{ lineHeight: "1.6" }}>
-                  PAN NO: AAKCT6155G
+                  PAN No: AAKCT6155G
                 </span>
                 <span style={{ lineHeight: "1.6" }}>
-                  STARTUPINDIA VERIFIED: DIPP151698
+                  Startup India Recognition Certificate no: DIPP151698
                 </span>
               </div>
             </div>
