@@ -7,15 +7,15 @@ const FAQItem = ({ question, answer, number }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className={`faq-item ${isOpen ? 'open' : ''}`}>
-      <div className="faq-question" onClick={() => setIsOpen(!isOpen)}>
+    <div className={`faq-page-item-unique ${isOpen ? 'faq-page-open-unique' : ''}`}>
+      <div className="faq-page-question-unique" onClick={() => setIsOpen(!isOpen)}>
         <h3>{number}. {question}</h3>
-        <span className="faq-icon">
+        <span className="faq-page-icon-unique">
           {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
         </span>
       </div>
       {isOpen && (
-        <div className="faq-answer">
+        <div className="faq-page-answer-unique">
           {answer}
         </div>
       )}
@@ -25,13 +25,13 @@ const FAQItem = ({ question, answer, number }) => {
 
 const FAQ = () => {
   return (
-    <div className="faq-container">
-      <div className="faq-header">
+    <div className="faq-page-container-unique">
+      <div className="faq-page-header-unique">
         <h1>Frequently Asked Questions</h1>
-        <p className="last-updated">Last Updated: December 2023</p>
+        <p className="faq-page-last-updated-unique">Last Updated: January 2026</p>
       </div>
 
-      <div className="faq-section">
+      <div className="faq-page-section-unique">
         <h2>General FAQs</h2>
         
         <FAQItem 
@@ -53,7 +53,7 @@ const FAQ = () => {
         />
       </div>
 
-      <div className="faq-section">
+      <div className="faq-page-section-unique">
         <h2>Guest FAQs</h2>
         
         <FAQItem 
@@ -71,7 +71,7 @@ const FAQ = () => {
         <FAQItem 
           number="6"
           question="What is the cancellation and refund policy?"
-          answer={<p>Cancellation and refund eligibility depends on the timing of cancellation and the applicable policy shown during booking. Please refer to our <Link to="/refund-cancellation-policy" className="faq-link">Refund & Cancellation Policy</Link> for details.</p>}
+          answer={<p>Cancellation and refund eligibility depends on the timing of cancellation and the applicable policy shown during booking. Please refer to our <Link to="/refund-cancellation-policy" className="faq-page-link-unique">Refund & Cancellation Policy</Link> for details.</p>}
         />
 
         <FAQItem 
@@ -93,7 +93,7 @@ const FAQ = () => {
         />
       </div>
 
-      <div className="faq-section">
+      <div className="faq-page-section-unique">
         <h2>Owner FAQs</h2>
         
         <FAQItem 
@@ -133,13 +133,13 @@ const FAQ = () => {
         />
       </div>
 
-      <div className="faq-section">
+      <div className="faq-page-section-unique">
         <h2>Privacy & Data Protection FAQs</h2>
         
         <FAQItem 
           number="16"
           question="How is my personal data protected?"
-          answer={<p>OvikaLiving.com follows applicable Indian data protection laws and implements security measures to protect user data. Please refer to our <Link to="/privacy-policy" className="faq-link">Privacy Policy</Link> for details.</p>}
+          answer={<p>OvikaLiving.com follows applicable Indian data protection laws and implements security measures to protect user data. Please refer to our <Link to="/privacy-policy" className="faq-page-link-unique">Privacy Policy</Link> for details.</p>}
         />
 
         <FAQItem 
@@ -155,13 +155,13 @@ const FAQ = () => {
         />
       </div>
 
-      <div className="faq-section">
+      <div className="faq-page-section-unique">
         <h2>Legal & Platform FAQs</h2>
         
         <FAQItem 
           number="19"
           question="What laws govern OvikaLiving.com?"
-          answer={<p>All services are governed by the laws of India, as outlined in our <Link to="/terms-and-conditions" className="faq-link">Terms & Conditions</Link>.</p>}
+          answer={<p>All services are governed by the laws of India, as outlined in our <Link to="/terms-and-conditions" className="faq-page-link-unique">Terms & Conditions</Link>.</p>}
         />
 
         <FAQItem 
@@ -173,12 +173,12 @@ const FAQ = () => {
         <FAQItem 
           number="21"
           question="How can I contact OvikaLiving support?"
-          answer={<p>You can contact us at: <a href="mailto:enquiry@ovikaLiving.com" className="faq-link">enquiry@ovikaLiving.com</a> or <a href="mailto:support@townmanor.ai" className="faq-link">support@townmanor.ai</a></p>}
+          answer={<p>You can contact us at: <a href="mailto:enquiry@ovikaLiving.com" className="faq-page-link-unique">enquiry@ovikaLiving.com</a> or <a href="mailto:support@townmanor.ai" className="faq-page-link-unique">support@townmanor.ai</a></p>}
         />
       </div>
 
-      <div className="faq-contact">
-        <p>Still have questions? Contact our support team at <a href="mailto:enquiry@ovikaLiving.com" className="faq-link">enquiry@ovikaLiving.com</a> or <a href="mailto:support@townmanor.ai" className="faq-link">support@townmanor.ai</a></p>
+      <div className="faq-page-contact-unique">
+        <p>Still have questions? Contact our support team at <a href="mailto:enquiry@ovikaLiving.com" className="faq-page-link-unique">enquiry@ovikaLiving.com</a> or <a href="mailto:support@townmanor.ai" className="faq-page-link-unique">support@townmanor.ai</a></p>
       </div>
     </div>
   );

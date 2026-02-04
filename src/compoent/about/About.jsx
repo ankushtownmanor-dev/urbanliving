@@ -1,110 +1,128 @@
+
 // import React from "react";
 // import "./About.css";
 
-// const About = () => {
+// const AboutUs = () => {
 //   return (
-//     <div className="tm-about-container">
-//       {/* Hero Section */}
-//       <section className="tm-about-hero">
-//         <div className="tm-about-text">
-//           <h1>About TownManor</h1>
-//           <p>
-//             At <span className="tm-highlight">TownManor</span>, we believe in more than just providing rooms—
-//             we provide <strong>comfort, community, and care</strong>. 
-//             Our mission is to make living effortless, inclusive, and warm.
-//           </p>
-//         </div>
-//         <div className="tm-about-image">
-//           <img src="/f3.png" alt="About TownManor" />
-//         </div>
-//       </section>
+//     <section className="about-container">
+//       <h1 className="about-title">About OVIKA</h1>
 
-//       {/* Vision & Mission */}
-//       <section className="tm-about-section">
-//         <h2>Our Vision</h2>
-//         <p>
-//           To redefine modern living by blending <strong>hospitality, flexibility, and inclusivity</strong>. 
-//           Whether you are a student, professional, or traveler, we make sure you feel at home.
-//         </p>
-//       </section>
+//       <p className="about-text">
+//         OVIKA is a technology-driven marketplace for short-term stays and
+//         hosting, built to simplify how people book quality accommodations and
+//         how property owners earn from their homes.
+//       </p>
 
-//       <section className="tm-about-section">
-//         <h2>Our Mission</h2>
-//         <p>
-//           We aim to create a <strong>judgement-free space</strong> where people can live, work, and grow together.
-//           Every stay at TownManor is built on <em>trust, comfort, and care</em>.
-//         </p>
-//       </section>
+//       <p className="about-text">
+//         For guests, OVIKA offers thoughtfully curated short-term rental homes
+//         designed for comfort, convenience, and reliability—whether for business
+//         travel, leisure, or extended stays.
+//       </p>
 
-//       {/* Features */}
-//       <section className="tm-about-features">
-//         <h2>Why Choose TownManor?</h2>
-//         <div className="tm-feature-grid">
-//           <div className="tm-feature-card">
-//             <h3>Flexible Living</h3>
-//             <p>From PG stays to luxury apartments, choose the living style that fits you best.</p>
-//           </div>
-//           <div className="tm-feature-card">
-//             <h3>Safe & Secure</h3>
-//             <p>We ensure a hassle-free stay with safety, privacy, and comfort as top priorities.</p>
-//           </div>
-//           <div className="tm-feature-card">
-//             <h3>Community Living</h3>
-//             <p>Our co-living spaces bring together people with shared interests and lifestyles.</p>
-//           </div>
-//           <div className="tm-feature-card">
-//             <h3>Premium Experience</h3>
-//             <p>Enjoy modern amenities, prime locations, and personalized hospitality.</p>
-//           </div>
-//         </div>
-//       </section>
+//       <p className="about-text">
+//         For property owners, OVIKA provides a simple and transparent platform to
+//         list, manage, and monetize properties through short-term rentals, with
+//         professional support and end-to-end assistance.
+//       </p>
 
-//       {/* Closing Section */}
-//       <section className="tm-about-closing">
-//         <h2>Welcome to the TownManor Family</h2>
-//         <p>
-//           Wherever life takes you, <strong>TownManor</strong> is here to make your journey
-//           smoother, warmer, and unforgettable.
-//         </p>
-//       </section>
-//     </div>
+//       <p className="about-text">
+//         Our mission is to create a trusted ecosystem where guests enjoy seamless
+//         stays and hosts unlock better returns—powered by technology, local
+//         expertise, and a focus on quality.
+//       </p>
+//     </section>
 //   );
 // };
 
-// export default About;
-// src/pages/AboutUs/AboutUs.jsx
+// export default AboutUs;
 import React from "react";
 import "./About.css";
 
 const AboutUs = () => {
   return (
-    <section className="about-container">
-      <h1 className="about-title">About OVIKA</h1>
+    <div className="about-wrapper">
+      {/* Hero Section */}
+      <section className="about-hero">
+        <div className="about-hero-content">
+          <h1 className="about-main-title">About OVIKA</h1>
+        </div>
+      </section>
 
-      <p className="about-text">
-        OVIKA is a technology-driven marketplace for short-term stays and
-        hosting, built to simplify how people book quality accommodations and
-        how property owners earn from their homes.
-      </p>
+      {/* Content Section */}
+      <section className="about-content-section">
+        <div className="about-content-container">
+          {/* Introduction */}
+          <div className="about-intro-box">
+            <p className="about-intro-text">
+              OVIKA is a technology-driven marketplace for short-term stays and
+              hosting, built to simplify how people book quality accommodations
+              and how property owners earn from their homes.
+            </p>
+          </div>
 
-      <p className="about-text">
-        For guests, OVIKA offers thoughtfully curated short-term rental homes
-        designed for comfort, convenience, and reliability—whether for business
-        travel, leisure, or extended stays.
-      </p>
+          {/* Two Column Features */}
+          <div className="about-features-grid">
+            <div className="about-feature-box">
+              <div className="feature-header">
+                <div className="feature-icon-circle">
+                  <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                  </svg>
+                </div>
+                <h3 className="feature-heading">For Guests</h3>
+              </div>
+              <p className="feature-description">
+                OVIKA offers thoughtfully curated short-term rental homes
+                designed for comfort, convenience, and reliability—whether for
+                business travel, leisure, or extended stays.
+              </p>
+            </div>
 
-      <p className="about-text">
-        For property owners, OVIKA provides a simple and transparent platform to
-        list, manage, and monetize properties through short-term rentals, with
-        professional support and end-to-end assistance.
-      </p>
+            <div className="about-feature-box">
+              <div className="feature-header">
+                <div className="feature-icon-circle">
+                  <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                  </svg>
+                </div>
+                <h3 className="feature-heading">For Property Owners</h3>
+              </div>
+              <p className="feature-description">
+                  For property owners, OVIKA provides a simple and transparent platform to
+         list, manage, and monetize properties through short-term rentals, with
+         professional support and end-to-end assistance.
+              </p>
+            </div>
+          </div>
 
-      <p className="about-text">
-        Our mission is to create a trusted ecosystem where guests enjoy seamless
-        stays and hosts unlock better returns—powered by technology, local
-        expertise, and a focus on quality.
-      </p>
-    </section>
+          {/* Mission Section */}
+          <div className="about-mission-box">
+            <h2 className="mission-title">Our Mission</h2>
+            <p className="mission-description">
+              Our mission is to create a trusted ecosystem where guests enjoy
+              seamless stays and hosts unlock better returns—powered by
+              technology, local expertise, and a focus on quality.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 };
 
