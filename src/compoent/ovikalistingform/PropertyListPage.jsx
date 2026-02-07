@@ -249,29 +249,29 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
   const categories = [
     {
       id: 'economy',
-      title: 'PG Economy',
+      title: 'PG ',
       description: 'Budget-friendly PG accommodations perfect for students and working professionals in new form Per Night',
       icon: '🏠',
       color: '#4A90E2',
       minPrice: 0,
-      maxPrice: 1500
+      maxPrice: 900
     },
     {
       id: 'premium',
-      title: 'Premium Stay',
+      title: 'Economy Stay',
       description: 'Comfortable serviced apartments with modern amenities',
       icon: '🏢',
       color: '#C98B3E',
-      minPrice: 1500,
+      minPrice: 1000,
       maxPrice: 2500
     },
     {
       id: 'luxury',
-      title: 'Luxury Stay',
+      title: 'Premium Stay',
       description: 'Premium luxury accommodations with world-class facilities',
       icon: '✨',
       color: '#8B4513',
-      minPrice: 2500,
+      minPrice: 2600,
       maxPrice: Infinity
     }
   ];
