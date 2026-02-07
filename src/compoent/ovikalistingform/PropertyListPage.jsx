@@ -268,7 +268,7 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
     {
       id: 'luxury',
       title: 'Premium Stay',
-      description: 'Premium luxury accommodations with world-class facilities',
+      description: 'Premium accommodations with standard facilities',
       icon: '✨',
       color: '#8B4513',
       minPrice: 2600,
