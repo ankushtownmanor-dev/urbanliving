@@ -20,7 +20,7 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
       icon: '🏠',
       color: '#4A90E2',
       minPrice: 0,
-      maxPrice: 900
+      maxPrice: 1499,
     },
     {
       id: 'premium',
@@ -29,8 +29,8 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
       description: 'Well-furnished homes with modern amenities',
       icon: '🏢',
       color: '#C98B3E',
-      minPrice: 1000,
-      maxPrice: 2500
+      minPrice: 1500,
+      maxPrice: 2499
     },
     {
       id: 'luxury',
@@ -39,7 +39,7 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
       description: 'Enhanced comfort with premium facilities',
       icon: '✨',
       color: '#8B4513',
-      minPrice: 2600,
+      minPrice: 2500,
       maxPrice: Infinity
     }
   ];
