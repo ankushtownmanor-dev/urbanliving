@@ -43,7 +43,7 @@ const data = [
       'Yes. You can block dates anytime through your owner dashboard, giving you complete flexibility to use your property whenever you want.',
   },
   {
-    q: 'Is hosting really hassle-free with OVIKA?',
+    q: 'Is hosting really hassle-free with OVIKALIVING?',
     a:
       'Absolutely. From onboarding to payouts, OVIKA manages everything — so you enjoy passive income without daily operational stress.',
   }

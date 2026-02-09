@@ -306,7 +306,7 @@ const PropertyConsultation = () => {
 
       <div className="ovika-top-text">
         <h3>
-          Start sharing your property with <span>Ovika</span> today !
+          Start sharing your property with <span>OvikaLiving</span> today !
         </h3>
         {/* <p>
           Ready to unlock your property potential? Choose your preferred way to connect with us below
