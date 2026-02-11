@@ -589,8 +589,8 @@ const PropertyCard = ({ property }) => {
 
         <div className="card-footer-row">
           <div className="price-section">
-            <span className="price-amount">{formatPrice(property.base_rate)}</span>
-            {property.base_rate && <span className="price-period"> / night</span>}
+            <span className="price-amount">{formatPrice(property.price || property.base_rate)}</span>
+            {(property.price || property.base_rate) && <span className="price-period"> / night</span>}
           </div>
         </div>
       </div>
@@ -630,11 +630,17 @@ const PropertyListPage = () => {
     
     // Filter properties based on category ID match with property_category field
     const filtered = properties.filter((p) => {
+<<<<<<< HEAD
       // Match by property_category field
       if (p.property_category === category.id) {
         return true;
       }
       return false;
+=======
+      const price = Number(p.price || p.base_rate);
+      if (Number.isNaN(price)) return false;
+      return price >= category.minPrice && price <= category.maxPrice;
+>>>>>>> 7f3fef85bf9b1a5bd6a2bc71a034ff110f077bab
     });
     
     setFilteredProperties(filtered);
@@ -649,7 +655,13 @@ const PropertyListPage = () => {
       // If a category is selected, maintain the filter
       if (selectedCategory) {
         const filtered = properties.filter((p) => {
+<<<<<<< HEAD
           return p.property_category === selectedCategory.id;
+=======
+          const price = Number(p.price || p.base_rate);
+          if (Number.isNaN(price)) return false;
+          return price >= selectedCategory.minPrice && price <= selectedCategory.maxPrice;
+>>>>>>> 7f3fef85bf9b1a5bd6a2bc71a034ff110f077bab
         });
         setFilteredProperties(filtered);
       } else {
@@ -661,7 +673,13 @@ const PropertyListPage = () => {
     const q = searchTerm.toLowerCase();
     let baseFilter = selectedCategory 
       ? properties.filter((p) => {
+<<<<<<< HEAD
           return p.property_category === selectedCategory.id;
+=======
+          const price = Number(p.price || p.base_rate);
+          if (Number.isNaN(price)) return false;
+          return price >= selectedCategory.minPrice && price <= selectedCategory.maxPrice;
+>>>>>>> 7f3fef85bf9b1a5bd6a2bc71a034ff110f077bab
         })
       : properties;
     

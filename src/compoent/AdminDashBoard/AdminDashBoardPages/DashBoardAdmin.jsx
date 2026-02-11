@@ -1148,7 +1148,7 @@ const AMENITIES = {
 };
 
 const DEFAULT_CANCELLATION_POLICIES = ["Flexible", "Moderate", "Strict"];
-const DEFAULT_PROPERTY_CATEGORIES = ["Apartment", "House", "Villa", "Cabin", "Bungalow", "Studio", "Suite", "Other"];
+const DEFAULT_PROPERTY_CATEGORIES = ["Apartment", "House", "Villa", "Cabin", "Bungalow", "Studio", "Suite","PG","Other"];
 const PROPERTY_TYPES = ["Entire place", "Private room"];
 
 // Edit Modal Component
