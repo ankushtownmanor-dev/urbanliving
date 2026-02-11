@@ -623,8 +623,8 @@ const PropertyCard = ({ property }) => {
 
         <div className="card-footer-row">
           <div className="price-section">
-            <span className="price-amount">{formatPrice(property.base_rate)}</span>
-            {property.base_rate && <span className="price-period"> / night</span>}
+            <span className="price-amount">{formatPrice(property.price || property.base_rate)}</span>
+            {(property.price || property.base_rate) && <span className="price-period"> / night</span>}
           </div>
         </div>
       </div>
@@ -676,8 +676,8 @@ const PropertyListPage = () => {
           return false; // PG ko exclude karo
         }
         
-        const price = Number(p.base_rate);
-        if (isNaN(price)) return false;
+        const price = Number(p.price || p.base_rate);
+        if (Number.isNaN(price)) return false;
         
         return price >= category.minPrice && price <= category.maxPrice;
       }
@@ -709,8 +709,8 @@ const PropertyListPage = () => {
               return false;
             }
             
-            const price = Number(p.base_rate);
-            if (isNaN(price)) return false;
+            const price = Number(p.price || p.base_rate);
+            if (Number.isNaN(price)) return false;
             
             return price >= selectedCategory.minPrice && price <= selectedCategory.maxPrice;
           }
@@ -739,8 +739,8 @@ const PropertyListPage = () => {
               return false;
             }
             
-            const price = Number(p.base_rate);
-            if (isNaN(price)) return false;
+            const price = Number(p.price || p.base_rate);
+            if (Number.isNaN(price)) return false;
             
             return price >= selectedCategory.minPrice && price <= selectedCategory.maxPrice;
           }
