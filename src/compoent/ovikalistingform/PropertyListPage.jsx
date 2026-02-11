@@ -199,8 +199,8 @@ const PropertyCard = ({ property }) => {
 
         <div className="card-footer-row">
           <div className="price-section">
-            <span className="price-amount">{formatPrice(property.base_rate)}</span>
-            {property.base_rate && <span className="price-period"> / night</span>}
+            <span className="price-amount">{formatPrice(property.price || property.base_rate)}</span>
+            {(property.price || property.base_rate) && <span className="price-period"> / night</span>}
           </div>
         </div>
       </div>
@@ -240,7 +240,7 @@ const PropertyListPage = () => {
     
     // Filter properties based on price range
     const filtered = properties.filter((p) => {
-      const price = Number(p.base_rate);
+      const price = Number(p.price || p.base_rate);
       if (Number.isNaN(price)) return false;
       return price >= category.minPrice && price <= category.maxPrice;
     });
@@ -257,7 +257,7 @@ const PropertyListPage = () => {
       // If a category is selected, maintain the filter
       if (selectedCategory) {
         const filtered = properties.filter((p) => {
-          const price = Number(p.base_rate);
+          const price = Number(p.price || p.base_rate);
           if (Number.isNaN(price)) return false;
           return price >= selectedCategory.minPrice && price <= selectedCategory.maxPrice;
         });
@@ -271,7 +271,7 @@ const PropertyListPage = () => {
     const q = searchTerm.toLowerCase();
     let baseFilter = selectedCategory 
       ? properties.filter((p) => {
-          const price = Number(p.base_rate);
+          const price = Number(p.price || p.base_rate);
           if (Number.isNaN(price)) return false;
           return price >= selectedCategory.minPrice && price <= selectedCategory.maxPrice;
         })
