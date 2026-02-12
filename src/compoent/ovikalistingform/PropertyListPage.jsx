@@ -1,3 +1,5 @@
+
+
 // import React, { useState, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { FiSearch, FiMapPin, FiHeart, FiFilter, FiPlus, FiStar, FiX } from 'react-icons/fi';
@@ -18,16 +20,16 @@
 //       description: 'Ideal for students & professionals',
 //       icon: '🏠',
 //       color: '#4A90E2',
-//       filterByPrice: false, // Category se filter hoga
+//       filterByPrice: false,
 //     },
-//     {
+//     {      
 //       id: 'Economy Stay',
 //       title: 'Economy Stay',
 //       subTitle: "Comfort at great value",
 //       description: 'Well-furnished homes with modern amenities',
 //       icon: '🏢',
 //       color: '#C98B3E',
-//       filterByPrice: true, // Sirf price se filter hoga
+//       filterByPrice: true,
 //       minPrice: 1500,
 //       maxPrice: 3000
 //     },
@@ -38,7 +40,7 @@
 //       description: 'Enhanced comfort with premium facilities',
 //       icon: '✨',
 //       color: '#8B4513',
-//       filterByPrice: true, // Sirf price se filter hoga
+//       filterByPrice: true,
 //       minPrice: 3001,
 //       maxPrice: Infinity
 //     }
@@ -198,8 +200,12 @@
 
 //         <div className="card-footer-row">
 //           <div className="price-section">
-//             <span className="price-amount">{formatPrice(property.base_rate)}</span>
-//             {property.base_rate && <span className="price-period"> / night</span>}
+//             <span className="price-amount">{formatPrice(property.price || property.base_rate)}</span>
+//             {(property.price || property.base_rate) && (
+//               <span className="price-period">
+//                 {property.property_category === 'PG' ? ' / month' : ' / night'}
+//               </span>
+//             )}
 //           </div>
 //         </div>
 //       </div>
@@ -244,10 +250,15 @@
 //         return p.property_category === 'PG';
 //       }
       
-//       // Economy Stay & Premium Stay: SIRF PRICE SE FILTER (category se nahi)
+//       // Economy Stay & Premium Stay: SIRF PRICE SE FILTER + PG KO EXCLUDE KARO
 //       if (category.filterByPrice) {
-//         const price = Number(p.base_rate);
-//         if (isNaN(price)) return false;
+//         // Pehle check karo ki ye PG to nahi hai
+//         if (p.property_category === 'PG') {
+//           return false; // PG ko exclude karo
+//         }
+        
+//         const price = Number(p.price || p.base_rate);
+//         if (Number.isNaN(price)) return false;
         
 //         return price >= category.minPrice && price <= category.maxPrice;
 //       }
@@ -272,10 +283,15 @@
 //             return p.property_category === 'PG';
 //           }
           
-//           // Economy & Premium: SIRF PRICE SE FILTER
+//           // Economy & Premium: SIRF PRICE SE FILTER + PG KO EXCLUDE
 //           if (selectedCategory.filterByPrice) {
-//             const price = Number(p.base_rate);
-//             if (isNaN(price)) return false;
+//             // PG ko exclude karo
+//             if (p.property_category === 'PG') {
+//               return false;
+//             }
+            
+//             const price = Number(p.price || p.base_rate);
+//             if (Number.isNaN(price)) return false;
             
 //             return price >= selectedCategory.minPrice && price <= selectedCategory.maxPrice;
 //           }
@@ -297,10 +313,15 @@
 //             return p.property_category === 'PG';
 //           }
           
-//           // Economy & Premium: SIRF PRICE SE FILTER
+//           // Economy & Premium: SIRF PRICE SE FILTER + PG KO EXCLUDE
 //           if (selectedCategory.filterByPrice) {
-//             const price = Number(p.base_rate);
-//             if (isNaN(price)) return false;
+//             // PG ko exclude karo
+//             if (p.property_category === 'PG') {
+//               return false;
+//             }
+            
+//             const price = Number(p.price || p.base_rate);
+//             if (Number.isNaN(price)) return false;
             
 //             return price >= selectedCategory.minPrice && price <= selectedCategory.maxPrice;
 //           }
@@ -423,6 +444,7 @@
 
 // export default PropertyListPage;
 
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiSearch, FiMapPin, FiHeart, FiFilter, FiPlus, FiStar, FiX } from 'react-icons/fi';
@@ -442,8 +464,9 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
       subTitle: "Affordable stays per night",
       description: 'Ideal for students & professionals',
       icon: '🏠',
-      color: '#4A90E2',
-      filterByPrice: false,
+      color: '#C98B3E',
+      minPrice: 0,
+      maxPrice: 1499,
     },
     {
       id: 'Economy Stay',
@@ -452,9 +475,8 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
       description: 'Well-furnished homes with modern amenities',
       icon: '🏢',
       color: '#C98B3E',
-      filterByPrice: true,
       minPrice: 1500,
-      maxPrice: 3000
+      maxPrice: 2499
     },
     {
       id: 'Premium Stay',
@@ -462,9 +484,8 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
       subTitle: "Refined living experience",
       description: 'Enhanced comfort with premium facilities',
       icon: '✨',
-      color: '#8B4513',
-      filterByPrice: true,
-      minPrice: 3001,
+      color: '#C98B3E',
+      minPrice: 2500,
       maxPrice: Infinity
     }
   ];
@@ -478,7 +499,7 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
 
         <div className="modal-header">
           <h2 className="modal-title">Choose Your Stay Category</h2>
-          <p className="modal-subtitle">Select the type of accommodation that best suits your needs</p>
+          {/* <p className="modal-subtitle">Select the type of accommodation that best suits your needs</p> */}
         </div>
 
         <div className="category-cards-grid">
@@ -506,6 +527,7 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
               >
                 View Properties
               </button>
+            
             </div>
           ))}
         </div>
@@ -517,6 +539,7 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
 const PropertyCard = ({ property }) => {
   const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState(false);
+  // const [isData, isSeTData]= useState(true
 
   const handleClick = (e) => {
     if (e.target.closest('.action-btn')) return;
@@ -634,6 +657,7 @@ const PropertyCard = ({ property }) => {
         )}
 
         <div className="card-footer-row">
+<<<<<<< HEAD
           <div className="price-section" style={property.property_category === 'PG' ? { flexDirection: 'column', alignItems: 'flex-start', gap: '4px' } : {}}>
              {property.property_category === 'PG' ? (
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
@@ -650,6 +674,11 @@ const PropertyCard = ({ property }) => {
                   )}
                 </>
              )}
+=======
+          <div className="price-section">
+            <span className="price-amount">{formatPrice(property.base_rate)}</span>
+            {property.base_rate && <span className="price-period"> / night</span>}
+>>>>>>> e547faf (new)
           </div>
         </div>
       </div>
@@ -687,26 +716,12 @@ const PropertyListPage = () => {
     setSelectedCategory(category);
     setShowCategoryModal(false);
     
-    // Filter properties based on category
+    // Filter properties based on category ID match with property_category field
     const filtered = properties.filter((p) => {
-      // PG: Sirf category se filter (amount se nahi)
-      if (category.id === 'PG') {
-        return p.property_category === 'PG';
+      // Match by property_category field
+      if (p.property_category === category.id) {
+        return true;
       }
-      
-      // Economy Stay & Premium Stay: SIRF PRICE SE FILTER + PG KO EXCLUDE KARO
-      if (category.filterByPrice) {
-        // Pehle check karo ki ye PG to nahi hai
-        if (p.property_category === 'PG') {
-          return false; // PG ko exclude karo
-        }
-        
-        const price = Number(p.price || p.base_rate);
-        if (Number.isNaN(price)) return false;
-        
-        return price >= category.minPrice && price <= category.maxPrice;
-      }
-      
       return false;
     });
     
@@ -722,25 +737,7 @@ const PropertyListPage = () => {
       // If a category is selected, maintain the filter
       if (selectedCategory) {
         const filtered = properties.filter((p) => {
-          // PG: Sirf category se filter
-          if (selectedCategory.id === 'PG') {
-            return p.property_category === 'PG';
-          }
-          
-          // Economy & Premium: SIRF PRICE SE FILTER + PG KO EXCLUDE
-          if (selectedCategory.filterByPrice) {
-            // PG ko exclude karo
-            if (p.property_category === 'PG') {
-              return false;
-            }
-            
-            const price = Number(p.price || p.base_rate);
-            if (Number.isNaN(price)) return false;
-            
-            return price >= selectedCategory.minPrice && price <= selectedCategory.maxPrice;
-          }
-          
-          return false;
+          return p.property_category === selectedCategory.id;
         });
         setFilteredProperties(filtered);
       } else {
@@ -752,25 +749,7 @@ const PropertyListPage = () => {
     const q = searchTerm.toLowerCase();
     let baseFilter = selectedCategory 
       ? properties.filter((p) => {
-          // PG: Sirf category se filter
-          if (selectedCategory.id === 'PG') {
-            return p.property_category === 'PG';
-          }
-          
-          // Economy & Premium: SIRF PRICE SE FILTER + PG KO EXCLUDE
-          if (selectedCategory.filterByPrice) {
-            // PG ko exclude karo
-            if (p.property_category === 'PG') {
-              return false;
-            }
-            
-            const price = Number(p.price || p.base_rate);
-            if (Number.isNaN(price)) return false;
-            
-            return price >= selectedCategory.minPrice && price <= selectedCategory.maxPrice;
-          }
-          
-          return false;
+          return p.property_category === selectedCategory.id;
         })
       : properties;
     

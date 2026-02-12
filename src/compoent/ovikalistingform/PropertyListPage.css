@@ -110,8 +110,9 @@ body {
 
 /* Modal Header */
 .modal-header {
-  text-align: center;
+   justify-content: center;
   margin-bottom: 2.5rem;
+      background:linear-gradient(#ea8a29 0%, #f8b36e 100%);
 }
 
 .modal-title {
@@ -884,6 +885,7 @@ body {
 
   .modal-header {
     margin-bottom: 1rem;
+    justify-content: center;
   }
 
   .modal-title {
