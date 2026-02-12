@@ -1,5 +1,4 @@
 
-
 // import React, { useState, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { FiSearch, FiMapPin, FiHeart, FiFilter, FiPlus, FiStar, FiX } from 'react-icons/fi';
@@ -19,19 +18,19 @@
 //       subTitle: "Affordable stays per night",
 //       description: 'Ideal for students & professionals',
 //       icon: '🏠',
-//       color: '#4A90E2',
-//       filterByPrice: false,
+//       color: '#C98B3E',
+//       minPrice: 0,
+//       maxPrice: 1499,
 //     },
-//     {      
+//     {
 //       id: 'Economy Stay',
 //       title: 'Economy Stay',
 //       subTitle: "Comfort at great value",
 //       description: 'Well-furnished homes with modern amenities',
 //       icon: '🏢',
 //       color: '#C98B3E',
-//       filterByPrice: true,
 //       minPrice: 1500,
-//       maxPrice: 3000
+//       maxPrice: 2499
 //     },
 //     {
 //       id: 'Premium Stay',
@@ -39,9 +38,8 @@
 //       subTitle: "Refined living experience",
 //       description: 'Enhanced comfort with premium facilities',
 //       icon: '✨',
-//       color: '#8B4513',
-//       filterByPrice: true,
-//       minPrice: 3001,
+//       color: '#C98B3E',
+//       minPrice: 2500,
 //       maxPrice: Infinity
 //     }
 //   ];
@@ -55,7 +53,7 @@
 
 //         <div className="modal-header">
 //           <h2 className="modal-title">Choose Your Stay Category</h2>
-//           <p className="modal-subtitle">Select the type of accommodation that best suits your needs</p>
+//           {/* <p className="modal-subtitle">Select the type of accommodation that best suits your needs</p> */}
 //         </div>
 
 //         <div className="category-cards-grid">
@@ -83,6 +81,7 @@
 //               >
 //                 View Properties
 //               </button>
+            
 //             </div>
 //           ))}
 //         </div>
@@ -94,6 +93,7 @@
 // const PropertyCard = ({ property }) => {
 //   const navigate = useNavigate();
 //   const [isFavorite, setIsFavorite] = useState(false);
+//   // const [isData, isSeTData]= useState(true
 
 //   const handleClick = (e) => {
 //     if (e.target.closest('.action-btn')) return;
@@ -140,6 +140,18 @@
 //     e.target.onerror = null;
 //     e.target.src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
 //   };
+
+//   const getMeta = () => {
+//     if (!property.meta) return {};
+//     if (typeof property.meta === 'object') return property.meta;
+//     try {
+//       return JSON.parse(property.meta);
+//     } catch {
+//       return {};
+//     }
+//   };
+
+//   const meta = getMeta();
 
 //   return (
 //     <div className="property-card" onClick={handleClick}>
@@ -199,14 +211,25 @@
 //         )}
 
 //         <div className="card-footer-row">
-//           <div className="price-section">
-//             <span className="price-amount">{formatPrice(property.price || property.base_rate)}</span>
-//             {(property.price || property.base_rate) && (
-//               <span className="price-period">
-//                 {property.property_category === 'PG' ? ' / month' : ' / night'}
-//               </span>
-//             )}
-//           </div>
+
+//           <div className="price-section" style={property.property_category === 'PG' ? { flexDirection: 'column', alignItems: 'flex-start', gap: '4px' } : {}}>
+//              {property.property_category === 'PG' ? (
+//                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+//                    <span className="price-amount">
+//                      {formatPrice(Number(meta?.perNightPrice) || Number(property.base_rate || property.price) || 0)}
+//                    </span>
+//                    <span className="price-period"> / night</span>
+//                 </div>
+//               ) : (
+//                 <>
+//                   <span className="price-amount">{formatPrice(property.base_rate || property.price)}</span>
+//                   {(property.base_rate || property.price) && ( 
+//                     <span className="price-period"> / night</span>
+//                   )}
+//                 </>
+//              )} 
+
+          
 //         </div>
 //       </div>
 //     </div>
@@ -243,26 +266,12 @@
 //     setSelectedCategory(category);
 //     setShowCategoryModal(false);
     
-//     // Filter properties based on category
+//     // Filter properties based on category ID match with property_category field
 //     const filtered = properties.filter((p) => {
-//       // PG: Sirf category se filter (amount se nahi)
-//       if (category.id === 'PG') {
-//         return p.property_category === 'PG';
+//       // Match by property_category field
+//       if (p.property_category === category.id) {
+//         return true;
 //       }
-      
-//       // Economy Stay & Premium Stay: SIRF PRICE SE FILTER + PG KO EXCLUDE KARO
-//       if (category.filterByPrice) {
-//         // Pehle check karo ki ye PG to nahi hai
-//         if (p.property_category === 'PG') {
-//           return false; // PG ko exclude karo
-//         }
-        
-//         const price = Number(p.price || p.base_rate);
-//         if (Number.isNaN(price)) return false;
-        
-//         return price >= category.minPrice && price <= category.maxPrice;
-//       }
-      
 //       return false;
 //     });
     
@@ -278,25 +287,7 @@
 //       // If a category is selected, maintain the filter
 //       if (selectedCategory) {
 //         const filtered = properties.filter((p) => {
-//           // PG: Sirf category se filter
-//           if (selectedCategory.id === 'PG') {
-//             return p.property_category === 'PG';
-//           }
-          
-//           // Economy & Premium: SIRF PRICE SE FILTER + PG KO EXCLUDE
-//           if (selectedCategory.filterByPrice) {
-//             // PG ko exclude karo
-//             if (p.property_category === 'PG') {
-//               return false;
-//             }
-            
-//             const price = Number(p.price || p.base_rate);
-//             if (Number.isNaN(price)) return false;
-            
-//             return price >= selectedCategory.minPrice && price <= selectedCategory.maxPrice;
-//           }
-          
-//           return false;
+//           return p.property_category === selectedCategory.id;
 //         });
 //         setFilteredProperties(filtered);
 //       } else {
@@ -308,25 +299,7 @@
 //     const q = searchTerm.toLowerCase();
 //     let baseFilter = selectedCategory 
 //       ? properties.filter((p) => {
-//           // PG: Sirf category se filter
-//           if (selectedCategory.id === 'PG') {
-//             return p.property_category === 'PG';
-//           }
-          
-//           // Economy & Premium: SIRF PRICE SE FILTER + PG KO EXCLUDE
-//           if (selectedCategory.filterByPrice) {
-//             // PG ko exclude karo
-//             if (p.property_category === 'PG') {
-//               return false;
-//             }
-            
-//             const price = Number(p.price || p.base_rate);
-//             if (Number.isNaN(price)) return false;
-            
-//             return price >= selectedCategory.minPrice && price <= selectedCategory.maxPrice;
-//           }
-          
-//           return false;
+//           return p.property_category === selectedCategory.id;
 //         })
 //       : properties;
     
@@ -444,7 +417,6 @@
 
 // export default PropertyListPage;
 
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiSearch, FiMapPin, FiHeart, FiFilter, FiPlus, FiStar, FiX } from 'react-icons/fi';
@@ -499,7 +471,6 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
 
         <div className="modal-header">
           <h2 className="modal-title">Choose Your Stay Category</h2>
-          {/* <p className="modal-subtitle">Select the type of accommodation that best suits your needs</p> */}
         </div>
 
         <div className="category-cards-grid">
@@ -527,7 +498,6 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
               >
                 View Properties
               </button>
-            
             </div>
           ))}
         </div>
@@ -539,7 +509,6 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
 const PropertyCard = ({ property }) => {
   const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState(false);
-  // const [isData, isSeTData]= useState(true
 
   const handleClick = (e) => {
     if (e.target.closest('.action-btn')) return;
@@ -608,6 +577,10 @@ const PropertyCard = ({ property }) => {
           onError={handleImageError}
           className="card-image"
         />
+        
+        <button className="action-btn favorite-btn" onClick={toggleFavorite}>
+          <FiHeart className={isFavorite ? 'filled' : ''} />
+        </button>
       
         {property.property_category && (
           <span className="category-badge">{property.property_category}</span>
@@ -619,7 +592,7 @@ const PropertyCard = ({ property }) => {
           <h3 className="property-title">{property.property_name || 'Untitled Property'}</h3>
           <div className="rating-badge">
             <FiStar className="star-icon" />
-            <span>4.8</span>
+            <span>{property.rating || '4.8'}</span>
           </div>
         </div>
 
@@ -657,28 +630,22 @@ const PropertyCard = ({ property }) => {
         )}
 
         <div className="card-footer-row">
-
-          {/* <div className="price-section" style={property.property_category === 'PG' ? { flexDirection: 'column', alignItems: 'flex-start', gap: '4px' } : {}}> */}
-             {/* {property.property_category === 'PG' ? ( */}
-{/* //                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-//                   <span className="price-amount">
-//                     {formatPrice(Number(meta?.perNightPrice) || Number(property.base_rate || property.price) || 0)}
-//                   </span>
-//                   <span className="price-period"> / night</span>
-//                 </div>
-//              ) : (
-//                 <>
-//                   <span className="price-amount">{formatPrice(property.base_rate || property.price)}</span>
-//                   {(property.base_rate || property.price) && ( */}
-{/* //                     <span className="price-period"> / night</span>
-//                   )}
-//                 </>
-//              )} */}
-
-          <div className="price-section">
-            <span className="price-amount">{formatPrice(property.base_rate)}</span>
-            {property.base_rate && <span className="price-period"> / night</span>}
-
+          <div className="price-section" style={property.property_category === 'PG' ? { flexDirection: 'column', alignItems: 'flex-start', gap: '4px' } : {}}>
+            {property.property_category === 'PG' ? (
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                <span className="price-amount">
+                  {formatPrice(Number(meta?.perNightPrice) || Number(property.base_rate || property.price) || 0)}
+                </span>
+                <span className="price-period"> / night</span>
+              </div>
+            ) : (
+              <>
+                <span className="price-amount">{formatPrice(property.base_rate || property.price)}</span>
+                {(property.base_rate || property.price) && ( 
+                  <span className="price-period"> / night</span>
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -712,17 +679,33 @@ const PropertyListPage = () => {
     }
   };
 
+  // Helper function to get property price for Economy/Premium filtering
+  const getPropertyPrice = (property) => {
+    const price = Number(property.base_rate || property.price);
+    return isNaN(price) ? 0 : price;
+  };
+
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
     setShowCategoryModal(false);
     
-    // Filter properties based on category ID match with property_category field
+    // Filter properties based on category
     const filtered = properties.filter((p) => {
-      // Match by property_category field
-      if (p.property_category === category.id) {
-        return true;
+      // For PG category - ONLY match by property_category field (naam se filter)
+      if (category.id === 'PG') {
+        return p.property_category === 'PG';
       }
-      return false;
+      
+      // For Economy Stay and Premium Stay - filter by price range
+      // BUT exclude PG properties
+      if (p.property_category === 'PG') {
+        return false; // PG ko exclude karo Economy aur Premium se
+      }
+      
+      const propertyPrice = getPropertyPrice(p);
+      
+      // Check if price falls within category range
+      return propertyPrice >= category.minPrice && propertyPrice <= category.maxPrice;
     });
     
     setFilteredProperties(filtered);
@@ -734,10 +717,23 @@ const PropertyListPage = () => {
 
   useEffect(() => {
     if (!searchTerm.trim()) {
-      // If a category is selected, maintain the filter
       if (selectedCategory) {
         const filtered = properties.filter((p) => {
-          return p.property_category === selectedCategory.id;
+          // For PG category - ONLY match by property_category field
+          if (selectedCategory.id === 'PG') {
+            return p.property_category === 'PG';
+          }
+          
+          // For Economy Stay and Premium Stay - filter by price range
+          // BUT exclude PG properties
+          if (p.property_category === 'PG') {
+            return false; // PG ko exclude karo
+          }
+          
+          const propertyPrice = getPropertyPrice(p);
+          
+          // Check if price falls within category range
+          return propertyPrice >= selectedCategory.minPrice && propertyPrice <= selectedCategory.maxPrice;
         });
         setFilteredProperties(filtered);
       } else {
@@ -749,7 +745,21 @@ const PropertyListPage = () => {
     const q = searchTerm.toLowerCase();
     let baseFilter = selectedCategory 
       ? properties.filter((p) => {
-          return p.property_category === selectedCategory.id;
+          // For PG category - ONLY match by property_category field
+          if (selectedCategory.id === 'PG') {
+            return p.property_category === 'PG';
+          }
+          
+          // For Economy Stay and Premium Stay - filter by price range
+          // BUT exclude PG properties
+          if (p.property_category === 'PG') {
+            return false; // PG ko exclude karo
+          }
+          
+          const propertyPrice = getPropertyPrice(p);
+          
+          // Check if price falls within category range
+          return propertyPrice >= selectedCategory.minPrice && propertyPrice <= selectedCategory.maxPrice;
         })
       : properties;
     
