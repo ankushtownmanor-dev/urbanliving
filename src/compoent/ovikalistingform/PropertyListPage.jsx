@@ -564,6 +564,18 @@ const PropertyCard = ({ property }) => {
     e.target.src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
   };
 
+  const getMeta = () => {
+    if (!property.meta) return {};
+    if (typeof property.meta === 'object') return property.meta;
+    try {
+      return JSON.parse(property.meta);
+    } catch {
+      return {};
+    }
+  };
+
+  const meta = getMeta();
+
   return (
     <div className="property-card" onClick={handleClick}>
       <div className="card-image-wrapper">
@@ -622,13 +634,22 @@ const PropertyCard = ({ property }) => {
         )}
 
         <div className="card-footer-row">
-          <div className="price-section">
-            <span className="price-amount">{formatPrice(property.price || property.base_rate)}</span>
-            {(property.price || property.base_rate) && (
-              <span className="price-period">
-                {property.property_category === 'PG' ? ' / month' : ' / night'}
-              </span>
-            )}
+          <div className="price-section" style={property.property_category === 'PG' ? { flexDirection: 'column', alignItems: 'flex-start', gap: '4px' } : {}}>
+             {property.property_category === 'PG' ? (
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                  <span className="price-amount">
+                    {formatPrice(Number(meta?.perNightPrice) || Number(property.base_rate || property.price) || 0)}
+                  </span>
+                  <span className="price-period"> / night</span>
+                </div>
+             ) : (
+                <>
+                  <span className="price-amount">{formatPrice(property.base_rate || property.price)}</span>
+                  {(property.base_rate || property.price) && (
+                    <span className="price-period"> / night</span>
+                  )}
+                </>
+             )}
           </div>
         </div>
       </div>

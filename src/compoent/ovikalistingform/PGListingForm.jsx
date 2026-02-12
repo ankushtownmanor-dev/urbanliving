@@ -540,15 +540,15 @@ const PGListingForm = () => {
                 <label className="tmx9pf-label">Room Sharing Options & Prices *</label>
                 <div className="tmx9pf-dynamic-list">
                   {form.bedroomDetails.map((item, index) => (
-                    <div key={item.id} className="tmx9pf-dynamic-row" style={{ alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                      <select value={item.type} onChange={(e) => { const newDetails = [...form.bedroomDetails]; newDetails[index].type = e.target.value; setForm(f => ({ ...f, bedroomDetails: newDetails })); }} className="tmx9pf-select" style={{ flex: '1 1 200px' }}>
+                    <div key={item.id} className="tmx9pf-dynamic-row" style={{ alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px' }}>
+                      <select value={item.type} onChange={(e) => { const newDetails = [...form.bedroomDetails]; newDetails[index].type = e.target.value; setForm(f => ({ ...f, bedroomDetails: newDetails })); }} className="tmx9pf-select" style={{ flex: '1 1 160px' }}>
                         {SHARING_TYPES.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                       </select>
-                      <input type="number" min="1" placeholder="Number of Rooms" value={item.count} onChange={(e) => { const newDetails = [...form.bedroomDetails]; newDetails[index].count = Number(e.target.value); setForm(f => ({ ...f, bedroomDetails: newDetails })); }} className="tmx9pf-input" style={{ flex: '1 1 100px' }} />
-                      <input type="number" min="0" placeholder="Price per person/bed (Rs)" value={item.price} onChange={(e) => { const newDetails = [...form.bedroomDetails]; newDetails[index].price = e.target.value; setForm(f => ({ ...f, bedroomDetails: newDetails })); }} className="tmx9pf-input" style={{ flex: '1 1 150px' }} />
-                      <select value={item.washroomType} onChange={(e) => { const newDetails = [...form.bedroomDetails]; newDetails[index].washroomType = e.target.value; setForm(f => ({ ...f, bedroomDetails: newDetails })); }} className="tmx9pf-select" style={{ flex: '1 1 120px' }}>
-                        <option value="Attached">Attached</option>
-                        <option value="Common">Common</option>
+                      {/* Removed "Number of Rooms" count to simplify configuration per type */}
+                      <input type="number" min="0" placeholder="Rent (₹) / Night" value={item.price} onChange={(e) => { const newDetails = [...form.bedroomDetails]; newDetails[index].price = e.target.value; setForm(f => ({ ...f, bedroomDetails: newDetails })); }} className="tmx9pf-input" style={{ flex: '1 1 140px' }} />
+                      <select value={item.washroomType} onChange={(e) => { const newDetails = [...form.bedroomDetails]; newDetails[index].washroomType = e.target.value; setForm(f => ({ ...f, bedroomDetails: newDetails })); }} className="tmx9pf-select" style={{ flex: '1 1 160px' }}>
+                        <option value="Attached">Attached Washroom</option>
+                        <option value="Common">Common Washroom</option>
                       </select>
                       <button type="button" onClick={() => { const newDetails = form.bedroomDetails.filter((_, i) => i !== index); setForm(f => ({ ...f, bedroomDetails: newDetails })); }} className="tmx9pf-small-btn danger">×</button>
                     </div>
@@ -660,16 +660,11 @@ const PGListingForm = () => {
           <section className="tmx9pf-section">
             <h2 className="tmx9pf-section-title">Rent & Charges</h2>
              <div className="tmx9pf-grid">
-               <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Monthly Rent (Rs) *</label>
-                <input name="baseRate" type="number" value={form.baseRate} onChange={handleNumChange} className="tmx9pf-input" placeholder="Starting from..." />
-                {renderError("baseRate")}
-               </div>
-
-               <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Per Night Rent (Rs) (Optional)</label>
-                <input name="perNightPrice" type="number" value={form.perNightPrice} onChange={handleNumChange} className="tmx9pf-input" placeholder="For short stays..." />
-               </div>
+                <div className="tmx9pf-field">
+                 <label className="tmx9pf-label">Rent per Night (Rs) *</label>
+                 <input name="baseRate" type="number" value={form.baseRate} onChange={handleNumChange} className="tmx9pf-input" placeholder="e.g. 1200" />
+                 {renderError("baseRate")}
+                </div>
 
                <div className="tmx9pf-field">
                  <label className="tmx9pf-label">Electricity Charges</label>
@@ -686,7 +681,7 @@ const PGListingForm = () => {
                </div>
 
                <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Maintenance/Cleaning Fee (Monthly)</label>
+                <label className="tmx9pf-label">Maintenance/Cleaning Fee</label>
                 <input name="cleaningFee" type="number" value={form.cleaningFee} onChange={handleChange} className="tmx9pf-input" />
                </div>
 

@@ -765,6 +765,98 @@ const Calendar = ({ selectedDates, onDateSelect, minDate = new Date(), disabledD
   );
 };
 
+const LeadGenerationModal = ({ isOpen, onClose, propertyName, propertyId, user }) => {
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({
+    name: user?.name || '',
+    email: user?.email || '',
+    phone: user?.phone || ''
+  });
+
+  if (!isOpen) return null;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await axios.post('https://townmanor.ai/api/formlead/leads', {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        property_name: propertyName,
+        property_id: propertyId,
+        city: 'N/A' 
+      });
+      alert('Interest registered successfully! We will contact you soon.');
+      onClose();
+    } catch (error) {
+      console.error(error);
+      alert('Failed to submit request.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div style={{
+      position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+      background: 'rgba(0,0,0,0.6)', zIndex: 10002,
+      display: 'flex', alignItems: 'center', justifyContent: 'center'
+    }}>
+      <div style={{
+        background: 'white', padding: '2rem', borderRadius: '12px',
+        width: '90%', maxWidth: '400px', position: 'relative'
+      }}>
+        <button onClick={onClose} style={{
+          position: 'absolute', top: '10px', right: '10px',
+          background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer'
+        }}><FiX /></button>
+        
+        <h3 style={{ marginBottom: '1rem', color: '#8b0000' }}>Interested in Long Term Stay?</h3>
+        <p style={{ marginBottom: '1.5rem', color: '#666', fontSize: '0.9rem' }}>
+          Please share your details. Our team will contact you with the best rates for {propertyName}.
+        </p>
+        
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Name</label>
+            <input 
+              type="text" required
+              value={form.name}
+              onChange={e => setForm({...form, name: e.target.value})}
+              style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ddd' }}
+            />
+          </div>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Email</label>
+            <input 
+              type="email" required
+              value={form.email}
+              onChange={e => setForm({...form, email: e.target.value})}
+              style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ddd' }}
+            />
+          </div>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Phone</label>
+            <input 
+              type="tel" required
+              value={form.phone}
+              onChange={e => setForm({...form, phone: e.target.value})}
+              style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ddd' }}
+            />
+          </div>
+          <button type="submit" disabled={loading} style={{
+            width: '100%', padding: '12px', background: '#8b0000', color: 'white',
+            border: 'none', borderRadius: '6px', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer'
+          }}>
+            {loading ? 'Sending...' : 'Request Callback'}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
 // MAIN COMPONENT
 const PropertyDetailPage = () => {
   const [hostUser, setHostUser] = useState(null);
@@ -804,6 +896,7 @@ const PropertyDetailPage = () => {
   const [alertMessage, setAlertMessage] = useState(null);
   const [showRequestSentPopup, setShowRequestSentPopup] = useState(false);
   const [hostImage, setHostImage] = useState(null);
+  const [showLeadModal, setShowLeadModal] = useState(false);
 
 
   const [passportFile, setPassportFile] = useState(null);
@@ -813,7 +906,8 @@ const PropertyDetailPage = () => {
 
   const [bookingType, setBookingType] = useState(0);
   const [ownerApprovalStatus, setOwnerApprovalStatus] = useState(null);
-  const [pricingMode, setPricingMode] = useState('monthly'); // 'monthly' | 'daily'
+  const [pricingMode, setPricingMode] = useState('daily'); // 'monthly' | 'daily'
+  const [selectedPrice, setSelectedPrice] = useState(null);
 
   const token = Cookies.get('jwttoken');
   let username = '';
@@ -869,54 +963,86 @@ const PropertyDetailPage = () => {
   };
 
   useEffect(() => {
-    const fetchProperty = async () => {
-      try {
-        const res = await fetch(`${API_BASE_URL}/properties/${id}`);
-        const data = await res.json();
-        const transformed = transformPropertyData(data?.data || data);
-        setProperty(transformed);
-        setBookingType(Number(transformed.booking_type || 0));
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProperty();
+    if (id) {
+      const fetchProperty = async () => {
+        try {
+          const response = await axios.get(`${API_BASE_URL}/properties/${id}`);
+          const data = response.data;
+          const transformed = transformPropertyData(data?.data || data);
+          setProperty(transformed);
+          setBookingType(Number(transformed.booking_type || 0));
+          
+          // Initial price setup
+          const initialDaily = Number(transformed.meta?.perNightPrice) || 0;
+          const initialMonthly = Number(transformed.base_rate) || 0;
+          
+          if (transformed.property_category === 'PG') {
+             // Always default to 'daily' mode so the Reserve button opens the Booking/Payment flow by default.
+             // If perNightPrice is 0, it will show 0 but allow booking.
+             setPricingMode('daily');
+          }
+        } catch (err) {
+          console.error("Failed to fetch property", err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchProperty();
+    }
   }, [id]);
 
   useEffect(() => {
-    if (formData.checkInDate && formData.checkOutDate && property) {
-      const checkIn = new Date(formData.checkInDate);
-      const checkOut = new Date(formData.checkOutDate);
-      const diffTime = Math.abs(checkOut - checkIn);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      
-      let subtotal = 0;
-      if (property.property_category === 'PG') {
-          if (pricingMode === 'daily') {
-             // Daily Rent * Days
-             const nightly = Number(property.meta?.perNightPrice) || 0;
+    // When switching modes, ensure selectedPrice is set appropriately
+    if (property) {
+        if (pricingMode === 'monthly' && !selectedPrice) {
+            setSelectedPrice(Number(property.base_rate));
+        }
+    }
+  }, [pricingMode, property, selectedPrice]);
+
+  useEffect(() => {
+    let subtotal = 0;
+    let computedTotal = 0;
+
+    // Check if we can calculate price based on configuration
+    const isPGMonthly = property?.property_category === 'PG' && pricingMode === 'monthly';
+    const datesSelected = formData.checkInDate && formData.checkOutDate;
+
+    if (property) {
+      if (isPGMonthly) {
+        // For PG Monthly, we can show value even without dates (defaults to 1 month advance)
+        const monthly = (selectedPrice || Number(property.base_rate) || 0) * 30;
+        subtotal = monthly;
+      } else if (datesSelected) {
+          // Standard Daily/Other logic requiring dates
+          const checkIn = new Date(formData.checkInDate);
+          const checkOut = new Date(formData.checkOutDate);
+          const diffTime = Math.abs(checkOut - checkIn);
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          
+          if (property.property_category === 'PG' && pricingMode === 'daily') {
+             const nightly = Number(property.meta?.perNightPrice) || Number(property.base_rate) || 0;
              subtotal = nightly * diffDays;
           } else {
-             // Monthly Rent (usually 1 month advance/token to book)
-             // We can treat it as 1 Month Rent fixed, or calculate pro-rata?
-             // Usually for PG booking, we just show 1 Month Rent.
-             subtotal = Number(property.base_rate) || 0;
+             // Standard Hotel
+             const price = Number(property.base_rate) || 0;
+             subtotal = price * diffDays;
           }
-      } else {
-          // Standard Hotel/Stay logic (base_rate is usually per night)
-          const pricePerNight = Number(property.base_rate) || 0;
-          subtotal = diffDays * pricePerNight;
       }
+    }
+
+    if (subtotal > 0) {
+      computedTotal = subtotal; // Add tax/fees logic here if needed, currently 0
       
-      const gst = subtotal * 0.05;
-      const total = subtotal + gst;
-      setPricing({ subtotal, gst, total });
+      setPricing({ 
+        subtotal: subtotal, 
+        gst: 0, 
+        total: computedTotal 
+      });
     } else {
       setPricing({ subtotal: 0, gst: 0, total: 0 });
     }
-  }, [formData.checkInDate, formData.checkOutDate, property, pricingMode]);
+  }, [formData.checkInDate, formData.checkOutDate, property, pricingMode, selectedPrice]);
 
   useEffect(() => {
     const allStepsComplete =
@@ -981,6 +1107,10 @@ useEffect(() => {
 }, [property?.owner_id]);
 
   const handleReserveClick = () => {
+    if (property?.property_category === 'PG' && pricingMode === 'monthly') {
+        setShowLeadModal(true);
+        return;
+    }
     if (!user) {
       navigate('/login', { state: { from: location } });
       return;
@@ -1349,6 +1479,14 @@ const guestPolicy = property?.guest_policy || {};
         />
       )}
 
+      <LeadGenerationModal 
+        isOpen={showLeadModal}
+        onClose={() => setShowLeadModal(false)}
+        propertyName={property.property_name}
+        propertyId={property.id}
+        user={user}
+      />
+
       {showPaymentModal && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 9999, overflow: 'auto', padding: '2rem 0' }}>
           <div style={{ maxWidth: '900px', margin: '0 auto', background: 'white', borderRadius: '12px', padding: '2rem', position: 'relative' }}>
@@ -1388,7 +1526,7 @@ const guestPolicy = property?.guest_policy || {};
                       <p style={{ color: '#555', marginBottom: '1rem', fontSize: '0.95rem' }}>{property.description}</p>
                       <p style={{ fontSize: '1.5rem', fontWeight: '600', color: '#8b0000' }}>
                         <MdCurrencyRupee style={{ display: 'inline', verticalAlign: 'middle' }} />
-                        {formatCurrency(property.base_rate)}<span style={{ fontSize: '1rem', color: '#666' }}>/{property.property_category === 'PG' ? 'month' : 'night'}</span>
+                        {formatCurrency(property.base_rate)}<span style={{ fontSize: '1rem', color: '#666' }}>/{property.property_category === 'PG' ? 'night' : (property.billing_cycle || 'night')}</span>
                       </p>
                     </div>
                   </div>
@@ -1757,7 +1895,7 @@ const guestPolicy = property?.guest_policy || {};
                                 </span>
                             </div>
                             {curr.price ? (
-                              <strong style={{ fontSize: '1.rem', color: '#8b0000' }}>₹{formatCurrency(curr.price)}<span style={{ fontSize: '0.8rem', color: '#666', fontWeight: 'normal' }}>/month</span></strong>
+                              <strong style={{ fontSize: '1.rem', color: '#8b0000' }}>₹{formatCurrency(curr.price)}<span style={{ fontSize: '0.8rem', color: '#666', fontWeight: 'normal' }}>/night</span></strong>
                             ) : (
                                <span style={{ fontSize: '0.9rem', color: '#64748b' }}>Price on Request</span>
                             )}
@@ -2236,14 +2374,12 @@ const guestPolicy = property?.guest_policy || {};
                   <span className="amount">
                     ₹{formatCurrency(
                         property.property_category === 'PG' 
-                           ? (pricingMode === 'daily' ? (property.meta?.perNightPrice || 0) : baseRate) 
-                           : baseRate
+                           ? (pricingMode === 'daily' ? (Number(property.meta?.perNightPrice) || Number(property.base_rate) || 0) : (selectedPrice || property.base_rate)) 
+                           : property.base_rate
                     )}
                   </span>
                   <span className="unit">
-                    /{property.property_category === 'PG' 
-                        ? (pricingMode === 'daily' ? 'night' : 'month') 
-                        : (property.billing_cycle || 'night')}
+                    /{property.property_category === 'PG' ? 'night' : (property.billing_cycle || 'night')}
                   </span>
                 </div>
                 <div className="review-badge">
@@ -2266,7 +2402,7 @@ const guestPolicy = property?.guest_policy || {};
                 <div className="price-breakdown">
                   <div className="row">
                     <span>{property.property_category === 'PG' ? (pricingMode === 'daily' ? 'Seat Rent x Nights' : 'Monthly Rent (Advance)') : 'Base Fare'}</span>
-                    <span>₹{formatCurrency(pricing.subtotal || (property.property_category === 'PG' && pricingMode === 'monthly' ? baseRate : 0))}</span>
+                    <span>₹{formatCurrency(pricing.subtotal)}</span>
                   </div>
                   {(property.cleaning_fee > 0) && (
                     <div className="row">
@@ -2282,14 +2418,60 @@ const guestPolicy = property?.guest_policy || {};
                   )}
                   <div className="row total">
                     <span>Total before taxes</span>
-                    <span>₹{formatCurrency(total)}</span>
+                    <span>₹{formatCurrency(pricing.total)}</span>
                   </div>
                 </div>
 
                 <div style={{ margin: '1.5rem 0' }}>
-                  <button className="reserve-btn" onClick={handleReserveClick}>Reserve Now</button>
+                  <button className="reserve-btn" onClick={handleReserveClick}>
+                    Reserve Now
+                  </button>
                   <p className="hint" style={{ marginBottom: 0 }}>You won't be charged yet</p>
                 </div>
+
+                {property.property_category === 'PG' && pricingMode === 'monthly' && property.parsedBedrooms?.length > 0 && (
+                  <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
+                     <h4 style={{ fontSize: '0.95rem', marginBottom: '0.5rem', color: '#334155' }}>Select Room Type:</h4>
+                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {property.parsedBedrooms.map((room, idx) => {
+                           const rPrice = Number(room.price) || 0;
+                           const isSelected = selectedPrice === rPrice;
+                           return (
+                           <div 
+                              key={idx} 
+                              onClick={() => rPrice > 0 && setSelectedPrice(rPrice)}
+                              style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
+                                fontSize: '0.9rem', 
+                                padding: '8px', 
+                                borderRadius: '6px', 
+                                cursor: rPrice > 0 ? 'pointer' : 'default',
+                                background: isSelected ? '#fef2f2' : 'transparent',
+                                border: isSelected ? '1px solid #8b0000' : '1px solid transparent'
+                              }}
+                           >
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <div style={{ 
+                                    width: '16px', 
+                                    height: '16px', 
+                                    borderRadius: '50%', 
+                                    border: isSelected ? '5px solid #8b0000' : '2px solid #cbd5e1',
+                                    background: 'white' 
+                                }}></div>
+                                <span style={{ color: isSelected ? '#8b0000' : '#64748b', fontWeight: isSelected ? 600 : 400 }}>
+                                    {room.type} <span style={{ fontSize: '0.8rem' }}>({room.washroomType})</span>
+                                </span>
+                              </div>
+                              <span style={{ fontWeight: 600, color: '#0f172a' }}>
+                                {rPrice ? `₹${formatCurrency(rPrice)}/mo` : 'N/A'}
+                              </span>
+                           </div>
+                           );
+                        })}
+                     </div>
+                  </div>
+                )}
 
                 {bookingType === 1 && (
                   <div style={{ marginTop: '8px', padding: '10px', background: '#fff7ed', border: '1px solid #fed7aa', borderRadius: '6px', fontSize: '0.8rem', color: '#92400e' }}>
@@ -2363,4 +2545,5 @@ border: "1px solid #e5e5e5",
 };
 
 export default PropertyDetailPage;
+
 
