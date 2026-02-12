@@ -624,7 +624,11 @@ const PropertyCard = ({ property }) => {
         <div className="card-footer-row">
           <div className="price-section">
             <span className="price-amount">{formatPrice(property.price || property.base_rate)}</span>
-            {(property.price || property.base_rate) && <span className="price-period"> / night</span>}
+            {(property.price || property.base_rate) && (
+              <span className="price-period">
+                {property.property_category === 'PG' ? ' / month' : ' / night'}
+              </span>
+            )}
           </div>
         </div>
       </div>

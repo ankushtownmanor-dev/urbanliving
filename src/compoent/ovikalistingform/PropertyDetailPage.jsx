@@ -6,7 +6,8 @@ import { UserCircle } from "lucide-react";
 
 import { 
   FiArrowLeft, FiMapPin, FiShare, FiHeart, FiCheck, FiXCircle,
-  FiUser, FiCalendar, FiShield, FiStar, FiX, FiZoomIn, FiZoomOut
+  FiUser, FiCalendar, FiShield, FiStar, FiX, FiZoomIn, FiZoomOut,
+  FiInfo, FiLock, FiZap
 } from 'react-icons/fi';
 import { BiBed, BiBath, BiArea } from 'react-icons/bi';
 import { 
@@ -70,8 +71,15 @@ const transformPropertyData = (data) => {
     return [];
   };
 
+  const parseMeta = (meta) => {
+      if (!meta) return {};
+      if (typeof meta === 'object') return meta;
+      try { return JSON.parse(meta); } catch (e) { return {}; }
+  };
+
   return {
     ...data,
+    meta: parseMeta(data.meta),
     amenities: parseJsonField(data.amenities),
     photos: Array.isArray(data.photos) ? data.photos : (data.photos ? [data.photos] : []),
     parsedBedrooms: parseJsonField(data.bedrooms),
@@ -802,8 +810,10 @@ const PropertyDetailPage = () => {
   const [isPassportLoading, setIsPassportLoading] = useState(false);
   const [passportError, setPassportError] = useState('');
   const [passportInput, setPassportInput] = useState('');
+
   const [bookingType, setBookingType] = useState(0);
   const [ownerApprovalStatus, setOwnerApprovalStatus] = useState(null);
+  const [pricingMode, setPricingMode] = useState('monthly'); // 'monthly' | 'daily'
 
   const token = Cookies.get('jwttoken');
   let username = '';
@@ -881,15 +891,32 @@ const PropertyDetailPage = () => {
       const checkOut = new Date(formData.checkOutDate);
       const diffTime = Math.abs(checkOut - checkIn);
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      const pricePerNight = Number(property.base_rate) || 0;
-      const subtotal = diffDays * pricePerNight;
+      
+      let subtotal = 0;
+      if (property.property_category === 'PG') {
+          if (pricingMode === 'daily') {
+             // Daily Rent * Days
+             const nightly = Number(property.meta?.perNightPrice) || 0;
+             subtotal = nightly * diffDays;
+          } else {
+             // Monthly Rent (usually 1 month advance/token to book)
+             // We can treat it as 1 Month Rent fixed, or calculate pro-rata?
+             // Usually for PG booking, we just show 1 Month Rent.
+             subtotal = Number(property.base_rate) || 0;
+          }
+      } else {
+          // Standard Hotel/Stay logic (base_rate is usually per night)
+          const pricePerNight = Number(property.base_rate) || 0;
+          subtotal = diffDays * pricePerNight;
+      }
+      
       const gst = subtotal * 0.05;
       const total = subtotal + gst;
       setPricing({ subtotal, gst, total });
     } else {
       setPricing({ subtotal: 0, gst: 0, total: 0 });
     }
-  }, [formData.checkInDate, formData.checkOutDate, property]);
+  }, [formData.checkInDate, formData.checkOutDate, property, pricingMode]);
 
   useEffect(() => {
     const allStepsComplete =
@@ -1361,7 +1388,7 @@ const guestPolicy = property?.guest_policy || {};
                       <p style={{ color: '#555', marginBottom: '1rem', fontSize: '0.95rem' }}>{property.description}</p>
                       <p style={{ fontSize: '1.5rem', fontWeight: '600', color: '#8b0000' }}>
                         <MdCurrencyRupee style={{ display: 'inline', verticalAlign: 'middle' }} />
-                        {formatCurrency(property.base_rate)}<span style={{ fontSize: '1rem', color: '#666' }}>/night</span>
+                        {formatCurrency(property.base_rate)}<span style={{ fontSize: '1rem', color: '#666' }}>/{property.property_category === 'PG' ? 'month' : 'night'}</span>
                       </p>
                     </div>
                   </div>
@@ -1712,6 +1739,37 @@ const guestPolicy = property?.guest_policy || {};
             </>
           )}
 
+          {property.parsedBedrooms?.length > 0 && property.property_category === 'PG' && (
+            <>
+              <div className="divider"></div>
+              <div className="text-section">
+                <h3>Room Rates & Sharing Options</h3>
+                <div className="amenities-grid">
+                  {property.parsedBedrooms.map((curr, i) => (
+                    <div key={i} className="amenity-card rule-card" style={{ padding: '16px', border: '1px solid #e2e8f0', borderRadius: '8px', background: '#f8fafc' }}>
+                      <div className="rule-info" style={{ width: '100%' }}>
+                        <span className="rule-label" style={{ fontSize: '1rem', fontWeight: '600', color: '#1e293b' }}>{curr.type}</span>
+                         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                <span style={{ fontSize: '0.9rem', color: '#64748b' }}>{curr.count} Rooms</span>
+                                <span style={{ fontSize: '0.85rem', color: '#334155', marginTop: '2px' }}>
+                                    <span style={{ fontWeight: 600 }}>Washroom:</span> {curr.washroomType || "Attached"}
+                                </span>
+                            </div>
+                            {curr.price ? (
+                              <strong style={{ fontSize: '1.rem', color: '#8b0000' }}>₹{formatCurrency(curr.price)}<span style={{ fontSize: '0.8rem', color: '#666', fontWeight: 'normal' }}>/month</span></strong>
+                            ) : (
+                               <span style={{ fontSize: '0.9rem', color: '#64748b' }}>Price on Request</span>
+                            )}
+                         </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
           <div className="divider"></div>
 
           <div className="text-section">
@@ -1845,6 +1903,45 @@ const guestPolicy = property?.guest_policy || {};
     </strong>
   </div>
 </div>
+
+{/* NOTICE PERIOD */}
+{(property.noticePeriod || property.meta?.noticePeriod) && (
+  <div className="amenity-card rule-card">
+    <div className="rule-icon">
+      <FiInfo style={{ color: '#3b82f6' }} />
+    </div>
+    <div className="rule-info">
+      <span className="rule-label">Notice Period</span>
+      <strong>{property.noticePeriod || property.meta?.noticePeriod} Days</strong>
+    </div>
+  </div>
+)}
+
+{/* LOCK-IN PERIOD */}
+{(property.lockInPeriod || property.meta?.lockInPeriod) && (
+  <div className="amenity-card rule-card">
+    <div className="rule-icon">
+      <FiLock style={{ color: '#3b82f6' }} />
+    </div>
+    <div className="rule-info">
+      <span className="rule-label">Lock-in Period</span>
+      <strong>{property.lockInPeriod || property.meta?.lockInPeriod} Months</strong>
+    </div>
+  </div>
+)}
+
+{/* ELECTRICITY CHARGES */}
+{(property.electricityCharges || property.meta?.electricityCharges) && (
+  <div className="amenity-card rule-card">
+    <div className="rule-icon">
+      <FiZap style={{ color: '#eab308' }} />
+    </div>
+    <div className="rule-info">
+      <span className="rule-label">Electricity</span>
+      <strong>{property.electricityCharges || property.meta?.electricityCharges}</strong>
+    </div>
+  </div>
+)}
 
 
 </div>
@@ -2112,10 +2209,42 @@ const guestPolicy = property?.guest_policy || {};
 
           <div style={{ margin: '2rem 0' }}>
             <div className="booking-card" style={{ position: 'static', maxWidth: 'none', boxShadow: 'none', border: '1px solid #e2e8f0', background: '#f8fafc' }}>
+              
+              {property.property_category === 'PG' && property.meta?.perNightPrice && (
+                  <div style={{ padding: '10px 16px 0' }}>
+                    <div style={{ display: 'flex', background: '#e2e8f0', borderRadius: '8px', padding: '4px' }}>
+                      <button 
+                         type="button"
+                         onClick={() => setPricingMode('monthly')}
+                         style={{ flex: 1, padding: '8px', borderRadius: '6px', border: 'none', background: pricingMode === 'monthly' ? '#fff' : 'transparent', fontWeight: pricingMode !== 'monthly' ? 400 : 700, color: pricingMode === 'monthly' ? '#8b0000' : '#64748b', cursor: 'pointer', transition: 'all 0.2s' }}
+                      >
+                         Monthly Stay
+                      </button>
+                      <button 
+                         type="button"
+                         onClick={() => setPricingMode('daily')}
+                         style={{ flex: 1, padding: '8px', borderRadius: '6px', border: 'none', background: pricingMode === 'daily' ? '#fff' : 'transparent', fontWeight: pricingMode !== 'daily' ? 400 : 700, color: pricingMode === 'daily' ? '#8b0000' : '#64748b', cursor: 'pointer', transition: 'all 0.2s' }}
+                      >
+                         Short Stay (Daily)
+                      </button>
+                    </div>
+                  </div>
+              )}
+
               <div className="card-header">
                 <div className="price-area">
-                  <span className="amount">₹{formatCurrency(baseRate)}</span>
-                  <span className="unit">/{property.billing_cycle || 'night'}</span>
+                  <span className="amount">
+                    ₹{formatCurrency(
+                        property.property_category === 'PG' 
+                           ? (pricingMode === 'daily' ? (property.meta?.perNightPrice || 0) : baseRate) 
+                           : baseRate
+                    )}
+                  </span>
+                  <span className="unit">
+                    /{property.property_category === 'PG' 
+                        ? (pricingMode === 'daily' ? 'night' : 'month') 
+                        : (property.billing_cycle || 'night')}
+                  </span>
                 </div>
                 <div className="review-badge">
                   <FiStar /> <span>New</span>
@@ -2125,24 +2254,30 @@ const guestPolicy = property?.guest_policy || {};
               <div className="booking-details">
                 <div className="date-picker-mock">
                   <div className="date-box">
-                    <label>CHECK-IN</label>
+                    <label>{property.property_category === 'PG' && pricingMode === 'monthly' ? 'MOVE-IN DATE' : 'CHECK-IN'}</label>
                     <span>{property.check_in_time || '12:00 PM'}</span>
                   </div>
                   <div className="date-box">
-                    <label>CHECK-OUT</label>
+                    <label>{property.property_category === 'PG' && pricingMode === 'monthly' ? 'DURATION' : 'CHECK-OUT'}</label>
                     <span>{property.check_out_time || '11:00 AM'}</span>
                   </div>
                 </div>
                 
                 <div className="price-breakdown">
                   <div className="row">
-                    <span>Base Fare</span>
-                    <span>₹{formatCurrency(baseRate * nights)}</span>
+                    <span>{property.property_category === 'PG' ? (pricingMode === 'daily' ? 'Seat Rent x Nights' : 'Monthly Rent (Advance)') : 'Base Fare'}</span>
+                    <span>₹{formatCurrency(pricing.subtotal || (property.property_category === 'PG' && pricingMode === 'monthly' ? baseRate : 0))}</span>
                   </div>
                   {(property.cleaning_fee > 0) && (
                     <div className="row">
-                      <span>Cleaning Fee</span>
+                      <span>{property.property_category === 'PG' ? 'Maintenance' : 'Cleaning Fee'}</span>
                       <span>₹{formatCurrency(property.cleaning_fee)}</span>
+                    </div>
+                  )}
+                  {(property.securityDeposit || property.security_deposit || (property.meta && property.meta.securityDeposit)) && (
+                    <div className="row">
+                      <span>Security Deposit</span>
+                      <span>₹{formatCurrency(property.securityDeposit || property.security_deposit || property.meta.securityDeposit)}</span>
                     </div>
                   )}
                   <div className="row total">
