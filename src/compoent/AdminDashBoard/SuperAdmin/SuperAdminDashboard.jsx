@@ -268,14 +268,28 @@ export default function SuperAdminDashboard() {
     if(!editingProp) return;
     
     try {
+        // Prepare payload: Spread editingProp FIRST, then override with formatted values
         const payload = {
+            ...editingProp,
             property_name: editingProp.property_name || editingProp.name,
             description: editingProp.description,
-            price: Number(editingProp.price),
+            price: Number(editingProp.price), // Ensure Number type
             address: editingProp.address,
             city: editingProp.city,
-            ...editingProp
         };
+
+        // Stringify complex fields to prevent backend SQL errors
+        ['amenities', 'photos', 'house_rules', 'safety_items', 'meta', 'id_files', 'guest_policy', 'bedroom_details', 'bathroom_details'].forEach(key => {
+             if (payload[key] && typeof payload[key] === 'object') {
+                 payload[key] = JSON.stringify(payload[key]);
+             }
+        });
+
+        // Remove system fields that should not be sent in the body
+        delete payload._id;
+        delete payload.id;
+        delete payload.created_at;
+        delete payload.updated_at;
 
         if (isCreatingProp) {
             // Create
@@ -292,8 +306,9 @@ export default function SuperAdminDashboard() {
         setIsCreatingProp(false);
         fetchAllProperties(); // Refresh list
     } catch(e) {
-        console.error(e);
-        alert("Operation failed: " + (e.response?.data?.message || e.message));
+        console.error("Save Error Details:", e);
+        const errMsg = e.response?.data?.message || e.response?.data?.error || e.message;
+        alert("Operation failed: " + errMsg);
     }
   };
 
