@@ -802,14 +802,15 @@ const LeadGenerationModal = ({ isOpen, onClose, propertyName, propertyId, user, 
         ? `${propertyName} - ${roomType}` 
         : propertyName;
 
-      await axios.post('https://townmanor.ai/api/formlead/leads', {
+      await axios.post('https://www.townmanor.ai/api/formlead/leads', {
         name: form.name,
         email: form.email,
-        phone: form.phone,
+        phone_number: form.phone, // Backend expects phone_number
         property_name: finalPropertyName,
         property_id: propertyId,
+        purpose: form.message, // Mapping message to purpose
         city: 'N/A',
-        message: form.message
+        source: 'Property Detail Page'
       });
       alert('Interest registered successfully! We will contact you soon.');
       onClose();
