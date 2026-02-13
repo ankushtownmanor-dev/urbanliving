@@ -17,6 +17,11 @@ const CANCELLATION_POLICIES = ["Flexible", "Moderate", "Strict"];
 const PG_TYPES = ["Boys PG", "Girls PG", "Co-ed PG"];
 const SHARING_TYPES = ["Single Room", "Double Sharing", "Triple Sharing", "Four Sharing", "Dormitory"];
 
+const BOOKING_TYPES = [
+  { id: 0, label: "Instant Booking", desc: "Guests can book instantly without waiting for approval." },
+  { id: 1, label: "Request to Book", desc: "You review and accept or decline booking requests." }
+];
+
 function useFilePreviews() {
   const [previews, setPreviews] = useState([]);
   const update = (files) => {
@@ -81,7 +86,7 @@ const PGListingForm = () => {
     quietHours: "23:00-06:00",
     maxGuests: 1, // Vacancy count likely
     baseRate: "", // Monthly Rent
-    bookingType: 1, // Default to Approval Required for PGs
+    bookingType: 1, // Default to Approval Required (Request to Book)
     cleaningFee: "", // Maintenance Charge
     selfCheckIn: "Not Available",
     registrationNumber: "",
@@ -96,8 +101,20 @@ const PGListingForm = () => {
    bachelorAllowed: true, // Usually true for PGs
     noticePeriod: 30, // days
     lockInPeriod: 1, // months
+    noticePeriod: 30, // days
+    lockInPeriod: 1, // months
+    foodAvailable: false,
     electricityCharges: "Included in Rent", // or "Separate", "Fixed"
     perNightPrice: "", // New optional field
+    gateClosingTime: "",
+    localGuide: {
+        nearestMetroStation: "",
+        nearestBusStop: "",
+        nearbyMarket: "",
+        nearbyHospital: "",
+        nearbyShowroom: "",
+        otherNotes: ""
+    }
   });
 
   const photoPreviews = useFilePreviews();
@@ -125,9 +142,10 @@ const PGListingForm = () => {
     { id: 1, title: "PG Details" },
     { id: 2, title: "Rooms & Amenities" },
     { id: 3, title: "Rules & Policies" },
-    { id: 4, title: "Photos" },
-    { id: 5, title: "Rent & Charges" },
-    { id: 6, title: "Verification" },
+    { id: 4, title: "Local Guide" },
+    { id: 5, title: "Photos" },
+    { id: 6, title: "Rent & Charges" },
+    { id: 7, title: "Verification" },
   ];
   const [step, setStep] = useState(0);
 
@@ -152,15 +170,15 @@ const PGListingForm = () => {
       if (!form.area?.trim()) newErrors.area = "Area is required";
     }
 
-    if (s === 3) { // Photos
+    if (s === 4) { // Photos
        if (photoPreviews.previews.length === 0) newErrors.photos = "At least one photo is required";
     }
 
-    if (s === 4) { // Pricing
+    if (s === 5) { // Pricing (Rent & Charges)
       if (!form.baseRate && form.baseRate !== 0) newErrors.baseRate = "Monthly rent is required";
     }
 
-    if (s === 5) { // Verification
+    if (s === 6) { // Verification
        if (!aadhaarVerified) newErrors.idFiles = "Please verify your Aadhaar number";
     }
 
@@ -378,6 +396,22 @@ const PGListingForm = () => {
         house_specific_tips: form.houseSpecificTips.filter(t => t.trim())
       };
 
+      // Add Local Guide from new form structure
+      if (form.localGuide) {
+          guidebook.transport_tips = { 
+              ...guidebook.transport_tips, 
+              metro: form.localGuide.nearestMetroStation,
+              bus: form.localGuide.nearestBusStop,
+              local: form.localGuide.otherNotes
+          };
+          guidebook.essentials_nearby = {
+              ...guidebook.essentials_nearby,
+              grocery: form.localGuide.nearbyMarket,
+              medical: form.localGuide.nearbyHospital,
+              shopping: form.localGuide.nearbyShowroom
+          };
+      }
+
       const meta = {
         propertyType: form.propertyType, // Boys PG, Girls PG etc
         propertyCategory: "PG", 
@@ -395,6 +429,7 @@ const PGListingForm = () => {
         drinkingAllowed: form.drinkingAllowed,
         outsideGuestsAllowed: form.outsideGuestsAllowed,
         maxGuests: form.maxGuests,
+        gateClosingTime: form.gateClosingTime,
         cleaningFee: form.cleaningFee, // Maintenance
         securityDeposit: securityDeposit, // Custom field for PG
         selfCheckIn: form.selfCheckIn,
@@ -418,6 +453,8 @@ const PGListingForm = () => {
         },
         noticePeriod: form.noticePeriod,
         lockInPeriod: form.lockInPeriod,
+        lockInPeriod: form.lockInPeriod,
+        foodAvailable: form.foodAvailable,
         electricityCharges: form.electricityCharges,
         perNightPrice: form.perNightPrice,
       };
@@ -597,7 +634,7 @@ const PGListingForm = () => {
             <div className="tmx9pf-grid">
               <div className="tmx9pf-field">
                 <label className="tmx9pf-label">Gate Closing Time</label>
-                <input name="checkInTime" type="time" value={form.checkInTime} onChange={handleChange} className="tmx9pf-input" />
+                <input name="gateClosingTime" type="time" value={form.gateClosingTime} onChange={handleChange} className="tmx9pf-input" />
                 <div className="tmx9pf-muted">Time by which residents must be in.</div>
               </div>
 
@@ -628,14 +665,43 @@ const PGListingForm = () => {
 
               <div className="tmx9pf-field">
                 <label className="tmx9pf-label">Food Included?</label>
-                <div className="tmx9pf-muted">Select meals details in Amenities section.</div>
+                <Toggle name="foodAvailable" value={form.foodAvailable} onChange={(v) => setForm((s) => ({ ...s, foodAvailable: v }))} />
               </div>
             </div>
           </section>
         )}
 
-        {/* STEP 3: Photos */}
+        {/* STEP 4: Local Guide (New) */}
         {step === 3 && (
+          <section className="tmx9pf-section">
+            <h2 className="tmx9pf-section-title">Local Guide / Neighborhood</h2>
+            <div className="tmx9pf-grid">
+               <div className="tmx9pf-field">
+                 <label className="tmx9pf-label">Nearest Metro Station</label>
+                 <input value={form.localGuide.nearestMetroStation} onChange={(e) => setForm(f => ({ ...f, localGuide: { ...f.localGuide, nearestMetroStation: e.target.value } }))} className="tmx9pf-input" placeholder="e.g. MG Road Metro" />
+               </div>
+               <div className="tmx9pf-field">
+                 <label className="tmx9pf-label">Nearest Bus Stop</label>
+                 <input value={form.localGuide.nearestBusStop} onChange={(e) => setForm(f => ({ ...f, localGuide: { ...f.localGuide, nearestBusStop: e.target.value } }))} className="tmx9pf-input" placeholder="e.g. Sector 18 Bus Stand" />
+               </div>
+               <div className="tmx9pf-field">
+                 <label className="tmx9pf-label">Nearby Market / Grocery</label>
+                 <input value={form.localGuide.nearbyMarket} onChange={(e) => setForm(f => ({ ...f, localGuide: { ...f.localGuide, nearbyMarket: e.target.value } }))} className="tmx9pf-input" placeholder="e.g. Super Mart, Local Vegetable Market" />
+               </div>
+               <div className="tmx9pf-field">
+                 <label className="tmx9pf-label">Nearby Hospital / Pharmacy</label>
+                 <input value={form.localGuide.nearbyHospital} onChange={(e) => setForm(f => ({ ...f, localGuide: { ...f.localGuide, nearbyHospital: e.target.value } }))} className="tmx9pf-input" placeholder="e.g. City Hospital" />
+               </div>
+               <div className="tmx9pf-field full">
+                 <label className="tmx9pf-label">Other Landmarks / Notes</label>
+                 <textarea value={form.localGuide.otherNotes} onChange={(e) => setForm(f => ({ ...f, localGuide: { ...f.localGuide, otherNotes: e.target.value } }))} className="tmx9pf-textarea" placeholder="Any other important landmarks nearby..." rows="3" />
+               </div>
+            </div>
+          </section>
+        )}
+
+        {/* STEP 5: Photos */}
+        {step === 4 && (
           <section className="tmx9pf-section">
             <h2 className="tmx9pf-section-title">PG Photos</h2>
             <div className="tmx9pf-field full">
@@ -655,8 +721,8 @@ const PGListingForm = () => {
           </section>
         )}
 
-        {/* STEP 4: Pricing */}
-        {step === 4 && (
+        {/* STEP 6: Pricing */}
+        {step === 5 && (
           <section className="tmx9pf-section">
             <h2 className="tmx9pf-section-title">Rent & Charges</h2>
              <div className="tmx9pf-grid">
@@ -664,6 +730,41 @@ const PGListingForm = () => {
                  <label className="tmx9pf-label">Rent per Night (Rs) *</label>
                  <input name="baseRate" type="number" value={form.baseRate} onChange={handleNumChange} className="tmx9pf-input" placeholder="e.g. 1200" />
                  {renderError("baseRate")}
+                </div>
+
+                <div className="tmx9pf-field full" style={{ marginTop: "1rem" }}>
+                   <label className="tmx9pf-label">Booking Process</label>
+                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+                      {BOOKING_TYPES.map((type) => (
+                        <div 
+                          key={type.id}
+                          onClick={() => setForm(f => ({ ...f, bookingType: type.id }))}
+                          style={{
+                            padding: '1rem',
+                            borderRadius: '8px',
+                            border: form.bookingType === type.id ? '2px solid #8b0000' : '1px solid #ddd',
+                            background: form.bookingType === type.id ? '#fff5f5' : 'white',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s',
+                            display: 'flex', flexDirection: 'column', gap: '4px'
+                          }}
+                        >
+                           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.25rem' }}>
+                              <div style={{
+                                 width: '18px', height: '18px', borderRadius: '50%',
+                                 border: form.bookingType === type.id ? '2px solid #8b0000' : '2px solid #ccc',
+                                 marginRight: '10px',
+                                 position: 'relative',
+                                 display: 'flex', alignItems: 'center', justifyContent: 'center'
+                              }}>
+                                {form.bookingType === type.id && <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#8b0000' }} />}
+                              </div>
+                              <span style={{ fontWeight: '600', color: '#333' }}>{type.label}</span>
+                           </div>
+                           <p style={{ margin: 0, fontSize: '0.85rem', color: '#666', paddingLeft: '28px' }}>{type.desc}</p>
+                        </div>
+                      ))}
+                   </div>
                 </div>
 
                <div className="tmx9pf-field">
@@ -695,8 +796,8 @@ const PGListingForm = () => {
           </section>
         )}
 
-        {/* STEP 5: Verification (Same as original) */}
-        {step === 5 && (
+        {/* STEP 7: Verification (Same as original) */}
+        {step === 6 && (
            <section className="tmx9pf-section">
             <h2 className="tmx9pf-section-title">Owner Verification</h2>
             <div className="tmx9pf-field full" style={{ background: '#f8fafc', padding: '16px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
@@ -740,3 +841,4 @@ const PGListingForm = () => {
 };
 
 export default PGListingForm;
+// Temporary file to force update

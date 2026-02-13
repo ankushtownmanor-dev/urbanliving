@@ -26,6 +26,8 @@ import {
   HeartPulse,
   Lightbulb,
   Clock,
+  Train,
+  ShoppingBag,
   MapPin as MapPinIcon
 } from 'lucide-react';
 import { MdCurrencyRupee, MdOutlineCurrencyRupee } from 'react-icons/md';
@@ -77,9 +79,12 @@ const transformPropertyData = (data) => {
       try { return JSON.parse(meta); } catch (e) { return {}; }
   };
 
+  const parsedMeta = parseMeta(data.meta);
+
   return {
     ...data,
-    meta: parseMeta(data.meta),
+    ...parsedMeta, // Lift meta properties to root
+    meta: parsedMeta,
     amenities: parseJsonField(data.amenities),
     photos: Array.isArray(data.photos) ? data.photos : (data.photos ? [data.photos] : []),
     parsedBedrooms: parseJsonField(data.bedrooms),
@@ -765,13 +770,27 @@ const Calendar = ({ selectedDates, onDateSelect, minDate = new Date(), disabledD
   );
 };
 
-const LeadGenerationModal = ({ isOpen, onClose, propertyName, propertyId, user }) => {
+const LeadGenerationModal = ({ isOpen, onClose, propertyName, propertyId, user, roomType }) => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: user?.name || '',
     email: user?.email || '',
-    phone: user?.phone || ''
+    phone: user?.phone || '',
+    message: ''
   });
+
+  // Reset form when modal opens
+  useEffect(() => {
+    if(isOpen) {
+        setForm(prev => ({
+            ...prev,
+            name: user?.name || prev.name,
+            email: user?.email || prev.email,
+            phone: user?.phone || prev.phone,
+            message: roomType ? `I am interested in the ${roomType} option.` : ''
+        }));
+    }
+  }, [isOpen, user, roomType]);
 
   if (!isOpen) return null;
 
@@ -779,13 +798,18 @@ const LeadGenerationModal = ({ isOpen, onClose, propertyName, propertyId, user }
     e.preventDefault();
     setLoading(true);
     try {
+      const finalPropertyName = roomType 
+        ? `${propertyName} - ${roomType}` 
+        : propertyName;
+
       await axios.post('https://townmanor.ai/api/formlead/leads', {
         name: form.name,
         email: form.email,
         phone: form.phone,
-        property_name: propertyName,
+        property_name: finalPropertyName,
         property_id: propertyId,
-        city: 'N/A' 
+        city: 'N/A',
+        message: form.message
       });
       alert('Interest registered successfully! We will contact you soon.');
       onClose();
@@ -800,56 +824,79 @@ const LeadGenerationModal = ({ isOpen, onClose, propertyName, propertyId, user }
   return (
     <div style={{
       position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-      background: 'rgba(0,0,0,0.6)', zIndex: 10002,
-      display: 'flex', alignItems: 'center', justifyContent: 'center'
+      background: 'rgba(0,0,0,0.7)', zIndex: 10002,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      backdropFilter: 'blur(5px)'
     }}>
       <div style={{
-        background: 'white', padding: '2rem', borderRadius: '12px',
-        width: '90%', maxWidth: '400px', position: 'relative'
+        background: 'white', padding: '2.5rem', borderRadius: '16px',
+        width: '90%', maxWidth: '450px', position: 'relative',
+        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
       }}>
         <button onClick={onClose} style={{
-          position: 'absolute', top: '10px', right: '10px',
-          background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer'
-        }}><FiX /></button>
+          position: 'absolute', top: '15px', right: '15px',
+          background: '#f1f1f1', border: 'none', borderRadius: '50%', 
+          width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '1.2rem', cursor: 'pointer', transition: 'background 0.2s'
+        }}><FiX color="#333" /></button>
         
-        <h3 style={{ marginBottom: '1rem', color: '#8b0000' }}>Interested in Long Term Stay?</h3>
-        <p style={{ marginBottom: '1.5rem', color: '#666', fontSize: '0.9rem' }}>
-          Please share your details. Our team will contact you with the best rates for {propertyName}.
-        </p>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <h3 style={{ margin: '0 0 0.5rem 0', color: '#1a1a1a', fontSize: '1.5rem', fontWeight: '700' }}>
+               {roomType ? `Enquire for ${roomType}` : 'Interested in staying?'}
+            </h3>
+            <p style={{ color: '#666', fontSize: '0.95rem', lineHeight: '1.5' }}>
+              Fill in your details below and our team will get back to you with the best personalized offer for <span style={{ fontWeight: '600', color: '#8b0000' }}>{propertyName}</span>.
+            </p>
+        </div>
         
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Name</label>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#374151', marginBottom: '0.5rem' }}>Full Name</label>
             <input 
               type="text" required
               value={form.name}
               onChange={e => setForm({...form, name: e.target.value})}
-              style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ddd' }}
+              placeholder="Enter your name"
+              style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb', fontSize: '1rem', outline: 'none', transition: 'border-color 0.2s' }}
+              onFocus={(e) => e.target.style.borderColor = '#8b0000'}
+              onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
             />
           </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Email</label>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#374151', marginBottom: '0.5rem' }}>Email Address</label>
             <input 
               type="email" required
               value={form.email}
               onChange={e => setForm({...form, email: e.target.value})}
-              style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ddd' }}
+              placeholder="Enter your email"
+              style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb', fontSize: '1rem', outline: 'none' }}
+              onFocus={(e) => e.target.style.borderColor = '#8b0000'}
+              onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
             />
           </div>
-          <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Phone</label>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#374151', marginBottom: '0.5rem' }}>Phone Number</label>
             <input 
               type="tel" required
               value={form.phone}
               onChange={e => setForm({...form, phone: e.target.value})}
-              style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ddd' }}
+              placeholder="Enter your phone number"
+              style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb', fontSize: '1rem', outline: 'none' }}
+              onFocus={(e) => e.target.style.borderColor = '#8b0000'}
+              onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
             />
           </div>
+
           <button type="submit" disabled={loading} style={{
-            width: '100%', padding: '12px', background: '#8b0000', color: 'white',
-            border: 'none', borderRadius: '6px', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer'
+            marginTop: '1rem', width: '100%', padding: '14px', background: 'linear-gradient(135deg, #8b0000 0%, #a50000 100%)', color: 'white',
+            border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '1rem', cursor: loading ? 'not-allowed' : 'pointer',
+            boxShadow: '0 4px 6px -1px rgba(139, 0, 0, 0.2)', transition: 'transform 0.1s'
           }}>
-            {loading ? 'Sending...' : 'Request Callback'}
+            {loading ? (
+                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                    <Loader size={18} className="animate-spin" /> Sending...
+                </span>
+            ) : 'Request Callback'}
           </button>
         </form>
       </div>
@@ -897,6 +944,11 @@ const PropertyDetailPage = () => {
   const [showRequestSentPopup, setShowRequestSentPopup] = useState(false);
   const [hostImage, setHostImage] = useState(null);
   const [showLeadModal, setShowLeadModal] = useState(false);
+  const [selectedRoomForLead, setSelectedRoomForLead] = useState(null);
+
+  // Booking Request State
+  const [bookingRequestStatus, setBookingRequestStatus] = useState(null); // 'pending', 'accepted', 'rejected', null
+  const [userBookingRequests, setUserBookingRequests] = useState([]);
 
 
   const [passportFile, setPassportFile] = useState(null);
@@ -1106,8 +1158,28 @@ useEffect(() => {
   fetchHostImage();
 }, [property?.owner_id]);
 
+  // Fetch Booking Requests for User
+  useEffect(() => {
+    if (user?.username && property?.id) {
+      axios.get(`https://townmanor.ai/api/booking-request?username=${user.username}`)
+        .then(res => {
+          if (res.data.success && Array.isArray(res.data.data)) {
+            setUserBookingRequests(res.data.data);
+            const req = res.data.data.find(r => r.property_id === property.id);
+            if (req) {
+              setBookingRequestStatus(req.status);
+              if (req.status === 'accepted') setOwnerApprovalStatus('accepted');
+            }
+          }
+        })
+        .catch(err => console.error("Failed to fetch booking requests", err));
+    }
+  }, [user?.username, property?.id]);
+
+
   const handleReserveClick = () => {
     if (property?.property_category === 'PG' && pricingMode === 'monthly') {
+        setSelectedRoomForLead(null); // General inquiry
         setShowLeadModal(true);
         return;
     }
@@ -1115,6 +1187,27 @@ useEffect(() => {
       navigate('/login', { state: { from: location } });
       return;
     }
+
+    // Booking Request Logic
+    if (bookingType === 1) {
+        if (bookingRequestStatus === 'pending') {
+            showAlert("You have a pending request for this property. Please wait for the owner's approval.");
+            return;
+        }
+        if (bookingRequestStatus === 'accepted') {
+            // Proceed to payment directly
+             setAvailabilityRequested(false);
+             setShowPaymentModal(true);
+             setStep(1);
+             return;
+        }
+        // If no request or rejected, open modal to send request (Step 1)
+        setAvailabilityRequested(false); 
+        setShowPaymentModal(true); // Reusing payment modal for date selection
+        setStep(1); 
+        return;
+    }
+
     setAvailabilityRequested(false);
     setOwnerApprovalStatus(null);
     setShowPaymentModal(true);
@@ -1127,7 +1220,7 @@ useEffect(() => {
 
       const payload = {
         property_id: property.id,
-        username: username,
+        username: user?.username || username,
         start_date: checkInDate,
         end_date: checkOutDate
       };
@@ -1485,6 +1578,7 @@ const guestPolicy = property?.guest_policy || {};
         propertyName={property.property_name}
         propertyId={property.id}
         user={user}
+        roomType={selectedRoomForLead}
       />
 
       {showPaymentModal && (
@@ -1569,9 +1663,8 @@ const guestPolicy = property?.guest_policy || {};
                         selectedDates={{ checkInDate: formData.checkInDate, checkOutDate: formData.checkOutDate }}
                         onDateSelect={async (dates) => {
                           setFormData({ ...formData, ...dates });
-                          if (bookingType === 1 && dates.checkInDate && dates.checkOutDate && !availabilityRequested) {
-                            setAvailabilityRequested(true);
-                            await sendAvailabilityRequest(dates);
+                          if (dates.checkInDate && dates.checkOutDate) {
+                            // Valid range selected
                           }
                         }}
                         minDate={new Date()}
@@ -1755,7 +1848,15 @@ const guestPolicy = property?.guest_policy || {};
               <button onClick={handlePrev} disabled={step === 1} style={{ padding: '12px 32px', background: step === 1 ? '#eee' : '#f8fafc', border: '2px solid #ddd', borderRadius: '8px', cursor: step === 1 ? 'not-allowed' : 'pointer', fontSize: '1rem', fontWeight: '600', color: step === 1 ? '#999' : '#333' }}>
                 ← Previous
               </button>
-              {!(bookingType === 1 && ownerApprovalStatus === 'pending') && (
+              {step === 3 && bookingType === 1 && bookingRequestStatus !== 'accepted' ? (
+                <button 
+                  onClick={() => sendAvailabilityRequest({ checkInDate: formData.checkInDate, checkOutDate: formData.checkOutDate })}
+                  disabled={!formData.checkInDate || !formData.checkOutDate || ownerApprovalStatus === 'pending'}
+                  style={{ padding: '12px 32px', background: ownerApprovalStatus === 'pending' ? '#ccc' : '#8b0000', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '600', cursor: ownerApprovalStatus === 'pending' ? 'not-allowed' : 'pointer' }}
+                >
+                  {ownerApprovalStatus === 'pending' ? "Request Sent" : "Send Booking Request"}
+                </button>
+              ) : (
                 <button onClick={handleNext} style={{ padding: '12px 32px', background: '#8b0000', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer' }}>
                   Next →
                 </button>
@@ -1842,7 +1943,7 @@ const guestPolicy = property?.guest_policy || {};
 </div>
 
 
-          {(property.parsedBedrooms?.length > 0 || property.parsedBathrooms?.length > 0) && (
+          {(property.parsedBedrooms?.length > 0 || property.parsedBathrooms?.length > 0) && property.property_category !== 'PG' && (
             <>
               <div className="divider"></div>
               <div className="text-section">
@@ -1884,22 +1985,75 @@ const guestPolicy = property?.guest_policy || {};
                 <h3>Room Rates & Sharing Options</h3>
                 <div className="amenities-grid">
                   {property.parsedBedrooms.map((curr, i) => (
-                    <div key={i} className="amenity-card rule-card" style={{ padding: '16px', border: '1px solid #e2e8f0', borderRadius: '8px', background: '#f8fafc' }}>
+                    <div 
+                        key={i} 
+                        className="amenity-card rule-card pg-room-card" 
+                        onClick={() => {
+                            setSelectedRoomForLead(curr.type);
+                            setShowLeadModal(true);
+                        }}
+                        style={{ 
+                            padding: '20px', 
+                            border: '1px solid #e2e8f0', 
+                            borderRadius: '12px', 
+                            background: '#fff',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                            position: 'relative',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1)';
+                            e.currentTarget.style.borderColor = '#8b0000';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.02)';
+                            e.currentTarget.style.borderColor = '#e2e8f0';
+                        }}
+                    >
                       <div className="rule-info" style={{ width: '100%' }}>
-                        <span className="rule-label" style={{ fontSize: '1rem', fontWeight: '600', color: '#1e293b' }}>{curr.type}</span>
-                         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', alignItems: 'center' }}>
-                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                <span style={{ fontSize: '0.9rem', color: '#64748b' }}>{curr.count} Rooms</span>
-                                <span style={{ fontSize: '0.85rem', color: '#334155', marginTop: '2px' }}>
-                                    <span style={{ fontWeight: 600 }}>Washroom:</span> {curr.washroomType || "Attached"}
-                                </span>
+                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                            <div>
+                                <h4 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#1e293b', margin: '0 0 4px 0' }}>{curr.type}</h4>
+                                <span style={{ fontSize: '0.9rem', color: '#64748b' }}>{curr.count} Rooms Available</span>
                             </div>
                             {curr.price ? (
-                              <strong style={{ fontSize: '1.rem', color: '#8b0000' }}>₹{formatCurrency(curr.price)}<span style={{ fontSize: '0.8rem', color: '#666', fontWeight: 'normal' }}>/night</span></strong>
+                              <div style={{ textAlign: 'right' }}>
+                                  <strong style={{ display: 'block', fontSize: '1.25rem', color: '#8b0000', lineHeight: 1 }}>
+                                    ₹{formatCurrency(curr.price)}
+                                    <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 'normal' }}>/mo</span>
+                                  </strong>
+                              </div>
                             ) : (
-                               <span style={{ fontSize: '0.9rem', color: '#64748b' }}>Price on Request</span>
+                               <span style={{ fontSize: '0.9rem', color: '#64748b', fontStyle: 'italic' }}>Price on Request</span>
                             )}
                          </div>
+
+                         <div style={{ margin: '12px 0', borderTop: '1px dashed #e2e8f0', paddingTop: '12px', display: 'flex', gap: '12px', fontSize: '0.9rem', color: '#334155' }}>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <BiBath size={16} color="#64748b" /> {curr.washroomType || "Attached"}
+                            </span>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <UserCircle size={16} color="#64748b" /> {curr.type.includes('Double') ? '2 Pax' : curr.type.includes('Triple') ? '3 Pax' : '1 Pax'}
+                            </span>
+                         </div>
+
+                         <button style={{ 
+                             width: '100%', 
+                             marginTop: '8px',
+                             padding: '10px', 
+                             background: '#fff1f1', 
+                             color: '#8b0000', 
+                             border: '1px solid #fee2e2', 
+                             borderRadius: '6px', 
+                             fontWeight: '600',
+                             fontSize: '0.9rem',
+                             cursor: 'pointer'
+                        }}>
+                             Enquire Now
+                         </button>
                       </div>
                     </div>
                   ))}
@@ -1932,12 +2086,12 @@ const guestPolicy = property?.guest_policy || {};
   {/* Smoking */}
   <div className="amenity-card rule-card">
     <div className="rule-icon">
-      {property.smoking_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
+      {(property.smoking_allowed || property.smokingAllowed || property.meta?.smokingAllowed) ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
     </div>
     <div className="rule-info">
       <span className="rule-label">Smoking</span>
-      <strong className={property.smoking_allowed ? "text-green" : "text-gray"}>
-        {property.smoking_allowed ? 'Allowed' : 'Not allowed'}
+      <strong className={(property.smoking_allowed || property.smokingAllowed || property.meta?.smokingAllowed) ? "text-green" : "text-gray"}>
+        {(property.smoking_allowed || property.smokingAllowed || property.meta?.smokingAllowed) ? 'Allowed' : 'Not allowed'}
       </strong>
     </div>
   </div>
@@ -1945,12 +2099,12 @@ const guestPolicy = property?.guest_policy || {};
   {/* Pets */}
   <div className="amenity-card rule-card">
     <div className="rule-icon">
-      {property.pets_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
+      {(property.pets_allowed || property.petsAllowed || property.meta?.petsAllowed) ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
     </div>
     <div className="rule-info">
       <span className="rule-label">Pets</span>
-      <strong className={property.pets_allowed ? "text-green" : "text-gray"}>
-        {property.pets_allowed ? 'Allowed' : 'Not allowed'}
+      <strong className={(property.pets_allowed || property.petsAllowed || property.meta?.petsAllowed) ? "text-green" : "text-gray"}>
+        {(property.pets_allowed || property.petsAllowed || property.meta?.petsAllowed) ? 'Allowed' : 'Not allowed'}
       </strong>
     </div>
   </div>
@@ -1958,12 +2112,12 @@ const guestPolicy = property?.guest_policy || {};
   {/* Events */}
   <div className="amenity-card rule-card">
     <div className="rule-icon">
-      {property.events_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
+      {(property.events_allowed || property.eventsAllowed || property.meta?.eventsAllowed) ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
     </div>
     <div className="rule-info">
       <span className="rule-label">Events</span>
-      <strong className={property.events_allowed ? "text-green" : "text-gray"}>
-        {property.events_allowed ? 'Allowed' : 'Not allowed'}
+      <strong className={(property.events_allowed || property.eventsAllowed || property.meta?.eventsAllowed) ? "text-green" : "text-gray"}>
+        {(property.events_allowed || property.eventsAllowed || property.meta?.eventsAllowed) ? 'Allowed' : 'Not allowed'}
       </strong>
     </div>
   </div>
@@ -1971,12 +2125,12 @@ const guestPolicy = property?.guest_policy || {};
   {/* Alcohol */}
   <div className="amenity-card rule-card">
     <div className="rule-icon">
-      {property.drinking_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
+      {(property.drinking_allowed || property.drinkingAllowed || property.meta?.drinkingAllowed) ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
     </div>
     <div className="rule-info">
       <span className="rule-label">Alcohol</span>
-      <strong className={property.drinking_allowed ? "text-green" : "text-gray"}>
-        {property.drinking_allowed ? 'Allowed' : 'Not allowed'}
+      <strong className={(property.drinking_allowed || property.drinkingAllowed || property.meta?.drinkingAllowed) ? "text-green" : "text-gray"}>
+        {(property.drinking_allowed || property.drinkingAllowed || property.meta?.drinkingAllowed) ? 'Allowed' : 'Not allowed'}
       </strong>
     </div>
   </div>
@@ -1984,12 +2138,12 @@ const guestPolicy = property?.guest_policy || {};
   {/* Outside Guests */}
   <div className="amenity-card rule-card">
     <div className="rule-icon">
-      {property.outside_guests_allowed ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
+      {(property.outside_guests_allowed || property.outsideGuestsAllowed || property.meta?.outsideGuestsAllowed) ? <FiCheck className="text-green" /> : <FiXCircle className="text-red" />}
     </div>
     <div className="rule-info">
       <span className="rule-label">Outside Guests</span>
-      <strong className={property.outside_guests_allowed ? "text-green" : "text-gray"}>
-        {property.outside_guests_allowed ? 'Allowed' : 'Not allowed'}
+      <strong className={(property.outside_guests_allowed || property.outsideGuestsAllowed || property.meta?.outsideGuestsAllowed) ? "text-green" : "text-gray"}>
+        {(property.outside_guests_allowed || property.outsideGuestsAllowed || property.meta?.outsideGuestsAllowed) ? 'Allowed' : 'Not allowed'}
       </strong>
     </div>
   </div>
@@ -2077,6 +2231,32 @@ const guestPolicy = property?.guest_policy || {};
     <div className="rule-info">
       <span className="rule-label">Electricity</span>
       <strong>{property.electricityCharges || property.meta?.electricityCharges}</strong>
+    </div>
+  </div>
+)}
+
+{/* GATE CLOSING TIME */}
+{(property.gateClosingTime || property.meta?.gateClosingTime || (property.property_category === 'PG' && property.check_in_time)) && (
+  <div className="amenity-card rule-card">
+    <div className="rule-icon">
+      <Clock size={18} color="#ef4444" />
+    </div>
+    <div className="rule-info">
+      <span className="rule-label">Gate Closing</span>
+      <strong>{property.gateClosingTime || property.meta?.gateClosingTime || property.check_in_time}</strong>
+    </div>
+  </div>
+)}
+
+{/* FOOD */}
+{(property.foodAvailable !== undefined || property.meta?.foodAvailable !== undefined) && (
+  <div className="amenity-card rule-card">
+    <div className="rule-icon">
+      {property.foodAvailable || property.meta?.foodAvailable ? <UtensilsCrossed size={18} className="text-green" /> : <FiXCircle className="text-red" />}
+    </div>
+    <div className="rule-info">
+      <span className="rule-label">Food</span>
+      <strong>{property.foodAvailable || property.meta?.foodAvailable ? 'Available' : 'Not included'}</strong>
     </div>
   </div>
 )}
@@ -2186,6 +2366,27 @@ const guestPolicy = property?.guest_policy || {};
                   <div className="gbRowValue">{property.guidebook.transport_tips.local_travel}</div>
                 </div>
               )}
+
+              {/* NEW: Metro & Bus from PG Form */}
+              {property.guidebook.transport_tips.metro && (
+                <div className="gbRow">
+                  <div className="gbRowLeft">
+                    <Train size={16} className="gbRowIcon" />
+                    <span className="gbRowLabel">Metro Station</span>
+                  </div>
+                  <div className="gbRowValue">{property.guidebook.transport_tips.metro}</div>
+                </div>
+              )}
+
+              {property.guidebook.transport_tips.bus && (
+                <div className="gbRow">
+                  <div className="gbRowLeft">
+                    <Bus size={16} className="gbRowIcon" />
+                    <span className="gbRowLabel">Bus Stop</span>
+                  </div>
+                  <div className="gbRowValue">{property.guidebook.transport_tips.bus}</div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -2272,6 +2473,16 @@ const guestPolicy = property?.guest_policy || {};
                     <span className="gbRowLabel">Medical</span>
                   </div>
                   <div className="gbRowValue">{property.guidebook.essentials_nearby.medical}</div>
+                </div>
+              )}
+
+              {property.guidebook.essentials_nearby.shopping && (
+                <div className="gbRow">
+                  <div className="gbRowLeft">
+                    <ShoppingBag size={16} className="gbRowIcon" />
+                    <span className="gbRowLabel">Shopping</span>
+                  </div>
+                  <div className="gbRowValue">{property.guidebook.essentials_nearby.shopping}</div>
                 </div>
               )}
             </div>
@@ -2404,10 +2615,10 @@ const guestPolicy = property?.guest_policy || {};
                     <span>{property.property_category === 'PG' ? (pricingMode === 'daily' ? 'Seat Rent x Nights' : 'Monthly Rent (Advance)') : 'Base Fare'}</span>
                     <span>₹{formatCurrency(pricing.subtotal)}</span>
                   </div>
-                  {(property.cleaning_fee > 0) && (
+                  {(property.cleaning_fee > 0 || (property.meta?.cleaningFee && Number(property.meta.cleaningFee) > 0)) && (
                     <div className="row">
                       <span>{property.property_category === 'PG' ? 'Maintenance' : 'Cleaning Fee'}</span>
-                      <span>₹{formatCurrency(property.cleaning_fee)}</span>
+                      <span>₹{formatCurrency(property.cleaning_fee || property.meta?.cleaningFee)}</span>
                     </div>
                   )}
                   {(property.securityDeposit || property.security_deposit || (property.meta && property.meta.securityDeposit)) && (
@@ -2424,9 +2635,11 @@ const guestPolicy = property?.guest_policy || {};
 
                 <div style={{ margin: '1.5rem 0' }}>
                   <button className="reserve-btn" onClick={handleReserveClick}>
-                    Reserve Now
+                    {bookingType === 1 && bookingRequestStatus !== 'accepted' ? "Send Booking Request" : "Reserve Now"}
                   </button>
-                  <p className="hint" style={{ marginBottom: 0 }}>You won't be charged yet</p>
+                  <p className="hint" style={{ marginBottom: 0 }}>
+                      {bookingType === 1 && bookingRequestStatus !== 'accepted' ? "Send a request first" : "You won't be charged yet"}
+                  </p>
                 </div>
 
                 {property.property_category === 'PG' && pricingMode === 'monthly' && property.parsedBedrooms?.length > 0 && (
@@ -2475,8 +2688,13 @@ const guestPolicy = property?.guest_policy || {};
 
                 {bookingType === 1 && (
                   <div style={{ marginTop: '8px', padding: '10px', background: '#fff7ed', border: '1px solid #fed7aa', borderRadius: '6px', fontSize: '0.8rem', color: '#92400e' }}>
-                    ⚠️ <strong>Owner approval required</strong><br />
-                    Please select your dates. The owner will confirm availability before you can book.
+                    {bookingRequestStatus === 'pending' ? (
+                         <span>⏳ <strong>Request Pending</strong><br/>Waiting for owner approval.</span>
+                    ) : bookingRequestStatus === 'accepted' ? (
+                         <span>✅ <strong>Request Accepted!</strong><br/>You can now proceed to book.</span>
+                    ) : (
+                         <span>⚠️ <strong>Owner approval required</strong><br />Please send a booking request first.</span>
+                    )}
                   </div>
                 )}
               </div>

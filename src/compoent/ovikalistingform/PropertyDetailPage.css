@@ -1516,3 +1516,161 @@ table {
   font-size: 0.85rem;
   color: #64748b;
 }
+
+/* =========================
+    PG Modern UI Refinements
+   ========================= */
+
+.pg-room-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.pg-modern-card {
+  background: var(--white);
+  border-radius: 20px;
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+}
+
+.pg-modern-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--primary-light);
+}
+
+/* Header with light gradient */
+.pg-card-header {
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(to bottom, #ffffff, #fafafa);
+  border-bottom: 1px dashed var(--gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.pg-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pg-room-type {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  letter-spacing: -0.01em;
+}
+
+.pg-spots-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--success);
+  background: #ecfdf5;
+  padding: 4px 10px;
+  border-radius: 99px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+  border: 1px solid #d1fae5;
+}
+
+.pg-price-box {
+  text-align: right;
+  background: var(--primary-light);
+  padding: 8px 12px;
+  border-radius: 12px;
+  color: var(--primary);
+}
+
+.pg-price-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1;
+  display: block;
+}
+
+.pg-price-unit {
+  font-size: 0.7rem;
+  font-weight: 600;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+
+/* Card Body */
+.pg-card-body {
+  padding: 1.5rem;
+  background: var(--white);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pg-features-list {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pg-feature-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--gray-700);
+  background: var(--gray-50);
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--gray-200);
+  font-weight: 500;
+}
+
+.pg-action-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--white);
+  color: var(--primary);
+  border: 1px solid var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.pg-action-btn:hover {
+  background: var(--primary);
+  color: var(--white);
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(139, 0, 0, 0.2);
+}
+
+@media (max-width: 640px) {
+  .pg-room-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .pg-card-header {
+    padding: 1rem 1.25rem;
+  }
+  
+  .pg-card-body {
+    padding: 1.25rem;
+  }
+}
+
