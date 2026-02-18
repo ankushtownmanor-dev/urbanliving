@@ -1766,7 +1766,7 @@ export default function Navbar() {
                       marginBottom: 25,
                     }}
                   >
-                    Perfect for vacation rentals, weekend getaways, and temporary stays
+                   PG, apartments,houses, and farmhouse accommodations are available for nightly rental.
                   </p>
                   <button
                     style={{
@@ -1788,7 +1788,7 @@ export default function Navbar() {
                       e.currentTarget.style.transform = "scale(1)";
                     }}
                   >
-                    View Properties
+                    List Properties
                   </button>
                 </div>
 
@@ -1848,7 +1848,7 @@ export default function Navbar() {
                       marginBottom: 25,
                     }}
                   >
-                    Ideal for PG accommodations, monthly rentals, and extended stays
+                   Same as short-term rental , only change from nightly rental to Monthly rental
                   </p>
                   <button
                     style={{
@@ -1870,7 +1870,7 @@ export default function Navbar() {
                       e.currentTarget.style.transform = "scale(1)";
                     }}
                   >
-                    View Properties
+                    List Properties
                   </button>
                 </div>
               </div>
