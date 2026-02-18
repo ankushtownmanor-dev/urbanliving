@@ -1697,7 +1697,7 @@ export default function Navbar() {
                     margin: 0,
                   }}
                 >
-                  Choose Your Rental Category
+                  Listing Category
                 </h2>
               </div>
 
@@ -1766,7 +1766,7 @@ export default function Navbar() {
                       marginBottom: 25,
                     }}
                   >
-                   PG, apartments,houses, and farmhouse accommodations are available for nightly rental.
+                   PG, apartments,houses, and farmhouse accommodations - Nightly Rental
                   </p>
                   <button
                     style={{
@@ -1848,7 +1848,7 @@ export default function Navbar() {
                       marginBottom: 25,
                     }}
                   >
-                   Same as short-term rental , only change from nightly rental to Monthly rental
+                     PG, apartments,houses, and farmhouse accommodations - Monthly Rental
                   </p>
                   <button
                     style={{
