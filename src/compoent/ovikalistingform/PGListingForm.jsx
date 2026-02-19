@@ -377,6 +377,18 @@ const PGListingForm = () => {
       return;
     }
 
+    if (!aadhaarVerified) {
+      alert("Please complete Aadhaar verification before listing.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!isPhoneVerified) {
+      alert("Please complete Phone verification before listing.");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const fd = new FormData();
       fd.append("property_name", form.title || "");
@@ -582,7 +594,7 @@ const PGListingForm = () => {
                         {SHARING_TYPES.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                       </select>
                       {/* Removed "Number of Rooms" count to simplify configuration per type */}
-                      <input type="number" min="0" placeholder="Rent (₹) / Night" value={item.price} onChange={(e) => { const newDetails = [...form.bedroomDetails]; newDetails[index].price = e.target.value; setForm(f => ({ ...f, bedroomDetails: newDetails })); }} className="tmx9pf-input" style={{ flex: '1 1 140px' }} />
+                      <input type="number" min="0" placeholder="Rent (₹) / month" value={item.price} onChange={(e) => { const newDetails = [...form.bedroomDetails]; newDetails[index].price = e.target.value; setForm(f => ({ ...f, bedroomDetails: newDetails })); }} className="tmx9pf-input" style={{ flex: '1 1 140px' }} />
                       <select value={item.washroomType} onChange={(e) => { const newDetails = [...form.bedroomDetails]; newDetails[index].washroomType = e.target.value; setForm(f => ({ ...f, bedroomDetails: newDetails })); }} className="tmx9pf-select" style={{ flex: '1 1 160px' }}>
                         <option value="Attached">Attached Washroom</option>
                         <option value="Common">Common Washroom</option>
@@ -712,8 +724,10 @@ const PGListingForm = () => {
                 {photoPreviews.previews.map((p, i) => (
                   <div key={i} className="tmx9pf-photo-thumb">
                     <img src={p.url} alt="preview" />
+                  <div className="tmx9pf-photo-actions">
                     <button type="button" onClick={() => removePhoto(i)} className="tmx9pf-small-btn">Remove</button>
                     <button type="button" onClick={() => setCoverIndex(i)} className={`tmx9pf-small-btn ${coverIndex === i ? "tmx9pf-small-btn--active" : ""}`}>Cover</button>
+                  </div>
                   </div>
                 ))}
               </div>

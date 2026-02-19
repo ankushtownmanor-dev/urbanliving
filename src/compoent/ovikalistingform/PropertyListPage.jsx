@@ -484,10 +484,11 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
                 <span className="category-icon">{category.icon}</span>
               </div>
               
-              <h3 className="category-title">{category.title}</h3>
-              <h5 className="category-subtitle">{category.subTitle}</h5>
-              
-              <p className="category-description">{category.description}</p>
+              <div className="category-content">
+                <h3 className="category-title">{category.title}</h3>
+                <h5 className="category-subtitle">{category.subTitle}</h5>
+                <p className="category-description">{category.description}</p>
+              </div>
               
               <button 
                 className="category-select-btn"
