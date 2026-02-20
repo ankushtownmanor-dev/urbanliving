@@ -29,9 +29,16 @@
 
 // export default FourthMain;
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './PropertyShare.css';
 
 function FourthMain() {
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate('/list-pg');
+  };
+
   return (
     <div className="property-share-container">
       <div className="property-share-overlay">
@@ -47,15 +54,21 @@ function FourthMain() {
           </p>
 
           <div className="property-share-btn-group">
-  <button className="property-share-btn property-share-btn-white">
-    Get Started
-    <span className="property-share-arrow">→</span>
-  </button>
-  
-  <button className="property-share-btn property-share-btn-orange">
-    Free
-  </button>
-</div>
+            <button 
+              className="property-share-btn property-share-btn-white"
+              onClick={handleNavigate}
+            >
+              Get Started
+              <span className="property-share-arrow">→</span>
+            </button>
+            
+            <button 
+              className="property-share-btn property-share-btn-orange"
+              onClick={handleNavigate}
+            >
+              Free
+            </button>
+          </div>
         </div>
       </div>
     </div>

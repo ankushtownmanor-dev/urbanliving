@@ -418,7 +418,7 @@
 // export default PropertyListPage;
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FiSearch, FiMapPin, FiHeart, FiFilter, FiPlus, FiStar, FiX } from 'react-icons/fi';
 import { BiBed, BiBath, BiArea } from 'react-icons/bi';
 import { MdClose } from 'react-icons/md';
@@ -426,41 +426,44 @@ import './PropertyListPage.css';
 
 const API_BASE_URL = 'https://townmanor.ai/api/ovika';
 
+// Define categories outside so both components can access them
+const CATEGORIES = [
+  {
+    id: 'PG',
+    title: 'PG',
+    subTitle: "Affordable stays per night",
+    description: 'Ideal for students & professionals',
+    icon: '🏠',
+    color: '#C98B3E',
+    minPrice: 0,
+    maxPrice: 1499,
+  },
+  {
+    id: 'Economy Stay',
+    title: 'Economy Stay',
+    subTitle: "Comfort at great value",
+    description: 'Well-furnished homes with modern amenities',
+    icon: '🏢',
+    color: '#C98B3E',
+    minPrice: 1500,
+    maxPrice: 2499
+  },
+  {
+    id: 'Premium Stay',
+    title: 'Premium Stay',
+    subTitle: "Refined living experience",
+    description: 'Enhanced comfort with premium facilities',
+    icon: '✨',
+    color: '#C98B3E',
+    minPrice: 2500,
+    maxPrice: Infinity
+  }
+];
+
 const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
   if (!isOpen) return null;
 
-  const categories = [
-    {
-      id: 'PG',
-      title: 'PG',
-      subTitle: "Affordable stays per night",
-      description: 'Ideal for students & professionals',
-      icon: '🏠',
-      color: '#C98B3E',
-      minPrice: 0,
-      maxPrice: 1499,
-    },
-    {
-      id: 'Economy Stay',
-      title: 'Economy Stay',
-      subTitle: "Comfort at great value",
-      description: 'Well-furnished homes with modern amenities',
-      icon: '🏢',
-      color: '#C98B3E',
-      minPrice: 1500,
-      maxPrice: 2499
-    },
-    {
-      id: 'Premium Stay',
-      title: 'Premium Stay',
-      subTitle: "Refined living experience",
-      description: 'Enhanced comfort with premium facilities',
-      icon: '✨',
-      color: '#C98B3E',
-      minPrice: 2500,
-      maxPrice: Infinity
-    }
-  ];
+// Categories array removed from here as it is now defined globally as CATEGORIES
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -474,7 +477,7 @@ const CategoryModal = ({ isOpen, onClose, onSelectCategory }) => {
         </div>
 
         <div className="category-cards-grid">
-          {categories.map((category) => (
+          {CATEGORIES.map((category) => (
             <div 
               key={category.id} 
               className="category-card"
@@ -663,6 +666,7 @@ const PropertyListPage = () => {
   const [showCategoryModal, setShowCategoryModal] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const fetchProperties = async () => {
     try {
@@ -775,6 +779,27 @@ const PropertyListPage = () => {
   useEffect(() => {
     fetchProperties();
   }, []);
+
+  // Handle URL query parameters for category filtering
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const categoryId = params.get('category'); // e.g., ?category=PG
+    
+    // Only proceed if we have properties and a category param
+    if (categoryId && properties.length > 0) {
+      // Find the matching category object
+      const matchedCategory = CATEGORIES.find(
+        (c) => c.id.toLowerCase() === categoryId.toLowerCase() || 
+               c.title.toLowerCase() === categoryId.toLowerCase()
+      );
+      
+      if (matchedCategory) {
+        // Automatically select the category and close the modal
+        setSelectedCategory(matchedCategory);
+        setShowCategoryModal(false);
+      }
+    }
+  }, [location.search, properties]); // Re-run when URL changes or properties are loaded
 
   if (loading) return <div className="loader-container"><div className="spinner"></div></div>;
   if (error) return <div className="error-container"><h2>Error</h2><p>{error}</p></div>;

@@ -54,9 +54,12 @@
 
 
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./Home2.css";
 
 const Home2 = () => {
+  const navigate = useNavigate();
+
   const cards = [
      {
       img: "/image 86.png",
@@ -69,8 +72,8 @@ const Home2 = () => {
       img: "/image 91.png",
       title: "PG Living Spaces",
       text: "TM Stay offers fully managed and affordable PG rentals tailored for students and working professionals. With clean, secure, precious and comfortable living spaces, we ensure a hassle-free stay that feels just like home – only better.",
-      btn: "Coming Soon",
-      link: "/" // 👈 you can set any URL or route here
+      btn: "View PGs",
+      link: "/properties?category=PG" // 👈 Updated to filter for PG properties
     },
     {
       img: "/image 87.png",
@@ -83,7 +86,7 @@ const Home2 = () => {
   ];
 
   const handleButtonClick = (url) => {
-    window.location.href = url; // 👈 redirect when button is clicked
+    navigate(url); // 👈 usage of useNavigate for client-side routing
   };
 
   return (
@@ -103,7 +106,6 @@ const Home2 = () => {
               <h3 className="living-title">{card.title}</h3>
               <p className="living-text">{card.text}</p>
               <button
-              target="_blank"
                 className="living-btn"
                 onClick={() => handleButtonClick(card.link)}
                 

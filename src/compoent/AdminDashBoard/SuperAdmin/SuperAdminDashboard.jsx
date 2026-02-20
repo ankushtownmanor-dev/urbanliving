@@ -81,6 +81,12 @@ export default function SuperAdminDashboard() {
     adminEmail: "admin@townmanor.ai"
   });
 
+  // Pagination State
+  const [userPage, setUserPage] = useState(1);
+  const [ownerPage, setOwnerPage] = useState(1);
+  const [guestPage, setGuestPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
+
   // --- Fetch Data ---
   const fetchAllData = async () => {
     setLoading(true);
@@ -136,8 +142,8 @@ export default function SuperAdminDashboard() {
   };
 
   useEffect(() => {
-    calculateStats(properties, bookings);
-  }, [properties, bookings]);
+    calculateStats(properties, bookings, usersList);
+  }, [properties, bookings, usersList]);
 
   // --- Helpers ---
   const calculateDays = (start, end) => {
@@ -163,7 +169,7 @@ export default function SuperAdminDashboard() {
     return days * price;
   };
 
-  const calculateStats = (propsData, bookingsData) => {
+  const calculateStats = (propsData, bookingsData, usersData = []) => {
     const totalProps = propsData.length;
     
     // Valuation
@@ -209,13 +215,27 @@ export default function SuperAdminDashboard() {
                 id: oid, 
                 count: 0, 
                 totalVal: 0,
-                name: p.owner_name || `Owner ${oid.toString().slice(-4)}`
+                name: p.owner_name || `Owner ${oid.toString().slice(-4)}`,
+                propertyNames: []
             };
         }
         userMap[oid].count += 1;
         userMap[oid].totalVal += (Number(p.price) || 0);
+        if(p.property_name || p.name) userMap[oid].propertyNames.push(p.property_name || p.name);
     });
-    setDerivedUsers(Object.values(userMap));
+
+    // Enrich with Contact Info from usersData
+    const enrichedOwners = Object.values(userMap).map(owner => {
+         // loose comparison for ID as one might be string, other number
+         const user = usersData.find(u => (u.id == owner.id || u._id == owner.id));
+         return {
+             ...owner,
+             email: user ? user.email : "N/A",
+             phone: user ? (user.phone_number || user.phone) : "N/A"
+         };
+    });
+
+    setDerivedUsers(enrichedOwners);
 
     // 2. Aggregate Guests (Who Booked)
     const guestMap = {};
@@ -601,159 +621,256 @@ export default function SuperAdminDashboard() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
                     
                     {/* PRIMARY USER TABLE (REAL API) */}
-                    <div className="sa-table-container">
-                        <div className="sa-table-header-row">
-                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <h3>Registered Users</h3>
-                                <div className="sa-badge" style={{background:'#eff6ff', color:'#3b82f6', border:'none'}}>{usersList.length} Total</div>
-                             </div>
-                             <div style={{display: 'flex', gap: '10px'}}>
-                                <input 
-                                    type="text" 
-                                    placeholder="Search users..." 
-                                    className="sa-search-input"
-                                    value={userSearch}
-                                    onChange={(e) => setUserSearch(e.target.value)}
-                                />
-                                <button className="sa-btn-primary" onClick={() => openUserModal()}>+ Add User</button>
-                             </div>
-                        </div>
-                        <table className="sa-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>User Profile</th>
-                                    <th>Contact Info</th>
-                                    <th>Status</th>
-                                    <th>Joined</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {usersList
-                                .filter(u => {
-                                    if(!userSearch) return true;
-                                    const s = userSearch.toLowerCase();
-                                    return (u.username||'').toLowerCase().includes(s) || 
-                                           (u.email||'').toLowerCase().includes(s) || 
-                                           (u.phone_number||'').toString().includes(s);
-                                })
-                                .slice(0, 50).map(u => (
-                                    <tr key={u.id || u._id}>
-                                        <td style={{fontFamily:'monospace', color:'#64748b'}}>#{(u.id||u._id || '').toString().slice(-4)}</td>
-                                        <td>
-                                            <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
-                                                <img 
-                                                    src={u.profile_photo || 'https://via.placeholder.com/40'} 
-                                                    alt="av" 
-                                                    style={{width:'36px', height:'36px', borderRadius:'50%', objectFit:'cover', border:'1px solid #e2e8f0'}}
-                                                />
-                                                <div style={{fontWeight:'600', color:'#1e293b'}}>{u.username || "No Name"}</div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style={{fontSize:'13px', fontWeight:'500'}}>{u.email}</div>
-                                            <div style={{fontSize:'11px', color:'#64748b'}}>{u.phone_number || u.phone || "N/A"}</div>
-                                        </td>
-                                        <td>
-                                            <div style={{display:'flex', gap:'4px'}}>
-                                                {u.aadhaar_verified || u.pan_verified ? (
-                                                    <span style={{fontSize:'10px', background:'#dcfce7', color:'#166534', padding:'2px 6px', borderRadius:'4px'}}>Verified</span>
-                                                ) : <span style={{fontSize:'10px', background:'#f1f5f9', color:'#94a3b8', padding:'2px 6px', borderRadius:'4px'}}>Not Verified</span>}
-                                            </div>
-                                        </td>
-                                        <td style={{fontSize:'12px', color:'#475569'}}>
-                                            {u.created_at ? new Date(u.created_at).toLocaleDateString() : '-'}
-                                        </td>
-                                        <td>
-                                            <div className="sa-actions">
-                                                <button className="sa-btn-primary" style={{padding:'4px 8px', fontSize:'11px'}} onClick={() => openUserModal(u)}>Edit</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                                {usersList.length === 0 && (
-                                    <tr><td colSpan="5" className="sa-empty">No registered users found.</td></tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                    {(() => {
+                        const filteredUsers = usersList.filter(u => {
+                            if(!userSearch) return true;
+                            const s = userSearch.toLowerCase();
+                            return (u.username||'').toLowerCase().includes(s) || 
+                                   (u.email||'').toLowerCase().includes(s) || 
+                                   (u.phone_number||'').toString().includes(s);
+                        });
+                        
+                        const totalUserPages = Math.ceil(filteredUsers.length / ITEMS_PER_PAGE);
+                        const displayUsers = filteredUsers.slice((userPage - 1) * ITEMS_PER_PAGE, userPage * ITEMS_PER_PAGE);
+
+                        return (
+                            <div className="sa-table-container">
+                                <div className="sa-table-header-row">
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <h3>Registered Users</h3>
+                                        <div className="sa-badge" style={{background:'#eff6ff', color:'#3b82f6', border:'none'}}>{filteredUsers.length} Total</div>
+                                    </div>
+                                    <div style={{display: 'flex', gap: '10px'}}>
+                                        <input 
+                                            type="text" 
+                                            placeholder="Search users..." 
+                                            className="sa-search-input"
+                                            value={userSearch}
+                                            onChange={(e) => {
+                                                setUserSearch(e.target.value);
+                                                setUserPage(1); // Reset to page 1 on search
+                                            }}
+                                        />
+                                        <button className="sa-btn-primary" onClick={() => openUserModal()}>+ Add User</button>
+                                    </div>
+                                </div>
+                                <table className="sa-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>User Profile</th>
+                                            <th>Contact Info</th>
+                                            <th>Status</th>
+                                            <th>Joined</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {displayUsers.map(u => (
+                                            <tr key={u.id || u._id}>
+                                                <td style={{fontFamily:'monospace', color:'#64748b'}}>#{(u.id||u._id || '').toString().slice(-4)}</td>
+                                                <td>
+                                                    <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
+                                                        <img 
+                                                            src={u.profile_photo || 'https://via.placeholder.com/40'} 
+                                                            alt="av" 
+                                                            style={{width:'36px', height:'36px', borderRadius:'50%', objectFit:'cover', border:'1px solid #e2e8f0'}}
+                                                        />
+                                                        <div style={{fontWeight:'600', color:'#1e293b'}}>{u.username || "No Name"}</div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style={{fontSize:'13px', fontWeight:'500'}}>{u.email}</div>
+                                                    <div style={{fontSize:'11px', color:'#64748b'}}>{u.phone_number || u.phone || "N/A"}</div>
+                                                </td>
+                                                <td>
+                                                    <div style={{display:'flex', gap:'4px'}}>
+                                                        {u.aadhaar_verified || u.pan_verified ? (
+                                                            <span style={{fontSize:'10px', background:'#dcfce7', color:'#166534', padding:'2px 6px', borderRadius:'4px'}}>Verified</span>
+                                                        ) : <span style={{fontSize:'10px', background:'#f1f5f9', color:'#94a3b8', padding:'2px 6px', borderRadius:'4px'}}>Not Verified</span>}
+                                                    </div>
+                                                </td>
+                                                <td style={{fontSize:'12px', color:'#475569'}}>
+                                                    {u.created_at ? new Date(u.created_at).toLocaleDateString() : '-'}
+                                                </td>
+                                                <td>
+                                                    <div className="sa-actions">
+                                                        <button className="sa-btn-primary" style={{padding:'4px 8px', fontSize:'11px'}} onClick={() => openUserModal(u)}>Edit</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {displayUsers.length === 0 && (
+                                            <tr><td colSpan="6" className="sa-empty">No registered users found.</td></tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                                {/* Pagination Controls for Users */}
+                                <div className="sa-pagination" style={{display: 'flex', justifyContent: 'flex-end', padding: '12px', gap: '8px', alignItems: 'center'}}>
+                                    <button 
+                                        className="sa-btn-secondary" 
+                                        disabled={userPage === 1}
+                                        onClick={() => setUserPage(p => Math.max(1, p - 1))}
+                                        style={{padding: '4px 8px', fontSize: '12px'}}
+                                    >
+                                        Prev
+                                    </button>
+                                    <span style={{fontSize: '12px', color: '#64748b'}}>
+                                        Page {userPage} of {totalUserPages || 1}
+                                    </span>
+                                    <button 
+                                        className="sa-btn-secondary" 
+                                        disabled={userPage >= totalUserPages}
+                                        onClick={() => setUserPage(p => Math.min(totalUserPages, p + 1))}
+                                        style={{padding: '4px 8px', fontSize: '12px'}}
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })()}
 
                     <h3 style={{ margin: '0 0 10px 0', color: '#475569', fontSize: '16px' }}>Activity Analysis</h3>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
                     
                     {/* OWNERS TABLE */}
-                    <div className="sa-table-container">
-                        <div className="sa-table-header-row">
-                            <h3>Property Owners (Listed)</h3>
-                        </div>
-                        <table className="sa-table">
-                            <thead>
-                                <tr>
-                                    <th>Owner Desc</th>
-                                    <th>Listings</th>
-                                    <th>Portfolio Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {derivedUsers.map(u => (
-                                    <tr key={u.id}>
-                                        <td>
-                                            <div style={{ fontWeight: '600', color: '#1e293b' }}>{u.name}</div>
-                                            <div style={{ fontFamily: 'monospace', color: '#6b7280', fontSize: '11px' }}>ID: {u.id}</div>
-                                        </td>
-                                        <td>
-                                            <span style={{ fontWeight: '700', fontSize: '15px' }}>{u.count}</span> Assets
-                                        </td>
-                                         <td>
-                                            ₹{u.totalVal.toLocaleString()}
-                                        </td>
-                                    </tr>
-                                ))}
-                                {derivedUsers.length === 0 && (
-                                    <tr><td colSpan="3" className="sa-empty">No owners found.</td></tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                    {(() => {
+                        const totalOwnerPages = Math.ceil(derivedUsers.length / ITEMS_PER_PAGE);
+                        const displayOwners = derivedUsers.slice((ownerPage - 1) * ITEMS_PER_PAGE, ownerPage * ITEMS_PER_PAGE);
+
+                        return (
+                            <div className="sa-table-container">
+                                <div className="sa-table-header-row">
+                                    <h3>Property Owners (Listed)</h3>
+                                </div>
+                                <table className="sa-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Owner Desc</th>
+                                            <th>Contact Details</th>
+                                            <th>Properties</th>
+                                            <th>Portfolio Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {displayOwners.map(u => (
+                                            <tr key={u.id}>
+                                                <td>
+                                                    <div style={{ fontWeight: '600', color: '#1e293b' }}>{u.name}</div>
+                                                    <div style={{ fontFamily: 'monospace', color: '#6b7280', fontSize: '11px' }}>ID: {u.id}</div>
+                                                </td>
+                                                <td>
+                                                    <div style={{ fontSize: '12px', fontWeight: '500' }}>{u.email}</div>
+                                                    <div style={{ fontSize: '11px', color: '#64748b' }}>{u.phone}</div>
+                                                </td>
+                                                <td>
+                                                    <div style={{ fontWeight: '700', fontSize: '14px' }}>{u.count} Assets</div>
+                                                    <div style={{ fontSize: '11px', color: '#64748b', maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                        {u.propertyNames.join(', ')}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    ₹{u.totalVal.toLocaleString()}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {displayOwners.length === 0 && (
+                                            <tr><td colSpan="4" className="sa-empty">No owners found.</td></tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                                {/* Pagination Controls for Owners */}
+                                <div className="sa-pagination" style={{display: 'flex', justifyContent: 'flex-end', padding: '12px', gap: '8px', alignItems: 'center'}}>
+                                    <button 
+                                        className="sa-btn-secondary" 
+                                        disabled={ownerPage === 1}
+                                        onClick={() => setOwnerPage(p => Math.max(1, p - 1))}
+                                        style={{padding: '4px 8px', fontSize: '12px'}}
+                                    >
+                                        Prev
+                                    </button>
+                                    <span style={{fontSize: '12px', color: '#64748b'}}>
+                                        {ownerPage} / {totalOwnerPages || 1}
+                                    </span>
+                                    <button 
+                                        className="sa-btn-secondary" 
+                                        disabled={ownerPage >= totalOwnerPages}
+                                        onClick={() => setOwnerPage(p => Math.min(totalOwnerPages, p + 1))}
+                                        style={{padding: '4px 8px', fontSize: '12px'}}
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })()}
 
                     {/* GUESTS TABLE */}
-                    <div className="sa-table-container">
-                        <div className="sa-table-header-row">
-                            <h3>Aactive Guests (Booked)</h3>
-                        </div>
-                         <table className="sa-table">
-                            <thead>
-                                <tr>
-                                    <th>Guest Info</th>
-                                    <th>Bookings</th>
-                                    <th>Total Spent</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {derivedGuests.map(u => (
-                                    <tr key={u.id}>
-                                        <td>
-                                            <div style={{ fontWeight: '600', color: '#0f766e' }}>{u.name}</div>
-                                            <div style={{ fontFamily: 'monospace', color: '#6b7280', fontSize: '11px' }}>ID: {u.id}</div>
-                                        </td>
-                                        <td>
-                                            <span style={{ fontWeight: '700', fontSize: '15px' }}>{u.count}</span> Requests
-                                        </td>
-                                         <td>
-                                            ₹{u.spent.toLocaleString()}
-                                        </td>
-                                    </tr>
-                                ))}
-                                 {derivedGuests.length === 0 && (
-                                     <tr><td colSpan="3" className="sa-empty">No guest activity found.</td></tr>
-                                 )}
-                            </tbody>
-                         </table>
-                    </div>
+                    {(() => {
+                        const totalGuestPages = Math.ceil(derivedGuests.length / ITEMS_PER_PAGE);
+                        const displayGuests = derivedGuests.slice((guestPage - 1) * ITEMS_PER_PAGE, guestPage * ITEMS_PER_PAGE);
+                        
+                        return (
+                            <div className="sa-table-container">
+                                <div className="sa-table-header-row">
+                                    <h3>Active Guests (Booked)</h3>
+                                </div>
+                                <table className="sa-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Guest Info</th>
+                                            <th>Bookings</th>
+                                            <th>Total Spent</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {displayGuests.map(u => (
+                                            <tr key={u.id}>
+                                                <td>
+                                                    <div style={{ fontWeight: '600', color: '#0f766e' }}>{u.name}</div>
+                                                    <div style={{ fontFamily: 'monospace', color: '#6b7280', fontSize: '11px' }}>ID: {u.id}</div>
+                                                </td>
+                                                <td>
+                                                    <span style={{ fontWeight: '700', fontSize: '15px' }}>{u.count}</span> Requests
+                                                </td>
+                                                <td>
+                                                    ₹{u.spent.toLocaleString()}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {displayGuests.length === 0 && (
+                                            <tr><td colSpan="3" className="sa-empty">No guest activity found.</td></tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                                {/* Pagination Controls for Guests */}
+                                <div className="sa-pagination" style={{display: 'flex', justifyContent: 'flex-end', padding: '12px', gap: '8px', alignItems: 'center'}}>
+                                    <button 
+                                        className="sa-btn-secondary" 
+                                        disabled={guestPage === 1}
+                                        onClick={() => setGuestPage(p => Math.max(1, p - 1))}
+                                        style={{padding: '4px 8px', fontSize: '12px'}}
+                                    >
+                                        Prev
+                                    </button>
+                                    <span style={{fontSize: '12px', color: '#64748b'}}>
+                                        {guestPage} / {totalGuestPages || 1}
+                                    </span>
+                                    <button 
+                                        className="sa-btn-secondary" 
+                                        disabled={guestPage >= totalGuestPages}
+                                        onClick={() => setGuestPage(p => Math.min(totalGuestPages, p + 1))}
+                                        style={{padding: '4px 8px', fontSize: '12px'}}
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })()}
 
                     </div>
-
                 </div>
             )}
 
