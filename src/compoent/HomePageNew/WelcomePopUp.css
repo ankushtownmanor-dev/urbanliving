@@ -1,0 +1,258 @@
+/* WelcomePopup.css */
+
+/* Overlay */
+.ovika-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 9999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: ovika-fade-in 0.3s ease;
+}
+
+@keyframes ovika-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Card */
+.ovika-popup-card {
+  position: relative;
+  background: #fff;
+  border-radius: 1.5rem;
+  max-width: 780px;
+  width: 100%;
+  padding: 2.5rem 2.5rem 2rem;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+  animation: ovika-slide-up 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+
+@keyframes ovika-slide-up {
+  from { opacity: 0; transform: translateY(40px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Decorative top bar */
+.ovika-popup-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #d97706, #ea580c);
+  border-radius: 1.5rem 1.5rem 0 0;
+}
+
+/* Close Button */
+.ovika-popup-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  background: #f3f4f6;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  z-index: 2;
+}
+.ovika-popup-close:hover {
+  background: #e5e7eb;
+  color: #111;
+}
+
+/* Header */
+.ovika-popup-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.ovika-popup-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #c2772b;
+  letter-spacing: -0.5px;
+}
+
+.ovika-popup-tagline {
+  margin-top: 0.35rem;
+  font-size: 1.05rem;
+  color: #444;
+  font-weight: 400;
+}
+
+/* Sections Row */
+.ovika-popup-sections {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+/* Individual Section */
+.ovika-popup-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem 1.5rem 1.25rem;
+  border-radius: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ovika-section-short {
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border: 1.5px solid #fde68a;
+}
+
+.ovika-section-long {
+  background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+  border: 1.5px solid #e5e7eb;
+}
+
+.ovika-popup-section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+}
+
+/* Icon */
+.ovika-section-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Title */
+.ovika-section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 0.6rem;
+}
+
+/* Description */
+.ovika-section-desc {
+  font-size: 0.88rem;
+  color: #555;
+  line-height: 1.6;
+  flex: 1;
+  margin-bottom: 1.2rem;
+}
+
+/* Buttons */
+.ovika-section-btn {
+  padding: 0.55rem 1.6rem;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 2px solid #d97706;
+  transition: all 0.25s;
+  white-space: nowrap;
+}
+
+.ovika-btn-primary {
+  background-color: #d97706;
+  color: #fff;
+}
+.ovika-btn-primary:hover {
+  background-color: #ea580c;
+  border-color: #ea580c;
+}
+
+.ovika-btn-outline {
+  background-color: transparent;
+  color: #d97706;
+}
+.ovika-btn-outline:hover {
+  background-color: #d97706;
+  color: #fff;
+}
+
+/* Divider */
+.ovika-popup-divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+}
+
+.ovika-popup-divider span {
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #888;
+  font-weight: 500;
+}
+
+/* ========================
+   Mobile View
+   ======================== */
+@media (max-width: 600px) {
+  .ovika-popup-card {
+    padding: 2rem 1.2rem 1.5rem;
+    border-radius: 1.2rem;
+    margin: 0 0.5rem;
+  }
+
+  .ovika-popup-sections {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .ovika-popup-divider {
+    flex-direction: row;
+    padding: 0;
+  }
+
+  .ovika-popup-divider::before,
+  .ovika-popup-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e5e7eb;
+  }
+
+  .ovika-popup-divider span {
+    margin: 0 0.75rem;
+  }
+
+  .ovika-popup-section {
+    padding: 1.2rem 1rem 1rem;
+  }
+
+  .ovika-section-title {
+    font-size: 1rem;
+  }
+
+  .ovika-section-desc {
+    font-size: 0.83rem;
+  }
+
+  .ovika-popup-logo {
+    font-size: 1.25rem;
+  }
+
+  .ovika-popup-tagline {
+    font-size: 0.95rem;
+  }
+}

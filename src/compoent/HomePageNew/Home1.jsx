@@ -1,36 +1,3 @@
-// import React from 'react';
-// import './Home1.css';
-
-// export default function Home1() {
-//   return (
-//     <div className="ovika-urban-hero-container">
-//       <div className="ovika-urban-hero-bg"></div>
-      
-//       <div className="ovika-urban-hero-wrapper">
-//         <h1 className="ovika-urban-hero-heading">
-//       Smart Urban Living, redefined for <br/>
-// the modern you. Stay, connect, <br/>
-// and thrive with Ovika
-//         </h1>
-        
-//         <p className="ovika-urban-hero-text">
-//           Discover a new way of city living with Ovika — where Co-Living, Paying Guest, and Luxury Dorms come together in perfect harmony. Designed for modern minds, our spaces blend comfort, community, and class, offering a lifestyle that feels effortless, connected, and truly urban.
-//         </p>
-        
-//         <div style={{alignItems:"center"}} className="ovika-urban-hero-btn-group-newhome">
-//           <button className="ovika-urban-hero-btn ovika-urban-btn-white">
-//             Explore
-//             <span className="ovika-urban-arrow">→</span>
-//           </button>
-          
-//           <button className="ovika-urban-hero-btn ovika-urban-btn-orange">
-//             Townmanor
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
 
 
 // import React from 'react';
@@ -49,11 +16,8 @@
         
 //         <h1 className="ovika-urban-hero-heading">
 //           {/* Ovika  marketplace for Short <br/> Term Stays & Hosting  */}
-//           <span style={{ color: "#c2772b",
-//       color: "#c2772b",
-//     fontSize: "3.10rem",
-//     display: "inline-block",
-//      transform: "translateY(clamp(-4px, -2vw, -9px))"  }}> OvikaLiving.com</span> – A Marketplace for  <br/>Short- Term  Stays & Hosting
+//           <span 
+//           className="ovika-brand-name"> OvikaLiving.com</span> – A Marketplace for  <br/>Short- Term  Stays & Hosting
 //         </h1> 
 //         <p className="ovika-urban-hero-text">
 //           {/* Discover a new way of city living with Ovika — where Co-Living, Paying Guest, and Luxury Spaces come together in perfect harmony. Designed for modern minds, our spaces blend comfort, community, and class, offering a lifes tyle that feels effortless, connected, and truly urban. */}
@@ -66,31 +30,83 @@
 //   );
 // }
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Home1.css';
 
 export default function Home1() {
+  const [rentalType, setRentalType] = useState(null);
+
+  useEffect(() => {
+    const type = sessionStorage.getItem('ovika_rental_type');
+    setRentalType(type); // null if not selected yet
+
+    const interval = setInterval(() => {
+      const updated = sessionStorage.getItem('ovika_rental_type');
+      setRentalType(updated);
+    }, 300);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const pricingLabel = rentalType === 'short'
+    ? ' — Per Night'
+    : rentalType === 'long'
+    ? ' — Per Month'
+    : ''; // default: nothing
+
+  const cards = [
+    {
+      icon: '🏠',
+      title: 'PG',
+      subtitle: `Affordable stays${pricingLabel}`,
+      desc: 'Ideal for students & professionals.',
+    },
+    {
+      icon: '🏢',
+      title: 'Economy Stay',
+      subtitle: `Comfort at great value${pricingLabel}`,
+      desc: 'Well-furnished homes with modern amenities.',
+    },
+    {
+      icon: '✨',
+      title: 'Premium Stay',
+      subtitle: `Refined living experience${pricingLabel}`,
+      desc: 'Enhanced comfort with premium facilities.',
+    },
+  ];
+
   return (
     <div className="ovika-urban-hero-container">
       <div className="ovika-urban-hero-bg"></div>
-      
+
       <div className="ovika-urban-hero-wrapper">
-        {/* <h1 className="ovika-urban-hero-heading">
-     Where Urban Comfort Meets <br/>
-Contemporary Living
-        </h1> */}
-        
-        <h1 className="ovika-urban-hero-heading">
-          {/* Ovika  marketplace for Short <br/> Term Stays & Hosting  */}
-          <span 
-          className="ovika-brand-name"> OvikaLiving.com</span> – A Marketplace for  <br/>Short- Term  Stays & Hosting
-        </h1> 
-        <p className="ovika-urban-hero-text">
-          {/* Discover a new way of city living with Ovika — where Co-Living, Paying Guest, and Luxury Spaces come together in perfect harmony. Designed for modern minds, our spaces blend comfort, community, and class, offering a lifes tyle that feels effortless, connected, and truly urban. */}
-          Book verified short-term stays or host your property and earn — all in one platform.
-        </p>
-        
-       
+        {/* Left Content */}
+        <div className="ovika-hero-left">
+          <h1 className="ovika-urban-hero-heading">
+            <span className="ovika-brand-name">OvikaLiving.com</span> – A Marketplace for <br />
+            Short-Term Stays &amp; Hosting
+          </h1>
+          <p className="ovika-urban-hero-text">
+            Book verified short-term stays or host your property and earn — all in one platform.
+          </p>
+        </div>
+
+        {/* Right Cards */}
+        <div className="ovika-hero-cards">
+          {cards.map((card, i) => (
+            <div className="ovika-hero-card" key={i}>
+              <div className="ovika-card-icon">{card.icon}</div>
+              <div className="ovika-card-body">
+                <h3 className="ovika-card-title">{card.title}</h3>
+                <p className="ovika-card-subtitle">{card.subtitle}</p>
+                <p className="ovika-card-desc">{card.desc}</p>
+                <a href="/properties" className="ovika-card-link">
+                  Explore <span>→</span>
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

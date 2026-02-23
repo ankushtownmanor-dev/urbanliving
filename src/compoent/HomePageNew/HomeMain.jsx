@@ -6,10 +6,12 @@ import Home4 from './Home4'
 import Home5 from './Home5'
 import Home6 from './Home6'
 import Home7 from "./Home7"
+import WelcomePopUp from './WelcomePopUp';
 
 export const HomeMain = () => {
   return (
     <div>
+      <WelcomePopUp/>
       <Home1 />
       <Home2 />
       <Home3 />
