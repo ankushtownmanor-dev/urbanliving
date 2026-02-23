@@ -61,7 +61,7 @@
 // }
 
 import React, { useState, useEffect } from 'react';
-import './WelcomePopup.css';
+import './WelcomePopUp.css';
 
 export default function WelcomePopup() {
   const [visible, setVisible] = useState(false);
