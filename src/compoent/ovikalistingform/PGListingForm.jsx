@@ -101,8 +101,6 @@ const PGListingForm = () => {
    bachelorAllowed: true, // Usually true for PGs
     noticePeriod: 30, // days
     lockInPeriod: 1, // months
-    noticePeriod: 30, // days
-    lockInPeriod: 1, // months
     foodAvailable: false,
     electricityCharges: "Included in Rent", // or "Separate", "Fixed"
     perNightPrice: "", // New optional field
@@ -464,7 +462,6 @@ const PGListingForm = () => {
           bachelors_allowed: Boolean(form.bachelorAllowed),
         },
         noticePeriod: form.noticePeriod,
-        lockInPeriod: form.lockInPeriod,
         lockInPeriod: form.lockInPeriod,
         foodAvailable: form.foodAvailable,
         electricityCharges: form.electricityCharges,
