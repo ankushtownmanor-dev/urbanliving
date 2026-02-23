@@ -1027,7 +1027,7 @@ const PropertyDetailPage = () => {
           
           // Initial price setup
           const initialDaily = Number(transformed.meta?.perNightPrice) || 0;
-          const initialMonthly = Number(transformed.base_rate) || 0;
+          const initialMonthly = Number(transformed.price) || 0;
           
           if (transformed.property_category === 'PG') {
              // Always default to 'daily' mode so the Reserve button opens the Booking/Payment flow by default.
@@ -1048,7 +1048,7 @@ const PropertyDetailPage = () => {
     // When switching modes, ensure selectedPrice is set appropriately
     if (property) {
         if (pricingMode === 'monthly' && !selectedPrice) {
-            setSelectedPrice(Number(property.base_rate));
+            setSelectedPrice(Number(property.price));
         }
     }
   }, [pricingMode, property, selectedPrice]);
@@ -1064,7 +1064,7 @@ const PropertyDetailPage = () => {
     if (property) {
       if (isPGMonthly) {
         // For PG Monthly, we can show value even without dates (defaults to 1 month advance)
-        const monthly = (selectedPrice || Number(property.base_rate) || 0) * 30;
+        const monthly = (selectedPrice || Number(property.price) || 0) * 30;
         subtotal = monthly;
       } else if (datesSelected) {
           // Standard Daily/Other logic requiring dates
@@ -1074,11 +1074,11 @@ const PropertyDetailPage = () => {
           const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
           
           if (property.property_category === 'PG' && pricingMode === 'daily') {
-             const nightly = Number(property.meta?.perNightPrice) || Number(property.base_rate) || 0;
+             const nightly = Number(property.meta?.perNightPrice) || Number(property.price) || 0;
              subtotal = nightly * diffDays;
           } else {
              // Standard Hotel
-             const price = Number(property.base_rate) || 0;
+             const price = Number(property.price) || 0;
              subtotal = price * diffDays;
           }
       }
@@ -1542,7 +1542,7 @@ const guestPolicy = property?.guest_policy || {};
   if (!property) return <div className="error-screen">Property not found</div>;
 
   const photos = property.photos || [];
-  const baseRate = Number(property.base_rate) || 0;
+  const baseRate = Number(property.price) || 0;
   const nights = Number(property.number_of_nights) || 1;
   const fees = (Number(property.cleaning_fee)||0) + (Number(property.service_fee)||0);
   const total = (baseRate * nights) + fees;
@@ -1621,7 +1621,7 @@ const guestPolicy = property?.guest_policy || {};
                       <p style={{ color: '#555', marginBottom: '1rem', fontSize: '0.95rem' }}>{property.description}</p>
                       <p style={{ fontSize: '1.5rem', fontWeight: '600', color: '#8b0000' }}>
                         <MdCurrencyRupee style={{ display: 'inline', verticalAlign: 'middle' }} />
-                        {formatCurrency(property.base_rate)}<span style={{ fontSize: '1rem', color: '#666' }}>/{property.property_category === 'PG' ? 'night' : (property.billing_cycle || 'night')}</span>
+                        {formatCurrency(property.price)}<span style={{ fontSize: '1rem', color: '#666' }}>/{property.property_category === 'PG' ? 'night' : (property.billing_cycle || 'night')}</span>
                       </p>
                     </div>
                   </div>
@@ -2586,8 +2586,8 @@ const guestPolicy = property?.guest_policy || {};
                   <span className="amount">
                     ₹{formatCurrency(
                         property.property_category === 'PG' 
-                           ? (pricingMode === 'daily' ? (Number(property.meta?.perNightPrice) || Number(property.base_rate) || 0) : (selectedPrice || property.base_rate)) 
-                           : property.base_rate
+                           ? (pricingMode === 'daily' ? (Number(property.meta?.perNightPrice) || Number(property.price) || 0) : (selectedPrice || property.price)) 
+                           : property.price
                     )}
                   </span>
                   <span className="unit">

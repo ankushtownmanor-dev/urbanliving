@@ -216,14 +216,14 @@
 //              {property.property_category === 'PG' ? (
 //                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
 //                    <span className="price-amount">
-//                      {formatPrice(Number(meta?.perNightPrice) || Number(property.base_rate || property.price) || 0)}
+//                      {formatPrice(Number(meta?.perNightPrice) || Number(property.price || property.price) || 0)}
 //                    </span>
 //                    <span className="price-period"> / night</span>
 //                 </div>
 //               ) : (
 //                 <>
-//                   <span className="price-amount">{formatPrice(property.base_rate || property.price)}</span>
-//                   {(property.base_rate || property.price) && ( 
+//                   <span className="price-amount">{formatPrice(property.price || property.price)}</span>
+//                   {(property.price || property.price) && ( 
 //                     <span className="price-period"> / night</span>
 //                   )}
 //                 </>
@@ -638,14 +638,14 @@ const PropertyCard = ({ property }) => {
             {property.property_category === 'PG' ? (
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
                 <span className="price-amount">
-                  {formatPrice(Number(meta?.perNightPrice) || Number(property.base_rate || property.price) || 0)}
+                  {formatPrice(Number(meta?.perNightPrice) || Number(property.price || property.price) || 0)}
                 </span>
                 <span className="price-period"> / night</span>
               </div>
             ) : (
               <>
-                <span className="price-amount">{formatPrice(property.base_rate || property.price)}</span>
-                {(property.base_rate || property.price) && ( 
+                <span className="price-amount">{formatPrice(property.price || property.price)}</span>
+                {(property.price || property.price) && ( 
                   <span className="price-period"> / night</span>
                 )}
               </>
@@ -686,7 +686,7 @@ const PropertyListPage = () => {
 
   // Helper function to get property price for Economy/Premium filtering
   const getPropertyPrice = (property) => {
-    const price = Number(property.base_rate || property.price);
+    const price = Number(property.price || property.price);
     return isNaN(price) ? 0 : price;
   };
 
