@@ -1,35 +1,4 @@
 
-
-// import React from 'react';
-// import './Home1.css';
-
-// export default function Home1() {
-//   return (
-//     <div className="ovika-urban-hero-container">
-//       <div className="ovika-urban-hero-bg"></div>
-      
-//       <div className="ovika-urban-hero-wrapper">
-//         {/* <h1 className="ovika-urban-hero-heading">
-//      Where Urban Comfort Meets <br/>
-// Contemporary Living
-//         </h1> */}
-        
-//         <h1 className="ovika-urban-hero-heading">
-//           {/* Ovika  marketplace for Short <br/> Term Stays & Hosting  */}
-//           <span 
-//           className="ovika-brand-name"> OvikaLiving.com</span> – A Marketplace for  <br/>Short- Term  Stays & Hosting
-//         </h1> 
-//         <p className="ovika-urban-hero-text">
-//           {/* Discover a new way of city living with Ovika — where Co-Living, Paying Guest, and Luxury Spaces come together in perfect harmony. Designed for modern minds, our spaces blend comfort, community, and class, offering a lifes tyle that feels effortless, connected, and truly urban. */}
-//           Book verified short-term stays or host your property and earn — all in one platform.
-//         </p>
-        
-       
-//       </div>
-//     </div>
-//   );
-// }
-
 import React, { useState, useEffect } from 'react';
 import './Home1.css';
 
