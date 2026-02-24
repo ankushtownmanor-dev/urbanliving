@@ -17,7 +17,7 @@ const SAMPLE_VIDEOS = [
     thumbnail: "/tm2newimage.jpeg",
     // duration: "3:12",
     category: "Apartment",
-    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+    videoUrl: "/tm2video.mp4",
   },
   {
     id: 3,
@@ -44,7 +44,7 @@ const SAMPLE_VIDEOS = [
     thumbnail: "/tm5.png",
     // duration: "5:01",
     category: "Suite",
-    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+    videoUrl: "/tmluxe5video.mp4",
   },
 ];
 
