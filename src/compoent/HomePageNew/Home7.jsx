@@ -8,7 +8,7 @@ const SAMPLE_VIDEOS = [
     thumbnail: "/tmluxe1.jpeg",
     // duration: "2:45",
     category: "Studio",
-    videoUrl: "/public/tmvideo1.mp4",
+    videoUrl: "/tmvideo1.mp4",
   },
   {
     id: 2,
@@ -26,7 +26,7 @@ const SAMPLE_VIDEOS = [
     thumbnail: "/tm3image.jpeg",
     // duration: "0:45",
     category: "Suite",
-    videoUrl: "/public/tm3.mp4",
+    videoUrl: "/tm3.mp4",
   },
   {
     id: 4,
@@ -35,7 +35,7 @@ const SAMPLE_VIDEOS = [
     thumbnail: "/tmluxe44.png",
     // duration: "4:20",
     category: "Suite",
-    videoUrl: "/public/tm4video.mp4",
+    videoUrl: "/tm4video.mp4",
   },
   {
     id: 5,
