@@ -14,7 +14,7 @@ const Home4 = () => {
     title: "TM Luxe - 1",
     text: "Experience refined urban living at TM Luxe 1, where thoughtfully designed spaces combine comfort, style, and convenience. Ideal for business executives, professionals, families, and tourists, the accommodation is fully furnished and features a comfortable living area with sofa, Google TV, air-conditioning, and a private balcony. A fully loaded kitchen and laundry provisions with washing machine, iron, and ironing board ensure a homelike experience. Guests also enjoy the ease of self check-in and check-out for a seamless and independent stay.",
     rating: "⭐ 4.8 (120 reviews)",
-    price: "₹4,500 / night",
+    price: "₹4,200 / night",
     btn: "View Property"
   };
 
@@ -25,7 +25,7 @@ const Home4 = () => {
     title: "TM Luxe - 2",
     text: "TM Luxe 2 is a private luxury room within a premium apartment, offering comfort and privacy for modern travelers. The room features an attached toilet and a private balcony, providing a relaxing personal space. It is equipped with an air conditioner, sofa, Google TV, and a coffeemaker for added convenience. The metro station is just a five-minute walk away, and popular shopping and entertainment centers are located in close vicinity.",
     rating: "⭐ 4.9 (85 reviews)",
-    price: "₹3,000 / night",
+    price: "₹2,400 / night",
     btn: "View Property"
   };
 
@@ -36,8 +36,8 @@ const Home4 = () => {
     title: "TM Luxe - 3",
     text: "TM Luxe 3 is a super-luxury studio overlooking the golf courses, stadium, and Jaypee Greens resorts. Spanning 710 sq. ft., the studio features a fitted kitchen, dining counter with high chairs, a modern toilet, and a private balcony. The space is elegantly furnished with sofas, Google TV, Wi-Fi, and other contemporary comforts. Guests can also enjoy the convenience of self check-in and check-out facilities.",
     rating: "Coming Soon",
-    price: "₹5,000 / night",
-    btn: "Coming Soon"
+    price: "₹4,000 / night",
+    btn: "View Property"
   };
 
   // Default properties that will always show
