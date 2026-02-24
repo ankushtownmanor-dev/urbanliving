@@ -1326,6 +1326,9 @@ const styles = `
     position: relative;
     z-index: 10;
   }
+  @media(max-width: 600px) {
+    .spotlight-actions { display: none; }
+  }
 
   .spotlight-dur {
     position: absolute;
