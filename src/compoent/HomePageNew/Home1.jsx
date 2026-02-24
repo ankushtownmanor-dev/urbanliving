@@ -230,20 +230,22 @@ export default function Home1() {
         {/* Right Cards */}
         <div className="ovika-hero-cards">
           {cards.map((card, i) => (
-            <div className="ovika-hero-card" key={i}>
+            <a
+              key={i}
+              href={`/properties?category=${encodeURIComponent(card.category)}`}
+              className="ovika-hero-card"
+              style={{ textDecoration: 'none', color: 'inherit', display: 'flex' }}
+            >
               <div className="ovika-card-icon">{card.icon}</div>
               <div className="ovika-card-body">
                 <h3 className="ovika-card-title">{card.title}</h3>
                 <p className="ovika-card-subtitle">{card.subtitle}</p>
                 <p className="ovika-card-desc">{card.desc}</p>
-                <a
-                  href={`/properties?category=${encodeURIComponent(card.category)}`}
-                  className="ovika-card-link"
-                >
+                <span className="ovika-card-link">
                   Explore <span>→</span>
-                </a>
+                </span>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>
