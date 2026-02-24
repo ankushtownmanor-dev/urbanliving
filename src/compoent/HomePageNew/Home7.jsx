@@ -1107,18 +1107,22 @@ const styles = `
     opacity: 0.5;
   }
   .vs-title {
-    font-size: clamp(36px, 5vw, 56px);
-    font-weight: 300;
+    font-size: 26px;
+    font-weight: 350;
     color: var(--text-dark);
     line-height: 1.1;
     margin-bottom: 8px;
+  }
+  @media(min-width: 786px) {
+    .vs-title {   font-size: 36px;
+  font-weight: 500; }
   }
   .vs-title em {
     font-style: italic;
     color: var(--gold);
   }
   .vs-subtitle {
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 300;
     color: var(--text-mid);
     letter-spacing: 1px;
@@ -1662,6 +1666,9 @@ const styles = `
     flex-wrap: wrap;
     position: relative;
     z-index: 10;
+  }
+  @media(max-width: 600px) {
+    .filmstrip-actions .instant-book-btn { display: none; }
   }
   .watch-now-btn {
     font-size: 10px;

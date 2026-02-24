@@ -1907,14 +1907,14 @@ const guestPolicy = property?.guest_policy || {};
               <BiBed className="f-icon"/>
               <div>
                 <strong>{getDisplayCount(property.bedrooms, property.parsedBedrooms)}</strong>
-                <span>Bedrooms</span>
+                <span>Bedroom</span>
               </div>
             </div>
             <div className="feature-box">
               <BiBath className="f-icon"/>
               <div>
                 <strong>{getDisplayCount(property.bathrooms, property.parsedBathrooms)}</strong>
-                <span>Bathrooms</span>
+                <span>Bathroom</span>
               </div>
             </div>
             <div className="feature-box">
@@ -1928,7 +1928,7 @@ const guestPolicy = property?.guest_policy || {};
               <FiUser className="f-icon"/>
               <div>
                 <strong>{property.max_guests || 2}</strong>
-                <span>Guests</span>
+                <span>Max Guests</span>
               </div>
             </div>
           </div>
