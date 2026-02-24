@@ -3,47 +3,47 @@ import { useState, useRef, useEffect } from "react";
 const SAMPLE_VIDEOS = [
   {
     id: 1,
-    title: "Product Launch 2024",
-    subtitle: "Unveiling the Future",
-    thumbnail: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&q=80",
-    duration: "2:45",
-    category: "Launch",
-    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+    title: "Signature Stay 1",
+    // subtitle: "Unveiling the Future",
+    thumbnail: "/public/tmluxe1.jpeg",
+    // duration: "2:45",
+    category: "Studio",
+    videoUrl: "/public/tmvideo1.mp4",
   },
   {
     id: 2,
-    title: "Behind the Scenes",
-    subtitle: "Craftsmanship Story",
-    thumbnail: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&q=80",
-    duration: "3:12",
-    category: "Story",
+    title: "Signature Stay 2",
+    // subtitle: "Craftsmanship Story",
+    thumbnail: "/public/tm2newimage.jpeg",
+    // duration: "3:12",
+    category: "Apartment",
     videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
   },
   {
     id: 3,
-    title: "Client Testimonials",
-    subtitle: "Voices of Trust",
-    thumbnail: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80",
-    duration: "1:58",
-    category: "Reviews",
-    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+    title: "Signature Stay 3",
+    // subtitle: "Signature Stay 3",
+    thumbnail: "/public/tm3image.jpeg",
+    // duration: "0:45",
+    category: "Suite",
+    videoUrl: "/public/tm3.mp4",
   },
   {
     id: 4,
-    title: "Feature Showcase",
-    subtitle: "Excellence Defined",
-    thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
-    duration: "4:20",
-    category: "Features",
-    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+    title: "Signature Stay 4",
+    // subtitle: "Signature Stay 4",
+    thumbnail: "/public/tmluxe44.png",
+    // duration: "4:20",
+    category: "Suite",
+    videoUrl: "/public/tm4video.mp4",
   },
   {
     id: 5,
-    title: "The Making Of",
-    subtitle: "Art Meets Innovation",
-    thumbnail: "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&q=80",
-    duration: "5:01",
-    category: "Process",
+    title: "Signature Stay 5",
+    // subtitle: "Signature Stay 5",
+    thumbnail: "/public/tm5.png",
+    // duration: "5:01",
+    category: "Suite",
     videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
   },
 ];
@@ -810,8 +810,8 @@ export default function VideoShowcase({ videos = SAMPLE_VIDEOS }) {
         {/* Header */}
         <div className="vs-header">
           {/* <div className="">Featured Videos</div> */}
-          <h1 className="vs-title">Our <span style={{color:"#c2772b"}}>Finest</span> Work</h1>
-          <p className="vs-subtitle">Explore the collection · Select a view</p>
+          <h1 className="vs-title">Our <span style={{color:"#c2772b"}}>Signature</span> Stays</h1>
+          <p className="vs-subtitle">A Smarter Experience</p>
         </div>
 
         {/* View Switcher */}
