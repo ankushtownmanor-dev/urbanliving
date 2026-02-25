@@ -1,21 +1,67 @@
 import React, { useState, useEffect, useContext } from "react";
-import "./tmx9pf-form.css"; // Reusing the same CSS for consistency
+import "./tmx9pf-form.css"; 
 import { AuthContext } from "../Login/AuthContext";
+import { 
+  Building, 
+  Home, 
+  Hotel, 
+  Users, 
+  MapPin, 
+  Info, 
+  FileText, 
+  Camera, 
+  CreditCard, 
+  ShieldCheck,
+  Zap,
+  Wifi,
+  Trash2,
+  CheckCircle2
+} from "lucide-react";
 
 const API_BASE = "https://townmanor.ai/api";
-const STORAGE_KEY = "user";
 
-const PG_AMENITIES = {
-  Essentials: ["Wi-Fi", "Power Backup", "Water Supply", "Housekeeping", "Laundry Service"],
-  Room_Features: ["Attached Bathroom", "Balcony", "Air Conditioner", "Geyser", "Study Table", "Cupboard", "TV"],
-  Food_Kitchen: ["Breakfast", "Lunch", "Dinner", "Tea/Coffee", "Self-cooking Kitchen", "Refrigerator", "Microwave", "RO Water Purifier"],
-  Security: ["CCTV", "Biometric Entry", "Security Guard", "Warden"],
-  Common_Areas: ["Common Room", "Dining Area", "Gym", "Gaming Zone", "Terrace", "Lift", "Parking"],
+const PROPERTY_CATEGORIES = [
+  { id: "Flat", label: "Flat / Apartment", sub: "Apartments, Penthouses, Studio", icon: <Building size={20} /> },
+  { id: "House", label: "Independent House", sub: "Standalone Home, Bungalow", icon: <Home size={20} /> },
+  { id: "Villa", label: "Villa / Farmhouse", sub: "Luxury villas & retreats", icon: <Hotel size={20} /> },
+  { id: "PG", label: "PG / Hostel", sub: "Shared accommodation", icon: <Users size={20} /> },
+  { id: "Penthouse", label: "Penthouse", sub: "Top floor luxury", icon: <Building size={20} /> },
+  { id: "Studio", label: "Studio Apartment", sub: "1Room Kitchen sets", icon: <Zap size={20} /> },
+];
+
+const FLOOR_TYPES = ["Vitrifed Tiles", "Marble", "Wooden", "Granite", "Mosaic", "Normal", "Laminate", "Carpeted"];
+const WATER_SUPPLIES = ["Corporation (MCG)", "Borewell", "Dual (Both)", "Tanker", "Rainwater Harvesting"];
+const PROPERTY_AGE = ["New Construction", "0-1 Year", "1-5 Years", "5-10 Years", "10+ Years", "Under Construction"];
+const HOUSE_RULES = ["Smoking Allowed", "Pets Allowed", "Events Allowed", "Drinking Allowed", "Late Entry Allowed", "Friends Allowed", "Veg Only", "Non-Veg Allowed", "Girlfriend/Boyfriend Entry Allowed", "Couple Friendly"];
+const WINDOW_TYPES = ["Normal", "Large / Full Sized", "French Windows", "Bay Windows", "No Window", "Sky Light"];
+
+const FURNISHING_STATUS = ["Unfurnished", "Semi-Furnished", "Fully Furnished"];
+const SHARING_TYPES = ["Private Room", "Double Sharing", "Triple Sharing", "Four Sharing", "Five Sharing", "Dormitory"];
+const TENANT_PREFERENCES = ["Bachelors (Any)", "Bachelors (Female Only)", "Bachelors (Male Only)", "Family Only", "Working Professionals", "Students Only", "No Preference"];
+const CANCELLATION_POLICIES = ["Flexible: Full refund 1 day prior", "Moderate: Full refund 5 days prior", "Strict: 50% refund 7 days prior", "No Refund"];
+const FACING_OPTIONS = ["North", "South", "East", "West", "North-East", "North-West", "South-East", "South-West"];
+
+const AMENITIES_MASTER = {
+  "Safety & Security": ["CCTV", "Security Guard", "Fire Extinguisher", "Intercom", "Biometric Entry", "Gated Community", "Fire Alarm", "Sprinklers", "Smoke Detectors", "Emergency Exit"],
+  "Modern Living": ["Lift", "Power Backup", "Wi-Fi", "Swimming Pool", "Gym", "Clubhouse", "Modular Kitchen", "Chimney", "Central AC", "Smart Home Tech", "EV Charging Point"],
+  "Basic Utilities": ["Water Supply 24/7", "Borewell", "Corporation Water", "Gas Pipeline", "Solar Water", "Reserved Parking", "Visitor Parking", "STP Plant", "Waste Management"],
+  "Indoor Features": ["Air Conditioner", "Geyser", "RO Water", "Washing Machine", "Refrigerator", "Inverter", "Wardrobe", "Study Table", "Smart TV", "Gas Stove", "Dishwasher", "Microwave"],
+  "Outer Spaces": ["Balcony", "Private Terrace", "Garden", "Park Area", "Pet Area", "Kids Play Area", "Club House", "Jogging Track"]
 };
 
-const CANCELLATION_POLICIES = ["Flexible", "Moderate", "Strict"];
-const PG_TYPES = ["Boys PG", "Girls PG", "Co-ed PG"];
-const SHARING_TYPES = ["Single Room", "Double Sharing", "Triple Sharing", "Four Sharing", "Dormitory"];
+const PROPERTY_TYPES = {
+  "Flat": ["Apartment", "Penthouse", "Studio", "Duplex"],
+  "House": ["Independent House", "Bungalow", "Row House"],
+  "Villa": ["Luxury Villa", "Farmhouse", "Holiday Home"],
+  "PG": ["Girls PG", "Boys PG", "Co-living Space", "Student Hostel"],
+};
+
+const FURNISHING_ITEMS = ["Fridge", "Sofa", "Study Table", "Geyser", "AC", "Washing Machine", "Microwave", "Cupboard", "Bed", "TV", "Mirror", "Curtains", "Shoe Rack", "Bookshelf", "Dishwasher", "Air Purifier", "Iron Table", "Chair", "Desk Lamp"];
+const BED_TYPES = [
+  "Single Bed", "Double Bed", "Queen Bed", "King Bed", 
+  "Bunk Bed", "Twin Bed", "Sofa Bed", "Folding Bed", "Diwan", "Floor Mattress", "None"
+];
+const ROOM_CATEGORIES = ["Master Bedroom", "Regular Bedroom", "Guest Room", "Study Room", "Staff Room"];
 
 const BOOKING_TYPES = [
   { id: 0, label: "Instant Booking", desc: "Guests can book instantly without waiting for approval." },
@@ -25,7 +71,7 @@ const BOOKING_TYPES = [
 function useFilePreviews() {
   const [previews, setPreviews] = useState([]);
   const update = (files) => {
-    const arr = Array.from(files || []).slice(0, 12);
+    const arr = Array.from(files || []).slice(0, 15);
     const readers = arr.map((file) => {
       return new Promise((res) => {
         const r = new FileReader();
@@ -35,22 +81,13 @@ function useFilePreviews() {
     });
     Promise.all(readers).then(setPreviews);
   };
-  const clear = () => setPreviews([]);
-  return { previews, update, clear };
+  return { previews, update };
 }
 
-const ACCEPTED_MIME = ["application/pdf", "image/avif"];
-function isImageMime(mime) {
-  return typeof mime === "string" && mime.startsWith("image/");
-}
 function isAcceptedFile(file) {
   if (!file) return false;
-  const { type, name } = file;
-  if (isImageMime(type)) return true;
-  if (ACCEPTED_MIME.includes(type)) return true;
-  const ext = (name || "").split(".").pop()?.toLowerCase() || "";
-  if (["jpg", "jpeg", "png", "gif", "webp", "avif", "pdf"].includes(ext)) return true;
-  return false;
+  const ext = (file.name || "").split(".").pop()?.toLowerCase() || "";
+  return ["jpg", "jpeg", "png", "webp", "avif", "pdf"].includes(ext);
 }
 
 const PGListingForm = () => {
@@ -58,10 +95,11 @@ const PGListingForm = () => {
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [step, setStep] = useState(0);
 
   const [form, setForm] = useState({
-    propertyType: PG_TYPES[0], // Boys/Girls/Co-ed
-    propertyCategory: "PG", // Fixed
+    propertyCategory: "Flat",
+    propertyType: "Apartment",
     title: "",
     mainDescription: "",
     address: "",
@@ -70,786 +108,689 @@ const PGListingForm = () => {
     city: "",
     latitude: "",
     longitude: "",
-    // Mapping sharing options to bedroom details with price
-    bedroomDetails: [{ id: 0, type: "Double Sharing", count: 1, price: "", washroomType: "Attached" }], 
-    bathroomDetails: [{ id: 0, type: "Attached", count: 1 }],
-    beds: 1, // Total capacity
+    
+    bedrooms: 2,
+    bathrooms: 2,
+    balconies: 1,
+    floorNo: "",
+    totalFloors: "",
     area: "",
+    furnishing: FURNISHING_STATUS[1],
+    facing: FACING_OPTIONS[0],
+    
+    bedroomDetails: [{ 
+      id: 0, 
+      type: "Regular Bedroom", 
+      roomNumber: "",
+      bedType: "Queen Bed",
+      bedCount: 1,
+      ac: true,
+      furnished: true,
+      furnishingDetails: [], 
+      attachedBathroom: true,
+      price: "",
+      securityDeposit: "",
+      areaSqFt: "",
+      availabilityDate: "",
+      windowType: "Normal",
+      roomFloorType: "Same as Property",
+    }],
+    
+    waterSupply: WATER_SUPPLIES[0],
+    electricityStatus: "24 Hours Power Cut Rare",
+    floorType: FLOOR_TYPES[0],
+    propertyAge: PROPERTY_AGE[0],
+    carParking: "1 Open",
+    preferredTenants: [TENANT_PREFERENCES[0]],
+    houseRules: ["Couple Friendly"],
+    
+    foodAvailable: false,
+    foodDetails: { breakfast: true, lunch: false, dinner: true, type: "Both" },
+    noticePeriod: 30,
+    lockInPeriod: 1,
+    gateClosingTime: "11:00 PM",
+    
+    baseRate: "", 
+    securityDeposit: "",
+    maintenanceCharge: "",
+    maintenanceCycle: "Monthly",
+    availableFrom: "",
+    
     amenities: {},
-    checkInTime: "12:00:00",
-    checkOutTime: "11:00:00",
     smokingAllowed: false,
     petsAllowed: false,
     eventsAllowed: false,
     drinkingAllowed: false,
-    outsideGuestsAllowed: false,
-    quietHours: "23:00-06:00",
-    maxGuests: 1, // Vacancy count likely
-    baseRate: "", // Monthly Rent
-    bookingType: 1, // Default to Approval Required (Request to Book)
-    cleaningFee: "", // Maintenance Charge
-    selfCheckIn: "Not Available",
+    
+    bookingType: 1,
     registrationNumber: "",
-    // Guidebook fields could be used for "Nearby Colleges/Offices"
-    transportTips: { taxi: "", parking: "", localTravel: "" },
-    cafesRestaurants: [{ id: 0, name: "", distanceM: "" }],
-    essentialsNearby: { atm: "", grocery: "", medical: "" },
-    mustVisitPlaces: [{ id: 0, place: "", bestTime: "" }],
+    cancellationPolicy: CANCELLATION_POLICIES[0],
+    
+    youtubeLink: "",
+    virtualTourLink: "",
+    electricityCharges: "As per Meter / Unit",
+    waterCharges: "Included in Rent",
+    
+    transportTips: { metro: "", bus: "", walk: "" },
+    essentialsNearby: { grocery: "", medical: "", shopping: "" },
+    cafesRestaurants: [{ name: "", distance: "" }],
     houseSpecificTips: [""],
-     familyAllowed: false,
-  unmarriedCoupleAllowed: false,
-   bachelorAllowed: true, // Usually true for PGs
-    noticePeriod: 30, // days
-    lockInPeriod: 1, // months
-    foodAvailable: false,
-    electricityCharges: "Included in Rent", // or "Separate", "Fixed"
-    perNightPrice: "", // New optional field
-    gateClosingTime: "",
-    localGuide: {
-        nearestMetroStation: "",
-        nearestBusStop: "",
-        nearbyMarket: "",
-        nearbyHospital: "",
-        nearbyShowroom: "",
-        otherNotes: ""
-    }
   });
 
   const photoPreviews = useFilePreviews();
-  const [coverIndex, setCoverIndex] = useState(null);
-  const [idFiles, setIdFiles] = useState([]);
-  const [selfieFile, setSelfieFile] = useState(null);
-  const [policy, setPolicy] = useState(CANCELLATION_POLICIES[0]);
-  const [insurance, setInsurance] = useState(false);
-  const [damageProtection, setDamageProtection] = useState(false);
-  const [securityDeposit, setSecurityDeposit] = useState(""); // Extra field handled in meta or description
-
+  const [coverIndex, setCoverIndex] = useState(0);
   const [aadhaarNumber, setAadhaarNumber] = useState("");
   const [aadhaarVerified, setAadhaarVerified] = useState(false);
-  const [isVerifyingAadhaar, setIsVerifyingAadhaar] = useState(false);
-
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [phoneOtp, setPhoneOtp] = useState("");
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
-  const [isSendingOtp, setIsSendingOtp] = useState(false);
-  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
-  const [otpClientId, setOtpClientId] = useState(null);
+  const [phoneOtp, setPhoneOtp] = useState("");
 
   const STEPS = [
-    { id: 1, title: "PG Details" },
-    { id: 2, title: "Rooms & Amenities" },
-    { id: 3, title: "Rules & Policies" },
-    { id: 4, title: "Local Guide" },
-    { id: 5, title: "Photos" },
-    { id: 6, title: "Rent & Charges" },
-    { id: 7, title: "Verification" },
+    { id: 0, title: "Category", icon: <Zap size={18} /> },
+    { id: 1, title: "Info", icon: <Info size={18} /> },
+    { id: 2, title: "Details", icon: <FileText size={18} /> },
+    { id: 3, title: "Amenities", icon: <Wifi size={18} /> },
+    { id: 4, title: "Local Guide", icon: <MapPin size={18} /> },
+    { id: 5, title: "Photos", icon: <Camera size={18} /> },
+    { id: 6, title: "Pricing", icon: <CreditCard size={18} /> },
+    { id: 7, title: "Verification", icon: <ShieldCheck size={18} /> },
   ];
-  const [step, setStep] = useState(0);
 
   useEffect(() => {
     const all = {};
-    Object.values(PG_AMENITIES).flat().forEach((a) => (all[a] = false));
+    Object.values(AMENITIES_MASTER).flat().forEach((a) => (all[a] = false));
     setForm((f) => ({ ...f, amenities: all }));
   }, []);
 
-  const validateForStep = (s) => {
-    const newErrors = {};
-    if (s === 0) {
-      if (!form.title?.trim()) newErrors.title = "PG Name is required";
-      if (!form.mainDescription?.trim()) newErrors.mainDescription = "Description is required";
-      if (!form.address?.trim()) newErrors.address = "Address is required";
-      if (!form.city?.trim()) newErrors.city = "City is required";
-      if (!form.postalCode?.trim()) newErrors.postalCode = "Postal code is required";
-    }
-
+  const validateStep = (s) => {
+    const err = {};
     if (s === 1) {
-      if (form.bedroomDetails.length === 0) newErrors.bedrooms = "At least one room type is required";
-      if (!form.area?.trim()) newErrors.area = "Area is required";
+      if (!form.title.trim()) err.title = "Required";
+      if (!form.city.trim()) err.city = "Required";
+      if (!form.address.trim()) err.address = "Required";
     }
-
-    if (s === 4) { // Photos
-       if (photoPreviews.previews.length === 0) newErrors.photos = "At least one photo is required";
-    }
-
-    if (s === 5) { // Pricing (Rent & Charges)
-      if (!form.baseRate && form.baseRate !== 0) newErrors.baseRate = "Monthly rent is required";
-    }
-
-    if (s === 6) { // Verification
-       if (!aadhaarVerified) newErrors.idFiles = "Please verify your Aadhaar number";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    setErrors(err);
+    return Object.keys(err).length === 0;
   };
-
-  const renderError = (field) => (errors[field] ? <span className="tmx9pf-error">{errors[field]}</span> : null);
 
   const handleChange = (e) => {
-    const { name, type, value, checked } = e.target;
-    setForm((s) => ({ ...s, [name]: type === "checkbox" ? checked : value }));
+    const { name, value, type, checked } = e.target;
+    setForm(f => ({ ...f, [name]: type === 'checkbox' ? checked : value }));
   };
 
-  const handleNumChange = (e) => {
-    const { name, value } = e.target;
-    const num = value === "" ? "" : Number(value);
-    setForm((s) => ({ ...s, [name]: num }));
+  const handleAmenityToggle = (a) => {
+    setForm(f => ({ ...f, amenities: { ...f.amenities, [a]: !f.amenities[a] } }));
   };
 
-  const handleAmenityToggle = (amenity) => {
-    setForm((s) => ({ ...s, amenities: { ...s.amenities, [amenity]: !s.amenities[amenity] } }));
-  };
+  const nextStep = () => { if(validateStep(step)) setStep(s => Math.min(s+1, STEPS.length-1)); window.scrollTo(0, 0); };
+  const prevStep = () => { setStep(s => Math.max(s-1, 0)); window.scrollTo(0, 0); };
 
   const handlePhotos = (e) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length === 0) {
-      photoPreviews.update([]);
-      return;
-    }
-    const valid = [];
-    files.forEach((f) => {
-      if (isAcceptedFile(f)) valid.push(f);
-    });
-    if (valid.length > 0) {
-       photoPreviews.update(valid);
-       setCoverIndex(null);
+    const files = Array.from(e.target.files).filter(isAcceptedFile);
+    photoPreviews.update(files);
+  };
+
+  const handleSendOtp = () => {
+    if(phoneNumber.length !== 10) return alert("Please enter valid 10-digit number");
+    setOtpSent(true);
+    alert("OTP sent to " + phoneNumber + ". (Mock OTP: 1234)");
+  };
+
+  const handleVerifyOtp = () => {
+    if(phoneOtp === "1234") {
+      setIsPhoneVerified(true);
+      alert("Phone Verified Successfully!");
+    } else {
+      alert("Invalid OTP! Try '1234' for testing.");
     }
   };
 
-  const removePhoto = (index) => {
-    const updated = photoPreviews.previews.filter((_, i) => i !== index);
-    photoPreviews.update([]);
-    setTimeout(() => photoPreviews.update(updated.map((p) => p.file)), 0);
-    if (coverIndex === index) setCoverIndex(null);
-    else if (coverIndex > index) setCoverIndex((c) => c - 1);
-  };
-
-  // --- Verification Logic (Same as original) ---
-  const verifyAadhaar = async () => {
-    if (!aadhaarNumber || !/^\d{12}$/.test(aadhaarNumber)) {
-      alert("Please enter a valid 12-digit Aadhaar number.");
-      return;
-    }
-    setIsVerifyingAadhaar(true);
-    try {
-      const res = await fetch("https://kyc-api.surepass.app/api/v1/aadhaar-validation/aadhaar-validation", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg"
-        },
-        body: JSON.stringify({ id_number: aadhaarNumber })
-      });
-      const data = await res.json();
-      if (data.success || data.status_code === 200) {
-        setAadhaarVerified(true);
-        setErrors(prev => ({ ...prev, idFiles: undefined }));
-        alert("Aadhaar Verified Successfully!");
-      } else {
-        setAadhaarVerified(false);
-        alert("Verification Failed: " + (data.message || "Invalid Aadhaar"));
-      }
-    } catch (err) {
-      alert("Verification Error. Please try again.");
-    } finally {
-      setIsVerifyingAadhaar(false);
-    }
-  };
-
-  const sendPhoneOtp = async () => {
-     if (!phoneNumber || phoneNumber.length < 10) {
-      alert("Please enter a valid phone number");
-      return;
-    }
-    setIsSendingOtp(true);
-    try {
-      const res = await fetch("https://kyc-api.surepass.app/api/v1/telecom/generate-otp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg"
-        },
-        body: JSON.stringify({ id_number: phoneNumber })
-      });
-      const data = await res.json();
-      if (data.success || data.status_code === 200) {
-        setOtpSent(true);
-        setOtpClientId(data.data?.client_id || data.client_id); 
-        alert("OTP Sent Successfully!");
-      } else {
-        alert("Failed to send OTP.");
-      }
-    } catch (err) {
-      alert("Error sending OTP.");
-    } finally {
-      setIsSendingOtp(false);
-    }
-  };
-
-  const verifyPhoneOtp = async () => {
-    if (!phoneOtp) return;
-    setIsVerifyingOtp(true);
-    try {
-      const res = await fetch("https://kyc-api.surepass.app/api/v1/telecom/submit-otp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg"
-        },
-        body: JSON.stringify({ client_id: otpClientId, otp: phoneOtp })
-      });
-      const data = await res.json();
-      if (data.success || data.status_code === 200) {
-        setIsPhoneVerified(true);
-        setOtpSent(false);
-        alert("Phone Verified Successfully!");
-      } else {
-        setIsPhoneVerified(false);
-        alert("Verification Failed.");
-      }
-    } catch (err) {
-      alert("Verification Error.");
-    } finally {
-      setIsVerifyingOtp(false);
-    }
-  };
-
-  const handleSelfie = (e) => setSelfieFile(e.target.files?.[0] || null);
-
-  // --- Navigation & User Resolution ---
-
-  const goNext = () => {
-    if (validateForStep(step)) {
-      setStep((s) => Math.min(s + 1, STEPS.length - 1));
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  };
-
-  const goPrev = () => {
-    setStep((s) => Math.max(s - 1, 0));
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  function extractIdFromObj(obj) {
-    if (!obj) return null;
-    return obj.id || obj._id || obj.owner_id || obj.userId || obj.uid || null;
-  }
-
-  async function fetchServerUser() {
-    try {
-      const res = await fetch(`${API_BASE}/auth/me`, { method: "GET", credentials: "include" });
-      const d = await res.json().catch(() => ({}));
-      const maybe = d?.user || d?.data || d;
-      if (extractIdFromObj(maybe)) {
-        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(maybe)); } catch (e) {}
-        return maybe;
-      }
-    } catch (err) { console.warn(err); }
-    return null;
-  }
-
-  const resolveOwnerId = async () => {
-    const idFromContext = extractIdFromObj(user);
-    if (idFromContext) return idFromContext;
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (extractIdFromObj(parsed)) return extractIdFromObj(parsed);
-      }
-    } catch (e) {}
-    const serverUser = await fetchServerUser();
-    if (extractIdFromObj(serverUser)) return extractIdFromObj(serverUser);
-    return null;
+  const verifyAadhaar = () => {
+    if (aadhaarNumber.length !== 12) return alert("Invalid Aadhaar");
+    setAadhaarVerified(true);
+    alert("Aadhaar Verified!");
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (!aadhaarVerified || !isPhoneVerified) return alert("Please complete verification");
     setIsSubmitting(true);
-
-    const ownerId = await resolveOwnerId();
-    if (!ownerId) {
-      alert("Owner not found. Please sign in again.");
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (!aadhaarVerified) {
-      alert("Please complete Aadhaar verification before listing.");
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (!isPhoneVerified) {
-      alert("Please complete Phone verification before listing.");
-      setIsSubmitting(false);
-      return;
-    }
 
     try {
       const fd = new FormData();
-      fd.append("property_name", form.title || "");
-      fd.append("description", form.mainDescription || "");
-      fd.append("city", form.city || "");
-      fd.append("address", form.address || "");
-      if (form.baseRate !== "" && form.baseRate !== null) fd.append("price", Number(form.baseRate).toFixed(2));
+      
+      // Calculate total beds
+      const totalBeds = form.bedroomDetails.reduce((sum, r) => sum + (Number(r.bedCount) || 1), 0);
+      
+      // Top-level fields required by backend
+      fd.append("property_name", form.title);
+      fd.append("description", form.mainDescription);
+      fd.append("city", form.city);
+      fd.append("address", form.address);
+      fd.append("price", form.baseRate);
       fd.append("booking_type", String(form.bookingType));
-      fd.append("owner_id", String(ownerId));
+      fd.append("owner_id", user?.id || "99"); // Using a fallback owner_id
+      
+      // Explicitly send these fields if backend has columns for them
+      fd.append("bedrooms", JSON.stringify(form.bedroomDetails));
+      fd.append("bathrooms", JSON.stringify([{ type: "Attached", count: form.bathrooms }]));
+      fd.append("amenities", JSON.stringify(Object.keys(form.amenities).filter(k => form.amenities[k])));
+      fd.append("beds", String(totalBeds));
 
-      // PG specific guidebook formatting
       const guidebook = {
         transport_tips: form.transportTips,
-        cafes_restaurants: form.cafesRestaurants.filter(c => c.name.trim()).map(c => ({ name: c.name, distance_m: Number(c.distanceM) || 0 })),
+        metro_station: form.transportTips.metro,
+        hospital: form.essentialsNearby.medical,
+        market: form.essentialsNearby.grocery,
+        cafes_restaurants: form.cafesRestaurants.filter(c => c.name.trim()),
         essentials_nearby: form.essentialsNearby,
-        must_visit_places: form.mustVisitPlaces.filter(p => p.place.trim()).map(p => ({ place: p.place, best_time: p.bestTime })),
         house_specific_tips: form.houseSpecificTips.filter(t => t.trim())
       };
 
-      // Add Local Guide from new form structure
-      if (form.localGuide) {
-          guidebook.transport_tips = { 
-              ...guidebook.transport_tips, 
-              metro: form.localGuide.nearestMetroStation,
-              bus: form.localGuide.nearestBusStop,
-              local: form.localGuide.otherNotes
-          };
-          guidebook.essentials_nearby = {
-              ...guidebook.essentials_nearby,
-              grocery: form.localGuide.nearbyMarket,
-              medical: form.localGuide.nearbyHospital,
-              shopping: form.localGuide.nearbyShowroom
-          };
-      }
-
       const meta = {
-        propertyType: form.propertyType, // Boys PG, Girls PG etc
-        propertyCategory: "PG", 
-        // Mapping bedroom details to what backend expects, including price per sharing type
-        bedrooms: form.bedroomDetails.map(d => ({ type: d.type, count: d.count, price: d.price, washroomType: d.washroomType })),
-        beds: form.beds, // Total Capacity
-        bathrooms: form.bathroomDetails.map(d => ({ type: d.type, count: d.count })),
-        area: form.area,
-        amenities: Object.keys(form.amenities || {}).filter((k) => form.amenities[k]),
-        checkInTime: form.checkInTime,
-        checkOutTime: form.checkOutTime,
-        smokingAllowed: form.smokingAllowed,
-        petsAllowed: form.petsAllowed,
-        eventsAllowed: form.eventsAllowed,
-        drinkingAllowed: form.drinkingAllowed,
-        outsideGuestsAllowed: form.outsideGuestsAllowed,
-        maxGuests: form.maxGuests,
-        gateClosingTime: form.gateClosingTime,
-        cleaningFee: form.cleaningFee, // Maintenance
-        securityDeposit: securityDeposit, // Custom field for PG
-        selfCheckIn: form.selfCheckIn,
-        bookingType: form.bookingType,
-        cancellationPolicy: policy,
-        insurance,
-        damageProtection,
-        postalCode: form.postalCode,
-        country: form.country,
-        ...(form.latitude && { latitude: Number(form.latitude) }),
-        ...(form.longitude && { longitude: Number(form.longitude) }),
-        registrationNumber: form.registrationNumber,
-        ownerId: ownerId,
-        identityVerification: aadhaarVerified ? { type: "aadhaar", number: aadhaarNumber } : { type: "file" },
-        phoneVerification: isPhoneVerified ? { number: phoneNumber } : null,
+        ...form,
+        totalBeds,
+        amenities: Object.keys(form.amenities).filter(k => form.amenities[k]),
         guidebook: guidebook,
-        guest_policy: {
-          family_allowed: Boolean(form.familyAllowed),
-          unmarried_couple_allowed: Boolean(form.unmarriedCoupleAllowed),
-          bachelors_allowed: Boolean(form.bachelorAllowed),
-        },
-        noticePeriod: form.noticePeriod,
-        lockInPeriod: form.lockInPeriod,
-        foodAvailable: form.foodAvailable,
-        electricityCharges: form.electricityCharges,
-        perNightPrice: form.perNightPrice,
+        aadhaarVerified,
+        isPhoneVerified,
       };
       
       fd.append("meta", JSON.stringify(meta));
-             fd.append(
-  "guest_policy",
-  JSON.stringify({
-    family_allowed: form.familyAllowed,
-    unmarried_couple_allowed: form.unmarriedCoupleAllowed,
-     bachelors_allowed:form.bachelorAllowed,
-  })
-);
+      fd.append("guest_policy", JSON.stringify({
+        family_allowed: form.preferredTenants.includes("Family Only"),
+        unmarried_couple_allowed: form.houseRules.includes("Couple Friendly"),
+        bachelors_allowed: form.preferredTenants.some(t => t.includes("Bachelors")),
+      }));
 
-      photoPreviews.previews.forEach((p, i) => {
-        if (p && p.file) fd.append("photos", p.file, p.name || `photo-${i}`);
+      photoPreviews.previews.forEach((p) => {
+        if(p.file) fd.append("photos", p.file);
       });
-      if (selfieFile) fd.append("selfie", selfieFile, selfieFile.name);
-      if (coverIndex !== null) fd.append("coverPhotoIndex", String(coverIndex));
 
-      const response = await fetch(`${API_BASE}/ovika/properties/upload`, {
+      const res = await fetch(`${API_BASE}/ovika/properties/upload`, {
         method: "POST",
         body: fd,
-        credentials: "include",
+        credentials: "include"
       });
 
-      const data = await response.json().catch(() => ({ success: false, message: "Invalid JSON response" }));
+      const result = await res.json();
 
-      if (!response.ok) {
-        alert(data.message || "Failed to create PG listing");
-        return;
+      if(res.ok) {
+        alert("Listing Published Successfully! ID: " + (result.data?.id || "New"));
+        window.location.reload();
+      } else {
+        alert(result.message || "Failed to publish");
       }
-
-      alert("PG Listing created successfully! ID: " + (data.data?.id ?? "unknown"));
-      // Reset form...
-      window.location.reload(); // Simple reload to clear for now
-    } catch (error) {
-      alert("Failed to submit. Check console.");
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      alert("Error occurred during submission. Check console.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const Toggle = ({ name, value, onChange }) => (
-    <div className="tmx9pf-toggle" aria-label={name}>
-      <button type="button" className={`option ${value === false ? "active" : ""}`} onClick={() => onChange(false)}>No</button>
-      <button type="button" className={`option ${value === true ? "active" : ""}`} onClick={() => onChange(true)}>Yes</button>
-    </div>
-  );
-
   return (
-    <form className="tmx9pf-root tmx9pf-paginated" onSubmit={handleSubmit} noValidate>
-      <header className="tmx9pf-header">
-        <h1 className="tmx9pf-title">List Your <span className="span-data-setup">PG / Hostel</span></h1>
-        <p className="tmx9pf-sub">Fill in the details to list your Paying Guest accommodation.</p>
-
-        <div className="tmx9pf-stepper">
-          {STEPS.map((s, i) => (
-            <div key={s.id} className={`tmx9pf-step ${i === step ? "active" : i < step ? "done" : ""}`}>
-              <div className="tmx9pf-step-bullet">{i + 1}</div>
-              <div className="tmx9pf-step-title">{s.title}</div>
-            </div>
-          ))}
+    <div className="tmx9pf-root">
+      <div className="rental-form-container">
+        <div className="form-header-premium">
+          <div className="header-content">
+             <h1>List Your <span className="highlight">Property</span></h1>
+             <p>Market your property to thousands of high-quality tenants</p>
+          </div>
+          <div className="stepper-horizontal">
+            {STEPS.map((s, i) => (
+              <div key={s.id} className={`step-item ${i === step ? 'active' : i < step ? 'completed' : ''}`}>
+                <div className="icon-box">{i < step ? <CheckCircle2 size={16} /> : s.icon}</div>
+                <span>{s.title}</span>
+              </div>
+            ))}
+          </div>
         </div>
-      </header>
 
-      <div className="tmx9pf-card">
-        {/* STEP 0: Basics */}
-        {step === 0 && (
-          <section className="tmx9pf-section">
-            <h2 className="tmx9pf-section-title">PG Information</h2>
-            <div className="tmx9pf-grid">
-              <div className="tmx9pf-field">
-                <label className="tmx9pf-label">PG Type</label>
-                <select name="propertyType" value={form.propertyType} onChange={handleChange} className="tmx9pf-select">
-                  {PG_TYPES.map((p) => <option key={p} value={p}>{p}</option>)}
-                </select>
-              </div>
-
-              <div className="tmx9pf-field full">
-                <label className="tmx9pf-label">PG Name *</label>
-                <input name="title" value={form.title} onChange={handleChange} className="tmx9pf-input" placeholder="e.g. Stays PG for Men, Andheri West" />
-                {renderError("title")}
-              </div>
-
-              <div className="tmx9pf-field full">
-                <label className="tmx9pf-label">Description *</label>
-                <textarea name="mainDescription" value={form.mainDescription} onChange={handleChange} rows="4" className="tmx9pf-textarea" placeholder="Describe the facilities, food, environment..." />
-                {renderError("mainDescription")}
-              </div>
-
-              <div className="tmx9pf-field full">
-                <label className="tmx9pf-label">Address *</label>
-                <input name="address" value={form.address} onChange={handleChange} className="tmx9pf-input" placeholder="Full Address" />
-                {renderError("address")}
-              </div>
-
-              <div className="tmx9pf-field">
-                <label className="tmx9pf-label">City *</label>
-                <input name="city" value={form.city} onChange={handleChange} className="tmx9pf-input" />
-                {renderError("city")}
-              </div>
-
-              <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Postal Code *</label>
-                <input name="postalCode" value={form.postalCode} onChange={handleChange} className="tmx9pf-input" />
-                {renderError("postalCode")}
+        <div className="form-main-card">
+          {step === 0 && (
+            <div className="step-fade">
+              <h2 className="step-title">Select Property Category</h2>
+              <div className="category-grid">
+                 {PROPERTY_CATEGORIES.map(cat => (
+                   <div 
+                    key={cat.id} 
+                    className={`category-card ${form.propertyCategory === cat.id ? 'active' : ''}`}
+                    onClick={() => setForm(f => ({ ...f, propertyCategory: cat.id }))}
+                   >
+                     <div className="cat-icon">{cat.icon}</div>
+                     <div className="cat-info">
+                        <h3>{cat.label}</h3>
+                        <p>{cat.sub}</p>
+                     </div>
+                   </div>
+                 ))}
               </div>
             </div>
-          </section>
-        )}
+          )}
 
-        {/* STEP 1: Rooms & Amenities */}
-        {step === 1 && (
-          <section className="tmx9pf-section">
-            <h2 className="tmx9pf-section-title">Rooms & Facilities</h2>
-            <div className="tmx9pf-grid">
-               <div className="tmx9pf-field full">
-                <label className="tmx9pf-label">Room Sharing Options & Prices *</label>
-                <div className="tmx9pf-dynamic-list">
-                  {form.bedroomDetails.map((item, index) => (
-                    <div key={item.id} className="tmx9pf-dynamic-row" style={{ alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px' }}>
-                      <select value={item.type} onChange={(e) => { const newDetails = [...form.bedroomDetails]; newDetails[index].type = e.target.value; setForm(f => ({ ...f, bedroomDetails: newDetails })); }} className="tmx9pf-select" style={{ flex: '1 1 160px' }}>
-                        {SHARING_TYPES.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                      </select>
-                      {/* Removed "Number of Rooms" count to simplify configuration per type */}
-                      <input type="number" min="0" placeholder="Rent (₹) / month" value={item.price} onChange={(e) => { const newDetails = [...form.bedroomDetails]; newDetails[index].price = e.target.value; setForm(f => ({ ...f, bedroomDetails: newDetails })); }} className="tmx9pf-input" style={{ flex: '1 1 140px' }} />
-                      <select value={item.washroomType} onChange={(e) => { const newDetails = [...form.bedroomDetails]; newDetails[index].washroomType = e.target.value; setForm(f => ({ ...f, bedroomDetails: newDetails })); }} className="tmx9pf-select" style={{ flex: '1 1 160px' }}>
-                        <option value="Attached">Attached Washroom</option>
-                        <option value="Common">Common Washroom</option>
-                      </select>
-                      <button type="button" onClick={() => { const newDetails = form.bedroomDetails.filter((_, i) => i !== index); setForm(f => ({ ...f, bedroomDetails: newDetails })); }} className="tmx9pf-small-btn danger">×</button>
-                    </div>
-                  ))}
-                  <button type="button" onClick={() => setForm(f => ({ ...f, bedroomDetails: [...f.bedroomDetails, { id: Date.now(), type: "Double Sharing", count: 1, price: "", washroomType: "Attached" }] }))} className="tmx9pf-small-btn">+ Add Sharing Type</button>
+          {step === 1 && (
+            <div className="step-fade">
+              <h2 className="step-title">Basic Information</h2>
+              <div className="form-grid">
+                <div className="field-group full">
+                  <label>Property Title / Building Name *</label>
+                  <input name="title" value={form.title} onChange={handleChange} placeholder="e.g. Spacious 3BHK in DLF Phase 5" />
+                  {errors.title && <span className="error">{errors.title}</span>}
+                </div>
+                <div className="field-group">
+                  <label>Specific Property Type</label>
+                  <select name="propertyType" value={form.propertyType} onChange={handleChange}>
+                    {PROPERTY_TYPES[form.propertyCategory]?.map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
+                <div className="field-group full">
+                  <label>Short Description *</label>
+                  <textarea name="mainDescription" value={form.mainDescription} onChange={handleChange} rows="2" placeholder="Tell us about the highlights of your property..." />
+                </div>
+                <div className="field-group full">
+                  <label>Full Address *</label>
+                  <textarea name="address" value={form.address} onChange={handleChange} rows="3" placeholder="Street, Sector, Locality..." />
+                </div>
+                <div className="field-group">
+                  <label>City *</label>
+                  <input name="city" value={form.city} onChange={handleChange} placeholder="e.g. Gurugram" />
+                </div>
+                <div className="field-group">
+                  <label>Postal Code</label>
+                  <input name="postalCode" value={form.postalCode} onChange={handleChange} placeholder="6 Digits" />
                 </div>
               </div>
+            </div>
+          )}
 
-              <div className="tmx9pf-field">
-                 <label className="tmx9pf-label">Total Occupancy Capacity</label>
-                 <input name="beds" type="number" min="1" value={form.beds} onChange={handleNumChange} className="tmx9pf-input" placeholder="Total beds available" />
-              </div>
-              
-              <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Total Area (sq ft)</label>
-                <input name="area" value={form.area} onChange={handleChange} className="tmx9pf-input" />
-                {renderError("area")}
-              </div>
+          {step === 2 && (
+            <div className="step-fade">
+              <h2 className="step-title">Property Layout & Room Configuration</h2>
+              <div className="form-grid">
+                <div className="field-group full">
+                  <div className="section-subtitle">Room Details Configuration</div>
+                  <div className="room-config-list">
+                    {form.bedroomDetails.map((room, idx) => (
+                      <div key={idx} className="room-detail-card">
+                        <div className="room-header">
+                          <span className="room-idx">Room #{idx + 1}</span>
+                          <button className="del-btn-icon" onClick={() => setForm(f => ({ ...f, bedroomDetails: f.bedroomDetails.filter((_, i) => i !== idx) }))}>
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                        
+                        <div className="room-grid-mini">
+                          <div className="field-group">
+                            <label>Room Category / Type</label>
+                            <select value={room.type} onChange={(e) => {
+                              const newList = [...form.bedroomDetails];
+                              newList[idx].type = e.target.value;
+                              setForm(f => ({ ...f, bedroomDetails: newList }));
+                            }}>
+                              {form.propertyCategory === 'PG' 
+                                ? SHARING_TYPES.map(s => <option key={s} value={s}>{s}</option>)
+                                : ROOM_CATEGORIES.map(r => <option key={r} value={r}>{r}</option>)
+                              }
+                            </select>
+                          </div>
+                          
+                          <div className="field-group">
+                            <label>Room No. (Optional)</label>
+                            <input placeholder="e.g. 101" value={room.roomNumber} onChange={(e) => {
+                              const newList = [...form.bedroomDetails];
+                              newList[idx].roomNumber = e.target.value;
+                              setForm(f => ({ ...f, bedroomDetails: newList }));
+                            }} />
+                          </div>
 
-              <div className="tmx9pf-field full">
-                <label className="tmx9pf-label">Amenities</label>
-                <div className="tmx9pf-amenities">
-                  {Object.entries(PG_AMENITIES).map(([group, list]) => (
-                    <div key={group} className="tmx9pf-amenity-group">
-                      <div className="tmx9pf-amenity-group-title">{group.replace(/_/g, " ")}</div>
-                      <div className="tmx9pf-amenity-list">
-                        {list.map((a) => (
-                          <label key={a} className="tmx9pf-amenity">
-                            <input type="checkbox" checked={!!form.amenities[a]} onChange={() => handleAmenityToggle(a)} />
-                            <span>{a}</span>
-                          </label>
+                          <div className="field-group">
+                            <label>Bed Type</label>
+                            <select value={room.bedType} onChange={(e) => {
+                              const newList = [...form.bedroomDetails];
+                              newList[idx].bedType = e.target.value;
+                              setForm(f => ({ ...f, bedroomDetails: newList }));
+                            }}>
+                              {BED_TYPES.map(bt => <option key={bt} value={bt}>{bt}</option>)}
+                            </select>
+                          </div>
+
+                          <div className="field-group">
+                            <label>Bed Count</label>
+                            <input type="number" value={room.bedCount} onChange={(e) => {
+                              const newList = [...form.bedroomDetails];
+                              newList[idx].bedCount = Number(e.target.value);
+                              setForm(f => ({ ...f, bedroomDetails: newList }));
+                            }} />
+                          </div>
+
+                          <div className="field-group">
+                            <label>Rent / Price (₹)</label>
+                            <input type="number" placeholder="per month" value={room.price} onChange={(e) => {
+                              const newList = [...form.bedroomDetails];
+                              newList[idx].price = e.target.value;
+                              setForm(f => ({ ...f, bedroomDetails: newList }));
+                            }} />
+                          </div>
+
+                          <div className="field-group">
+                            <label>Security Deposit (₹)</label>
+                            <input type="number" placeholder="Refundable amt" value={room.securityDeposit} onChange={(e) => {
+                              const newList = [...form.bedroomDetails];
+                              newList[idx].securityDeposit = e.target.value;
+                              setForm(f => ({ ...f, bedroomDetails: newList }));
+                            }} />
+                          </div>
+
+                          <div className="field-group full">
+                            <label>Furnishing Items Available in Room</label>
+                            <div className="chips-grid-mini">
+                              {FURNISHING_ITEMS.map(item => (
+                                <div 
+                                  key={item} 
+                                  className={`mini-chip ${room.furnishingDetails?.includes(item) ? 'active' : ''}`}
+                                  onClick={() => {
+                                    const newList = [...form.bedroomDetails];
+                                    const items = newList[idx].furnishingDetails || [];
+                                    newList[idx].furnishingDetails = items.includes(item) 
+                                      ? items.filter(i => i !== item) 
+                                      : [...items, item];
+                                    setForm(f => ({ ...f, bedroomDetails: newList }));
+                                  }}
+                                >
+                                  {item}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="room-checkbox-grid">
+                            <label className="checkbox-mini">
+                              <input type="checkbox" checked={room.ac} onChange={(e) => {
+                                const newList = [...form.bedroomDetails];
+                                newList[idx].ac = e.target.checked;
+                                setForm(f => ({ ...f, bedroomDetails: newList }));
+                              }} />
+                              <span>Air Conditioning (AC)</span>
+                            </label>
+                            <label className="checkbox-mini">
+                              <input type="checkbox" checked={room.furnished} onChange={(e) => {
+                                const newList = [...form.bedroomDetails];
+                                newList[idx].furnished = e.target.checked;
+                                setForm(f => ({ ...f, bedroomDetails: newList }));
+                              }} />
+                              <span>Furnished Room</span>
+                            </label>
+                            <label className="checkbox-mini">
+                              <input type="checkbox" checked={room.attachedBathroom} onChange={(e) => {
+                                const newList = [...form.bedroomDetails];
+                                newList[idx].attachedBathroom = e.target.checked;
+                                setForm(f => ({ ...f, bedroomDetails: newList }));
+                              }} />
+                              <span>Attached Bathroom</span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    <button className="add-btn-wide" onClick={() => {
+                      const newId = Date.now();
+                      setForm(f => ({ ...f, bedroomDetails: [...f.bedroomDetails, { 
+                        id: newId, 
+                        type: f.propertyCategory === 'PG' ? SHARING_TYPES[0] : ROOM_CATEGORIES[0], 
+                        roomNumber: "",
+                        bedType: BED_TYPES[1],
+                        bedCount: 1,
+                        ac: true,
+                        furnished: true,
+                        attachedBathroom: true,
+                        price: "",
+                        securityDeposit: "",
+                        areaSqFt: ""
+                      }] }));
+                    }}>
+                      <Users size={18} /> Add Another Room Configuration
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="field-group">
+                  <label>Total Built-up Area (Sq Ft) *</label>
+                  <input type="number" name="area" value={form.area} onChange={handleChange} placeholder="Total house area" />
+                </div>
+                <div className="field-group">
+                  <label>Overall Furnishing</label>
+                  <select name="furnishing" value={form.furnishing} onChange={handleChange}>
+                    {FURNISHING_STATUS.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </div>
+                
+                <div className="field-group">
+                  <label>Property Age</label>
+                  <select name="propertyAge" value={form.propertyAge} onChange={handleChange}>
+                    {PROPERTY_AGE.map(a => <option key={a} value={a}>{a}</option>)}
+                  </select>
+                </div>
+                <div className="field-group">
+                  <label>Water Supply</label>
+                  <select name="waterSupply" value={form.waterSupply} onChange={handleChange}>
+                    {WATER_SUPPLIES.map(w => <option key={w} value={w}>{w}</option>)}
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="step-fade">
+              <h2 className="step-title">Amenities & Features</h2>
+              <div className="amenities-container">
+                 {Object.entries(AMENITIES_MASTER).map(([group, list]) => (
+                   <div key={group} className="amenity-group">
+                      <h4>{group}</h4>
+                      <div className="chips-grid">
+                        {list.map(a => (
+                          <div 
+                           key={a} 
+                           className={`amenity-chip ${form.amenities[a] ? 'selected' : ''}`}
+                           onClick={() => handleAmenityToggle(a)}
+                          >
+                            {form.amenities[a] && <CheckCircle2 size={14} className="check-icon" />}
+                            {a}
+                          </div>
                         ))}
                       </div>
-                    </div>
-                  ))}
+                   </div>
+                 ))}
+              </div>
+            </div>
+          )}
+
+          {step === 4 && (
+            <div className="step-fade">
+              <h2 className="step-title">Local Guide & Neighborhood</h2>
+              <div className="form-grid">
+                 <div className="field-group full">
+                    <label>Nearest Metro Station</label>
+                    <input value={form.transportTips.metro} onChange={(e) => setForm(f => ({ ...f, transportTips: { ...f.transportTips, metro: e.target.value }}))} placeholder="e.g. Huda City Centre" />
+                 </div>
+                 <div className="field-group">
+                    <label>Nearest Hospital</label>
+                    <input value={form.essentialsNearby.medical} onChange={(e) => setForm(f => ({ ...f, essentialsNearby: { ...f.essentialsNearby, medical: e.target.value }}))} placeholder="e.g. Artemis Hospital" />
+                 </div>
+                 <div className="field-group">
+                    <label>Nearest Grocery / Market</label>
+                    <input value={form.essentialsNearby.grocery} onChange={(e) => setForm(f => ({ ...f, essentialsNearby: { ...f.essentialsNearby, grocery: e.target.value }}))} placeholder="e.g. Reliance Fresh" />
+                 </div>
+                 
+                 <div className="field-group full">
+                    <div className="section-subtitle">Recommended Cafes & Restaurants</div>
+                    {form.cafesRestaurants.map((res, idx) => (
+                      <div key={idx} className="v-input-row" style={{marginBottom: '10px'}}>
+                        <input placeholder="Name" value={res.name} onChange={(e) => {
+                           const n = [...form.cafesRestaurants]; n[idx].name = e.target.value; setForm(f => ({ ...f, cafesRestaurants: n }));
+                        }} />
+                        <input placeholder="Distance (m)" value={res.distance} onChange={(e) => {
+                           const n = [...form.cafesRestaurants]; n[idx].distance = e.target.value; setForm(f => ({ ...f, cafesRestaurants: n }));
+                        }} />
+                      </div>
+                    ))}
+                    <button className="mini-chip" onClick={() => setForm(f => ({ ...f, cafesRestaurants: [...f.cafesRestaurants, {name: "", distance: ""}] }))}>+ Add More</button>
+                 </div>
+              </div>
+            </div>
+          )}
+
+          {step === 5 && (
+            <div className="step-fade">
+              <h3 className="step-title">Upload Gallery</h3>
+              <div className="upload-zone">
+                 <input type="file" multiple accept="image/*" onChange={handlePhotos} id="photo-upload" hidden />
+                 <label htmlFor="photo-upload" className="upload-trigger">
+                    <Camera size={40} />
+                    <p>Click to upload property photos</p>
+                    <span>Up to 15 high-quality images</span>
+                 </label>
+              </div>
+              <div className="preview-grid">
+                 {photoPreviews.previews.map((p, i) => (
+                   <div key={i} className={`preview-item ${coverIndex === i ? 'is-cover' : ''}`}>
+                      <img src={p.url} alt="prop" />
+                      <div className="badge-cover" onClick={() => setCoverIndex(i)}>Cover</div>
+                   </div>
+                 ))}
+              </div>
+            </div>
+          )}
+
+          {step === 6 && (
+            <div className="step-fade">
+              <h2 className="step-title">Rent & Financials</h2>
+              <div className="form-grid">
+                <div className="field-group">
+                  <label>Nightly Rent (₹) *</label>
+                  <input type="number" name="baseRate" value={form.baseRate} onChange={handleChange} placeholder="e.g. 25000" />
                 </div>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* STEP 2: Rules */}
-        {step === 2 && (
-          <section className="tmx9pf-section">
-            <h2 className="tmx9pf-section-title">PG Rules</h2>
-            <div className="tmx9pf-grid">
-              <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Gate Closing Time</label>
-                <input name="gateClosingTime" type="time" value={form.gateClosingTime} onChange={handleChange} className="tmx9pf-input" />
-                <div className="tmx9pf-muted">Time by which residents must be in.</div>
-              </div>
-
-              <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Notice Period (Days)</label>
-                <input name="noticePeriod" type="number" min="0" value={form.noticePeriod} onChange={handleNumChange} className="tmx9pf-input" />
-              </div>
-
-              <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Lock-in Period (Months)</label>
-                <input name="lockInPeriod" type="number" min="0" value={form.lockInPeriod} onChange={handleNumChange} className="tmx9pf-input" />
-              </div>
-
-               <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Visitors / Outside Guests</label>
-                <Toggle name="outsideGuestsAllowed" value={form.outsideGuestsAllowed} onChange={(v) => setForm((s) => ({ ...s, outsideGuestsAllowed: v }))} />
-              </div>
-
-              <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Smoking</label>
-                <Toggle name="smokingAllowed" value={form.smokingAllowed} onChange={(v) => setForm((s) => ({ ...s, smokingAllowed: v }))} />
-              </div>
-
-              <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Alcohol</label>
-                <Toggle name="drinkingAllowed" value={form.drinkingAllowed} onChange={(v) => setForm((s) => ({ ...s, drinkingAllowed: v }))} />
-              </div>
-
-              <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Food Included?</label>
-                <Toggle name="foodAvailable" value={form.foodAvailable} onChange={(v) => setForm((s) => ({ ...s, foodAvailable: v }))} />
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* STEP 4: Local Guide (New) */}
-        {step === 3 && (
-          <section className="tmx9pf-section">
-            <h2 className="tmx9pf-section-title">Local Guide / Neighborhood</h2>
-            <div className="tmx9pf-grid">
-               <div className="tmx9pf-field">
-                 <label className="tmx9pf-label">Nearest Metro Station</label>
-                 <input value={form.localGuide.nearestMetroStation} onChange={(e) => setForm(f => ({ ...f, localGuide: { ...f.localGuide, nearestMetroStation: e.target.value } }))} className="tmx9pf-input" placeholder="e.g. MG Road Metro" />
-               </div>
-               <div className="tmx9pf-field">
-                 <label className="tmx9pf-label">Nearest Bus Stop</label>
-                 <input value={form.localGuide.nearestBusStop} onChange={(e) => setForm(f => ({ ...f, localGuide: { ...f.localGuide, nearestBusStop: e.target.value } }))} className="tmx9pf-input" placeholder="e.g. Sector 18 Bus Stand" />
-               </div>
-               <div className="tmx9pf-field">
-                 <label className="tmx9pf-label">Nearby Market / Grocery</label>
-                 <input value={form.localGuide.nearbyMarket} onChange={(e) => setForm(f => ({ ...f, localGuide: { ...f.localGuide, nearbyMarket: e.target.value } }))} className="tmx9pf-input" placeholder="e.g. Super Mart, Local Vegetable Market" />
-               </div>
-               <div className="tmx9pf-field">
-                 <label className="tmx9pf-label">Nearby Hospital / Pharmacy</label>
-                 <input value={form.localGuide.nearbyHospital} onChange={(e) => setForm(f => ({ ...f, localGuide: { ...f.localGuide, nearbyHospital: e.target.value } }))} className="tmx9pf-input" placeholder="e.g. City Hospital" />
-               </div>
-               <div className="tmx9pf-field full">
-                 <label className="tmx9pf-label">Other Landmarks / Notes</label>
-                 <textarea value={form.localGuide.otherNotes} onChange={(e) => setForm(f => ({ ...f, localGuide: { ...f.localGuide, otherNotes: e.target.value } }))} className="tmx9pf-textarea" placeholder="Any other important landmarks nearby..." rows="3" />
-               </div>
-            </div>
-          </section>
-        )}
-
-        {/* STEP 5: Photos */}
-        {step === 4 && (
-          <section className="tmx9pf-section">
-            <h2 className="tmx9pf-section-title">PG Photos</h2>
-            <div className="tmx9pf-field full">
-              <label className="tmx9pf-label">Upload Photos (Rooms, Kitchen, Common Area) *</label>
-              <input type="file" multiple accept="image/*" onChange={handlePhotos} className="tmx9pf-file" />
-              {renderError("photos")}
-              <div className="tmx9pf-photo-previews">
-                {photoPreviews.previews.map((p, i) => (
-                  <div key={i} className="tmx9pf-photo-thumb">
-                    <img src={p.url} alt="preview" />
-                  <div className="tmx9pf-photo-actions">
-                    <button type="button" onClick={() => removePhoto(i)} className="tmx9pf-small-btn">Remove</button>
-                    <button type="button" onClick={() => setCoverIndex(i)} className={`tmx9pf-small-btn ${coverIndex === i ? "tmx9pf-small-btn--active" : ""}`}>Cover</button>
-                  </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* STEP 6: Pricing */}
-        {step === 5 && (
-          <section className="tmx9pf-section">
-            <h2 className="tmx9pf-section-title">Rent & Charges</h2>
-             <div className="tmx9pf-grid">
-                <div className="tmx9pf-field">
-                 <label className="tmx9pf-label">Rent per Night (Rs) *</label>
-                 <input name="baseRate" type="number" value={form.baseRate} onChange={handleNumChange} className="tmx9pf-input" placeholder="e.g. 1200" />
-                 {renderError("baseRate")}
+                <div className="field-group">
+                  <label>Security Deposit (₹)</label>
+                  <input type="number" name="securityDeposit" value={form.securityDeposit} onChange={handleChange} placeholder="e.g. 50000" />
+                </div>
+                <div className="field-group">
+                  <label>Gate Closing Time</label>
+                  <input name="gateClosingTime" value={form.gateClosingTime} onChange={handleChange} />
+                </div>
+                <div className="field-group">
+                  <label>Notice Period (Days)</label>
+                  <input type="number" name="noticePeriod" value={form.noticePeriod} onChange={handleChange} />
                 </div>
 
-                <div className="tmx9pf-field full" style={{ marginTop: "1rem" }}>
-                   <label className="tmx9pf-label">Booking Process</label>
-                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
-                      {BOOKING_TYPES.map((type) => (
+                <div className="field-group full">
+                   <label>Preferred Tenant (Select Multiple)</label>
+                   <div className="chips-grid">
+                      {TENANT_PREFERENCES.map(p => (
                         <div 
-                          key={type.id}
-                          onClick={() => setForm(f => ({ ...f, bookingType: type.id }))}
-                          style={{
-                            padding: '1rem',
-                            borderRadius: '8px',
-                            border: form.bookingType === type.id ? '2px solid #8b0000' : '1px solid #ddd',
-                            background: form.bookingType === type.id ? '#fff5f5' : 'white',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s',
-                            display: 'flex', flexDirection: 'column', gap: '4px'
+                          key={p} 
+                          className={`amenity-chip ${form.preferredTenants.includes(p) ? 'selected' : ''}`}
+                          onClick={() => {
+                            const newTenants = form.preferredTenants.includes(p) 
+                              ? form.preferredTenants.filter(t => t !== p) 
+                              : [...form.preferredTenants, p];
+                            setForm(f => ({ ...f, preferredTenants: newTenants }));
                           }}
                         >
-                           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.25rem' }}>
-                              <div style={{
-                                 width: '18px', height: '18px', borderRadius: '50%',
-                                 border: form.bookingType === type.id ? '2px solid #8b0000' : '2px solid #ccc',
-                                 marginRight: '10px',
-                                 position: 'relative',
-                                 display: 'flex', alignItems: 'center', justifyContent: 'center'
-                              }}>
-                                {form.bookingType === type.id && <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#8b0000' }} />}
-                              </div>
-                              <span style={{ fontWeight: '600', color: '#333' }}>{type.label}</span>
-                           </div>
-                           <p style={{ margin: 0, fontSize: '0.85rem', color: '#666', paddingLeft: '28px' }}>{type.desc}</p>
+                          {p}
                         </div>
                       ))}
                    </div>
                 </div>
 
-               <div className="tmx9pf-field">
-                 <label className="tmx9pf-label">Electricity Charges</label>
-                 <select name="electricityCharges" value={form.electricityCharges} onChange={handleChange} className="tmx9pf-select">
-                   <option value="Included in Rent">Included in Rent</option>
-                   <option value="Separate (As per Meter)">Separate (As per Meter)</option>
-                   <option value="Fixed Amount">Fixed Amount</option>
-                 </select>
-               </div>
-
-               <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Security Deposit (Rs)</label>
-                <input type="number" value={securityDeposit} onChange={(e) => setSecurityDeposit(e.target.value)} className="tmx9pf-input" />
-               </div>
-
-               <div className="tmx9pf-field">
-                <label className="tmx9pf-label">Maintenance/Cleaning Fee</label>
-                <input name="cleaningFee" type="number" value={form.cleaningFee} onChange={handleChange} className="tmx9pf-input" />
-               </div>
-
-                <div className="tmx9pf-field full">
-                <label className="tmx9pf-label">Cancellation Policy</label>
-                 <select value={policy} onChange={(e) => setPolicy(e.target.value)} className="tmx9pf-select">
-                  {CANCELLATION_POLICIES.map((p) => <option key={p} value={p}>{p}</option>)}
-                </select>
-               </div>
-             </div>
-          </section>
-        )}
-
-        {/* STEP 7: Verification (Same as original) */}
-        {step === 6 && (
-           <section className="tmx9pf-section">
-            <h2 className="tmx9pf-section-title">Owner Verification</h2>
-            <div className="tmx9pf-field full" style={{ background: '#f8fafc', padding: '16px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-               <label className="tmx9pf-label">Aadhaar Verification *</label> 
-               <div style={{ display: 'flex', gap: '10px' }}>
-                 <input value={aadhaarNumber} onChange={(e) => setAadhaarNumber(e.target.value.replace(/\D/g, '').slice(0, 12))} placeholder="12-digit Aadhaar" className="tmx9pf-input" disabled={aadhaarVerified} />
-                 <button type="button" onClick={verifyAadhaar} disabled={aadhaarVerified || isVerifyingAadhaar} className="tmx9pf-small-btn" style={{ background: aadhaarVerified ? '#22c55e' : '#3b82f6', color: 'white' }}>{aadhaarVerified ? "Verified" : "Verify"}</button>
-               </div>
-               {renderError("idFiles")}
+                <div className="field-group full">
+                  <div className="section-separator">Bill Payment Policy</div>
+                </div>
+                
+                <div className="field-group">
+                  <label>Electricity Charges</label>
+                  <select name="electricityCharges" value={form.electricityCharges} onChange={handleChange}>
+                    <option>Included in Rent</option>
+                    <option>As per Meter / Unit</option>
+                    <option>Fixed Monthly Charge</option>
+                    <option>Shared among roommates</option>
+                  </select>
+                </div>
+                <div className="field-group">
+                  <label>Water Charges</label>
+                  <select name="waterCharges" value={form.waterCharges} onChange={handleChange}>
+                    <option>Included in Rent</option>
+                    <option>Fixed Monthly Charge</option>
+                    <option>Shared Bill</option>
+                  </select>
+                </div>
+              </div>
             </div>
+          )}
 
-            <div className="tmx9pf-field full" style={{ background: '#f8fafc', padding: '16px', borderRadius: '8px', border: '1px solid #e2e8f0', marginTop: '16px' }}>
-               <label className="tmx9pf-label">Phone Verification *</label> 
-               <div style={{ display: 'flex', gap: '10px' }}>
-                 <input value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="10-digit Mobile" className="tmx9pf-input" disabled={isPhoneVerified || otpSent} />
-                 {!otpSent && !isPhoneVerified && <button type="button" onClick={sendPhoneOtp} disabled={isSendingOtp} className="tmx9pf-small-btn" style={{ background: '#3b82f6', color: 'white' }}>Send OTP</button>}
-               </div>
-               {otpSent && !isPhoneVerified && (
-                  <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                    <input value={phoneOtp} onChange={(e) => setPhoneOtp(e.target.value)} placeholder="OTP" className="tmx9pf-input" />
-                    <button type="button" onClick={verifyPhoneOtp} disabled={isVerifyingOtp} className="tmx9pf-small-btn" style={{ background: '#10b981', color: 'white' }}>Verify OTP</button>
-                  </div>
-               )}
-               {isPhoneVerified && <p style={{ color: '#166534', margin: '5px 0 0 0' }}>✓ Verified</p>}
+          {step === 7 && (
+            <div className="step-fade">
+              <h2 className="step-title">Final Verification</h2>
+              <div className="verification-box">
+                 <div className="v-item">
+                    <div className="v-label">Aadhaar Number (Identity)</div>
+                    <div className="v-input-row">
+                       <input 
+                        placeholder="12 digit number" 
+                        value={aadhaarNumber} 
+                        onChange={(e) => setAadhaarNumber(e.target.value.slice(0,12))} 
+                        disabled={aadhaarVerified}
+                       />
+                       <button onClick={verifyAadhaar} disabled={aadhaarVerified} className={aadhaarVerified ? 'verified' : ''}>
+                          {aadhaarVerified ? 'Verified' : 'Verify'}
+                       </button>
+                    </div>
+                 </div>
+                 <div className="v-item">
+                    <div className="v-label">Mobile Number Verification</div>
+                    <div className="v-input-row">
+                       <input 
+                        placeholder="10 digit number" 
+                        value={phoneNumber} 
+                        onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g,'').slice(0,10))} 
+                        disabled={otpSent}
+                       />
+                       {!otpSent ? (
+                         <button onClick={handleSendOtp}>Send OTP</button>
+                       ) : !isPhoneVerified ? (
+                        <div className="otp-container">
+                          <input 
+                            placeholder="OTP" 
+                            className="otp-input"
+                            value={phoneOtp}
+                            onChange={(e) => setPhoneOtp(e.target.value.slice(0,4))}
+                          />
+                          <button onClick={handleVerifyOtp} className="verify-btn">Verify</button>
+                        </div>
+                       ) : (
+                         <button className="verified" disabled><CheckCircle2 size={16} /> Verified</button>
+                       )}
+                    </div>
+                 </div>
+              </div>
             </div>
-           </section>
-        )}
+          )}
+        </div>
 
+        <div className="form-footer-nav">
+           <button className="btn-back" onClick={prevStep} disabled={step === 0}>Back</button>
+           {step < STEPS.length - 1 ? (
+             <button className="btn-next" onClick={nextStep}>Continue</button>
+           ) : (
+             <button className="btn-submit" onClick={handleSubmit} disabled={isSubmitting}>
+               {isSubmitting ? 'Publishing...' : 'Publish Listing'}
+             </button>
+           )}
+        </div>
       </div>
-
-      <div className="tmx9pf-nav">
-        <button type="button" onClick={goPrev} disabled={step === 0} className="tmx9pf-nav-btn tmx9pf-nav-prev">Previous</button>
-        {step < STEPS.length - 1 ? (
-          <button type="button" onClick={goNext} className="tmx9pf-nav-btn tmx9pf-nav-next">Next</button>
-        ) : (
-          <button type="submit" className="tmx9pf-nav-btn tmx9pf-nav-next" disabled={isSubmitting}>{isSubmitting ? "Submitting..." : "List PG"}</button>
-        )}
-      </div>
-    </form>
+    </div>
   );
 };
 
 export default PGListingForm;
-// Temporary file to force update

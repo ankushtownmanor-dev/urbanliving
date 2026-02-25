@@ -7,7 +7,7 @@ import { UserCircle } from "lucide-react";
 import { 
   FiArrowLeft, FiMapPin, FiShare, FiHeart, FiCheck, FiXCircle,
   FiUser, FiCalendar, FiShield, FiStar, FiX, FiZoomIn, FiZoomOut,
-  FiInfo, FiLock, FiZap
+  FiInfo, FiLock, FiZap, FiWind, FiCompass
 } from 'react-icons/fi';
 import { BiBed, BiBath, BiArea } from 'react-icons/bi';
 import { 
@@ -18,16 +18,20 @@ import {
   ChevronLeft, 
   ChevronRight,
   Car, 
+  Building,
+  CreditCard,
   ParkingCircle,
   Bus,
   UtensilsCrossed,
   Landmark,
   ShoppingBasket,
   HeartPulse,
-  Lightbulb,
-  Clock,
-  Train,
+  Lightbulb, 
+  Clock, 
+  Train, 
   ShoppingBag,
+  Dumbbell,
+  Pill,
   MapPin as MapPinIcon
 } from 'lucide-react';
 import { MdCurrencyRupee, MdOutlineCurrencyRupee } from 'react-icons/md';
@@ -64,11 +68,15 @@ const formatCurrency = (num) => {
 
 const transformPropertyData = (data) => {
   if (!data) return null;
+  
   const parseJsonField = (field) => {
     if (!field) return [];
     if (Array.isArray(field)) return field;
     if (typeof field === 'string') {
-      try { return JSON.parse(field); } catch (e) { return []; }
+      try { 
+        const parsed = JSON.parse(field);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) { return []; }
     }
     return [];
   };
@@ -81,14 +89,21 @@ const transformPropertyData = (data) => {
 
   const parsedMeta = parseMeta(data.meta);
 
-  return {
+  // Combine root and meta, preferring meta for nested fields
+  const combined = {
     ...data,
-    ...parsedMeta, // Lift meta properties to root
+    ...parsedMeta,
     meta: parsedMeta,
-    amenities: parseJsonField(data.amenities),
+  };
+
+  return {
+    ...combined,
+    amenities: parseJsonField(data.amenities || parsedMeta.amenities),
     photos: Array.isArray(data.photos) ? data.photos : (data.photos ? [data.photos] : []),
-    parsedBedrooms: parseJsonField(data.bedrooms),
-    parsedBathrooms: parseJsonField(data.bathrooms),
+    parsedBedrooms: parseJsonField(data.bedrooms || parsedMeta.bedrooms),
+    parsedBathrooms: parseJsonField(data.bathrooms || parsedMeta.bathrooms),
+    guidebook: combined.guidebook || parsedMeta.guidebook || {},
+    guest_policy: combined.guest_policy || parsedMeta.guest_policy || {}
   };
 };
 
@@ -985,14 +1000,43 @@ const PropertyDetailPage = () => {
 
   const getTotal = (arr) => {
     if (!Array.isArray(arr)) return 0;
-    return arr.reduce((acc, curr) => acc + (Number(curr.count) || (typeof curr === 'number' ? curr : 0)), 0);
+    // Count objects with 'count' or 'bedCount', or use array length if it's a list of configurations
+    const sum = arr.reduce((acc, curr) => acc + (Number(curr.count) || Number(curr.bedCount) || (typeof curr === 'number' ? curr : 0)), 0);
+    return sum > 0 ? sum : arr.length;
   };
   
   const getDisplayCount = (raw, parsed) => {
-    const t = getTotal(parsed);
-    if (t > 0) return t;
+    if (Array.isArray(parsed) && parsed.length > 0) {
+        // If it's a configuration list, return the number of configurations (rooms)
+        return parsed.length;
+    }
     return Number(raw) || 0;
   };
+
+  // AMENITIES MASTER FOR GROUPING RECOVERY
+  const AMENITIES_GROUPS = {
+    "Safety & Security": ["CCTV", "Security Guard", "Fire Extinguisher", "Intercom", "Biometric Entry", "Gated Community", "Fire Alarm", "Sprinklers", "Smoke Detectors", "Emergency Exit"],
+    "Modern Living": ["Lift", "Power Backup", "Wi-Fi", "Swimming Pool", "Gym", "Clubhouse", "Modular Kitchen", "Chimney", "Central AC", "Smart Home Tech", "EV Charging Point"],
+    "Basic Utilities": ["Water Supply 24/7", "Borewell", "Corporation Water", "Gas Pipeline", "Solar Water", "Reserved Parking", "Visitor Parking", "STP Plant", "Waste Management"],
+    "Indoor Features": ["Air Conditioner", "Geyser", "RO Water", "Washing Machine", "Refrigerator", "Inverter", "Wardrobe", "Study Table", "Smart TV", "Gas Stove", "Dishwasher", "Microwave"],
+    "Outer Spaces": ["Balcony", "Private Terrace", "Garden", "Park Area", "Pet Area", "Kids Play Area", "Club House", "Jogging Track"]
+  };
+
+  const getGroupedAmenities = (amenitiesArr) => {
+    if (!Array.isArray(amenitiesArr)) return {};
+    const grouped = {};
+    Object.entries(AMENITIES_GROUPS).forEach(([group, list]) => {
+      const found = amenitiesArr.filter(a => list.includes(a));
+      if (found.length > 0) grouped[group] = found;
+    });
+    // Handle others
+    const allCategorized = Object.values(AMENITIES_GROUPS).flat();
+    const rest = amenitiesArr.filter(a => !allCategorized.includes(a));
+    if (rest.length > 0) grouped["Others"] = rest;
+    return grouped;
+  };
+
+  const groupedAmenities = getGroupedAmenities(property?.amenities);
 
   const showAlert = (message) => setAlertMessage(message);
   const closeAlert = () => setAlertMessage(null);
@@ -1064,8 +1108,10 @@ const PropertyDetailPage = () => {
 
     if (property) {
       if (isPGMonthly) {
-        // For PG Monthly, we can show value even without dates (defaults to 1 month advance)
-        const monthly = (selectedPrice || Number(property.price) || 0) * 30;
+        // For PG Monthly, if selectedPrice is from a room config, it's already monthly.
+        // If it's just from the top-level property.price (which is Nightly), we multiply by 30.
+        const isFromRoom = property.parsedBedrooms?.some(r => Number(r.price) === selectedPrice);
+        const monthly = (selectedPrice && isFromRoom) ? selectedPrice : ((selectedPrice || Number(property.price) || 0) * 30);
         subtotal = monthly;
       } else if (datesSelected) {
           // Standard Daily/Other logic requiring dates
@@ -1909,7 +1955,7 @@ const guestPolicy = property?.guest_policy || {};
               <BiBed className="f-icon"/>
               <div>
                 <strong>{getDisplayCount(property.bedrooms, property.parsedBedrooms)}</strong>
-                <span>Bedroom</span>
+                <span>{property.property_category === 'PG' ? 'Room Type' : 'Bedroom'}</span>
               </div>
             </div>
             <div className="feature-box">
@@ -1919,6 +1965,15 @@ const guestPolicy = property?.guest_policy || {};
                 <span>Bathroom</span>
               </div>
             </div>
+            {property.balconies > 0 && (
+              <div className="feature-box">
+                <FiWind className="f-icon"/>
+                <div>
+                  <strong>{property.balconies}</strong>
+                  <span>Balcony</span>
+                </div>
+              </div>
+            )}
             <div className="feature-box">
               <BiArea className="f-icon"/>
               <div>
@@ -1926,13 +1981,15 @@ const guestPolicy = property?.guest_policy || {};
                 <span>Sq Ft</span>
               </div>
             </div>
-            <div className="feature-box">
-              <FiUser className="f-icon"/>
-              <div>
-                <strong>{property.max_guests || 2}</strong>
-                <span>Max Guests</span>
-              </div>
-            </div>
+            {property.facing && (
+               <div className="feature-box">
+                <FiCompass className="f-icon"/>
+                <div>
+                  <strong>{property.facing}</strong>
+                  <span>Facing</span>
+                </div>
+               </div>
+            )}
           </div>
 
           <div className="divider"></div>
@@ -1986,77 +2043,59 @@ const guestPolicy = property?.guest_policy || {};
               <div className="divider"></div>
               <div className="text-section">
                 <h3>Room Rates & Sharing Options</h3>
-                <div className="amenities-grid">
+                <div className="room-rates-grid-comprehensive">
                   {property.parsedBedrooms.map((curr, i) => (
                     <div 
                         key={i} 
-                        className="amenity-card rule-card pg-room-card" 
+                        className="pg-room-card-premium" 
                         onClick={() => {
                             setSelectedRoomForLead(curr.type);
                             setShowLeadModal(true);
                         }}
-                        style={{ 
-                            padding: '20px', 
-                            border: '1px solid #e2e8f0', 
-                            borderRadius: '12px', 
-                            background: '#fff',
-                            cursor: 'pointer',
-                            transition: 'all 0.3s ease',
-                            position: 'relative',
-                            boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'translateY(-2px)';
-                            e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1)';
-                            e.currentTarget.style.borderColor = '#8b0000';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.02)';
-                            e.currentTarget.style.borderColor = '#e2e8f0';
-                        }}
                     >
-                      <div className="rule-info" style={{ width: '100%' }}>
-                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                            <div>
-                                <h4 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#1e293b', margin: '0 0 4px 0' }}>{curr.type}</h4>
-                                <span style={{ fontSize: '0.9rem', color: '#64748b' }}>{curr.count} Rooms Available</span>
+                      <div className="pg-room-badge">
+                        {curr.type}
+                      </div>
+                      
+                      <div className="pg-room-content">
+                        <div className="pg-room-main-info">
+                            <div className="pg-room-pricing">
+                                {curr.price ? (
+                                    <>
+                                        <span className="pg-rent-val">₹{formatCurrency(curr.price)}</span>
+                                        <span className="pg-rent-unit">/month</span>
+                                    </>
+                                ) : <span className="pg-rent-unit">Price on Request</span>}
                             </div>
-                            {curr.price ? (
-                              <div style={{ textAlign: 'right' }}>
-                                  <strong style={{ display: 'block', fontSize: '1.25rem', color: '#8b0000', lineHeight: 1 }}>
-                                    ₹{formatCurrency(curr.price)}
-                                    <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 'normal' }}>/mo</span>
-                                  </strong>
-                              </div>
-                            ) : (
-                               <span style={{ fontSize: '0.9rem', color: '#64748b', fontStyle: 'italic' }}>Price on Request</span>
+                            {curr.securityDeposit && (
+                                <div className="pg-deposit-tag">
+                                    Deposit: ₹{formatCurrency(curr.securityDeposit)}
+                                </div>
                             )}
-                         </div>
+                        </div>
 
-                         <div style={{ margin: '12px 0', borderTop: '1px dashed #e2e8f0', paddingTop: '12px', display: 'flex', gap: '12px', fontSize: '0.9rem', color: '#334155' }}>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <BiBath size={16} color="#64748b" /> {curr.washroomType || "Attached"}
-                            </span>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <UserCircle size={16} color="#64748b" /> {curr.type.includes('Double') ? '2 Pax' : curr.type.includes('Triple') ? '3 Pax' : '1 Pax'}
-                            </span>
-                         </div>
+                        <div className="pg-room-specs">
+                            <div className="spec-item"><BiBed /> {curr.bedType || 'Standard Bed'} ({curr.bedCount || 1})</div>
+                            <div className="spec-item">
+                                {curr.ac ? <span style={{color: '#16a34a'}}><FiZap /> AC Room</span> : <span style={{color: '#64748b'}}><FiZap /> Non-AC</span>}
+                            </div>
+                            <div className="spec-item"><BiBath /> {curr.attachedBathroom ? 'Attached Bath' : 'Shared Bath'}</div>
+                            {curr.areaSqFt && <div className="spec-item"><BiArea /> {curr.areaSqFt} Sq Ft</div>}
+                            {curr.windowType && <div className="spec-item"><FiWind /> {curr.windowType} Window</div>}
+                            {curr.availabilityDate && (
+                                <div className="spec-item" style={{color: '#8b0000', fontWeight: '500'}}>
+                                    <FiCalendar /> Avail: {new Date(curr.availabilityDate).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}
+                                </div>
+                            )}
+                        </div>
 
-                         <button style={{ 
-                             width: '100%', 
-                             marginTop: '8px',
-                             padding: '10px', 
-                             background: '#fff1f1', 
-                             color: '#8b0000', 
-                             border: '1px solid #fee2e2', 
-                             borderRadius: '6px', 
-                             fontWeight: '600',
-                             fontSize: '0.9rem',
-                             cursor: 'pointer'
-                        }}>
-                             Enquire Now
-                         </button>
+                        {curr.furnishingDetails?.length > 0 && (
+                            <div className="pg-room-items">
+                                <strong>In-room:</strong> {curr.furnishingDetails.join(", ")}
+                            </div>
+                        )}
+
+                        <button className="pg-enquiry-btn">Enquire Now</button>
                       </div>
                     </div>
                   ))}
@@ -2067,14 +2106,130 @@ const guestPolicy = property?.guest_policy || {};
 
           <div className="divider"></div>
 
-          <div className="text-section">
-            <h3>What this place offers</h3>
-            <div className="amenities-grid">
-              {property.amenities.length > 0 ? property.amenities.map((am, i) => (
-                <div key={i} className="amenity-item">
-                  <FiCheck className="check-icon" /> {am}
+          {/* NEW SECTION: BUILDING & INFRASTRUCTURE */}
+          {(property.waterSupply || property.electricityStatus || property.floorType || property.propertyAge || property.floorNo) && (
+            <>
+              <div className="text-section">
+                <h3>Building & Infrastructure</h3>
+                <div className="amenities-grid">
+                  {property.floorNo && (
+                    <div className="amenity-card rule-card">
+                      <div className="rule-icon"><Building size={18} color="#64748b" /></div>
+                      <div className="rule-info">
+                        <span className="rule-label">Floor</span>
+                        <strong>{property.floorNo} {property.totalFloors ? `of ${property.totalFloors}` : ''}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {property.waterSupply && (
+                    <div className="amenity-card rule-card">
+                      <div className="rule-icon"><Bus size={18} color="#0ea5e9" /></div>
+                      <div className="rule-info">
+                        <span className="rule-label">Water Supply</span>
+                        <strong>{property.waterSupply}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {property.electricityStatus && (
+                    <div className="amenity-card rule-card">
+                      <div className="rule-icon"><FiZap color="#eab308" /></div>
+                      <div className="rule-info">
+                        <span className="rule-label">Power Status</span>
+                        <strong>{property.electricityStatus}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {property.floorType && (
+                    <div className="amenity-card rule-card">
+                      <div className="rule-icon"><BiArea color="#94a3b8" /></div>
+                      <div className="rule-info">
+                        <span className="rule-label">Flooring</span>
+                        <strong>{property.floorType}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {property.propertyAge && (
+                    <div className="amenity-card rule-card">
+                      <div className="rule-icon"><FiCalendar color="#6366f1" /></div>
+                      <div className="rule-info">
+                        <span className="rule-label">Property Age</span>
+                        <strong>{property.propertyAge}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {property.carParking && (
+                    <div className="amenity-card rule-card">
+                      <div className="rule-icon"><Car size={18} color="#334155" /></div>
+                      <div className="rule-info">
+                        <span className="rule-label">Parking</span>
+                        <strong>{property.carParking}</strong>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )) : <p>No specific amenities listed.</p>}
+              </div>
+              <div className="divider"></div>
+            </>
+          )}
+
+          {/* NEW SECTION: FINANCIALS & BILLS */}
+          {(property.securityDeposit || property.maintenanceCharge || property.availableFrom) && (
+            <>
+              <div className="text-section">
+                <h3>Financials & Availability</h3>
+                <div className="amenities-grid">
+                  {property.securityDeposit && (
+                    <div className="amenity-card rule-card">
+                      <div className="rule-icon"><FiLock color="#8b0000" /></div>
+                      <div className="rule-info">
+                        <span className="rule-label">Security Deposit</span>
+                        <strong>₹{formatCurrency(property.securityDeposit)}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {property.maintenanceCharge && (
+                    <div className="amenity-card rule-card">
+                      <div className="rule-icon"><CreditCard size={18} color="#0ea5e9" /></div>
+                      <div className="rule-info">
+                        <span className="rule-label">Maintenance</span>
+                        <strong>₹{formatCurrency(property.maintenanceCharge)} ({property.maintenanceCycle || 'Monthly'})</strong>
+                      </div>
+                    </div>
+                  )}
+                  {property.availableFrom && (
+                    <div className="amenity-card rule-card">
+                      <div className="rule-icon"><FiCalendar color="#16a34a" /></div>
+                      <div className="rule-info">
+                        <span className="rule-label">Available From</span>
+                        <strong>{new Date(property.availableFrom).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</strong>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="divider"></div>
+            </>
+          )}
+
+          <div className="text-section">
+            <h3>Amenities & Features</h3>
+            <div className="amenities-container-premium">
+              {Object.entries(groupedAmenities).length > 0 ? (
+                Object.entries(groupedAmenities).map(([group, list]) => (
+                  <div key={group} className="amenity-group-detail">
+                    <h4 className="amenity-group-title">{group}</h4>
+                    <div className="amenities-grid">
+                      {list.map((am, i) => (
+                        <div key={i} className="amenity-item">
+                          <FiCheck className="check-icon" /> {am}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>No specific amenities listed.</p>
+              )}
             </div>
           </div>
 
@@ -2199,6 +2354,50 @@ const guestPolicy = property?.guest_policy || {};
   </div>
 </div>
 
+  {/* Late Entry */}
+  {property.houseRules?.includes("Late Entry Allowed") && (
+    <div className="amenity-card rule-card">
+      <div className="rule-icon"><FiCheck className="text-green" /></div>
+      <div className="rule-info">
+        <span className="rule-label">Late Entry</span>
+        <strong className="text-green">Allowed</strong>
+      </div>
+    </div>
+  )}
+
+  {/* Friends Allowed */}
+  {property.houseRules?.includes("Friends Allowed") && (
+    <div className="amenity-card rule-card">
+      <div className="rule-icon"><FiCheck className="text-green" /></div>
+      <div className="rule-info">
+        <span className="rule-label">Friends Entry</span>
+        <strong className="text-green">Allowed</strong>
+      </div>
+    </div>
+  )}
+
+  {/* Veg Only */}
+  {property.houseRules?.includes("Veg Only") && (
+    <div className="amenity-card rule-card">
+      <div className="rule-icon"><UtensilsCrossed size={18} className="text-green" /></div>
+      <div className="rule-info">
+        <span className="rule-label">Food Preference</span>
+        <strong className="text-green">Pure Veg Only</strong>
+      </div>
+    </div>
+  )}
+
+  {/* GF/BF Entry */}
+  {property.houseRules?.includes("Girlfriend/Boyfriend Entry Allowed") && (
+    <div className="amenity-card rule-card">
+      <div className="rule-icon"><FiCheck className="text-green" /></div>
+      <div className="rule-info">
+        <span className="rule-label">Partner Entry</span>
+        <strong className="text-green">Allowed</strong>
+      </div>
+    </div>
+  )}
+
 {/* NOTICE PERIOD */}
 {(property.noticePeriod || property.meta?.noticePeriod) && (
   <div className="amenity-card rule-card">
@@ -2238,6 +2437,19 @@ const guestPolicy = property?.guest_policy || {};
   </div>
 )}
 
+{/* WATER CHARGES */}
+{(property.waterCharges || property.meta?.waterCharges) && (
+  <div className="amenity-card rule-card">
+    <div className="rule-icon">
+      <Bus size={18} color="#0ea5e9" />
+    </div>
+    <div className="rule-info">
+      <span className="rule-label">Water Bill</span>
+      <strong>{property.waterCharges || property.meta?.waterCharges}</strong>
+    </div>
+  </div>
+)}
+
 {/* GATE CLOSING TIME */}
 {(property.gateClosingTime || property.meta?.gateClosingTime || (property.property_category === 'PG' && property.check_in_time)) && (
   <div className="amenity-card rule-card">
@@ -2251,18 +2463,38 @@ const guestPolicy = property?.guest_policy || {};
   </div>
 )}
 
-{/* FOOD */}
-{(property.foodAvailable !== undefined || property.meta?.foodAvailable !== undefined) && (
-  <div className="amenity-card rule-card">
-    <div className="rule-icon">
-      {property.foodAvailable || property.meta?.foodAvailable ? <UtensilsCrossed size={18} className="text-green" /> : <FiXCircle className="text-red" />}
+  {/* FOOD */}
+  {(property.foodAvailable !== undefined || property.meta?.foodAvailable !== undefined) && (
+    <div className="amenity-card rule-card">
+      <div className="rule-icon">
+        {property.foodAvailable || property.meta?.foodAvailable ? <UtensilsCrossed size={18} className="text-green" /> : <FiXCircle className="text-red" />}
+      </div>
+      <div className="rule-info">
+        <span className="rule-label">Food</span>
+        <strong>{property.foodAvailable || property.meta?.foodAvailable ? 'Included' : 'Not included'}</strong>
+        {(property.foodAvailable || property.meta?.foodAvailable) && property.foodDetails && (
+          <div style={{fontSize: '0.75rem', color: '#64748b'}}>
+            {[
+              property.foodDetails.breakfast && 'Breakfast',
+              property.foodDetails.lunch && 'Lunch',
+              property.foodDetails.dinner && 'Dinner'
+            ].filter(Boolean).join(', ')}
+          </div>
+        )}
+      </div>
     </div>
-    <div className="rule-info">
-      <span className="rule-label">Food</span>
-      <strong>{property.foodAvailable || property.meta?.foodAvailable ? 'Available' : 'Not included'}</strong>
+  )}
+
+  {/* PREFERRED TENANTS */}
+  {(property.preferredTenants?.length > 0) && (
+    <div className="amenity-card rule-card">
+      <div className="rule-icon"><Users size={18} color="#6366f1" /></div>
+      <div className="rule-info">
+        <span className="rule-label">Preferred Tenant</span>
+        <strong>{property.preferredTenants.join(", ")}</strong>
+      </div>
     </div>
-  </div>
-)}
+  )}
 
 
 </div>
@@ -2488,6 +2720,26 @@ const guestPolicy = property?.guest_policy || {};
                   <div className="gbRowValue">{property.guidebook.essentials_nearby.shopping}</div>
                 </div>
               )}
+              
+              {property.guidebook.essentials_nearby.pharmacy && (
+                <div className="gbRow">
+                  <div className="gbRowLeft">
+                    <Pill size={16} className="gbRowIcon" />
+                    <span className="gbRowLabel">Pharmacy</span>
+                  </div>
+                  <div className="gbRowValue">{property.guidebook.essentials_nearby.pharmacy}</div>
+                </div>
+              )}
+
+              {property.guidebook.essentials_nearby.gym && (
+                <div className="gbRow">
+                  <div className="gbRowLeft">
+                    <Dumbbell size={16} className="gbRowIcon" />
+                    <span className="gbRowLabel">Gym / Fitness</span>
+                  </div>
+                  <div className="gbRowValue">{property.guidebook.essentials_nearby.gym}</div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -2585,31 +2837,46 @@ const guestPolicy = property?.guest_policy || {};
 
               <div className="card-header">
                 <div className="price-area">
-                  <span className="amount">
-                    ₹{formatCurrency(
-                        property.property_category === 'PG' 
-                           ? (pricingMode === 'daily' ? (Number(property.meta?.perNightPrice) || Number(property.price) || 0) : (selectedPrice || property.price)) 
-                           : property.price
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                      <span className="amount">
+                        ₹{formatCurrency(
+                            property.property_category === 'PG' 
+                               ? (pricingMode === 'daily' ? (Number(property.meta?.perNightPrice) || Number(property.price) || 0) : (selectedPrice || property.price || 0)) 
+                               : (property.price || 0)
+                        )}
+                      </span>
+                      <span className="unit">
+                        /{property.property_category === 'PG' ? (pricingMode === 'daily' ? 'night' : 'month') : (property.billing_cycle || 'night')}
+                      </span>
+                    </div>
+                    {property.property_category === 'PG' && pricingMode === 'daily' && (
+                      <span style={{ fontSize: '0.75rem', color: '#8b0000', fontWeight: '500', marginTop: '2px' }}>
+                        * Flexible nightly stay enabled
+                      </span>
                     )}
-                  </span>
-                  <span className="unit">
-                    /{property.property_category === 'PG' ? 'night' : (property.billing_cycle || 'night')}
-                  </span>
+                  </div>
                 </div>
                 <div className="review-badge">
                   <FiStar /> <span>New</span>
                 </div>
               </div>
 
+              {property.property_category === 'PG' && pricingMode === 'daily' && (
+                <div style={{ margin: '8px 16px', padding: '10px', background: '#fffbeb', border: '1px solid #fef3c7', borderRadius: '8px', fontSize: '0.8rem', color: '#92400e', lineHeight: '1.4' }}>
+                   <strong>Nightly Stay Write-up:</strong> Pay only for the nights you actually stay. Perfect for travelers, candidates appearing for exams, or short business trips. No long-term commitment required.
+                </div>
+              )}
+
               <div className="booking-details">
                 <div className="date-picker-mock">
                   <div className="date-box">
                     <label>{property.property_category === 'PG' && pricingMode === 'monthly' ? 'MOVE-IN DATE' : 'CHECK-IN'}</label>
-                    <span>{property.check_in_time || '12:00 PM'}</span>
+                    <span>{formData.checkInDate ? new Date(formData.checkInDate).toLocaleDateString() : (property.check_in_time || 'Select Date')}</span>
                   </div>
                   <div className="date-box">
-                    <label>{property.property_category === 'PG' && pricingMode === 'monthly' ? 'DURATION' : 'CHECK-OUT'}</label>
-                    <span>{property.check_out_time || '11:00 AM'}</span>
+                    <label>{property.property_category === 'PG' && pricingMode === 'monthly' ? 'NOTICE PERIOD' : 'CHECK-OUT'}</label>
+                    <span>{property.property_category === 'PG' && pricingMode === 'monthly' ? `${property.noticePeriod || property.meta?.noticePeriod || 30} Days` : (formData.checkOutDate ? new Date(formData.checkOutDate).toLocaleDateString() : (property.check_out_time || 'Select Date'))}</span>
                   </div>
                 </div>
                 
