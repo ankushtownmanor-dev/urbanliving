@@ -78,9 +78,9 @@
 .ovika-hero-cards {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
   flex-shrink: 0;
-  width: 320px;
+  width: 300px;
   margin-left: auto;
   align-self: center;
 }
@@ -88,16 +88,16 @@
 .ovika-hero-card {
   display: flex;
   align-items: flex-start;
-  gap: 0.9rem;
-  background:#1a100699;
-  border-left: 4px solid #d97706;
+  gap: 0.7rem;
+  background: #1a100699;
+  border-left: 3px solid #d97706;
   border-top: 1px solid rgba(217, 119, 6, 0.25);
   border-right: 1px solid rgba(217, 119, 6, 0.15);
   border-bottom: 1px solid rgba(217, 119, 6, 0.15);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-radius: 0.75rem;
-  padding: 1rem 1.1rem;
+  border-radius: 0.65rem;
+  padding: 0.7rem 0.9rem;
   transition: transform 0.25s ease, border-left-color 0.25s ease, background 0.25s ease;
   cursor: pointer;
 }
@@ -109,7 +109,7 @@
 }
 
 .ovika-card-icon {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   flex-shrink: 0;
   margin-top: 2px;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
@@ -118,29 +118,29 @@
 .ovika-card-body {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.1rem;
 }
 
 .ovika-card-title {
   color: #ffffff;
-  font-size: 1rem;
+  font-size: 0.88rem;
   font-weight: 700;
   margin: 0;
   letter-spacing: 0.02em;
 }
 
 .ovika-card-subtitle {
-  color: #f5a623;
-  font-size: 0.82rem;
-  font-weight: 600;
-  margin: 0;
+  color: #f5c97a;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin: 0.05rem 0 0;
 }
 
 .ovika-card-desc {
   color: rgba(220, 210, 195, 0.95);
-  font-size: 0.80rem;
-  line-height: 1.5;
-  margin: 0.1rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  margin: 0.08rem 0 0;
   font-weight: 400;
 }
 
@@ -149,10 +149,10 @@
   align-items: center;
   gap: 4px;
   color: #f5a623;
-  font-size: 0.82rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-decoration: none;
-  margin-top: 0.4rem;
+  margin-top: 0.25rem;
   transition: gap 0.2s;
   letter-spacing: 0.02em;
 }
@@ -160,57 +160,6 @@
 .ovika-card-link:hover {
   gap: 8px;
   color: #ffc85a;
-}
-
-.ovika-card-icon {
-  font-size: 1.8rem;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.ovika-card-body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.ovika-card-title {
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0;
-  letter-spacing: 0.01em;
-}
-
-.ovika-card-subtitle {
-  color: #f5c97a;
-  font-size: 0.83rem;
-  font-weight: 500;
-  margin: 0.1rem 0 0;
-}
-
-.ovika-card-desc {
-  color: rgba(255, 255, 255, 0.72);
-  font-size: 0.82rem;
-  line-height: 1.5;
-  margin: 0;
-  font-weight: 300;
-}
-
-.ovika-card-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: #f5a623;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-decoration: none;
-  margin-top: 0.35rem;
-  transition: gap 0.2s;
-}
-
-.ovika-card-link:hover {
-  gap: 8px;
 }
 
 /* =========================
@@ -276,23 +225,23 @@
   /* Cards full width on mobile */
   .ovika-hero-cards {
     width: 100%;
-    gap: 0.75rem;
+    gap: 0.6rem;
   }
 
   .ovika-hero-card {
-    padding: 0.9rem 1rem;
-    border-radius: 0.85rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: 0.75rem;
   }
 
   .ovika-card-icon {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 
   .ovika-card-title {
-    font-size: 0.92rem;
+    font-size: 0.85rem;
   }
 
   .ovika-card-desc {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
   }
 }

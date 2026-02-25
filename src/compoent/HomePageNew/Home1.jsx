@@ -55,7 +55,7 @@ export default function Home1() {
         {/* Left Content */}
         <div className="ovika-hero-left">
           <h1 className="ovika-urban-hero-heading">
-            <span className="ovika-brand-name">OvikaLiving.com</span> – A Marketplace for <br />
+            <span className="ovika-brand-name">OvikaLiving.com</span> – A Marketplace for 
             Short-Term Stays &amp; Hosting
           </h1>
           <p className="ovika-urban-hero-text">
