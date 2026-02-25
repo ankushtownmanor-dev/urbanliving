@@ -20,12 +20,15 @@ const DEFAULT_CANCELLATION_POLICIES = ["Flexible", "Moderate", "Strict"];
 // const DEFAULT_PROPERTY_CATEGORIES = ["Apartment", "House", "Villa", "Cabin", "Bungalow", "Studio", "Suite", "Other"];
 const DEFAULT_PROPERTY_CATEGORIES = [
   "Apartment",
-  "House / Villa / Bungalow",
+  "House",
+   "Villa",
+     "Bungalow",
   "Cabin",
   "Studio",
   "Suite",
   "PG",
-  "Other"
+  "Other",
+   "Hotel"
 ];
 
 const PROPERTY_TYPES = ["Entire place", "Private room"];
