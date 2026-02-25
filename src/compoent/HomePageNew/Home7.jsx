@@ -1122,7 +1122,7 @@ import { useState, useRef, useEffect } from "react";
 const SAMPLE_VIDEOS = [
   {
     id: 1,
-    title: "Signature Stay 1",
+    title: "Signature Stay 1, Greater Noida",
     thumbnail: "/tmluxe1.jpeg",
     category: "Studio",
     videoUrl: "/tmvideo1.mp4",
@@ -1130,7 +1130,7 @@ const SAMPLE_VIDEOS = [
   },
   {
     id: 2,
-    title: "Signature Stay 2",
+    title: "Signature Stay 2, Noida",
     thumbnail: "/tm2newimage.jpeg",
     category: "Apartment",
     videoUrl: "/tm2video.mp4",
@@ -1138,26 +1138,26 @@ const SAMPLE_VIDEOS = [
   },
   {
     id: 3,
-    title: "Signature Stay 3",
+    title: "Signature Stay 3, Greater Noida",
     thumbnail: "/tm3image.jpeg",
     category: "Suite",
-    videoUrl: "/tm3.mp4",
+    videoUrl: "/tm3newvideo.mp4",
     bookingUrl: "/property/79",
   },
   {
     id: 4,
-    title: "Signature Stay 4",
+    title: "Signature Stay 4, Noida",
     thumbnail: "/tmluxe44.png",
     category: "Suite",
-    videoUrl: "/tm4video.mp4",
+    videoUrl: "/tm4newvideo.mp4",
     bookingUrl: "/property/80",
   },
   {
     id: 5,
-    title: "Signature Stay 5",
+    title: "Signature Stay 5, Noida",
     thumbnail: "/tm5.png",
     category: "Suite",
-    videoUrl: "/tmluxe5video.mp4",
+    videoUrl: "/tm5newvideo.mp4",
     bookingUrl: "/property/81",
   },
 ];

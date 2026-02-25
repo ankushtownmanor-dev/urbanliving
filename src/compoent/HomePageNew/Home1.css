@@ -225,11 +225,12 @@
   .ovika-hero-cards {
     width: auto;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 1.25rem;
     align-self: flex-end;
     margin-left: auto;
     min-width: 160px;
     max-width: 55%;
+    margin-bottom: 70px;
   }
 
   .ovika-hero-card {
