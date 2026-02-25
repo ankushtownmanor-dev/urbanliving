@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import "./tmx9pf-form.css"; 
+import "./pg-listing-form.css"; 
 import { AuthContext } from "../Login/AuthContext";
 import { 
   Building, 
@@ -22,8 +22,7 @@ const API_BASE = "https://townmanor.ai/api";
 
 const PROPERTY_CATEGORIES = [
   { id: "Flat", label: "Flat / Apartment", sub: "Apartments, Penthouses, Studio", icon: <Building size={20} /> },
-  { id: "House", label: "Independent House", sub: "Standalone Home, Bungalow", icon: <Home size={20} /> },
-  { id: "Villa", label: "Villa / Farmhouse", sub: "Luxury villas & retreats", icon: <Hotel size={20} /> },
+  { id: "House", label: "House / Villa / Farmhouse", sub: "Independent Home, Bungalow, Luxury Villa & Farmhouse", icon: <Home size={20} /> },
   { id: "PG", label: "PG / Hostel", sub: "Shared accommodation", icon: <Users size={20} /> },
   { id: "Penthouse", label: "Penthouse", sub: "Top floor luxury", icon: <Building size={20} /> },
   { id: "Studio", label: "Studio Apartment", sub: "1Room Kitchen sets", icon: <Zap size={20} /> },
@@ -50,10 +49,11 @@ const AMENITIES_MASTER = {
 };
 
 const PROPERTY_TYPES = {
-  "Flat": ["Apartment", "Penthouse", "Studio", "Duplex"],
-  "House": ["Independent House", "Bungalow", "Row House"],
-  "Villa": ["Luxury Villa", "Farmhouse", "Holiday Home"],
+  "Flat": ["Standard Apartment", "Studio Apartment", "Penthouse", "Duplex", "Service Apartment"],
+  "House": ["Independent House", "Bungalow", "Row House", "Luxury Villa", "Farmhouse", "Holiday Home"],
   "PG": ["Girls PG", "Boys PG", "Co-living Space", "Student Hostel"],
+  "Penthouse": ["Luxury Penthouse", "Duplex Penthouse", "Studio Penthouse"],
+  "Studio": ["1RK Studio", "1BHK Studio", "Luxury Studio"],
 };
 
 const FURNISHING_ITEMS = ["Fridge", "Sofa", "Study Table", "Geyser", "AC", "Washing Machine", "Microwave", "Cupboard", "Bed", "TV", "Mirror", "Curtains", "Shoe Rack", "Bookshelf", "Dishwasher", "Air Purifier", "Iron Table", "Chair", "Desk Lamp"];
@@ -181,10 +181,14 @@ const PGListingForm = () => {
   const [coverIndex, setCoverIndex] = useState(0);
   const [aadhaarNumber, setAadhaarNumber] = useState("");
   const [aadhaarVerified, setAadhaarVerified] = useState(false);
+  const [isVerifyingAadhaar, setIsVerifyingAadhaar] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [phoneOtp, setPhoneOtp] = useState("");
+  const [otpClientId, setOtpClientId] = useState(null);
 
   const STEPS = [
     { id: 0, title: "Category", icon: <Zap size={18} /> },
@@ -231,25 +235,94 @@ const PGListingForm = () => {
     photoPreviews.update(files);
   };
 
-  const handleSendOtp = () => {
-    if(phoneNumber.length !== 10) return alert("Please enter valid 10-digit number");
-    setOtpSent(true);
-    alert("OTP sent to " + phoneNumber + ". (Mock OTP: 1234)");
-  };
-
-  const handleVerifyOtp = () => {
-    if(phoneOtp === "1234") {
-      setIsPhoneVerified(true);
-      alert("Phone Verified Successfully!");
-    } else {
-      alert("Invalid OTP! Try '1234' for testing.");
+  const handleSendOtp = async () => {
+    if (!phoneNumber || phoneNumber.length < 10) {
+      alert("Please enter a valid phone number");
+      return;
+    }
+    setIsSendingOtp(true);
+    try {
+      const res = await fetch("https://kyc-api.surepass.app/api/v1/telecom/generate-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg"
+        },
+        body: JSON.stringify({ id_number: phoneNumber })
+      });
+      const data = await res.json();
+      if (data.success || data.status_code === 200) {
+        setOtpSent(true);
+        setOtpClientId(data.data?.client_id || data.client_id);
+        alert("OTP Sent Successfully!");
+      } else {
+        alert("Failed to send OTP: " + (data.message || "Unknown error"));
+      }
+    } catch (err) {
+      console.error("Phone OTP error", err);
+      alert("Error sending OTP. Please try again.");
+    } finally {
+      setIsSendingOtp(false);
     }
   };
 
-  const verifyAadhaar = () => {
-    if (aadhaarNumber.length !== 12) return alert("Invalid Aadhaar");
-    setAadhaarVerified(true);
-    alert("Aadhaar Verified!");
+  const handleVerifyOtp = async () => {
+    if (!phoneOtp) return;
+    setIsVerifyingOtp(true);
+    try {
+      const res = await fetch("https://kyc-api.surepass.app/api/v1/telecom/submit-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg"
+        },
+        body: JSON.stringify({ client_id: otpClientId, otp: phoneOtp })
+      });
+      const data = await res.json();
+      if (data.success || data.status_code === 200) {
+        setIsPhoneVerified(true);
+        setOtpSent(false);
+        alert("Phone Verified Successfully!");
+      } else {
+        alert("Verification Failed: " + (data.message || "Invalid OTP"));
+      }
+    } catch (err) {
+      console.error("Phone verification error", err);
+      alert("Verification Error. Please try again.");
+    } finally {
+      setIsVerifyingOtp(false);
+    }
+  };
+
+  const verifyAadhaar = async () => {
+    if (!aadhaarNumber || !/^\d{12}$/.test(aadhaarNumber)) {
+      alert("Please enter a valid 12-digit Aadhaar number.");
+      return;
+    }
+    setIsVerifyingAadhaar(true);
+    try {
+      const res = await fetch("https://kyc-api.surepass.app/api/v1/aadhaar-validation/aadhaar-validation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg"
+        },
+        body: JSON.stringify({ id_number: aadhaarNumber })
+      });
+      const data = await res.json();
+      if (data.success || data.status_code === 200) {
+        setAadhaarVerified(true);
+        alert("Aadhaar Verified Successfully!");
+      } else {
+        setAadhaarVerified(false);
+        alert("Verification Failed: " + (data.message || "Invalid Aadhaar"));
+      }
+    } catch (err) {
+      console.error("Aadhaar verification error", err);
+      alert("Verification Error. Please try again.");
+    } finally {
+      setIsVerifyingAadhaar(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -739,39 +812,71 @@ const PGListingForm = () => {
                        <input 
                         placeholder="12 digit number" 
                         value={aadhaarNumber} 
-                        onChange={(e) => setAadhaarNumber(e.target.value.slice(0,12))} 
-                        disabled={aadhaarVerified}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(/\D/g, '').slice(0, 12);
+                          setAadhaarNumber(val);
+                          if (aadhaarVerified) setAadhaarVerified(false);
+                        }} 
+                        disabled={aadhaarVerified || isVerifyingAadhaar}
+                        style={{ borderColor: aadhaarVerified ? '#10b981' : '' }}
                        />
-                       <button onClick={verifyAadhaar} disabled={aadhaarVerified} className={aadhaarVerified ? 'verified' : ''}>
-                          {aadhaarVerified ? 'Verified' : 'Verify'}
+                       <button 
+                        onClick={verifyAadhaar} 
+                        disabled={aadhaarVerified || isVerifyingAadhaar || aadhaarNumber.length !== 12} 
+                        className={aadhaarVerified ? 'verified' : ''}
+                       >
+                          {isVerifyingAadhaar ? 'Verifying...' : aadhaarVerified ? 'Verified ✓' : 'Verify Now'}
                        </button>
                     </div>
+                    {aadhaarVerified && <p className="success-msg">✓ Aadhaar verification successful.</p>}
                  </div>
+
                  <div className="v-item">
                     <div className="v-label">Mobile Number Verification</div>
                     <div className="v-input-row">
                        <input 
                         placeholder="10 digit number" 
                         value={phoneNumber} 
-                        onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g,'').slice(0,10))} 
-                        disabled={otpSent}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(/\D/g,'').slice(0,10);
+                          setPhoneNumber(val);
+                          if (isPhoneVerified) setIsPhoneVerified(false);
+                          if (otpSent) setOtpSent(false);
+                        }} 
+                        disabled={otpSent || isPhoneVerified || isSendingOtp}
+                        style={{ flex: 1, borderColor: isPhoneVerified ? '#10b981' : '' }}
                        />
-                       {!otpSent ? (
-                         <button onClick={handleSendOtp}>Send OTP</button>
-                       ) : !isPhoneVerified ? (
-                        <div className="otp-container">
-                          <input 
-                            placeholder="OTP" 
-                            className="otp-input"
-                            value={phoneOtp}
-                            onChange={(e) => setPhoneOtp(e.target.value.slice(0,4))}
-                          />
-                          <button onClick={handleVerifyOtp} className="verify-btn">Verify</button>
-                        </div>
-                       ) : (
-                         <button className="verified" disabled><CheckCircle2 size={16} /> Verified</button>
+                       
+                       {!otpSent && !isPhoneVerified && (
+                         <button onClick={handleSendOtp} disabled={isSendingOtp || phoneNumber.length !== 10}>
+                            {isSendingOtp ? 'Sending...' : 'Send OTP'}
+                         </button>
+                       )}
+
+                       {isPhoneVerified && (
+                         <button className="verified" disabled><CheckCircle2 size={16} /> Verified ✓</button>
                        )}
                     </div>
+
+                    {otpSent && !isPhoneVerified && (
+                      <div className="otp-container" style={{ marginTop: '15px' }}>
+                        <input 
+                          placeholder="4-digit OTP" 
+                          className="otp-input"
+                          value={phoneOtp}
+                          onChange={(e) => setPhoneOtp(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                        />
+                        <button 
+                          onClick={handleVerifyOtp} 
+                          className="verify-btn"
+                          disabled={isVerifyingOtp || phoneOtp.length < 4}
+                        >
+                          {isVerifyingOtp ? 'Verifying...' : 'Verify OTP'}
+                        </button>
+                      </div>
+                    )}
+                    
+                    {isPhoneVerified && <p className="success-msg">✓ Phone number verified successfully.</p>}
                  </div>
               </div>
             </div>

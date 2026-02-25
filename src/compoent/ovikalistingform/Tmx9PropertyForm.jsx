@@ -20,13 +20,11 @@ const DEFAULT_CANCELLATION_POLICIES = ["Flexible", "Moderate", "Strict"];
 // const DEFAULT_PROPERTY_CATEGORIES = ["Apartment", "House", "Villa", "Cabin", "Bungalow", "Studio", "Suite", "Other"];
 const DEFAULT_PROPERTY_CATEGORIES = [
   "Apartment",
-  "House",
-  "Villa",
+  "House / Villa / Bungalow",
   "Cabin",
-  "Bungalow",
   "Studio",
   "Suite",
-  "PG",        // 👈 NEW ADD
+  "PG",
   "Other"
 ];
 
