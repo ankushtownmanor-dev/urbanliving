@@ -1,5 +1,6 @@
 
-// import React, { useState, useEffect } from 'react';
+
+// import React, { useState, useEffect, useMemo } from 'react';
 // import { useNavigate, useLocation } from 'react-router-dom';
 // import { FiSearch, FiMapPin, FiHeart, FiPlus, FiStar, FiX } from 'react-icons/fi';
 // import { BiBed, BiBath, BiArea } from 'react-icons/bi';
@@ -16,6 +17,11 @@
 // const PropertyCard = ({ property }) => {
 //   const navigate = useNavigate();
 //   const [fav, setFav] = useState(false);
+
+//   // Stable random rating between 4.1 and 4.9 (won't change on re-render)
+//   const randomRating = useMemo(() => {
+//     return (Math.random() * (4.9 - 4.1) + 4.1).toFixed(1);
+//   }, [property.id]);
 
 //   const getCount = (val) => {
 //     if (typeof val === 'number') return val;
@@ -108,7 +114,7 @@
 //           </h3>
 //           <div style={{ display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0 }}>
 //             <FiStar style={{ fontSize: 13, color: '#222', fill: '#222' }} />
-//             <span style={{ fontSize: 13, fontWeight: 600, color: '#222' }}>{property.rating || '4.8'}</span>
+//             <span style={{ fontSize: 13, fontWeight: 600, color: '#222' }}>{randomRating}</span>
 //           </div>
 //         </div>
 
@@ -471,11 +477,10 @@ const CATEGORIES = [
 ];
 
 /* ─── Property Card ─────────────────────────────── */
-const PropertyCard = ({ property }) => {
+const PropertyCard = ({ property, rentalType }) => {
   const navigate = useNavigate();
   const [fav, setFav] = useState(false);
 
-  // Stable random rating between 4.1 and 4.9 (won't change on re-render)
   const randomRating = useMemo(() => {
     return (Math.random() * (4.9 - 4.1) + 4.1).toFixed(1);
   }, [property.id]);
@@ -505,6 +510,32 @@ const PropertyCard = ({ property }) => {
   };
 
   const meta = getMeta();
+
+  // ── Price Logic ──
+  // monthly: use meta.perMonthPrice or meta.monthlyPrice, fallback to property.monthly_price
+  // nightly / default: use meta.perNightPrice or property.price
+  const isMonthly = rentalType === 'long';
+
+  const getDisplayPrice = () => {
+    if (property.property_category === 'PG') {
+      if (isMonthly) {
+        const monthly = Number(meta?.perMonthPrice) || Number(meta?.monthlyPrice) || Number(property.monthly_price) || 0;
+        return { price: monthly, label: '/ month' };
+      } else {
+        const nightly = Number(meta?.perNightPrice) || Number(property.price) || 0;
+        return { price: nightly, label: '/ night' };
+      }
+    }
+    // Non-PG properties
+    if (isMonthly) {
+      const monthly = Number(meta?.perMonthPrice) || Number(meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.price) || 0;
+      return { price: monthly, label: '/ month' };
+    }
+    return { price: Number(property.price) || 0, label: '/ night' };
+  };
+
+  const { price: displayPrice, label: priceLabel } = getDisplayPrice();
+
   const coverPhoto =
     property.cover_photo ||
     (Array.isArray(property.photos) && property.photos[0]) ||
@@ -547,6 +578,8 @@ const PropertyCard = ({ property }) => {
         >
           <FiHeart style={{ fill: fav ? '#e84040' : 'none' }} />
         </button>
+
+        {/* Category Badge */}
         {property.property_category && (
           <span style={{
             position: 'absolute', bottom: 10, left: 10,
@@ -557,6 +590,17 @@ const PropertyCard = ({ property }) => {
             {property.property_category}
           </span>
         )}
+
+        {/* Rental Type Badge */}
+        <span style={{
+          position: 'absolute', bottom: 10, right: 10,
+          background: isMonthly ? 'rgba(201,139,62,0.92)' : 'rgba(30,30,30,0.82)',
+          color: '#fff',
+          padding: '3px 10px', borderRadius: 6, fontSize: 11,
+          fontWeight: 700, letterSpacing: '0.04em',
+        }}>
+          {isMonthly ? 'Monthly' : 'Nightly'}
+        </span>
       </div>
 
       {/* Card Body */}
@@ -620,13 +664,10 @@ const PropertyCard = ({ property }) => {
         <div style={{ marginTop: 'auto', paddingTop: 10, borderTop: '1px solid #f0f0f0' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 3 }}>
             <span style={{ fontSize: 17, fontWeight: 700, color: '#222' }}>
-              {property.property_category === 'PG'
-                ? formatPrice(Number(meta?.perNightPrice) || Number(property.price) || 0)
-                : formatPrice(property.price)
-              }
+              {formatPrice(displayPrice)}
             </span>
-            {(property.property_category === 'PG' || property.price) && (
-              <span style={{ fontSize: 13, color: '#717171' }}> / night</span>
+            {displayPrice > 0 && (
+              <span style={{ fontSize: 13, color: '#717171' }}>{priceLabel}</span>
             )}
           </div>
         </div>
@@ -643,6 +684,7 @@ const PropertyListPage = () => {
   const [error, setError] = useState(null);
   const [search, setSearch] = useState('');
   const [activeCat, setActiveCat] = useState(null);
+  const [rentalType, setRentalType] = useState(null); // 'short' | 'long' | null
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -683,8 +725,11 @@ const PropertyListPage = () => {
   useEffect(() => { fetchProperties(); }, []);
   useEffect(() => { setFiltered(applyFilter(properties, activeCat, search)); }, [search, activeCat, properties]);
 
+  // Read category AND rentalType from URL params
   useEffect(() => {
     const params = new URLSearchParams(location.search);
+
+    // Category
     const cId = params.get('category');
     if (cId && properties.length > 0) {
       const match = CATEGORIES.find(c =>
@@ -692,7 +737,19 @@ const PropertyListPage = () => {
       );
       if (match) setActiveCat(match);
     }
+
+    // Rental type from URL — overrides sessionStorage if present
+    const rt = params.get('rentalType');
+    if (rt) {
+      setRentalType(rt);
+    } else {
+      // Fallback to sessionStorage
+      const stored = sessionStorage.getItem('ovika_rental_type');
+      if (stored) setRentalType(stored);
+    }
   }, [location.search, properties]);
+
+  const isMonthly = rentalType === 'long';
 
   if (loading) return (
     <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -721,21 +778,32 @@ const PropertyListPage = () => {
         display: 'flex', justifyContent: 'center',
         position: 'relative', overflow: 'hidden',
       }}>
-        {/* Texture overlay */}
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.06,
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff' fill-rule='evenodd'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")`,
         }} />
 
         <div style={{ maxWidth: 760, width: '100%', position: 'relative', zIndex: 1, textAlign: 'center' }}>
-
-          {/* Heading */}
           <h1 style={{
             fontSize: 44, fontWeight: 800, color: '#fff',
             margin: '0 0 10px', letterSpacing: '-0.025em', lineHeight: 1.1,
           }}>
             Book your Stay
           </h1>
+
+          {/* Rental type indicator badge */}
+          {rentalType && (
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.4)',
+              borderRadius: 50, padding: '4px 14px', marginBottom: 14,
+            }}>
+              <span style={{ fontSize: 13, color: '#fff', fontWeight: 600 }}>
+                {isMonthly ? '🗓 Monthly Rates' : '🌙 Nightly Rates'}
+              </span>
+            </div>
+          )}
+
           <p style={{
             fontSize: 16, color: 'rgba(255,255,255,0.88)',
             margin: '0 0 30px', lineHeight: 1.65, maxWidth: 560, marginLeft: 'auto', marginRight: 'auto',
@@ -743,7 +811,7 @@ const PropertyListPage = () => {
             Luxury studios, homestays, and serviced apartments — curated for comfortable short and extended stays
           </p>
 
-          {/* ── SEARCH BAR ── */}
+          {/* Search Bar */}
           <div style={{
             background: '#fff', borderRadius: 16,
             display: 'flex', alignItems: 'center',
@@ -776,7 +844,7 @@ const PropertyListPage = () => {
             )}
           </div>
 
-          {/* ── CATEGORY TABS (below search bar) ── */}
+          {/* Category Tabs */}
           <div style={{
             display: 'flex', justifyContent: 'center', alignItems: 'center',
             gap: 8, marginTop: 14, flexWrap: 'nowrap', width: '100%',
@@ -820,7 +888,6 @@ const PropertyListPage = () => {
               );
             })}
           </div>
-
         </div>
       </div>
 
@@ -879,7 +946,9 @@ const PropertyListPage = () => {
             gridTemplateColumns: 'repeat(auto-fill, minmax(268px, 1fr))',
             gap: 20,
           }}>
-            {filtered.map(p => <PropertyCard key={p.id} property={p} />)}
+            {filtered.map(p => (
+              <PropertyCard key={p.id} property={p} rentalType={rentalType} />
+            ))}
           </div>
         ) : (
           <div style={{
