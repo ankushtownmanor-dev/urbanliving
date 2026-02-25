@@ -652,22 +652,23 @@ const Calendar = ({ selectedDates, onDateSelect, minDate = new Date(), disabledD
 
   const isDateDisabled = (date) => {
     if (!date) return true;
-    const dateStr = date.toISOString().split('T')[0];
-    return date < minDate || disabledDateSet.has(dateStr);
+    const dateStr = toYMD(date);
+    const minDateStr = toYMD(minDate);
+    return dateStr < minDateStr || disabledDateSet.has(dateStr);
   };
 
   const isDateSelected = (date) => {
     if (!date) return false;
-    const dateStr = date.toISOString().split('T')[0];
-    return (checkInDate && dateStr === checkInDate.toISOString().split('T')[0]) ||
-           (checkOutDate && dateStr === checkOutDate.toISOString().split('T')[0]);
+    const dateStr = toYMD(date);
+    return (checkInDate && dateStr === toYMD(checkInDate)) ||
+           (checkOutDate && dateStr === toYMD(checkOutDate));
   };
 
   const isDateInRange = (date) => {
     if (!date || !checkInDate || !checkOutDate) return false;
-    const dateStr = date.toISOString().split('T')[0];
-    const checkInStr = checkInDate.toISOString().split('T')[0];
-    const checkOutStr = checkOutDate.toISOString().split('T')[0];
+    const dateStr = toYMD(date);
+    const checkInStr = toYMD(checkInDate);
+    const checkOutStr = toYMD(checkOutDate);
     return dateStr > checkInStr && dateStr < checkOutStr;
   };
 
@@ -696,8 +697,8 @@ const Calendar = ({ selectedDates, onDateSelect, minDate = new Date(), disabledD
         }
         setCheckOutDate(date);
         onDateSelect({
-          checkInDate: checkInDate.toISOString().split('T')[0],
-          checkOutDate: date.toISOString().split('T')[0]
+          checkInDate: toYMD(checkInDate),
+          checkOutDate: toYMD(date)
         });
       } else {
         if (hasBlockedDateInRange(date, checkInDate)) {
@@ -707,8 +708,8 @@ const Calendar = ({ selectedDates, onDateSelect, minDate = new Date(), disabledD
         setCheckInDate(date);
         setCheckOutDate(checkInDate);
         onDateSelect({
-          checkInDate: date.toISOString().split('T')[0],
-          checkOutDate: checkInDate.toISOString().split('T')[0]
+          checkInDate: toYMD(date),
+          checkOutDate: toYMD(checkInDate)
         });
       }
     }
@@ -1085,11 +1086,12 @@ const PropertyDetailPage = () => {
     }
 
     if (subtotal > 0) {
-      computedTotal = subtotal; // Add tax/fees logic here if needed, currently 0
+      const gstAmount = subtotal * 0.05;
+      computedTotal = subtotal + gstAmount;
       
       setPricing({ 
         subtotal: subtotal, 
-        gst: 0, 
+        gst: gstAmount, 
         total: computedTotal 
       });
     } else {
