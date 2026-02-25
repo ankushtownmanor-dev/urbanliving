@@ -41,6 +41,10 @@ const API_PROPERTIES_UPLOAD = "https://townmanor.ai/api/ovika/properties/upload"
 const API_BOOKINGS = "https://townmanor.ai/api/booking-request";
 const API_USERS = "https://townmanor.ai/api/users-list";
 
+const SHARING_TYPES = ["Single Room", "Double Sharing", "Triple Sharing", "Four Sharing", "Dormitory"];
+const BEDROOM_TYPES = ["King Bed", "Queen Bed", "Single Bed", "Bunk Bed", "Twin Bed", "Other"];
+const BATHROOM_TYPES = ["Attached", "Common", "Shared", "Private"];
+
 export default function SuperAdminDashboard() {
   const [view, setView] = useState('dashboard'); // 'dashboard', 'properties', 'users', 'bookings', 'finance', 'settings'
   const [properties, setProperties] = useState([]);
@@ -270,8 +274,39 @@ export default function SuperAdminDashboard() {
   
   // --- Edit Handlers ---
   const handleEditClick = (prop) => {
-      setEditingProp({ ...prop }); 
+      const parsedProp = { ...prop };
+      // Parse JSON fields for editing
+      ['amenities', 'photos', 'house_rules', 'safety_items', 'meta', 'id_files', 'guest_policy', 'bedroom_details', 'bathroom_details', 'bedrooms', 'bathrooms'].forEach(key => {
+          if (parsedProp[key] && typeof parsedProp[key] === 'string') {
+              try {
+                  parsedProp[key] = JSON.parse(parsedProp[key]);
+              } catch (e) {
+                  console.warn(`Failed to parse ${key}`, e);
+              }
+          }
+      });
+      setEditingProp(parsedProp); 
       setIsCreatingProp(false);
+  };
+
+  const handleNestedChange = (parent, field, value) => {
+      setEditingProp(prev => ({
+          ...prev,
+          [parent]: {
+              ...(prev[parent] || {}),
+              [field]: value
+          }
+      }));
+  };
+
+  const handleMetaChange = (field, value) => {
+      setEditingProp(prev => ({
+          ...prev,
+          meta: {
+              ...(typeof prev.meta === 'object' ? prev.meta : {}),
+              [field]: value
+          }
+      }));
   };
 
   const handleCreatePropClick = () => {
@@ -298,14 +333,19 @@ export default function SuperAdminDashboard() {
             city: editingProp.city,
         };
 
-        // Stringify complex fields to prevent backend SQL errors
-        ['amenities', 'photos', 'house_rules', 'safety_items', 'meta', 'id_files', 'guest_policy', 'bedroom_details', 'bathroom_details'].forEach(key => {
-             if (payload[key] && typeof payload[key] === 'object') {
-                 payload[key] = JSON.stringify(payload[key]);
+        // Stringify complex fields (objects/arrays) to prevent backend SQL errors
+        Object.keys(payload).forEach(key => {
+             if (payload[key] !== null && typeof payload[key] === 'object') {
+                 try {
+                     payload[key] = JSON.stringify(payload[key]);
+                 } catch (e) {
+                     console.warn(`Auto-stringify failed for ${key}`, e);
+                 }
              }
         });
 
-        // Remove system fields that should not be sent in the body
+        // Remove fields that should not be updated or were removed from the form
+        delete payload.photos;
         delete payload._id;
         delete payload.id;
         delete payload.created_at;
@@ -1110,52 +1150,352 @@ export default function SuperAdminDashboard() {
             {/* EDIT PROPERTY MODAL */}
             {editingProp && (
                 <div className="sa-modal-overlay">
-                    <div className="sa-modal-content">
-                        <h3 style={{ marginBottom: '20px' }}>{isCreatingProp ? 'Create Property' : 'Edit Property'}</h3>
+                    <div className="sa-modal-content" style={{ maxWidth: '900px', width: '95%', maxHeight: '90vh', overflowY: 'auto' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #eee', paddingBottom: '15px' }}>
+                            <h3 style={{ margin: 0 }}>{isCreatingProp ? 'Create Property' : 'Edit Property'}</h3>
+                            <div style={{ fontSize: '12px', color: '#6b7280' }}>ID: {editingProp.id || editingProp._id || 'New'}</div>
+                        </div>
                         
-                        <div style={{ display: 'grid', gap: '0' }}>
-                             <div className="sa-input-group">
-                                 <label>Property Name</label>
-                                 <input 
-                                    name="property_name" 
-                                    value={editingProp.property_name || editingProp.name || ""} 
-                                    onChange={handleEditChange} 
-                                 />
-                             </div>
-                             
-                             <div className="sa-input-group">
-                                 <label>Price</label>
-                                 <input 
-                                     type="number" 
-                                     name="price"
-                                     value={editingProp.price || ""} 
-                                     onChange={handleEditChange} 
-                                 />
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                             {/* BASIC INFO SECTION */}
+                             <div className="sa-section-col">
+                                 <h4 style={{ borderLeft: '4px solid #3b82f6', paddingLeft: '10px', marginBottom: '15px' }}>Basic Information</h4>
+                                 <div className="sa-input-group">
+                                     <label>Property Name</label>
+                                     <input 
+                                        name="property_name" 
+                                        value={editingProp.property_name || editingProp.name || ""} 
+                                        onChange={handleEditChange} 
+                                     />
+                                 </div>
+                                 
+                                 <div className="sa-input-group">
+                                     <label>Category</label>
+                                     <select 
+                                        name="property_category" 
+                                        value={editingProp.property_category || ""} 
+                                        onChange={handleEditChange}
+                                        className="sa-search-input"
+                                        style={{ width: '100%', marginBottom: '15px' }}
+                                     >
+                                        <option value="">Select Category</option>
+                                        <option value="PG">PG / Hostel</option>
+                                        <option value="Apartment">Apartment</option>
+                                        <option value="House">House</option>
+                                        <option value="Villa">Villa</option>
+                                        <option value="Commercial">Commercial</option>
+                                     </select>
+                                 </div>
+
+                                 <div className="sa-input-group">
+                                     <label>Base Price / Nightly Rent</label>
+                                     <input 
+                                         type="number" 
+                                         name="price"
+                                         value={editingProp.price || ""} 
+                                         onChange={handleEditChange} 
+                                     />
+                                 </div>
+
+                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                                     <div className="sa-input-group">
+                                         <label>City</label>
+                                         <input 
+                                             name="city"
+                                             value={editingProp.city || ""} 
+                                             onChange={handleEditChange} 
+                                         />
+                                     </div>
+                                     <div className="sa-input-group">
+                                         <label>Area (Sq Ft)</label>
+                                         <input 
+                                             name="area"
+                                             value={editingProp.area || ""} 
+                                             onChange={handleEditChange} 
+                                         />
+                                     </div>
+                                 </div>
+
+                                 <div className="sa-input-group">
+                                     <label>Address</label>
+                                     <textarea 
+                                         rows="2"
+                                         name="address"
+                                         value={editingProp.address || ""} 
+                                         onChange={handleEditChange} 
+                                     />
+                                 </div>
+                                 
+                                 <div className="sa-input-group">
+                                     <label>Description</label>
+                                     <textarea 
+                                         rows="3"
+                                         name="description"
+                                         value={editingProp.description || ""} 
+                                         onChange={handleEditChange} 
+                                     />
+                                 </div>
                              </div>
 
-                             <div className="sa-input-group">
-                                 <label>City</label>
-                                 <input 
-                                     name="city"
-                                     value={editingProp.city || ""} 
-                                     onChange={handleEditChange} 
-                                 />
-                             </div>
+                             {/* CATEGORY SPECIFIC SECTION */}
+                             <div className="sa-section-col">
+                                 {editingProp.property_category === 'PG' ? (
+                                     <>
+                                         <h4 style={{ borderLeft: '4px solid #10b981', paddingLeft: '10px', marginBottom: '15px' }}>PG Specific Details</h4>
+                                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                                             <div className="sa-input-group">
+                                                 <label>Notice Period (Days)</label>
+                                                 <input 
+                                                    type="number"
+                                                    value={editingProp.meta?.noticePeriod || ""} 
+                                                    onChange={(e) => handleMetaChange('noticePeriod', e.target.value)} 
+                                                 />
+                                             </div>
+                                             <div className="sa-input-group">
+                                                 <label>Lock-in (Months)</label>
+                                                 <input 
+                                                    type="number"
+                                                    value={editingProp.meta?.lockInPeriod || ""} 
+                                                    onChange={(e) => handleMetaChange('lockInPeriod', e.target.value)} 
+                                                 />
+                                             </div>
+                                         </div>
+                                         
+                                         <div className="sa-input-group">
+                                             <label>Electricity Charges</label>
+                                             <input 
+                                                value={editingProp.meta?.electricityCharges || ""} 
+                                                onChange={(e) => handleMetaChange('electricityCharges', e.target.value)} 
+                                                placeholder="e.g. 10 Rs/Unit"
+                                             />
+                                         </div>
 
-                             <div className="sa-input-group">
-                                 <label>Address</label>
-                                 <textarea 
-                                     rows="3"
-                                     name="address"
-                                     value={editingProp.address || ""} 
-                                     onChange={handleEditChange} 
-                                 />
+                                         <div className="sa-input-group">
+                                             <label>Sharing Options & Prices</label>
+                                             <div style={{ background: '#f8fafc', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                                                 {(editingProp.bedroom_details || []).map((room, idx) => (
+                                                     <div key={idx} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
+                                                         <select 
+                                                            value={room.type || SHARING_TYPES[0]} 
+                                                            onChange={(e) => {
+                                                                const newRooms = [...editingProp.bedroom_details];
+                                                                newRooms[idx].type = e.target.value;
+                                                                setEditingProp(prev => ({ ...prev, bedroom_details: newRooms }));
+                                                            }}
+                                                            style={{ padding: '6px', fontSize: '11px', border: '1px solid #cbd5e1', borderRadius: '4px' }}
+                                                         >
+                                                            {SHARING_TYPES.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                                                         </select>
+                                                         <input 
+                                                            type="number" 
+                                                            placeholder="Rent (₹)" 
+                                                            value={room.price || ""} 
+                                                            onChange={(e) => {
+                                                                const newRooms = [...editingProp.bedroom_details];
+                                                                newRooms[idx].price = e.target.value;
+                                                                setEditingProp(prev => ({ ...prev, bedroom_details: newRooms }));
+                                                            }}
+                                                            style={{ padding: '6px', fontSize: '11px', border: '1px solid #cbd5e1', borderRadius: '4px' }}
+                                                         />
+                                                         <select 
+                                                            value={room.washroomType || "Attached"} 
+                                                            onChange={(e) => {
+                                                                const newRooms = [...editingProp.bedroom_details];
+                                                                newRooms[idx].washroomType = e.target.value;
+                                                                setEditingProp(prev => ({ ...prev, bedroom_details: newRooms }));
+                                                            }}
+                                                            style={{ padding: '6px', fontSize: '11px', border: '1px solid #cbd5e1', borderRadius: '4px' }}
+                                                         >
+                                                            <option value="Attached">Attached</option>
+                                                            <option value="Common">Common</option>
+                                                         </select>
+                                                         <button 
+                                                            onClick={() => {
+                                                                const newRooms = editingProp.bedroom_details.filter((_, i) => i !== idx);
+                                                                const totalBeds = newRooms.reduce((acc, curr) => acc + (Number(curr.count) || 1), 0);
+                                                                setEditingProp(prev => ({ ...prev, bedroom_details: newRooms, beds: totalBeds }));
+                                                            }}
+                                                            style={{ background: '#fee2e2', color: '#dc2626', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer' }}
+                                                         >×</button>
+                                                     </div>
+                                                 ))}
+                                                 <button 
+                                                    onClick={() => {
+                                                        const newRooms = [...(editingProp.bedroom_details || []), { type: SHARING_TYPES[1], price: "", washroomType: "Attached", count: 1 }];
+                                                        const totalBeds = newRooms.reduce((acc, curr) => acc + (Number(curr.count) || 1), 0);
+                                                        setEditingProp(prev => ({ ...prev, bedroom_details: newRooms, beds: totalBeds }));
+                                                    }}
+                                                    style={{ background: '#eff6ff', color: '#2563eb', border: '1px dashed #3b82f6', borderRadius: '4px', padding: '6px 12px', fontSize: '11px', width: '100%', marginTop: '5px', cursor: 'pointer' }}
+                                                 >+ Add Sharing Option</button>
+                                             </div>
+                                         </div>
+
+                                         <div className="sa-input-group" style={{ display: 'flex', gap: '20px', marginTop: '10px' }}>
+                                             <label style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}>
+                                                 <input 
+                                                    type="checkbox" 
+                                                    checked={editingProp.meta?.foodAvailable} 
+                                                    onChange={(e) => handleMetaChange('foodAvailable', e.target.checked)} 
+                                                 /> Food Available
+                                             </label>
+                                             <label style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}>
+                                                 <input 
+                                                    type="checkbox" 
+                                                    checked={editingProp.meta?.laundryAvailable} 
+                                                    onChange={(e) => handleMetaChange('laundryAvailable', e.target.checked)} 
+                                                 /> Laundry
+                                             </label>
+                                         </div>
+                                     </>
+                                 ) : (
+                                     <>
+                                         <h4 style={{ borderLeft: '4px solid #f59e0b', paddingLeft: '10px', marginBottom: '15px' }}>Room & Policy Details</h4>
+                                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                                             <div className="sa-input-group">
+                                                 <label>Max Guests</label>
+                                                 <input 
+                                                    type="number"
+                                                    name="max_guests"
+                                                    value={editingProp.max_guests || ""} 
+                                                    onChange={handleEditChange} 
+                                                 />
+                                             </div>
+                                             <div className="sa-input-group">
+                                                 <label>Booking Type</label>
+                                                 <select 
+                                                    name="booking_type" 
+                                                    value={editingProp.booking_type || "0"} 
+                                                    onChange={handleEditChange}
+                                                    style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+                                                 >
+                                                    <option value="0">Instant</option>
+                                                    <option value="1">Request Only</option>
+                                                 </select>
+                                             </div>
+                                         </div>
+
+                                         <div className="sa-input-group">
+                                             <label>House Rules</label>
+                                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px', background: '#f8fafc', padding: '10px', borderRadius: '6px' }}>
+                                                 {['smokingAllowed', 'petsAllowed', 'eventsAllowed', 'drinkingAllowed'].map((rule) => (
+                                                     <label key={rule} style={{ fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}>
+                                                         <input 
+                                                            type="checkbox" 
+                                                            checked={editingProp.meta?.[rule]} 
+                                                            onChange={(e) => handleMetaChange(rule, e.target.checked)} 
+                                                         /> {rule.replace('Allowed', '')} Allowed
+                                                     </label>
+                                                 ))}
+                                             </div>
+                                         </div>
+
+                                         <div className="sa-input-group">
+                                             <label>Bedroom & Bathroom Details</label>
+                                             <div style={{ background: '#f8fafc', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                                                 <div style={{ marginBottom: '15px' }}>
+                                                     <div style={{ fontSize: '11px', fontWeight: '600', color: '#64748b', marginBottom: '8px' }}>Bedrooms</div>
+                                                     {(editingProp.bedroom_details || []).map((room, idx) => (
+                                                         <div key={idx} style={{ display: 'flex', gap: '8px', marginBottom: '6px', alignItems: 'center' }}>
+                                                             <select 
+                                                                value={room.type || BEDROOM_TYPES[0]} 
+                                                                onChange={(e) => {
+                                                                    const newList = [...editingProp.bedroom_details];
+                                                                    newList[idx].type = e.target.value;
+                                                                    setEditingProp(prev => ({ ...prev, bedroom_details: newList }));
+                                                                }}
+                                                                style={{ flex: 2, padding: '6px', fontSize: '11px', border: '1px solid #cbd5e1', borderRadius: '4px' }}
+                                                             >
+                                                                {BEDROOM_TYPES.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                                                             </select>
+                                                             <input 
+                                                                type="number" 
+                                                                placeholder="Count" 
+                                                                value={room.count || ""} 
+                                                                onChange={(e) => {
+                                                                    const newList = [...editingProp.bedroom_details];
+                                                                    newList[idx].count = e.target.value;
+                                                                    const total = newList.reduce((acc, curr) => acc + (Number(curr.count) || 0), 0);
+                                                                    setEditingProp(prev => ({ ...prev, bedroom_details: newList, beds: total }));
+                                                                }}
+                                                                style={{ flex: 1, padding: '6px', fontSize: '11px', border: '1px solid #cbd5e1', borderRadius: '4px' }}
+                                                             />
+                                                             <button 
+                                                                onClick={() => {
+                                                                    const newList = editingProp.bedroom_details.filter((_, i) => i !== idx);
+                                                                    const total = newList.reduce((acc, curr) => acc + (Number(curr.count) || 0), 0);
+                                                                    setEditingProp(prev => ({ ...prev, bedroom_details: newList, beds: total }));
+                                                                }}
+                                                                style={{ background: '#fee2e2', color: '#dc2626', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer' }}
+                                                             >×</button>
+                                                         </div>
+                                                     ))}
+                                                     <button 
+                                                        onClick={() => {
+                                                            const newList = [...(editingProp.bedroom_details || []), { type: BEDROOM_TYPES[0], count: 1 }];
+                                                            const total = newList.reduce((acc, curr) => acc + (Number(curr.count) || 0), 0);
+                                                            setEditingProp(prev => ({ ...prev, bedroom_details: newList, beds: total }));
+                                                        }}
+                                                        style={{ background: '#fff', color: '#64748b', border: '1px solid #e2e8f0', borderRadius: '4px', padding: '4px 8px', fontSize: '10px', cursor: 'pointer' }}
+                                                     >+ Add Bedroom</button>
+                                                 </div>
+
+                                                 <div>
+                                                     <div style={{ fontSize: '11px', fontWeight: '600', color: '#64748b', marginBottom: '8px' }}>Bathrooms</div>
+                                                     {(editingProp.bathroom_details || []).map((bath, idx) => (
+                                                         <div key={idx} style={{ display: 'flex', gap: '8px', marginBottom: '6px', alignItems: 'center' }}>
+                                                             <select 
+                                                                value={bath.type || BATHROOM_TYPES[0]} 
+                                                                onChange={(e) => {
+                                                                    const newList = [...editingProp.bathroom_details];
+                                                                    newList[idx].type = e.target.value;
+                                                                    setEditingProp(prev => ({ ...prev, bathroom_details: newList }));
+                                                                }}
+                                                                style={{ flex: 2, padding: '6px', fontSize: '11px', border: '1px solid #cbd5e1', borderRadius: '4px' }}
+                                                             >
+                                                                {BATHROOM_TYPES.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                                                             </select>
+                                                             <input 
+                                                                type="number" 
+                                                                placeholder="Count" 
+                                                                value={bath.count || ""} 
+                                                                onChange={(e) => {
+                                                                    const newList = [...editingProp.bathroom_details];
+                                                                    newList[idx].count = e.target.value;
+                                                                    const total = newList.reduce((acc, curr) => acc + (Number(curr.count) || 0), 0);
+                                                                    setEditingProp(prev => ({ ...prev, bathroom_details: newList, bathrooms: total }));
+                                                                }}
+                                                                style={{ flex: 1, padding: '6px', fontSize: '11px', border: '1px solid #cbd5e1', borderRadius: '4px' }}
+                                                             />
+                                                             <button 
+                                                                onClick={() => {
+                                                                    const newList = editingProp.bathroom_details.filter((_, i) => i !== idx);
+                                                                    const total = newList.reduce((acc, curr) => acc + (Number(curr.count) || 0), 0);
+                                                                    setEditingProp(prev => ({ ...prev, bathroom_details: newList, bathrooms: total }));
+                                                                }}
+                                                                style={{ background: '#fee2e2', color: '#dc2626', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer' }}
+                                                             >×</button>
+                                                         </div>
+                                                     ))}
+                                                     <button 
+                                                        onClick={() => {
+                                                            const newList = [...(editingProp.bathroom_details || []), { type: BATHROOM_TYPES[0], count: 1 }];
+                                                            const total = newList.reduce((acc, curr) => acc + (Number(curr.count) || 0), 0);
+                                                            setEditingProp(prev => ({ ...prev, bathroom_details: newList, bathrooms: total }));
+                                                        }}
+                                                        style={{ background: '#fff', color: '#64748b', border: '1px solid #e2e8f0', borderRadius: '4px', padding: '4px 8px', fontSize: '10px', cursor: 'pointer' }}
+                                                     >+ Add Bathroom</button>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </>
+                                 )}
+
                              </div>
                         </div>
 
-                        <div style={{ marginTop: '25px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                        <div style={{ marginTop: '25px', display: 'flex', justifyContent: 'flex-end', gap: '10px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
                             <button className="sa-btn-danger" style={{ background:'#f3f4f6', color:'#374151', border:'1px solid #d1d5db' }} onClick={() => setEditingProp(null)}>Cancel</button>
-                            <button className="sa-btn-primary" onClick={handleSaveEdit}>Save Changes</button>
+                            <button className="sa-btn-primary" onClick={handleSaveEdit} style={{ padding: '10px 30px' }}>Save Changes</button>
                         </div>
                     </div>
                 </div>
