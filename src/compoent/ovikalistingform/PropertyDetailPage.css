@@ -527,29 +527,37 @@ table {
 .host-avatar {
   width: 70px;
   height: 70px;
-  /* ✅ Theme color for host avatar */
-  color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
-  font-weight: 400;
   box-shadow: var(--shadow-md);
   flex-shrink: 0;
-  border: 3px solid #c58b3a;;
+  border: 3px solid var(--accent-gold);
+  background: var(--white);
+  overflow: hidden;
+}
+
+.host-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.host-icon-fallback {
+  color: var(--accent-gold);
 }
 
 .host-info h4 {
   margin: 0 0 0.25rem;
   font-size: 1.25rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--gray-900);
 }
 
 .host-info p {
   margin: 0;
-  color: var(--gray-600);
+  color: var(--gray-500);
   font-size: 0.9rem;
 }
 
