@@ -74,21 +74,21 @@
   transform: translateY(clamp(-4px, -2vw, -9px));
 }
 
-/* ---- Right Cards ---- */
+/* ---- Right Cards — Desktop: slim & compact ---- */
 .ovika-hero-cards {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.35rem;
   flex-shrink: 0;
-  width: 300px;
+  width: 260px;
   margin-left: auto;
   align-self: center;
 }
 
 .ovika-hero-card {
   display: flex;
-  align-items: flex-start;
-  gap: 0.7rem;
+  align-items: center;
+  gap: 0.55rem;
   background: #1a100699;
   border-left: 3px solid #d97706;
   border-top: 1px solid rgba(217, 119, 6, 0.25);
@@ -96,8 +96,8 @@
   border-bottom: 1px solid rgba(217, 119, 6, 0.15);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-radius: 0.65rem;
-  padding: 0.7rem 0.9rem;
+  border-radius: 0.55rem;
+  padding: 0.5rem 0.75rem;
   transition: transform 0.25s ease, border-left-color 0.25s ease, background 0.25s ease;
   cursor: pointer;
 }
@@ -109,21 +109,20 @@
 }
 
 .ovika-card-icon {
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   flex-shrink: 0;
-  margin-top: 2px;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
 }
 
 .ovika-card-body {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0;
 }
 
 .ovika-card-title {
   color: #ffffff;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   font-weight: 700;
   margin: 0;
   letter-spacing: 0.02em;
@@ -131,16 +130,16 @@
 
 .ovika-card-subtitle {
   color: #f5c97a;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 500;
-  margin: 0.05rem 0 0;
+  margin: 0.02rem 0 0;
 }
 
 .ovika-card-desc {
-  color: rgba(220, 210, 195, 0.95);
-  font-size: 0.72rem;
-  line-height: 1.4;
-  margin: 0.08rem 0 0;
+  color: rgba(220, 210, 195, 0.9);
+  font-size: 0.67rem;
+  line-height: 1.35;
+  margin: 0.04rem 0 0;
   font-weight: 400;
 }
 
@@ -149,10 +148,10 @@
   align-items: center;
   gap: 4px;
   color: #f5a623;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-decoration: none;
-  margin-top: 0.25rem;
+  margin-top: 0.2rem;
   transition: gap 0.2s;
   letter-spacing: 0.02em;
 }
@@ -190,10 +189,10 @@
   /* Stack vertically on mobile */
   .ovika-urban-hero-wrapper {
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: flex-start;
-    padding: 6rem 1.2rem 2rem;
-    gap: 1.5rem;
+    padding: 6rem 1rem 2rem;
+    gap: 0.75rem;
     height: auto;
     min-height: 100vh;
   }
@@ -222,26 +221,38 @@
     margin-bottom: 0.5rem;
   }
 
-  /* Cards full width on mobile */
+  /* Cards on mobile — column format, right aligned */
   .ovika-hero-cards {
-    width: 100%;
-    gap: 0.6rem;
+    width: auto;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-self: flex-end;
+    margin-left: auto;
+    min-width: 160px;
+    max-width: 55%;
   }
 
   .ovika-hero-card {
-    padding: 0.7rem 0.9rem;
-    border-radius: 0.75rem;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.3rem 0.45rem;
+    border-radius: 0.5rem;
+    gap: 0.35rem;
   }
 
   .ovika-card-icon {
-    font-size: 1.2rem;
-  }
-
-  .ovika-card-title {
     font-size: 0.85rem;
   }
 
+  .ovika-card-title {
+    font-size: 0.66rem;
+  }
+
+  .ovika-card-subtitle {
+    font-size: 0.56rem;
+  }
+
   .ovika-card-desc {
-    font-size: 0.72rem;
+    font-size: 0.54rem;
   }
 }

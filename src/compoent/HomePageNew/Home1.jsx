@@ -77,9 +77,7 @@ export default function Home1() {
                 <h3 className="ovika-card-title">{card.title}</h3>
                 <p className="ovika-card-subtitle">{card.subtitle}</p>
                 <p className="ovika-card-desc">{card.desc}</p>
-                <span className="ovika-card-link">
-                  Explore <span>→</span>
-                </span>
+            
               </div>
             </a>
           ))}

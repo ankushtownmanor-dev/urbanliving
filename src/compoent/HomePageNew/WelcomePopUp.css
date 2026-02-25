@@ -132,6 +132,12 @@
 .ovika-section-icon {
   font-size: 2.2rem;
   margin-bottom: 0.75rem;
+  /* Fixed height so both sides start title at same level */
+  height: 2.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 /* Title */
@@ -140,6 +146,11 @@
   font-weight: 700;
   color: #111;
   margin: 0 0 0.6rem;
+  /* Fixed height so description starts at same level on both sides */
+  min-height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Description */
@@ -147,11 +158,16 @@
   font-size: 0.88rem;
   color: #555;
   line-height: 1.6;
+  /* flex: 1 pushes button to bottom, making both buttons vertically aligned */
   flex: 1;
   margin-bottom: 1.2rem;
+  /* Fixed min-height so short text doesn't collapse the card */
+  min-height: 5rem;
+  display: flex;
+  align-items: flex-start;
 }
 
-/* Buttons */
+/* Buttons — always pinned to bottom */
 .ovika-section-btn {
   padding: 0.55rem 1.6rem;
   border-radius: 9999px;
@@ -161,6 +177,8 @@
   border: 2px solid #d97706;
   transition: all 0.25s;
   white-space: nowrap;
+  margin-top: auto;
+  flex-shrink: 0;
 }
 
 .ovika-btn-primary {
@@ -188,6 +206,7 @@
   align-items: center;
   justify-content: center;
   padding: 0 1rem;
+  flex-shrink: 0;
 }
 
 .ovika-popup-divider span {
@@ -240,11 +259,18 @@
     padding: 1.2rem 1rem 1rem;
   }
 
+  /* On mobile, reset fixed heights — no need to align side-by-side */
+  .ovika-section-icon {
+    height: auto;
+  }
+
   .ovika-section-title {
+    min-height: unset;
     font-size: 1rem;
   }
 
   .ovika-section-desc {
+    min-height: unset;
     font-size: 0.83rem;
   }
 
