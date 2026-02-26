@@ -1238,7 +1238,7 @@ export default function SuperAdminDashboard() {
                                  </div>
 
                                  <div className="sa-input-group">
-                                     <label>Base Price / Nightly Rent</label>
+                                     <label>Base Price / Monthly Rental (₹)</label>
                                      <input 
                                          type="number" 
                                          name="price"
@@ -1651,6 +1651,10 @@ export default function SuperAdminDashboard() {
                              <div className="sa-section-col" style={{ gridColumn: 'span 2' }}>
                                  <h4 style={{ borderLeft: '4px solid #facc15', paddingLeft: '10px', marginBottom: '15px', marginTop: '10px' }}>Advanced Pricing & Compliance</h4>
                                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px', background: '#f8fafc', padding: '15px', borderRadius: '12px' }}>
+                                     <div className="sa-input-group">
+                                         <label>Monthly Rent (₹)</label>
+                                         <input type="number" value={editingProp.price || ""} onChange={(e) => setEditingProp({...editingProp, price: e.target.value})} />
+                                     </div>
                                      <div className="sa-input-group">
                                          <label>Weekend Rate (₹)</label>
                                          <input type="number" value={editingProp.weekend_rate || ""} onChange={(e) => setEditingProp({...editingProp, weekend_rate: e.target.value})} />

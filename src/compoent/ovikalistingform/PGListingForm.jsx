@@ -742,6 +742,10 @@ const PGListingForm = () => {
               <div className="form-grid">
 
                 <div className="field-group">
+                  <label>Base Price / Monthly Rental (₹)</label>
+                  <input type="number" name="baseRate" value={form.baseRate} onChange={handleChange} placeholder="e.g. 15000" />
+                </div>
+                <div className="field-group">
                   <label>Security Deposit (₹)</label>
                   <input type="number" name="securityDeposit" value={form.securityDeposit} onChange={handleChange} placeholder="e.g. 50000" />
                 </div>
