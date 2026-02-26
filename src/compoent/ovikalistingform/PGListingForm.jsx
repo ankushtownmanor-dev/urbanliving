@@ -71,7 +71,7 @@ const BOOKING_TYPES = [
 function useFilePreviews() {
   const [previews, setPreviews] = useState([]);
   const update = (files) => {
-    const arr = Array.from(files || []).slice(0, 15);
+    const arr = Array.from(files || []);
     const readers = arr.map((file) => {
       return new Promise((res) => {
         const r = new FileReader();
@@ -79,9 +79,17 @@ function useFilePreviews() {
         r.readAsDataURL(file);
       });
     });
-    Promise.all(readers).then(setPreviews);
+    Promise.all(readers).then((newResults) => {
+       setPreviews(prev => {
+         const combined = [...prev, ...newResults];
+         return combined.slice(0, 15);
+       });
+    });
   };
-  return { previews, update };
+  const remove = (index) => {
+    setPreviews(prev => prev.filter((_, i) => i !== index));
+  };
+  return { previews, update, remove };
 }
 
 function isAcceptedFile(file) {
@@ -175,6 +183,8 @@ const PGListingForm = () => {
     essentialsNearby: { grocery: "", medical: "", shopping: "" },
     cafesRestaurants: [{ name: "", distance: "" }],
     houseSpecificTips: [""],
+    discount90Days: "", 
+    discount180Days: "",
   });
 
   const photoPreviews = useFilePreviews();
@@ -722,14 +732,34 @@ const PGListingForm = () => {
                  <label htmlFor="photo-upload" className="upload-trigger">
                     <Camera size={40} />
                     <p>Click to upload property photos</p>
-                    <span>Up to 15 high-quality images</span>
+                    <span>Up to 10 high-quality images</span>
                  </label>
               </div>
               <div className="preview-grid">
                  {photoPreviews.previews.map((p, i) => (
                    <div key={i} className={`preview-item ${coverIndex === i ? 'is-cover' : ''}`}>
                       <img src={p.url} alt="prop" />
-                      <div className="badge-cover" onClick={() => setCoverIndex(i)}>Cover</div>
+                      <div className="preview-overlay-fixed">
+                         <div className="top-actions">
+                            <button 
+                              type="button" 
+                              className="remove-btn-premium" 
+                              onClick={(e) => { e.stopPropagation(); photoPreviews.remove(i); }}
+                              title="Delete Photo"
+                            >
+                               <Trash2 size={14} />
+                               <span>Delete</span>
+                            </button>
+                         </div>
+                         <div className="bottom-actions">
+                            <div 
+                              className={`badge-cover-premium ${coverIndex === i ? 'active' : ''}`} 
+                              onClick={() => setCoverIndex(i)}
+                            >
+                              {coverIndex === i ? 'Main Cover' : 'Set as Cover'}
+                            </div>
+                         </div>
+                      </div>
                    </div>
                  ))}
               </div>
@@ -798,6 +828,19 @@ const PGListingForm = () => {
                     <option>Fixed Monthly Charge</option>
                     <option>Shared Bill</option>
                   </select>
+                </div>
+
+                <div className="field-group full">
+                  <div className="section-separator">Long-term Stay Discounts</div>
+                </div>
+
+                <div className="field-group">
+                  <label>90 Days Discount (%)</label>
+                  <input type="number" name="discount90Days" value={form.discount90Days} onChange={handleChange} placeholder="e.g. 5" />
+                </div>
+                <div className="field-group">
+                  <label>180 Days Discount (%)</label>
+                  <input type="number" name="discount180Days" value={form.discount180Days} onChange={handleChange} placeholder="e.g. 10" />
                 </div>
               </div>
             </div>

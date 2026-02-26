@@ -384,25 +384,104 @@
 
 .preview-item.is-cover {
   border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary);
 }
 
-.badge-cover {
+.preview-overlay-fixed {
   position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,0.6);
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 50%, rgba(0,0,0,0.6) 100%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.preview-overlay-fixed > * {
+  pointer-events: auto;
+}
+
+.top-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.bottom-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.remove-btn-premium {
+  background: #eb4d4b;
   color: white;
-  padding: 4px 10px;
-  font-size: 0.7rem;
-  border-radius: 10px;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   cursor: pointer;
-  backdrop-filter: blur(4px);
+  font-size: 0.7rem;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   transition: var(--transition);
 }
 
-.preview-item.is-cover .badge-cover {
+.remove-btn-premium:hover {
+  background: #ff7675;
+  transform: translateY(-2px);
+}
+
+.remove-btn-premium:active {
+  transform: scale(0.95);
+}
+
+.badge-cover-premium {
+  background: white;
+  color: #2d3436;
+  padding: 5px 12px;
+  font-size: 0.7rem;
+  border-radius: 20px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: var(--transition);
+}
+
+.badge-cover-premium.active {
   background: var(--primary);
+  color: white;
+}
+
+.badge-cover-premium:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+@media (max-width: 768px) {
+  .preview-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .remove-btn-premium {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+  
+  .badge-cover-premium {
+    font-size: 0.75rem;
+    padding: 6px 14px;
+  }
+}
+
+.badge-cover {
+  display: none !important;
 }
 
 /* Verification */
