@@ -76,6 +76,9 @@ export default function SuperAdminDashboard() {
   const [userSearch, setUserSearch] = useState(""); // Search for Users
   const [bookingFilter, setBookingFilter] = useState("ALL");
   const [filterType, setFilterType] = useState("ALL");
+  const [propertyTypes, setPropertyTypes] = useState([
+    "PG", "Hostel", "Hotel Room", "Apartment", "House", "Villa", "Flat", "Commercial Shop", "Office Space", "Land / Plot"
+  ]);
   
   // Settings State
   const [settings, setSettings] = useState({
@@ -285,6 +288,9 @@ export default function SuperAdminDashboard() {
               }
           }
       });
+      // Normalize type/category field
+      parsedProp.property_type = parsedProp.property_type || parsedProp.property_category || "";
+      
       setEditingProp(parsedProp); 
       setIsCreatingProp(false);
   };
@@ -450,7 +456,7 @@ export default function SuperAdminDashboard() {
   // --- Filtering ---
   const filteredProperties = properties.filter(p => {
       // Type Filter
-      let type = p.property_type || "N/A";
+      let type = p.property_type || p.property_category || "N/A";
       if (!p.property_type && p.meta) {
           try {
              const meta = typeof p.meta === 'string' ? JSON.parse(p.meta) : p.meta;
@@ -583,9 +589,9 @@ export default function SuperAdminDashboard() {
                                 onChange={(e) => setFilterType(e.target.value)}
                             >
                                 <option value="ALL">All Types</option>
-                                <option value="PG">PG / Hostel</option>
-                                <option value="Apartment">Apartment</option>
-                                <option value="House">House</option>
+                                {propertyTypes.map(t => (
+                                    <option key={t} value={t}>{t}</option>
+                                ))}
                             </select>
                         </div>
                      </div>
@@ -606,8 +612,8 @@ export default function SuperAdminDashboard() {
                             {filteredProperties.slice(0, 50).map(p => {
                                 const img = (Array.isArray(p.photos) ? p.photos[0] : (p.photos ? p.photos.split(',')[0] : '')) || 'https://via.placeholder.com/60';
                                 
-                                let type = p.property_type || "N/A";
-                                if (!p.property_type && p.meta) {
+                                let type = p.property_type || p.property_category || "N/A";
+                                if (!p.property_type && !p.property_category && p.meta) {
                                     try {
                                         const meta = typeof p.meta === 'string' ? JSON.parse(p.meta) : p.meta;
                                         if (meta.propertyType) type = meta.propertyType;
@@ -1172,18 +1178,16 @@ export default function SuperAdminDashboard() {
                                  <div className="sa-input-group">
                                      <label>Category</label>
                                      <select 
-                                        name="property_category" 
-                                        value={editingProp.property_category || ""} 
+                                        name="property_type" 
+                                        value={editingProp.property_type || editingProp.property_category || ""} 
                                         onChange={handleEditChange}
                                         className="sa-search-input"
                                         style={{ width: '100%', marginBottom: '15px' }}
                                      >
                                         <option value="">Select Category</option>
-                                        <option value="PG">PG / Hostel</option>
-                                        <option value="Apartment">Apartment</option>
-                                        <option value="House">House</option>
-                                        <option value="Villa">Villa</option>
-                                        <option value="Commercial">Commercial</option>
+                                        {propertyTypes.map(t => (
+                                            <option key={t} value={t}>{t}</option>
+                                        ))}
                                      </select>
                                  </div>
 
@@ -1239,7 +1243,7 @@ export default function SuperAdminDashboard() {
 
                              {/* CATEGORY SPECIFIC SECTION */}
                              <div className="sa-section-col">
-                                 {editingProp.property_category === 'PG' ? (
+                                 {(editingProp.property_type === 'PG' || editingProp.property_type === 'Hostel') ? (
                                      <>
                                          <h4 style={{ borderLeft: '4px solid #10b981', paddingLeft: '10px', marginBottom: '15px' }}>PG Specific Details</h4>
                                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
@@ -1334,14 +1338,14 @@ export default function SuperAdminDashboard() {
                                              <label style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}>
                                                  <input 
                                                     type="checkbox" 
-                                                    checked={editingProp.meta?.foodAvailable} 
+                                                    checked={!!editingProp.meta?.foodAvailable} 
                                                     onChange={(e) => handleMetaChange('foodAvailable', e.target.checked)} 
                                                  /> Food Available
                                              </label>
                                              <label style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}>
                                                  <input 
                                                     type="checkbox" 
-                                                    checked={editingProp.meta?.laundryAvailable} 
+                                                    checked={!!editingProp.meta?.laundryAvailable} 
                                                     onChange={(e) => handleMetaChange('laundryAvailable', e.target.checked)} 
                                                  /> Laundry
                                              </label>
@@ -1381,7 +1385,7 @@ export default function SuperAdminDashboard() {
                                                      <label key={rule} style={{ fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}>
                                                          <input 
                                                             type="checkbox" 
-                                                            checked={editingProp.meta?.[rule]} 
+                                                            checked={!!editingProp.meta?.[rule]} 
                                                             onChange={(e) => handleMetaChange(rule, e.target.checked)} 
                                                          /> {rule.replace('Allowed', '')} Allowed
                                                      </label>
