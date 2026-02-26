@@ -45,6 +45,14 @@ const SHARING_TYPES = ["Single Room", "Double Sharing", "Triple Sharing", "Four 
 const BEDROOM_TYPES = ["King Bed", "Queen Bed", "Single Bed", "Bunk Bed", "Twin Bed", "Other"];
 const BATHROOM_TYPES = ["Attached", "Common", "Shared", "Private"];
 
+const AMENITIES_MASTER = {
+  "Safety & Security": ["CCTV", "Security Guard", "Fire Extinguisher", "Intercom", "Biometric Entry", "Gated Community", "Fire Alarm", "Smoke Detectors"],
+  "Modern Living": ["Lift", "Power Backup", "Wi-Fi", "Swimming Pool", "Gym", "Clubhouse", "Central AC", "EV Charging Point"],
+  "Basic Utilities": ["Water Supply 24/7", "Borewell", "Corporation Water", "Gas Pipeline", "Solar Water", "Reserved Parking", "Visitor Parking"],
+  "Indoor Features": ["Air Conditioner", "Geyser", "RO Water", "Washing Machine", "Refrigerator", "Inverter", "Wardrobe", "Study Table", "Smart TV", "Gas Stove"],
+  "Outer Spaces": ["Balcony", "Private Terrace", "Garden", "Park Area", "Pet Area", "Kids Play Area"]
+};
+
 export default function SuperAdminDashboard() {
   const [view, setView] = useState('dashboard'); // 'dashboard', 'properties', 'users', 'bookings', 'finance', 'settings'
   const [properties, setProperties] = useState([]);
@@ -279,7 +287,7 @@ export default function SuperAdminDashboard() {
   const handleEditClick = (prop) => {
       const parsedProp = { ...prop };
       // Parse JSON fields for editing
-      ['amenities', 'photos', 'house_rules', 'safety_items', 'meta', 'id_files', 'guest_policy', 'bedroom_details', 'bathroom_details', 'bedrooms', 'bathrooms'].forEach(key => {
+      ['amenities', 'photos', 'house_rules', 'safety_items', 'meta', 'id_files', 'guest_policy', 'bedroom_details', 'bathroom_details', 'bedrooms', 'bathrooms', 'guidebook'].forEach(key => {
           if (parsedProp[key] && typeof parsedProp[key] === 'string') {
               try {
                   parsedProp[key] = JSON.parse(parsedProp[key]);
@@ -288,8 +296,14 @@ export default function SuperAdminDashboard() {
               }
           }
       });
-      // Normalize type/category field
-      parsedProp.property_type = parsedProp.property_type || parsedProp.property_category || "";
+      // Normalize nested objects
+      parsedProp.guidebook = typeof parsedProp.guidebook === 'object' ? parsedProp.guidebook : {};
+      parsedProp.guest_policy = typeof parsedProp.guest_policy === 'object' ? parsedProp.guest_policy : {};
+      parsedProp.meta = typeof parsedProp.meta === 'object' ? parsedProp.meta : {};
+      
+      // Ensure specific meta fields exist if missing
+      parsedProp.meta.maintenanceCharge = parsedProp.meta.maintenanceCharge || parsedProp.maintenance_charge || "";
+      parsedProp.meta.securityDeposit = parsedProp.meta.securityDeposit || parsedProp.security_deposit || "";
       
       setEditingProp(parsedProp); 
       setIsCreatingProp(false);
@@ -306,13 +320,45 @@ export default function SuperAdminDashboard() {
   };
 
   const handleMetaChange = (field, value) => {
-      setEditingProp(prev => ({
-          ...prev,
-          meta: {
-              ...(typeof prev.meta === 'object' ? prev.meta : {}),
-              [field]: value
+      setEditingProp(prev => {
+          const newMeta = typeof prev.meta === 'object' ? { ...prev.meta } : {};
+          newMeta[field] = value;
+          return { ...prev, meta: newMeta };
+      });
+  };
+
+  const handleGuidebookChange = (field, value, nestedField = null) => {
+      setEditingProp(prev => {
+          const newGuide = { ...(prev.guidebook || {}) };
+          if (nestedField) {
+              newGuide[field] = { ...(newGuide[field] || {}), [nestedField]: value };
+          } else {
+              newGuide[field] = value;
           }
-      }));
+          return { ...prev, guidebook: newGuide };
+      });
+  };
+
+  const handlePolicyToggle = (field) => {
+      setEditingProp(prev => {
+          const newPolicy = { ...(prev.guest_policy || {}) };
+          newPolicy[field] = !newPolicy[field];
+          return { ...prev, guest_policy: newPolicy };
+      });
+  };
+
+  const toggleAmenity = (a) => {
+      setEditingProp(prev => {
+          const currentAmenities = Array.isArray(prev.amenities) 
+              ? prev.amenities 
+              : (typeof prev.amenities === 'string' ? JSON.parse(prev.amenities || '[]') : []);
+          
+          const newAmenities = currentAmenities.includes(a)
+              ? currentAmenities.filter(item => item !== a)
+              : [...currentAmenities, a];
+          
+          return { ...prev, amenities: newAmenities };
+      });
   };
 
   const handleCreatePropClick = () => {
@@ -1493,7 +1539,147 @@ export default function SuperAdminDashboard() {
                                          </div>
                                      </>
                                  )}
+                             </div>
 
+                             {/* AMENITIES SECTION */}
+                             <div className="sa-section-col" style={{ gridColumn: 'span 2' }}>
+                                 <h4 style={{ borderLeft: '4px solid #8b5cf6', paddingLeft: '10px', marginBottom: '15px', marginTop: '10px' }}>Amenities & Features</h4>
+                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', background: '#f8fafc', padding: '15px', borderRadius: '12px' }}>
+                                     {Object.entries(AMENITIES_MASTER).map(([group, list]) => (
+                                         <div key={group}>
+                                             <div style={{ fontSize: '12px', fontWeight: '700', color: '#475569', marginBottom: '8px', textTransform: 'uppercase' }}>{group}</div>
+                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                                 {list.map(a => {
+                                                     const isSelected = Array.isArray(editingProp.amenities) && editingProp.amenities.includes(a);
+                                                     return (
+                                                         <label key={a} style={{ fontSize: '11px', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', padding: '2px 0' }}>
+                                                             <input 
+                                                                 type="checkbox" 
+                                                                 checked={isSelected}
+                                                                 onChange={() => toggleAmenity(a)}
+                                                             /> {a}
+                                                         </label>
+                                                     );
+                                                 })}
+                                             </div>
+                                         </div>
+                                     ))}
+                                 </div>
+                             </div>
+
+                             {/* GUIDEBOOK & POLICIES SECTION */}
+                             <div className="sa-section-col">
+                                 <h4 style={{ borderLeft: '4px solid #ec4899', paddingLeft: '10px', marginBottom: '15px', marginTop: '10px' }}>Local Guidebook</h4>
+                                 <div className="sa-input-group">
+                                     <label>Nearest Metro / Transport</label>
+                                     <input 
+                                         value={editingProp.guidebook?.transport_tips?.metro || editingProp.guidebook?.metro_station || ""} 
+                                         onChange={(e) => handleGuidebookChange('transport_tips', e.target.value, 'metro')}
+                                         placeholder="e.g. Alambagh Metro"
+                                     />
+                                 </div>
+                                 <div className="sa-input-group">
+                                     <label>Nearest Hospital</label>
+                                     <input 
+                                         value={editingProp.guidebook?.essentials_nearby?.medical || editingProp.guidebook?.hospital || ""} 
+                                         onChange={(e) => handleGuidebookChange('essentials_nearby', e.target.value, 'medical')}
+                                         placeholder="e.g. Apollo Hospital"
+                                     />
+                                 </div>
+                                 <div className="sa-input-group">
+                                     <label>Nearest Grocery / Market</label>
+                                     <input 
+                                         value={editingProp.guidebook?.essentials_nearby?.grocery || editingProp.guidebook?.market || ""} 
+                                         onChange={(e) => handleGuidebookChange('essentials_nearby', e.target.value, 'grocery')}
+                                         placeholder="e.g. Reliance Fresh"
+                                     />
+                                 </div>
+                                 <div className="sa-input-group">
+                                     <label>Transport Tips (Notes)</label>
+                                     <textarea 
+                                         rows="2"
+                                         value={editingProp.guidebook?.transport_tips?.local_travel || ""} 
+                                         onChange={(e) => handleGuidebookChange('transport_tips', e.target.value, 'local_travel')}
+                                         placeholder="e.g. Auto easily available from main gate"
+                                     />
+                                 </div>
+                                 <div className="sa-input-group">
+                                     <label>Must Visit Places (Shortlist)</label>
+                                     <textarea 
+                                         rows="2"
+                                         value={editingProp.guidebook?.must_visit?.join(', ') || ""} 
+                                         onChange={(e) => handleGuidebookChange('must_visit', e.target.value.split(',').map(s => s.trim()))}
+                                         placeholder="e.g. Bara Imambara, Ambedkar Park"
+                                     />
+                                 </div>
+                             </div>
+
+                             <div className="sa-section-col">
+                                 <h4 style={{ borderLeft: '4px solid #06b6d4', paddingLeft: '10px', marginBottom: '15px', marginTop: '10px' }}>Guest Policy & Preferences</h4>
+                                 <div style={{ background: '#f8fafc', padding: '15px', borderRadius: '12px' }}>
+                                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                                         {[
+                                             { label: 'Family Allowed', key: 'family_allowed' },
+                                             { label: 'Couple Allowed', key: 'unmarried_couple_allowed' },
+                                             { label: 'Bachelors Allowed', key: 'bachelors_allowed' },
+                                             { label: 'Pets Allowed', key: 'pets_allowed' },
+                                             { label: 'Smoking Allowed', key: 'smoking_allowed' },
+                                             { label: 'Drinking Allowed', key: 'drinking_alcohol' }
+                                         ].map(p => (
+                                             <label key={p.key} style={{ fontSize: '12px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', padding: '4px 0' }}>
+                                                 <input 
+                                                     type="checkbox" 
+                                                     checked={!!editingProp.guest_policy?.[p.key]} 
+                                                     onChange={() => handlePolicyToggle(p.key)}
+                                                 /> {p.label}
+                                             </label>
+                                         ))}
+                                     </div>
+                                 </div>
+                                 
+                                 <div className="sa-input-group" style={{ marginTop: '15px' }}>
+                                     <label>Gate Closing Time / Common Check-in Notes</label>
+                                     <input 
+                                         value={editingProp.meta?.gateClosingTime || ""} 
+                                         onChange={(e) => handleMetaChange('gateClosingTime', e.target.value)}
+                                         placeholder="e.g. 11:00 PM"
+                                     />
+                                 </div>
+                             </div>
+
+                             {/* PRICING, TIMES & COMPLIANCE SECTION */}
+                             <div className="sa-section-col" style={{ gridColumn: 'span 2' }}>
+                                 <h4 style={{ borderLeft: '4px solid #facc15', paddingLeft: '10px', marginBottom: '15px', marginTop: '10px' }}>Advanced Pricing & Compliance</h4>
+                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px', background: '#f8fafc', padding: '15px', borderRadius: '12px' }}>
+                                     <div className="sa-input-group">
+                                         <label>Weekend Rate (₹)</label>
+                                         <input type="number" value={editingProp.weekend_rate || ""} onChange={(e) => setEditingProp({...editingProp, weekend_rate: e.target.value})} />
+                                     </div>
+                                     <div className="sa-input-group">
+                                         <label>Cleaning Fee (₹)</label>
+                                         <input type="number" value={editingProp.cleaning_fee || ""} onChange={(e) => setEditingProp({...editingProp, cleaning_fee: e.target.value})} />
+                                     </div>
+                                     <div className="sa-input-group">
+                                         <label>Weekly Disc (%)</label>
+                                         <input type="number" value={editingProp.weekly_discount_pct || ""} onChange={(e) => setEditingProp({...editingProp, weekly_discount_pct: e.target.value})} />
+                                     </div>
+                                     <div className="sa-input-group">
+                                         <label>Monthly Disc (%)</label>
+                                         <input type="number" value={editingProp.monthly_discount_pct || ""} onChange={(e) => setEditingProp({...editingProp, monthly_discount_pct: e.target.value})} />
+                                     </div>
+                                     <div className="sa-input-group">
+                                         <label>Check-in Time</label>
+                                         <input type="time" value={editingProp.check_in_time || "12:00"} onChange={(e) => setEditingProp({...editingProp, check_in_time: e.target.value})} />
+                                     </div>
+                                     <div className="sa-input-group">
+                                         <label>Check-out Time</label>
+                                         <input type="time" value={editingProp.check_out_time || "11:00"} onChange={(e) => setEditingProp({...editingProp, check_out_time: e.target.value})} />
+                                     </div>
+                                     <div className="sa-input-group" style={{ gridColumn: 'span 2' }}>
+                                         <label>Registration Number (Legal)</label>
+                                         <input value={editingProp.registration_number || ""} onChange={(e) => setEditingProp({...editingProp, registration_number: e.target.value})} placeholder="Govt Reg ID" />
+                                     </div>
+                                 </div>
                              </div>
                         </div>
 
@@ -1576,3 +1762,4 @@ export default function SuperAdminDashboard() {
     </div>
   );
 }
+
