@@ -538,7 +538,7 @@ const PGListingForm = () => {
                           </div>
 
                           <div className="field-group">
-                            <label>Rent / Price (₹)</label>
+                            <label>Monthly Rent (₹)</label>
                             <input type="number" placeholder="per month" value={room.price} onChange={(e) => {
                               const newList = [...form.bedroomDetails];
                               newList[idx].price = e.target.value;
@@ -740,10 +740,7 @@ const PGListingForm = () => {
             <div className="step-fade">
               <h2 className="step-title">Rent & Financials</h2>
               <div className="form-grid">
-                <div className="field-group">
-                  <label>Nightly Rent (₹) *</label>
-                  <input type="number" name="baseRate" value={form.baseRate} onChange={handleChange} placeholder="e.g. 25000" />
-                </div>
+
                 <div className="field-group">
                   <label>Security Deposit (₹)</label>
                   <input type="number" name="securityDeposit" value={form.securityDeposit} onChange={handleChange} placeholder="e.g. 50000" />
@@ -861,15 +858,15 @@ const PGListingForm = () => {
                     {otpSent && !isPhoneVerified && (
                       <div className="otp-container" style={{ marginTop: '15px' }}>
                         <input 
-                          placeholder="4-digit OTP" 
+                          placeholder="Enter OTP" 
                           className="otp-input"
                           value={phoneOtp}
-                          onChange={(e) => setPhoneOtp(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                          onChange={(e) => setPhoneOtp(e.target.value.replace(/\D/g, ''))}
                         />
                         <button 
                           onClick={handleVerifyOtp} 
                           className="verify-btn"
-                          disabled={isVerifyingOtp || phoneOtp.length < 4}
+                          disabled={isVerifyingOtp || !phoneOtp}
                         >
                           {isVerifyingOtp ? 'Verifying...' : 'Verify OTP'}
                         </button>
