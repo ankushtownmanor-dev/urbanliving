@@ -375,40 +375,77 @@ export default function SuperAdminDashboard() {
     if(!editingProp) return;
     
     try {
-        // Prepare payload: Spread editingProp FIRST, then override with formatted values
+        // Prepare PG/Advanced details to be appended to description if they don't have columns
+        let extraInfo = "";
+        if (editingProp.property_type === 'PG' || editingProp.property_type === 'Hostel') {
+            extraInfo += "\n\n--- PG Details ---";
+            if (editingProp.meta?.noticePeriod) extraInfo += `\nNotice Period: ${editingProp.meta.noticePeriod} Days`;
+            if (editingProp.meta?.lockInPeriod) extraInfo += `\nLock-in: ${editingProp.meta.lockInPeriod} Months`;
+            if (editingProp.meta?.electricityCharges) extraInfo += `\nElectricity: ${editingProp.meta.electricityCharges}`;
+            if (editingProp.meta?.gateClosingTime) extraInfo += `\nGate Closing Time: ${editingProp.meta.gateClosingTime}`;
+            if (editingProp.meta?.securityDeposit) extraInfo += `\nSecurity Deposit: ₹${editingProp.meta.securityDeposit}`;
+            if (editingProp.meta?.foodAvailable) extraInfo += `\nFood: Available`;
+        }
+
+        if (editingProp.guidebook) {
+            extraInfo += "\n\n--- Local Guide ---";
+            const g = editingProp.guidebook;
+            if (g.transport_tips) extraInfo += `\nTransport: ${g.transport_tips}`;
+            if (g.nearby_essentials) extraInfo += `\nEssentials: ${g.nearby_essentials}`;
+            if (g.cafes_restaurants) extraInfo += `\nCafes: ${g.cafes_restaurants}`;
+            if (g.must_visit) extraInfo += `\nMust Visit: ${g.must_visit}`;
+        }
+
+        // 1. Build Payload with ONLY verified columns (from DashBoardAdmin.jsx reference)
         const payload = {
-            ...editingProp,
-            property_name: editingProp.property_name || editingProp.name,
-            description: editingProp.description,
-            price: Number(editingProp.price), // Ensure Number type
-            address: editingProp.address,
-            city: editingProp.city,
+            property_name: editingProp.property_name || editingProp.name || "Untitled",
+            description: (editingProp.description || "") + extraInfo,
+            price: Number(editingProp.price) || 0,
+            address: editingProp.address || "",
+            city: editingProp.city || "",
+            property_type: editingProp.property_type || "Standard",
+            property_category: editingProp.property_category || "Flat",
+            area: editingProp.area || "",
+            beds: Number(editingProp.beds) || 0,
+            max_guests: Number(editingProp.max_guests) || 0,
+            booking_type: String(editingProp.booking_type || "0"),
+            owner_id: editingProp.owner_id || "admin",
+            check_in_time: editingProp.check_in_time || "12:00",
+            check_out_time: editingProp.check_out_time || "11:00",
+            weekend_rate: Number(editingProp.weekend_rate) || 0,
+            cleaning_fee: Number(editingProp.cleaning_fee) || 0,
+            weekly_discount_pct: Number(editingProp.weekly_discount_pct) || 0,
+            monthly_discount_pct: Number(editingProp.monthly_discount_pct) || 0,
+            // Boolean columns
+            smoking_allowed: !!editingProp.smoking_allowed,
+            pets_allowed: !!editingProp.pets_allowed,
+            events_allowed: !!editingProp.events_allowed,
+            drinking_alcohol: !!editingProp.drinking_alcohol || !!editingProp.drinkingAllowed,
         };
 
-        // Stringify complex fields (objects/arrays) to prevent backend SQL errors
-        Object.keys(payload).forEach(key => {
-             if (payload[key] !== null && typeof payload[key] === 'object') {
-                 try {
-                     payload[key] = JSON.stringify(payload[key]);
-                 } catch (e) {
-                     console.warn(`Auto-stringify failed for ${key}`, e);
-                 }
-             }
+        // 2. JSON Fields
+        const jsonFields = {
+            amenities: editingProp.amenities,
+            bedrooms: editingProp.bedrooms || editingProp.bedroom_details,
+            bathrooms: editingProp.bathrooms || editingProp.bathroom_details,
+            guest_policy: editingProp.guest_policy,
+        };
+
+        Object.keys(jsonFields).forEach(key => {
+            let val = jsonFields[key];
+            if (val) {
+                payload[key] = typeof val === 'object' ? JSON.stringify(val) : val;
+            } else {
+                payload[key] = key === 'guest_policy' ? "{}" : "[]";
+            }
         });
 
-        // Remove fields that should not be updated or were removed from the form
-        delete payload.photos;
-        delete payload._id;
-        delete payload.id;
-        delete payload.created_at;
-        delete payload.updated_at;
+        console.log("Saving Property with Verified Payload:", payload);
 
         if (isCreatingProp) {
-            // Create
             await axios.post(API_PROPERTIES_UPLOAD, payload);
             alert("Property created successfully.");
         } else {
-            // Update
             const id = editingProp.id || editingProp._id;
             await axios.put(`${API_PROPERTIES}/${id}`, payload);
             alert("Property updated successfully.");
@@ -416,7 +453,7 @@ export default function SuperAdminDashboard() {
         
         setEditingProp(null);
         setIsCreatingProp(false);
-        fetchAllProperties(); // Refresh list
+        fetchAllProperties(); 
     } catch(e) {
         console.error("Save Error Details:", e);
         const errMsg = e.response?.data?.message || e.response?.data?.error || e.message;
