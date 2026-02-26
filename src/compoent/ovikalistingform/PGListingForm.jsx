@@ -26,6 +26,7 @@ const PROPERTY_CATEGORIES = [
   { id: "PG", label: "PG / Hostel", sub: "Shared accommodation", icon: <Users size={20} /> },
   { id: "Penthouse", label: "Penthouse", sub: "Top floor luxury", icon: <Building size={20} /> },
   { id: "Studio", label: "Studio Apartment", sub: "1Room Kitchen sets", icon: <Zap size={20} /> },
+  { id: "Suite", label: "Suite", sub: "Luxury Suites & Living", icon: <Hotel size={20} /> },
 ];
 
 const FLOOR_TYPES = ["Vitrifed Tiles", "Marble", "Wooden", "Granite", "Mosaic", "Normal", "Laminate", "Carpeted"];
@@ -54,6 +55,7 @@ const PROPERTY_TYPES = {
   "PG": ["Girls PG", "Boys PG", "Co-living Space", "Student Hostel"],
   "Penthouse": ["Luxury Penthouse", "Duplex Penthouse", "Studio Penthouse"],
   "Studio": ["1RK Studio", "1BHK Studio", "Luxury Studio"],
+  "Suite": ["Standard Suite", "Executive Suite", "Presidential Suite", "Junior Suite"],
 };
 
 const FURNISHING_ITEMS = ["Fridge", "Sofa", "Study Table", "Geyser", "AC", "Washing Machine", "Microwave", "Cupboard", "Bed", "TV", "Mirror", "Curtains", "Shoe Rack", "Bookshelf", "Dishwasher", "Air Purifier", "Iron Table", "Chair", "Desk Lamp"];
@@ -861,7 +863,7 @@ const PGListingForm = () => {
                           setAadhaarNumber(val);
                           if (aadhaarVerified) setAadhaarVerified(false);
                         }} 
-                        disabled={aadhaarVerified || isVerifyingAadhaar}
+                        disabled={isVerifyingAadhaar}
                         style={{ borderColor: aadhaarVerified ? '#10b981' : '' }}
                        />
                        <button 
@@ -881,13 +883,14 @@ const PGListingForm = () => {
                        <input 
                         placeholder="10 digit number" 
                         value={phoneNumber} 
-                        onChange={(e) => {
-                          const val = e.target.value.replace(/\D/g,'').slice(0,10);
-                          setPhoneNumber(val);
-                          if (isPhoneVerified) setIsPhoneVerified(false);
-                          if (otpSent) setOtpSent(false);
-                        }} 
-                        disabled={otpSent || isPhoneVerified || isSendingOtp}
+                         onChange={(e) => {
+                           const val = e.target.value.replace(/\D/g,'').slice(0,10);
+                           setPhoneNumber(val);
+                           if (isPhoneVerified) setIsPhoneVerified(false);
+                           if (otpSent) setOtpSent(false);
+                           setPhoneOtp(''); // Clear OTP field if number changes
+                         }} 
+                        disabled={isPhoneVerified || isSendingOtp}
                         style={{ flex: 1, borderColor: isPhoneVerified ? '#10b981' : '' }}
                        />
                        
