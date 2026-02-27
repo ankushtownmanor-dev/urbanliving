@@ -1094,12 +1094,17 @@ export default function SuperAdminDashboard() {
                                             </td>
                                             <td>
                                                 <span className={`sa-badge-type`} style={{
-                                                    background: (b.status||'').toLowerCase() === 'accepted' ? '#dcfce7' : (b.status||'').toLowerCase() === 'rejected' ? '#fee2e2' : '#fef3c7',
-                                                    color: (b.status||'').toLowerCase() === 'accepted' ? '#166534' : (b.status||'').toLowerCase() === 'rejected' ? '#991b1b' : '#92400e',
+                                                    background: (b.status||'').toLowerCase() === 'accepted' ? '#dcfce7' : (b.status||'').toLowerCase() === 'rejected' ? '#fee2e2' : (b.status||'').toLowerCase() === 'cancelled' ? '#f3f4f6' : '#fef3c7',
+                                                    color: (b.status||'').toLowerCase() === 'accepted' ? '#166534' : (b.status||'').toLowerCase() === 'rejected' ? '#991b1b' : (b.status||'').toLowerCase() === 'cancelled' ? '#64748b' : '#92400e',
                                                     textTransform: 'capitalize'
                                                 }}>
                                                     {b.status || 'Pending'}
                                                 </span>
+                                                {(b.status||'').toLowerCase() === 'cancelled' && b.cancel_reason && (
+                                                    <div style={{ fontSize: '10px', color: '#ef4444', marginTop: '4px', maxWidth: '120px', fontStyle: 'italic' }}>
+                                                        Reason: {b.cancel_reason}
+                                                    </div>
+                                                )}
                                             </td>
                                             <td style={{ fontFamily: 'Inter', fontWeight: 'bold' }}>₹{amount.toLocaleString()}</td>
                                             <td>

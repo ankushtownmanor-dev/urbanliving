@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   FaHome,
   FaBookmark,
@@ -184,6 +185,36 @@ const Dashboard = () => {
       setLoadingNotification(false);
     }
   };
+  
+  const handleCancelBooking = async (id) => {
+    if (!window.confirm("Are you sure you want to cancel this booking request?")) return;
+    try {
+      console.log("Cancelling booking request ID:", id);
+      const res = await axios.patch(`https://townmanor.ai/api/booking-request/${id}/cancel`, {
+        id: id,
+        user_id: user?.user_id || user?.id,
+        username: user?.username,
+        cancel_reason: "Plan changed"
+      }, {
+        withCredentials: true,
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (res.status === 200 || res.status === 204 || res.data?.success) {
+        alert("Booking request cancelled successfully.");
+        fetchBookingRequests(); // Refresh the list
+      } else {
+        alert(`Failed to cancel: ${res.data?.message || "Unknown error"}`);
+      }
+    } catch (err) {
+      console.error("Cancel error detailed:", err);
+      const serverMsg = err.response?.data?.message || err.response?.data?.error || err.message;
+      alert(`Error cancelling booking request: ${serverMsg}`);
+    }
+  };
 
   useEffect(() => {
     if (navigation === "notification") {
@@ -366,9 +397,15 @@ const Dashboard = () => {
                           : "status-pending"
                       }`}
                     >
-                      {req.status.toUpperCase()}
+                      {req.status === "cancelled" ? "CANCELLED" : req.status.toUpperCase()}
                     </span>
                   </div>
+
+                  {req.status === "cancelled" && req.cancel_reason && (
+                    <p className="cancel-reason-text">
+                      <strong>Reason:</strong> {req.cancel_reason}
+                    </p>
+                  )}
 
                   <p>
                     <strong>City:</strong> {req.property?.city}
@@ -393,6 +430,26 @@ const Dashboard = () => {
                       onClick={() => navigate(`/property/${req.property_id}`)}
                     >
                       Proceed to Booking →
+                    </button>
+                  )}
+
+                  {req.status === "pending" && (
+                    <button
+                      className="cancel-btn"
+                      style={{
+                        marginTop: "12px",
+                        padding: "8px 16px",
+                        background: "#dc2626",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        fontSize: "14px",
+                        fontWeight: "500"
+                      }}
+                      onClick={() => handleCancelBooking(req.id)}
+                    >
+                      Cancel Booking
                     </button>
                   )}
                 </div>

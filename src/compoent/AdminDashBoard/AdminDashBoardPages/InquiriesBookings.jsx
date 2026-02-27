@@ -435,6 +435,25 @@ const InquiriesBookings = () => {
                   <span style={{ fontSize: "14px", fontWeight: 600, color: "#1e40af" }}>{req.username}</span>
                 </div>
 
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
+                  <span style={{ 
+                    padding: "4px 12px", 
+                    borderRadius: "20px", 
+                    fontSize: "12px", 
+                    fontWeight: 600,
+                    background: req.status === "accepted" ? "#dcfce7" : req.status === "rejected" ? "#fee2e2" : req.status === "cancelled" ? "#f3f4f6" : "#fef3c7",
+                    color: req.status === "accepted" ? "#166534" : req.status === "rejected" ? "#991b1b" : req.status === "cancelled" ? "#4b5563" : "#92400e"
+                  }}>
+                    {req.status === "cancelled" ? "CANCELLED BY USER" : req.status.toUpperCase()}
+                  </span>
+                </div>
+
+                {req.status === "cancelled" && req.cancel_reason && (
+                  <div style={{ padding: "10px", background: "#f9fafb", borderRadius: "8px", fontSize: "13px", color: "#4b5563", marginBottom: "16px", borderLeft: "4px solid #9ca3af" }}>
+                    <strong>Cancel Reason:</strong> {req.cancel_reason}
+                  </div>
+                )}
+
                 {req.status === "pending" && (
                   <div style={{ display: "flex", gap: "10px" }}>
                     <button onClick={() => handleAction(req.id, "accept")} disabled={actionLoadingId === req.id} style={{ flex: 1, padding: "12px", borderRadius: "10px", border: "none", background: "#16a34a", color: "#fff", fontWeight: 600, fontSize: "15px", cursor: actionLoadingId === req.id ? "not-allowed" : "pointer", opacity: actionLoadingId === req.id ? 0.6 : 1, transition: "all 0.2s" }}>
