@@ -1931,13 +1931,16 @@ const PropertyListPage = () => {
                   transform: 'translate(-50%, -50%)',
                   background: '#fff', borderRadius: 24,
                   boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
-                  padding: '36px', zIndex: 100,
-                  display: 'flex', flexDirection: 'column', gap: 20, width: 540,
+                  padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '24px 16px' : '36px',
+                  zIndex: 100,
+                  display: 'flex', flexDirection: 'column', gap: 16,
+                  width: typeof window !== 'undefined' && window.innerWidth < 480 ? 'calc(100vw - 32px)' : '540px',
+                  maxWidth: '95vw', boxSizing: 'border-box',
                 }}>
                   <h3 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: '#222', textAlign: 'center' }}>
                     Select Rental Type
                   </h3>
-                  <div style={{ display: 'flex', gap: 14 }}>
+                  <div style={{ display: 'flex', gap: 14, flexDirection: typeof window !== 'undefined' && window.innerWidth < 480 ? 'column' : 'row' }}>
                   {/* Nightly Card */}
                   <button
                     onClick={() => {
@@ -1946,7 +1949,7 @@ const PropertyListPage = () => {
                       setShowRentalPopup(false);
                     }}
                     style={{
-                      flex: 1, padding: '32px 20px', borderRadius: 16,
+                      flex: 1, padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', borderRadius: 16,
                       border: `2px solid ${rentalType === 'short' ? '#C98B3E' : '#e8e8e8'}`,
                       background: rentalType === 'short' ? '#FFF6EE' : '#fafafa',
                       cursor: 'pointer', fontFamily: 'inherit',
@@ -1973,7 +1976,7 @@ const PropertyListPage = () => {
                       setShowRentalPopup(false);
                     }}
                     style={{
-                      flex: 1, padding: '32px 20px', borderRadius: 16,
+                      flex: 1, padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', borderRadius: 16,
                       border: `2px solid ${rentalType === 'long' ? '#C98B3E' : '#e8e8e8'}`,
                       background: rentalType === 'long' ? '#FFF6EE' : '#fafafa',
                       cursor: 'pointer', fontFamily: 'inherit',
