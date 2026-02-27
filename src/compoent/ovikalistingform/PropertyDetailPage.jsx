@@ -306,9 +306,7 @@ const ImageViewer = ({ images, initialIndex, onClose }) => {
   );
 };
 
-// CALENDAR COMPONENT
-const Calendar = ({ selectedDates, onDateSelect, minDate = new Date(), disabledDateSet = new Set(), onInvalidRange }) => {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+const Calendar = ({ selectedDates, onDateSelect, minDate = new Date(), disabledDateSet = new Set(), onInvalidRange, currentMonth, setCurrentMonth }) => {
   const [checkInDate, setCheckInDate] = useState(selectedDates.checkInDate ? new Date(selectedDates.checkInDate) : null);
   const [checkOutDate, setCheckOutDate] = useState(selectedDates.checkOutDate ? new Date(selectedDates.checkOutDate) : null);
 
@@ -614,7 +612,7 @@ const PropertyDetailPage = () => {
   const [aadhaarNumber, setAadhaarNumber] = useState('');
   const [isAadhaarLoading, setIsAadhaarLoading] = useState(false);
   const [verificationMethod, setVerificationMethod] = useState('aadhaar');
-  const [pricing, setPricing] = useState({ subtotal: 0, gst: 0, total: 0 });
+  const [pricing, setPricing] = useState({ subtotal: 0, discount: 0, discountPercentage: 0, gst: 0, total: 0, daysNeededForNextTier: 0, nextTierPercentage: 0 });
   const [isPayNowEnabled, setIsPayNowEnabled] = useState(false);
   const [isPhotoUploading, setIsPhotoUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -625,6 +623,7 @@ const PropertyDetailPage = () => {
   const [hostImage, setHostImage] = useState(null);
   const [showLeadModal, setShowLeadModal] = useState(false);
   const [selectedRoomForLead, setSelectedRoomForLead] = useState(null);
+  const [calendarViewMonth, setCalendarViewMonth] = useState(new Date());
 
   // Booking Request State
   const [bookingRequestStatus, setBookingRequestStatus] = useState(null); // 'pending', 'accepted', 'rejected', null
@@ -763,48 +762,99 @@ const PropertyDetailPage = () => {
 
   useEffect(() => {
     let subtotal = 0;
+    let discountAmount = 0;
+    let discountPercentage = 0;
     let computedTotal = 0;
+    let currentDays = 0;
+    let nextTierDays = 0;
+    let nextTierPercentage = 0;
+    let daysNeededForNextTier = 0;
 
-    // Check if we can calculate price based on configuration
     const isPGMonthly = property?.property_category === 'PG' && pricingMode === 'monthly';
     const datesSelected = formData.checkInDate && formData.checkOutDate;
 
     if (property) {
+      const isTMLuxe = property.property_name?.includes('TM Luxe');
+
       if (isPGMonthly) {
         // For PG Monthly, if selectedPrice is from a room config, it's already monthly.
         // If it's just from the top-level property.price (which is Nightly), we multiply by 30.
         const isFromRoom = property.parsedBedrooms?.some(r => Number(r.price) === selectedPrice);
         const monthly = (selectedPrice && isFromRoom) ? selectedPrice : ((selectedPrice || Number(property.price) || 0) * 30);
         subtotal = monthly;
+
+        // For monthly mode, we assume at least 30 days unless dates are selected
+        currentDays = 30;
+        if (datesSelected) {
+          const checkIn = new Date(formData.checkInDate);
+          const checkOut = new Date(formData.checkOutDate);
+          const diffTime = Math.abs(checkOut - checkIn);
+          currentDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        }
+
+        if (isTMLuxe) {
+          if (currentDays > 30) {
+            discountPercentage = 30;
+          } else if (currentDays > 15) {
+            discountPercentage = 15;
+          }
+        }
       } else if (datesSelected) {
           // Standard Daily/Other logic requiring dates
           const checkIn = new Date(formData.checkInDate);
           const checkOut = new Date(formData.checkOutDate);
           const diffTime = Math.abs(checkOut - checkIn);
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          currentDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
           
           if (property.property_category === 'PG' && pricingMode === 'daily') {
              const nightly = Number(property.meta?.perNightPrice) || Number(property.price) || 0;
-             subtotal = nightly * diffDays;
+             subtotal = nightly * currentDays;
           } else {
              // Standard Hotel
              const price = Number(property.price) || 0;
-             subtotal = price * diffDays;
+             subtotal = price * currentDays;
           }
+
+          if (isTMLuxe) {
+            if (currentDays > 30) {
+              discountPercentage = 30;
+            } else if (currentDays > 15) {
+              discountPercentage = 15;
+            }
+          }
+      }
+
+      // Calculate next tier info only for TM Luxe properties
+      if (isTMLuxe && currentDays > 0) {
+        if (currentDays <= 15) {
+          nextTierDays = 16;
+          nextTierPercentage = 15;
+          daysNeededForNextTier = nextTierDays - currentDays;
+        } else if (currentDays <= 30) {
+          nextTierDays = 31;
+          nextTierPercentage = 30;
+          daysNeededForNextTier = nextTierDays - currentDays;
+        }
       }
     }
 
     if (subtotal > 0) {
-      const gstAmount = subtotal * 0.05;
-      computedTotal = subtotal + gstAmount;
+      discountAmount = (subtotal * discountPercentage) / 100;
+      const amountAfterDiscount = subtotal - discountAmount;
+      const gstAmount = amountAfterDiscount * 0.05;
+      computedTotal = amountAfterDiscount + gstAmount;
       
       setPricing({ 
         subtotal: subtotal, 
+        discount: discountAmount,
+        discountPercentage: discountPercentage,
         gst: gstAmount, 
-        total: computedTotal 
+        total: computedTotal,
+        daysNeededForNextTier: daysNeededForNextTier,
+        nextTierPercentage: nextTierPercentage
       });
     } else {
-      setPricing({ subtotal: 0, gst: 0, total: 0 });
+      setPricing({ subtotal: 0, discount: 0, discountPercentage: 0, gst: 0, total: 0, daysNeededForNextTier: 0, nextTierPercentage: 0 });
     }
   }, [formData.checkInDate, formData.checkOutDate, property, pricingMode, selectedPrice]);
 
@@ -1373,6 +1423,8 @@ const guestPolicy = property?.guest_policy || {};
                       )}
                       <Calendar
                         selectedDates={{ checkInDate: formData.checkInDate, checkOutDate: formData.checkOutDate }}
+                        currentMonth={calendarViewMonth}
+                        setCurrentMonth={setCalendarViewMonth}
                         onDateSelect={async (dates) => {
                           setFormData({ ...formData, ...dates });
                           if (dates.checkInDate && dates.checkOutDate) {
@@ -1391,6 +1443,12 @@ const guestPolicy = property?.guest_policy || {};
                           <span>Subtotal</span>
                           <span><MdCurrencyRupee style={{ display: 'inline' }} />{pricing.subtotal.toFixed(2)}</span>
                         </div>
+                        {pricing.discount > 0 && (
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', paddingBottom: '0.75rem', borderBottom: '1px solid #e5e5e5', color: '#16a34a' }}>
+                            <span>Stay Discount ({pricing.discountPercentage}%)</span>
+                            <span>-<MdCurrencyRupee style={{ display: 'inline' }} />{pricing.discount.toFixed(2)}</span>
+                          </div>
+                        )}
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', paddingBottom: '0.75rem', borderBottom: '1px solid #e5e5e5' }}>
                           <span>Taxes & GST (5%)</span>
                           <span><MdCurrencyRupee style={{ display: 'inline' }} />{pricing.gst.toFixed(2)}</span>
@@ -1399,6 +1457,25 @@ const guestPolicy = property?.guest_policy || {};
                           <span>Total Price</span>
                           <span><MdCurrencyRupee style={{ display: 'inline' }} />{pricing.total.toFixed(2)}</span>
                         </div>
+                        {pricing.discount > 0 && (
+                          <div style={{ marginTop: '0.5rem', textAlign: 'right', color: '#16a34a', fontSize: '0.85rem', fontWeight: '600' }}>
+                            You saved ₹{pricing.discount.toFixed(2)} on this stay!
+                          </div>
+                        )}
+                        {pricing.daysNeededForNextTier > 0 && pricing.daysNeededForNextTier <= 5 && (
+                          <div style={{ 
+                            marginTop: '1rem', 
+                            padding: '10px', 
+                            background: '#eff6ff', 
+                            borderRadius: '6px', 
+                            border: '1px dashed #3b82f6',
+                            fontSize: '0.85rem',
+                            color: '#1e40af',
+                            textAlign: 'center'
+                          }}>
+                            💡 Add <strong>{pricing.daysNeededForNextTier} {pricing.daysNeededForNextTier === 1 ? 'more day' : 'more days'}</strong> to get <strong>{pricing.nextTierPercentage}% discount!</strong>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
