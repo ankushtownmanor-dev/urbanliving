@@ -1743,7 +1743,7 @@ const guestPolicy = property?.guest_policy || {};
 </div>
 
 
-          {(property.parsedBedrooms?.length > 0 || property.parsedBathrooms?.length > 0) && property.property_category !== 'PG' && (
+          {/* {(property.parsedBedrooms?.length > 0 || property.parsedBathrooms?.length > 0) && property.property_category !== 'PG' && (
             <>
               <div className="divider"></div>
               <div className="text-section">
@@ -1776,9 +1776,129 @@ const guestPolicy = property?.guest_policy || {};
                 </div>
               </div>
             </>
+          )} */}
+          
+{(property.parsedBedrooms?.length > 0 || property.parsedBathrooms?.length > 0) && property.property_category !== 'PG' && (
+  <>
+    <div className="divider"></div>
+    <div className="text-section">
+      <div className="rm-section-header">
+        <div className="rm-section-left">
+          <span className="rm-pill">Layout</span>
+          <h3 className="rm-section-title">Room Arrangements</h3>
+        </div>
+        <div className="rm-section-stats">
+          {property.parsedBedrooms?.length > 0 && (
+            <div className="rm-stat-box">
+              <span className="rm-stat-num">{property.parsedBedrooms.length}</span>
+              <span className="rm-stat-lbl">Bedrooms</span>
+            </div>
           )}
+          {property.parsedBathrooms?.length > 0 && (
+            <div className="rm-stat-box rm-stat-box--gold">
+              <span className="rm-stat-num">{property.parsedBathrooms.length}</span>
+              <span className="rm-stat-lbl">Bathrooms</span>
+            </div>
+          )}
+        </div>
+      </div>
 
-          {property.parsedBedrooms?.length > 0 && property.property_category === 'PG' && (
+      {/* Desktop Table */}
+      <div className="rm-table-outer">
+        <table className="rm-table">
+          <thead>
+            <tr>
+              <th className="rm-th rm-th--room">Room</th>
+              <th className="rm-th">Category</th>
+              <th className="rm-th rm-th--price">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            {property.parsedBedrooms?.map((room, i) => (
+              <tr key={`bed-${i}`} className={`rm-row ${!property.parsedBathrooms?.length && i === property.parsedBedrooms.length - 1 ? 'rm-row--last' : ''}`}>
+                <td className="rm-td rm-td--room">
+                  <div className="rm-room-cell">
+                    <span className="rm-row-index">{String(i + 1).padStart(2, '0')}</span>
+                    <div className="rm-room-info">
+                      <span className="rm-room-name">{room.type || 'Bedroom'}</span>
+                    </div>
+                  </div>
+                </td>
+                <td className="rm-td">
+                  <span className="rm-bath rm-bath--attached">
+                    <span className="rm-bath-dot"></span>Bedroom
+                  </span>
+                </td>
+                <td className="rm-td rm-td--price">
+                  <div className="rm-price-cell">
+                    <span className="rm-price-main">{room.count || 1}</span>
+                    <span className="rm-price-unit"> unit{(room.count || 1) > 1 ? 's' : ''}</span>
+                  </div>
+                </td>
+              </tr>
+            ))}
+            {property.parsedBathrooms?.map((bath, i) => (
+              <tr key={`bath-${i}`} className={`rm-row ${i === property.parsedBathrooms.length - 1 ? 'rm-row--last' : ''}`}>
+                <td className="rm-td rm-td--room">
+                  <div className="rm-room-cell">
+                    <span className="rm-row-index">{String((property.parsedBedrooms?.length || 0) + i + 1).padStart(2, '0')}</span>
+                    <div className="rm-room-info">
+                      <span className="rm-room-name">{bath.type || 'Bathroom'}</span>
+                    </div>
+                  </div>
+                </td>
+                <td className="rm-td">
+                  <span className="rm-bath rm-bath--shared">
+                    <span className="rm-bath-dot"></span>Bathroom
+                  </span>
+                </td>
+                <td className="rm-td rm-td--price">
+                  <div className="rm-price-cell">
+                    <span className="rm-price-main">{bath.count || 1}</span>
+                    <span className="rm-price-unit"> unit{(bath.count || 1) > 1 ? 's' : ''}</span>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Mobile Cards */}
+      <div className="rm-mobile-list">
+        {[
+          ...(property.parsedBedrooms || []).map(r => ({ ...r, _cat: 'Bedroom' })),
+          ...(property.parsedBathrooms || []).map(r => ({ ...r, _cat: 'Bathroom' }))
+        ].map((item, i) => (
+          <div key={i} className="rm-mobile-card rm-mobile-card--simple">
+            <div className="rm-mc-top">
+              <div className="rm-mc-left">
+                <span className="rm-mc-idx">{String(i + 1).padStart(2, '0')}</span>
+                <div>
+                  <div className="rm-mc-name">{item.type || item._cat}</div>
+                </div>
+              </div>
+              <div className="rm-mc-price">
+                <span className={`rm-bath ${item._cat === 'Bedroom' ? 'rm-bath--attached' : 'rm-bath--shared'}`}>
+                  <span className="rm-bath-dot"></span>
+                  {item._cat}
+                </span>
+              </div>
+            </div>
+            <div className="rm-mc-grid" style={{gridTemplateColumns:'1fr'}}>
+              <div className="rm-mc-cell">
+                <span className="rm-mc-label">Count</span>
+                <span className="rm-area-val">{item.count || 1} unit{(item.count || 1) > 1 ? 's' : ''}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </>
+)}
+
+          {/* {property.parsedBedrooms?.length > 0 && property.property_category === 'PG' && (
             <>
               <div className="divider"></div>
               <div className="text-section">
@@ -1842,7 +1962,184 @@ const guestPolicy = property?.guest_policy || {};
                 </div>
               </div>
             </>
-          )}
+          )} */}
+          
+{property.parsedBedrooms?.length > 0 && property.property_category === 'PG' && (
+  <>
+    <div className="divider"></div>
+    <div className="text-section">
+      <div className="rm-section-header">
+        <div className="rm-section-left">
+          <span className="rm-pill">Room Inventory</span>
+          <h3 className="rm-section-title">Available Rooms & Rates</h3>
+          <p className="rm-section-sub">
+            {property.parsedBedrooms.length} room type{property.parsedBedrooms.length > 1 ? 's' : ''} · Starting{' '}
+            <strong>
+              ₹{Math.min(...property.parsedBedrooms.map(r => Number(r.price) || Infinity).filter(p => p < Infinity)).toLocaleString('en-IN')}
+            </strong>/mo
+          </p>
+        </div>
+        <div className="rm-section-stats">
+          <div className="rm-stat-box">
+            <span className="rm-stat-num">{property.parsedBedrooms.length}</span>
+            <span className="rm-stat-lbl">Types</span>
+          </div>
+          <div className="rm-stat-box rm-stat-box--gold">
+            <span className="rm-stat-num" style={{fontSize:'0.78rem'}}>
+              ₹{Math.min(...property.parsedBedrooms.map(r => Number(r.price) || Infinity).filter(p => p < Infinity)).toLocaleString('en-IN')}
+            </span>
+            <span className="rm-stat-lbl">From</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── DESKTOP TABLE ── */}
+      <div className="rm-table-outer">
+        <table className="rm-table">
+          <thead>
+            <tr>
+              <th className="rm-th rm-th--room">Room Type</th>
+              <th className="rm-th">Bathroom</th>
+              <th className="rm-th">Area</th>
+              <th className="rm-th rm-th--price">Price / Month</th>
+              <th className="rm-th">Available</th>
+              <th className="rm-th rm-th--action"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {property.parsedBedrooms.map((room, i) => {
+              const price = Number(room.price) || 0;
+              const hasAvail = room.availabilityDate;
+              const isLast = i === property.parsedBedrooms.length - 1;
+              return (
+                <tr key={i} className={`rm-row ${isLast ? 'rm-row--last' : ''}`}>
+                  <td className="rm-td rm-td--room">
+                    <div className="rm-room-cell">
+                      <span className="rm-row-index">{String(i + 1).padStart(2, '0')}</span>
+                      <div className="rm-room-info">
+                        <span className="rm-room-name">{room.type || 'Standard Room'}</span>
+                        <div className="rm-room-tags">
+                          {room.bedType && <span className="rm-tag">{room.bedType}</span>}
+                          {room.ac && <span className="rm-tag rm-tag--ac">❄ AC</span>}
+                          {room.furnished && <span className="rm-tag">Furnished</span>}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="rm-td">
+                    <div className={`rm-bath ${room.attachedBathroom ? 'rm-bath--attached' : 'rm-bath--shared'}`}>
+                      <span className="rm-bath-dot"></span>
+                      <span>{room.attachedBathroom ? 'Attached' : 'Shared'}</span>
+                    </div>
+                  </td>
+                  <td className="rm-td">
+                    <span className="rm-area-val">{room.areaSqFt ? `${room.areaSqFt} sqft` : '—'}</span>
+                  </td>
+                  <td className="rm-td rm-td--price">
+                    {price > 0 ? (
+                      <div className="rm-price-cell">
+                        <div style={{display:'flex',alignItems:'baseline',gap:'2px'}}>
+                          <span className="rm-price-main">₹{price.toLocaleString('en-IN')}</span>
+                          <span className="rm-price-unit">/mo</span>
+                        </div>
+                        {room.securityDeposit && (
+                          <div className="rm-deposit">Dep: ₹{Number(room.securityDeposit).toLocaleString('en-IN')}</div>
+                        )}
+                      </div>
+                    ) : <span className="rm-on-request">On Request</span>}
+                  </td>
+                  <td className="rm-td">
+                    {hasAvail ? (
+                      <div className="rm-avail rm-avail--date">
+                        <span className="rm-avail-dot"></span>
+                        {new Date(room.availabilityDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                      </div>
+                    ) : (
+                      <div className="rm-avail rm-avail--now">
+                        <span className="rm-avail-dot"></span>Available Now
+                      </div>
+                    )}
+                  </td>
+                  <td className="rm-td rm-td--cta">
+                    <button className="rm-enquire-btn" onClick={() => { setSelectedRoomForLead(room.type); setShowLeadModal(true); }}>
+                      Enquire
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* ── MOBILE CARDS ── */}
+      <div className="rm-mobile-list">
+        {property.parsedBedrooms.map((room, i) => {
+          const price = Number(room.price) || 0;
+          const hasAvail = room.availabilityDate;
+          return (
+            <div key={i} className="rm-mobile-card">
+              <div className="rm-mc-top">
+                <div className="rm-mc-left">
+                  <span className="rm-mc-idx">{String(i + 1).padStart(2, '0')}</span>
+                  <div>
+                    <div className="rm-mc-name">{room.type || 'Standard Room'}</div>
+                    <div className="rm-mc-tags">
+                      {room.bedType && <span className="rm-tag">{room.bedType}</span>}
+                      {room.ac && <span className="rm-tag rm-tag--ac">❄ AC</span>}
+                    </div>
+                  </div>
+                </div>
+                <div className="rm-mc-price">
+                  {price > 0 ? (
+                    <><span className="rm-mc-price-main">₹{price.toLocaleString('en-IN')}</span><span className="rm-mc-price-unit">/mo</span></>
+                  ) : <span className="rm-on-request">On Request</span>}
+                </div>
+              </div>
+              <div className="rm-mc-grid">
+                <div className="rm-mc-cell">
+                  <span className="rm-mc-label">Bathroom</span>
+                  <div className={`rm-bath ${room.attachedBathroom ? 'rm-bath--attached' : 'rm-bath--shared'}`}>
+                    <span className="rm-bath-dot"></span>
+                    <span>{room.attachedBathroom ? 'Attached' : 'Shared'}</span>
+                  </div>
+                </div>
+                <div className="rm-mc-cell">
+                  <span className="rm-mc-label">Area</span>
+                  <span className="rm-area-val">{room.areaSqFt ? `${room.areaSqFt} sqft` : '—'}</span>
+                </div>
+                <div className="rm-mc-cell">
+                  <span className="rm-mc-label">Available</span>
+                  {hasAvail ? (
+                    <div className="rm-avail rm-avail--date"><span className="rm-avail-dot"></span>{new Date(room.availabilityDate).toLocaleDateString('en-IN', {day:'numeric',month:'short'})}</div>
+                  ) : (
+                    <div className="rm-avail rm-avail--now"><span className="rm-avail-dot"></span>Now</div>
+                  )}
+                </div>
+                {room.securityDeposit && (
+                  <div className="rm-mc-cell">
+                    <span className="rm-mc-label">Deposit</span>
+                    <span className="rm-area-val">₹{Number(room.securityDeposit).toLocaleString('en-IN')}</span>
+                  </div>
+                )}
+              </div>
+              {room.furnishingDetails?.length > 0 && (
+                <div className="rm-mc-furnish">
+                  {room.furnishingDetails.slice(0, 4).map((f, fi) => <span key={fi} className="rm-furnish-tag">{f}</span>)}
+                  {room.furnishingDetails.length > 4 && <span className="rm-furnish-tag rm-furnish-more">+{room.furnishingDetails.length - 4}</span>}
+                </div>
+              )}
+              <button className="rm-mc-enquire" onClick={() => { setSelectedRoomForLead(room.type); setShowLeadModal(true); }}>
+                Enquire for this room
+              </button>
+            </div>
+          );
+        })}
+      </div>
+
+    </div>
+  </>
+)}
 
           <div className="divider"></div>
 
