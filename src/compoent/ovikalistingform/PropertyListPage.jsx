@@ -1137,7 +1137,7 @@ const PropertyListPage = () => {
             fontSize: 16, color: 'rgba(255,255,255,0.88)',
             margin: '0 0 30px', lineHeight: 1.65, maxWidth: 560, marginLeft: 'auto', marginRight: 'auto',
           }}>
-            Luxury studios, homestays, Hotel Rooms, apartments, Villas & Farmhouses curated for comfortable short and extended stays
+            Luxury studios, homestays, Hotel Rooms, apartments, Villas & Farmhouses — curated for comfortable short and extended stays
           </p>
 
           {/* Search Bar */}
