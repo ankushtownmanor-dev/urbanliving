@@ -47,7 +47,9 @@ import { useContext } from "react";
 import { Subsriptionmain } from "./compoent/SubsriptionNew/Subsriptionmain";
 import SuperAdminDashboard from './compoent/AdminDashBoard/SuperAdmin/SuperAdminDashboard';
 import { Notification } from "./compoent/Dashboard/Notification";
+import PGUpdateForm from "./compoent/ovikalistingform/PGUpdateForm";
 import  ContactMain  from "./compoent/ContactUs/ContactMain";
+
 
 // 🔒 Protected Route Component
 function RequireAuth({ children }) {
@@ -120,6 +122,14 @@ function App() {
             element={
               <RequireAuth>
                 <PGListingForm />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/update-pg/:id"
+            element={
+              <RequireAuth>
+                <PGUpdateForm />
               </RequireAuth>
             }
           />

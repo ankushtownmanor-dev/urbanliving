@@ -728,8 +728,15 @@ export default function SuperAdminDashboard() {
                                             </span>
                                         </td>
                                         <td>
-                                            <div className="sa-actions">
+                                            <div className="sa-actions" style={{ display: 'flex', gap: '8px' }}>
                                                 <button className="sa-btn-primary" onClick={() => handleEditClick(p)}>Edit</button>
+                                                <button 
+                                                  className="sa-btn-primary" 
+                                                  style={{ backgroundColor: '#8b5cf6' }} 
+                                                  onClick={() => window.open(`/update-pg/${p.id || p._id}`, '_blank')}
+                                                >
+                                                  PG Listing Update
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
