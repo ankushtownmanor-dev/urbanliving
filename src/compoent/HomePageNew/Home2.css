@@ -1,5 +1,5 @@
 * {
-  font-family: "Inter", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  
 }
 
 .living-container {
@@ -15,7 +15,7 @@
 .living-heading {
   font-size: 32px;
   color: #000;
-  font-weight: 500;
+  font-weight: 300 !important;
   margin-bottom: 10px;
 }
 
@@ -81,7 +81,7 @@
 
 .living-title {
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 300 !important;
   margin-bottom: 14px;
   color: #000;
   text-align: left;
@@ -104,7 +104,7 @@
   border-radius: 25px;
   font-size: 14px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 300 !important;
   display: inline-flex;
   align-items: center;
   justify-content: center;

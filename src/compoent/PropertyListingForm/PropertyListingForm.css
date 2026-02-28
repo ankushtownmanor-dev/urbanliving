@@ -24,7 +24,7 @@
   max-width: 1000px;
   margin: 2rem auto;
   padding: 2rem 1.5rem;
-  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
   color: var(--text-dark);
   position: relative;
   background-color: #fff;
@@ -79,7 +79,7 @@
   color: white;
   margin: 0 0 0.75rem;
   font-size: 2.2rem;
-  font-weight: 700;
+  font-weight: 300 !important;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
 }
@@ -138,7 +138,7 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 0.75rem;
-    font-weight: 600;
+    font-weight: 300 !important;
     font-size: 0.9rem;
     transition: all 0.3s ease;
 }
@@ -153,13 +153,13 @@
     color: #95a5a6;
     text-align: center;
     text-transform: capitalize;
-    font-weight: 500;
+    font-weight: 300 !important;
     transition: all 0.3s ease;
 }
 
 .step.active .step-name {
     color: #2c3e50;
-    font-weight: 600;
+    font-weight: 300 !important;
 }
 
 .step.completed .step-name {
@@ -275,7 +275,7 @@
     display: block;
     margin-bottom: 0.5rem;
     color: #2c3e50;
-    font-weight: 500;
+    font-weight: 300 !important;
     font-size: 0.95rem;
 }
 
@@ -294,7 +294,7 @@ textarea {
     font-size: 0.95rem;
     transition: var(--transition);
     background-color: var(--white);
-    font-family: inherit;
+    
     color: var(--text-dark);
 }
 
@@ -433,7 +433,7 @@ textarea {
     color: var(--text-dark);
     margin: 0 0 0.5rem;
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 300 !important;
 }
 
 .upload-text p {
@@ -448,7 +448,7 @@ textarea {
     background: var(--primary-color);
     color: white;
     border-radius: var(--radius-md);
-    font-weight: 500;
+    font-weight: 300 !important;
     transition: var(--transition);
 }
 
@@ -554,7 +554,7 @@ textarea {
     background: var(--primary-color);
     color: white;
     font-size: 0.7rem;
-    font-weight: 600;
+    font-weight: 300 !important;
     padding: 0.25rem 0.5rem;
     border-radius: var(--radius-sm);
     display: flex;
@@ -656,26 +656,26 @@ padding: 0.75rem 2rem;
 border: none;
 border-radius: var(--radius-md);
 font-size: 1rem;
-font-weight: 500;
+font-weight: 300 !important;
 cursor: pointer;
 transition: var(--transition);
 display: inline-flex;
 align-items: center;
 justify-content: center;
 min-width: 150px;
-font-family: 'Poppins', sans-serif;
+
 letter-spacing: 0.5px;
 text-transform: uppercase;
 font-size: 0.9rem;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 300 !important;
     cursor: pointer;
     transition: var(--transition);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-width: 150px;
-    font-family: 'Poppins', sans-serif;
+    
     letter-spacing: 0.5px;
     text-transform: uppercase;
     font-size: 0.9rem;

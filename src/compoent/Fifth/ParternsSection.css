@@ -9,7 +9,7 @@
 
 .partners-title {
   font-size: 26px;
-  font-weight: 600;
+  font-weight: 300 !important;
   margin-bottom: 40px;
   color: #000;
 }
@@ -60,7 +60,7 @@
 }
 
 .reviewer-name {
-  font-weight: 600;
+  font-weight: 300 !important;
   color: #000;
   font-size: 15px;
 }
@@ -127,7 +127,7 @@
   .reviewer-name {
     font-size: 15px;
     margin-top: 12px;
-    font-weight: 600;
+    font-weight: 300 !important;
     color: #000;
   }
 }

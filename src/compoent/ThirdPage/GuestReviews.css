@@ -6,9 +6,9 @@
 
 .guestreviews-heading {
   text-align: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
   font-size: 21px;
-  font-weight: 600;
+  font-weight: 300 !important;
   margin-bottom: 18px;
 }
 
@@ -84,7 +84,7 @@
 
 .guestreview-name {
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 300 !important;
   margin: 0;
 }
 
@@ -123,8 +123,8 @@
   border: none;
   border-radius: 22px;
   font-size: 15px;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  font-weight: 600;
+  
+  font-weight: 300 !important;
   cursor: pointer;
   /* box-shadow: 0 1px 14px rgba(126, 124, 124, 0.23); */
   transition: background 0.15s, box-shadow 0.15s;

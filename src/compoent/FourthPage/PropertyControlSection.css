@@ -53,7 +53,7 @@
 /* Heading - Black Text */
 .prop-ctrl-heading {
   font-size: 2rem; /* Slightly reduced */
-  font-weight: 600;
+  font-weight: 300 !important;
   color: #1a1a1a;
   margin: 0 0 12px 0; /* Reduced margin */
   letter-spacing: -0.3px;

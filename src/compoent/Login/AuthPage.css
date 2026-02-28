@@ -1,7 +1,7 @@
 .auth-container {
   display: flex;
   height: 100vh;
-  font-family: 'Segoe UI', sans-serif;
+  
   background: #fff;
   color: #000;
 }
@@ -55,7 +55,7 @@
      color: #c2772b;
     border: 1px solid #c2772b;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 300 !important;
     box-shadow: 1px 1px 1px 1px #e5e4
 }
 

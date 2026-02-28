@@ -27,9 +27,9 @@
 }
 
 .tmxluxe-prop-title {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
   font-size: 28px;
-  font-weight: 500;
+  font-weight: 300 !important;
   color: var(--tmxluxe-prop-text);
   margin: 0px;
 }
@@ -118,9 +118,9 @@
 .tmxluxe-prop-name {
   margin: 4px 0 10px;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 300 !important;
   color: var(--tmxluxe-prop-text);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
 }
 
 .tmxluxe-prop-meta {

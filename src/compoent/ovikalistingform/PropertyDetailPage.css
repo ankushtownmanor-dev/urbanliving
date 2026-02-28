@@ -47,7 +47,7 @@ html, body {
 body {
   margin: 0;
   background-color: var(--gray-50);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  
   color: var(--dark);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -94,7 +94,7 @@ table {
   padding: 0.75rem 1.25rem;
   border-radius: 50px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 300 !important;
   font-size: 0.9rem;
   color: var(--gray-700);
   transition: all 0.2s ease;
@@ -124,7 +124,7 @@ table {
 
 .title-section h1 {
   font-size: 2.25rem;
-  font-weight: 800;
+  font-weight: 300 !important;
   margin: 0 0 0.75rem;
   line-height: 1.2;
   color: var(--gray-900);
@@ -139,7 +139,7 @@ table {
   flex-wrap: wrap;
   color: var(--gray-600);
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 300 !important;
   min-width: 0;
 }
 
@@ -303,7 +303,7 @@ table {
 
 .feature-box strong {
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 300 !important;
   color: var(--gray-900);
   line-height: 1.2;
 }
@@ -313,7 +313,7 @@ table {
   color: var(--gray-500);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-weight: 600;
+  font-weight: 300 !important;
 }
 
 .divider {
@@ -332,7 +332,7 @@ table {
 
 .text-section h3 {
   font-size: 1.75rem;
-  font-weight: 700;
+  font-weight: 300 !important;
   margin: 0 0 1rem;
   color: var(--gray-900);
   letter-spacing: -0.01em;
@@ -375,7 +375,7 @@ table {
 
 .room-group h4 {
   margin: 0 0 1rem;
-  font-weight: 800;
+  font-weight: 300 !important;
   color: var(--gray-900);
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -401,7 +401,7 @@ table {
 .room-group li::before {
   content: '•';
   color: var(--primary);
-  font-weight: 900;
+  font-weight: 300 !important;
   font-size: 1.2rem;
   flex: 0 0 auto;
 }
@@ -425,7 +425,7 @@ table {
   background: var(--white);
   border: 1px solid var(--gray-200);
   border-radius: var(--radius-md);
-  font-weight: 500;
+  font-weight: 300 !important;
   color: var(--gray-700);
   transition: all 0.2s;
   min-width: 0;
@@ -494,14 +494,14 @@ table {
 .rule-label {
   font-size: 0.8rem;
   color: var(--gray-500);
-  font-weight: 600;
+  font-weight: 300 !important;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .rule-info strong {
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 300 !important;
   color: var(--gray-900);
 }
 
@@ -551,7 +551,7 @@ table {
 .host-info h4 {
   margin: 0 0 0.25rem;
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 300 !important;
   color: var(--gray-900);
 }
 
@@ -595,7 +595,7 @@ table {
 
 .amount {
   font-size: 2.5rem;
-  font-weight: 800;
+  font-weight: 300 !important;
   color: var(--white); /* ✅ White text on golden bg */
   letter-spacing: -0.02em;
 }
@@ -603,7 +603,7 @@ table {
 .unit {
   color: rgba(255,255,255,0.9); /* ✅ Slightly transparent white */
   font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: 300 !important;
 }
 
 .review-badge {
@@ -611,7 +611,7 @@ table {
   align-items: center;
   gap: 0.25rem;
   font-size: 0.9rem;
-  font-weight: 700;
+  font-weight: 300 !important;
   background: var(--white);
   color: var(--accent-gold-dark);
   padding: 0.5rem 0.75rem;
@@ -647,7 +647,7 @@ table {
 
 .date-box label {
   font-size: 0.7rem;
-  font-weight: 800;
+  font-weight: 300 !important;
   color: var(--gray-700);
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -656,7 +656,7 @@ table {
 .date-box span {
   font-size: 1rem;
   color: var(--gray-900);
-  font-weight: 700;
+  font-weight: 300 !important;
 }
 
 .hint {
@@ -680,7 +680,7 @@ table {
   border-top: 2px solid var(--gray-200);
   padding-top: 1rem;
   margin-top: 1rem;
-  font-weight: 800;
+  font-weight: 300 !important;
   color: var(--gray-900);
   font-size: 1.25rem;
 }
@@ -693,7 +693,7 @@ table {
   padding: 1.25rem;
   border-radius: var(--radius-md);
   font-size: 1.1rem;
-  font-weight: 800;
+  font-weight: 300 !important;
   cursor: pointer;
   transition: all 0.25s ease;
   margin-bottom: 1rem;
@@ -731,7 +731,7 @@ table {
    ========================= */
 .gbWrap { margin: 3rem 0 2rem; }
 .gbHeader { margin-bottom: 2rem; }
-.gbTitle { margin: 0 0 .5rem; font-size: 1.75rem; font-weight: 800; color: var(--gray-900); }
+.gbTitle { margin: 0 0 .5rem; font-size: 1.75rem; font-weight: 300 !important; color: var(--gray-900); }
 .gbSubTitle { margin: 0; font-size: 1rem; color: var(--gray-600); }
 
 .gbGrid {
@@ -780,7 +780,7 @@ table {
 
 .gbCardTitle {
   font-size: 1.1rem;
-  font-weight: 800;
+  font-weight: 300 !important;
   color: var(--gray-900);
   margin: 0;
 }
@@ -788,7 +788,7 @@ table {
 .gbCardMeta {
   font-size: 0.85rem;
   color: var(--gray-500);
-  font-weight: 600;
+  font-weight: 300 !important;
   margin: 0.2rem 0 0;
 }
 
@@ -804,9 +804,9 @@ table {
   min-width: 0;
 }
 .gbRowLeft { display: flex; align-items: center; gap: .75rem; min-width: 0; flex: 1; }
-.gbRowLabel { font-weight: 700; color: var(--gray-700); white-space: nowrap; }
+.gbRowLabel { font-weight: 300 !important; color: var(--gray-700); white-space: nowrap; }
 .gbRowValue {
-  font-weight: 700;
+  font-weight: 300 !important;
   color: var(--gray-900);
   text-align: right;
   min-width: 0;
@@ -830,7 +830,7 @@ table {
 .gbTable thead th {
   padding: .75rem .75rem;
   font-size: .8rem;
-  font-weight: 800;
+  font-weight: 300 !important;
   color: var(--gray-600);
   border-bottom: 2px solid var(--gray-200);
   background: var(--gray-50);
@@ -852,7 +852,7 @@ table {
   background: var(--white);
   transition: all 0.2s;
 }
-.gbListItemTitle { font-weight: 800; color: var(--gray-900); }
+.gbListItemTitle { font-weight: 300 !important; color: var(--gray-900); }
 .gbListItemMeta { margin-top: .75rem; display: flex; gap: .5rem; color: var(--gray-600); }
 
 .gbTips { list-style: none; margin: 0; padding: 1.5rem; display: grid; gap: .75rem; }
@@ -892,7 +892,7 @@ table {
 
 .ivCounter{
   color: #fff;
-  font-weight: 700;
+  font-weight: 300 !important;
   font-size: 14px;
 }
 
@@ -964,7 +964,7 @@ table {
   min-width: 64px;
   text-align: center;
   color: #fff;
-  font-weight: 700;
+  font-weight: 300 !important;
   font-size: 13px;
 }
 
@@ -1160,7 +1160,7 @@ table {
     gap: 0.5rem;
 
     font-size: 0.85rem;
-    font-weight: 500;
+    font-weight: 300 !important;
     color: #334155;
 
     box-shadow:
@@ -1205,18 +1205,18 @@ table {
 
   .amount {
     font-size: 2rem;
-    font-weight: 500; /* ⬅ reduced from 800 */
+    font-weight: 300 !important; /* ⬅ reduced from 800 */
     letter-spacing: -0.01em;
   }
 
   .unit {
     font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: 300 !important;
   }
 
   .review-badge {
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 300 !important;
     padding: 0.35rem 0.65rem;
   }
 
@@ -1233,31 +1233,31 @@ table {
 
   .date-box label {
     font-size: 0.65rem;
-    font-weight: 700;
+    font-weight: 300 !important;
     color: #64748b;
   }
 
   .date-box span {
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 300 !important;
     color: #0f172a;
   }
 
   /* PRICE BREAKDOWN */
   .price-breakdown .row {
     font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: 300 !important;
     padding: 0.35rem 0;
     color: #334155;
   }
 
   .price-breakdown .row span:last-child {
-    font-weight: 600;
+    font-weight: 300 !important;
   }
 
   .price-breakdown .total {
     font-size: 1.05rem;
-    font-weight: 700;
+    font-weight: 300 !important;
     border-top: 1.5px solid #e2e8f0;
     margin-top: 0.75rem;
     padding-top: 0.75rem;
@@ -1266,7 +1266,7 @@ table {
   /* BUTTON */
   .reserve-btn {
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 300 !important;
     padding: 1rem;
     border-radius: 12px;
     letter-spacing: 0.2px;
@@ -1327,7 +1327,7 @@ table {
   /* Title */
   .gbCardTitle {
     font-size: 0.95rem;
-    font-weight: 600; /* ⬅ reduced */
+    font-weight: 300 !important; /* ⬅ reduced */
     color: #0f172a;
   }
 
@@ -1352,13 +1352,13 @@ table {
 
   .gbRowLabel {
     font-size: 0.8rem;
-    font-weight: 500;
+    font-weight: 300 !important;
     color: #334155;
   }
 
   .gbRowValue {
     font-size: 0.8rem;
-    font-weight: 500;
+    font-weight: 300 !important;
     color: #0f172a;
     max-width: 55%;
   }
@@ -1374,7 +1374,7 @@ table {
 
   .gbTitle {
     font-size: 1.4rem;
-    font-weight: 700;
+    font-weight: 300 !important;
     margin-left: 10px;
   }
 
@@ -1443,7 +1443,7 @@ table {
 
   .rule-label {
     font-size: 0.65rem;
-    font-weight: 600;
+    font-weight: 300 !important;
     letter-spacing: 0.4px;
     text-transform: uppercase;
     color: #64748b;
@@ -1451,7 +1451,7 @@ table {
 
   .rule-info strong {
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 300 !important;
     color: #0f172a;
   }
 
@@ -1511,12 +1511,12 @@ table {
 .hostInfoPro h4 {
   margin: 0;
   font-size: 1.05rem;
-  font-weight: 600;
+  font-weight: 300 !important;
   color: #0f172a;
 }
 
 .hostInfoPro h4 span {
-  font-weight: 700;
+  font-weight: 300 !important;
 }
 
 .hostInfoPro p {
@@ -1572,14 +1572,14 @@ table {
 
 .pg-room-type {
   font-size: 1.15rem;
-  font-weight: 800;
+  font-weight: 300 !important;
   color: var(--gray-900);
   letter-spacing: -0.01em;
 }
 
 .pg-spots-badge {
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 300 !important;
   color: var(--success);
   background: #ecfdf5;
   padding: 4px 10px;
@@ -1601,14 +1601,14 @@ table {
 
 .pg-price-val {
   font-size: 1.25rem;
-  font-weight: 800;
+  font-weight: 300 !important;
   line-height: 1;
   display: block;
 }
 
 .pg-price-unit {
   font-size: 0.7rem;
-  font-weight: 600;
+  font-weight: 300 !important;
   opacity: 0.8;
   text-transform: uppercase;
 }
@@ -1639,14 +1639,14 @@ table {
   padding: 8px 12px;
   border-radius: 10px;
   border: 1px solid var(--gray-200);
-  font-weight: 500;
+  font-weight: 300 !important;
 }
 
 .pg-action-btn {
   width: 100%;
   padding: 12px;
   border-radius: 12px;
-  font-weight: 700;
+  font-weight: 300 !important;
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.2s;
@@ -1721,7 +1721,7 @@ table {
   padding: 6px 14px;
   border-radius: 50px;
   font-size: 0.75rem;
-  font-weight: 800;
+  font-weight: 300 !important;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   box-shadow: 0 4px 10px rgba(139, 0, 0, 0.2);
@@ -1751,7 +1751,7 @@ table {
 
 .pg-rent-val {
   font-size: 1.75rem;
-  font-weight: 800;
+  font-weight: 300 !important;
   color: var(--gray-900);
   letter-spacing: -0.02em;
 }
@@ -1759,12 +1759,12 @@ table {
 .pg-rent-unit {
   font-size: 0.9rem;
   color: var(--gray-500);
-  font-weight: 600;
+  font-weight: 300 !important;
 }
 
 .pg-deposit-tag {
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 300 !important;
   color: var(--gray-600);
   background: var(--gray-100);
   padding: 4px 10px;
@@ -1786,7 +1786,7 @@ table {
   gap: 8px;
   font-size: 0.85rem;
   color: var(--gray-700);
-  font-weight: 500;
+  font-weight: 300 !important;
 }
 
 .spec-item svg {
@@ -1812,7 +1812,7 @@ table {
   color: var(--primary);
   border: 1px solid rgba(139, 0, 0, 0.1);
   border-radius: 12px;
-  font-weight: 700;
+  font-weight: 300 !important;
   font-size: 0.9rem;
   transition: all 0.2s;
   cursor: pointer;
@@ -1835,7 +1835,7 @@ table {
 
 .amenity-group-title {
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 300 !important;
   color: var(--gray-500);
   text-transform: uppercase;
   letter-spacing: 1px;

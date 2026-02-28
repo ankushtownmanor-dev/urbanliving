@@ -19,7 +19,7 @@
   background-color: var(--bg-app);
   min-height: 100vh;
   padding: 40px 20px;
-  font-family: 'Poppins', sans-serif;
+  
   color: var(--text-main);
 }
 
@@ -36,7 +36,7 @@
 
 .header-content h1 {
   font-size: 2.5rem;
-  font-weight: 800;
+  font-weight: 300 !important;
   margin-bottom: 10px;
   color: var(--secondary);
 }
@@ -106,7 +106,7 @@
 
 .step-item span {
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 300 !important;
   white-space: nowrap;
 }
 
@@ -131,7 +131,7 @@
 
 .step-title {
   font-size: 1.8rem;
-  font-weight: 700;
+  font-weight: 300 !important;
   margin-bottom: 30px;
   color: var(--secondary);
   border-bottom: 2px solid var(--primary-light);
@@ -186,7 +186,7 @@
 
 .cat-info h3 {
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 300 !important;
   margin-bottom: 4px;
 }
 
@@ -213,7 +213,7 @@
 }
 
 .field-group label {
-  font-weight: 600;
+  font-weight: 300 !important;
   font-size: 0.95rem;
   color: var(--secondary);
 }
@@ -258,7 +258,7 @@
 }
 
 .room-idx {
-  font-weight: 700;
+  font-weight: 300 !important;
   color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -304,7 +304,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-weight: 500;
+  font-weight: 300 !important;
 }
 
 .amenity-chip:hover, .mini-chip:hover {
@@ -324,7 +324,7 @@
 
 .amenity-group h4 {
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 300 !important;
   margin-bottom: 15px;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -355,7 +355,7 @@
 }
 
 .upload-trigger p {
-  font-weight: 700;
+  font-weight: 300 !important;
   color: var(--secondary);
   font-size: 1.1rem;
 }
@@ -424,7 +424,7 @@
   gap: 4px;
   cursor: pointer;
   font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: 300 !important;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   transition: var(--transition);
 }
@@ -446,7 +446,7 @@
   border-radius: 20px;
   cursor: pointer;
   text-align: center;
-  font-weight: 800;
+  font-weight: 300 !important;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
@@ -499,7 +499,7 @@
 }
 
 .v-label {
-  font-weight: 700;
+  font-weight: 300 !important;
   margin-bottom: 15px;
   color: var(--secondary);
 }
@@ -523,7 +523,7 @@
   color: white;
   border: none;
   border-radius: 10px;
-  font-weight: 600;
+  font-weight: 300 !important;
   cursor: pointer;
   transition: var(--transition);
 }
@@ -540,7 +540,7 @@
 .success-msg {
   color: var(--success);
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 300 !important;
   margin-top: 10px;
 }
 
@@ -554,7 +554,7 @@
 .btn-back, .btn-next, .btn-submit {
   padding: 14px 35px;
   border-radius: 30px;
-  font-weight: 700;
+  font-weight: 300 !important;
   font-size: 1rem;
   cursor: pointer;
   transition: var(--transition);
@@ -591,13 +591,13 @@
 .error {
   color: var(--error);
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: 300 !important;
 }
 
 .section-separator {
   padding-bottom: 10px;
   border-bottom: 2px solid var(--border);
-  font-weight: 800;
+  font-weight: 300 !important;
   text-transform: uppercase;
   font-size: 0.9rem;
   margin: 20px 0;
@@ -611,7 +611,7 @@
   border: 2px dashed var(--primary);
   color: var(--primary);
   border-radius: 12px;
-  font-weight: 700;
+  font-weight: 300 !important;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -639,7 +639,7 @@
   align-items: center;
   gap: 8px;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 300 !important;
   cursor: pointer;
 }
 

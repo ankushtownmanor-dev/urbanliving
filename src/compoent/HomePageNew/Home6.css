@@ -1,5 +1,5 @@
 *{
-   font-family:"Inter","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+   
 }
 
 .ovika-connect-main {
@@ -134,7 +134,7 @@
 
 .form-heading-ovika-homepage {
   font-size: 1.6rem;
-  font-weight: 500;
+  font-weight: 300 !important;
   color: #000;
   margin-bottom: 20px;
   text-align: center;
@@ -291,7 +291,7 @@
 
   .ovika-property-heading {
     font-size: 1.8rem;
-    font-weight: 500;
+    font-weight: 300 !important;
     line-height: 1.2;
     margin: 30px 0 10px 0;
     text-align: left;
@@ -366,7 +366,7 @@
 
   .form-heading-ovika-homepage {
     font-size: 1.6rem;
-    font-weight: 500;
+    font-weight: 300 !important;
     color: #000;
     margin-bottom: 20px;
     text-align: center;

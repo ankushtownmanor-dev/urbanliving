@@ -4,11 +4,11 @@
   --tmluxe-bg: #ffffff;
   --tmluxe-text: #121212;
   --tmluxe-muted: #5a5a5a;
-  --tmluxe-accent: #f59e0b; 
+  --tmluxe-accent: #f59e0b;
   --tmluxe-border: #e5e7eb;
   --tmluxe-shadow-1: 0 2px 6px rgba(0, 0, 0, 0.06);
   --tmluxe-shadow-2: 0 10px 20px rgba(0, 0, 0, 0.06);
-  --tmluxe-shadow-inner: inset 0 1px 0 rgba(255,255,255,0.5);
+  --tmluxe-shadow-inner: inset 0 1px 0 rgba(255, 255, 255, 0.5);
   --tmluxe-radius: 14px;
   --tmluxe-maxw: 1400px;
 }
@@ -27,8 +27,6 @@
 .tmluxe-heading {
   text-align: center;
   color: var(--tmluxe-text);
-  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial;
   font-weight: 400;
   letter-spacing: 0.2px;
   margin: 6px 0 22px;
@@ -44,13 +42,14 @@
 
 .tmluxe-heading-accent {
   color: var(--tmluxe-accent);
-  font-weight: 500;
+  font-weight: 300 !important;
 }
 
 /* Grid */
 .tmluxe-grid {
   display: grid;
-  place-items: center;   /* PERFECT CENTER FIX */
+  place-items: center;
+  /* PERFECT CENTER FIX */
   grid-template-columns: 1fr;
   gap: 10px;
 }
@@ -60,6 +59,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
 @media (min-width: 980px) {
   .tmluxe-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -78,7 +78,8 @@
   transition: transform 200ms ease, box-shadow 200ms ease;
   width: 100%;
   max-width: 380px;
-  text-align: center;     /* FULL CENTER ALIGN */
+  text-align: center;
+  /* FULL CENTER ALIGN */
 }
 
 .tmluxe-card::before {
@@ -93,7 +94,7 @@
 .tmluxe-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08),
-              0 20px 34px rgba(0, 0, 0, 0.10);
+    0 20px 34px rgba(0, 0, 0, 0.10);
 }
 
 /* Icon Center */
@@ -116,7 +117,7 @@
 .tmluxe-card-title {
   margin: 6px 0 8px;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 300 !important;
   color: var(--tmluxe-text);
   text-align: center;
 }
@@ -126,7 +127,8 @@
   line-height: 1.45;
   font-size: 10px;
   max-width: 38ch;
-  margin: 0 auto;          /* CENTER TEXT WIDTH */
+  margin: 0 auto;
+  /* CENTER TEXT WIDTH */
   text-align: center;
 }
 
@@ -135,6 +137,7 @@
   .tmluxe-card-title {
     font-size: 20px;
   }
+
   .tmluxe-card-text {
     font-size: 14px;
   }

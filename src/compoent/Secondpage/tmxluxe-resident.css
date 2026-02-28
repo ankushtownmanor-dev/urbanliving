@@ -17,11 +17,11 @@
 
 .tmxluxe-resi-title {
   text-align: center;
-  font-weight: 600;
+  font-weight: 300 !important;
   font-size: 30px;
   color: #111;
   margin: 4px 0 22px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
 }
 
 .tmxluxe-resi-box {
@@ -64,7 +64,7 @@
 }
 .tmxluxe-resi-name {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 300 !important;
   color: var(--tmxluxe-resi-text);
   margin: 0;
 }
@@ -75,7 +75,7 @@
 
 /* Review Text */
 .tmxluxe-resi-text {
-  font-family: 'Segoe UI', sans-serif;
+  
   color: #2a2f36;
   font-size: 14.2px;
   line-height: 1.7;
@@ -100,7 +100,7 @@
   align-items: center;
   gap: 18px;
   color: #2a2f36;
-  font-weight: 600;
+  font-weight: 300 !important;
 }
 
 .tmxluxe-resi-act {

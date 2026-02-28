@@ -1,5 +1,5 @@
 * {
-  font-family: "Inter", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  
 }
 
 .how-container {
@@ -13,7 +13,7 @@
 .how-heading {
   font-size: 32px;
   color: #000;
-  font-weight: 500;
+  font-weight: 300 !important;
   margin-bottom: 60px;
 }
 
@@ -72,7 +72,7 @@
 
 .how-title {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 300 !important;
   color: #000;
   margin-bottom: 10px;
 }
@@ -130,7 +130,7 @@
 
   .how-title {
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 300 !important;
     margin-bottom: 8px;
   }
 

@@ -1,7 +1,7 @@
 .property-share-wrapper {
   background: #fff;
   padding: 40px 0;
-  font-family: Arial, sans-serif;
+  
   text-align: center;
 }
 
@@ -90,7 +90,7 @@ font-size: clamp(26px, 4.4vw, 40px);
 .arrow {
   margin-left: 18px;
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: 300 !important;
 }
 
 
@@ -104,7 +104,7 @@ font-size: clamp(26px, 4.4vw, 40px);
 
 
 .address-title {
-  font-weight: bold;
+  font-weight: 300 !important;
   color: #910a0a;
 }
 
@@ -165,7 +165,7 @@ font-size: clamp(26px, 4.4vw, 40px);
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 .address-title {
-  font-weight: 600;
+  font-weight: 300 !important;
   color: #910a0a;
   margin-bottom: 8px;
   font-size: 1.05rem;
@@ -173,7 +173,7 @@ font-size: clamp(26px, 4.4vw, 40px);
 
 /* Title inside box */
 .address-title {
-  font-weight: 600;
+  font-weight: 300 !important;
   color: #910a0a;
   margin-bottom: 8px;
   font-size: 1.05rem;
