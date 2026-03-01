@@ -441,10 +441,10 @@ const InquiriesBookings = () => {
                     borderRadius: "20px", 
                     fontSize: "12px", 
                     fontWeight: 600,
-                    background: req.status === "accepted" ? "#dcfce7" : req.status === "rejected" ? "#fee2e2" : req.status === "cancelled" ? "#f3f4f6" : "#fef3c7",
-                    color: req.status === "accepted" ? "#166534" : req.status === "rejected" ? "#991b1b" : req.status === "cancelled" ? "#4b5563" : "#92400e"
+                    background: (req.status === "confirmed" || req.status === "paid" || req.payment_status === "paid") ? "#10b981" : req.status === "accepted" ? "#dcfce7" : req.status === "rejected" ? "#fee2e2" : req.status === "cancelled" ? "#f3f4f6" : "#fef3c7",
+                    color: (req.status === "confirmed" || req.status === "paid" || req.payment_status === "paid") ? "#fff" : req.status === "accepted" ? "#166534" : req.status === "rejected" ? "#991b1b" : req.status === "cancelled" ? "#4b5563" : "#92400e"
                   }}>
-                    {req.status === "cancelled" ? "CANCELLED BY USER" : req.status.toUpperCase()}
+                    {req.status === "cancelled" ? "CANCELLED BY USER" : (req.status === "confirmed" || req.status === "paid" || req.payment_status === "paid") ? "💰 PAID & CONFIRMED" : req.status.toUpperCase()}
                   </span>
                 </div>
 

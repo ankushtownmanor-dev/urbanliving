@@ -13,12 +13,14 @@ import {
   FaCheck,
   FaImage,
   FaCloudUploadAlt,
+  FaHistory
 } from "react-icons/fa";
 import "./Dashboard.css";
 import BookingDashboard from "./BookingDashboard";
 import BookingDetail from "./BookingDetail";
 import ProfilePage from "./ProfilePage";
 import { useNavigate } from "react-router";
+import CancellationHistory from "./CancellationHistory";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -170,7 +172,9 @@ const Dashboard = () => {
       if (Array.isArray(result)) list = result;
       else if (Array.isArray(result?.data)) list = result.data;
 
-      const userRequests = list.filter((r) => r.username === user.username);
+      const userRequests = list.filter((r) => 
+        String(r.username).toLowerCase() === String(user.username).toLowerCase()
+      );
       userRequests.sort(
         (a, b) =>
           new Date(b.created_at || b.updated_at) -
@@ -186,15 +190,28 @@ const Dashboard = () => {
     }
   };
   
-  const handleCancelBooking = async (id) => {
-    if (!window.confirm("Are you sure you want to cancel this booking request?")) return;
+  const handleCancelBooking = async (booking) => {
+    if (!booking) return;
+    const id = booking.id;
+    // status 'accepted' with payment_status 'paid' should also be considered paid
+    const isActuallyPaid = booking.status === 'confirmed' || booking.status === 'paid' || booking.payment_status === 'paid' || (booking.status === 'accepted' && booking.payment_status === 'paid');
+
+    const confirmMsg = isActuallyPaid 
+      ? "This booking is PAID. If you cancel, a refund will be processed according to our policy. Do you want to proceed with the cancellation request?"
+      : "Are you sure you want to cancel this booking request?";
+
+    if (!window.confirm(confirmMsg)) return;
+
     try {
-      console.log("Cancelling booking request ID:", id);
-      const res = await axios.patch(`https://townmanor.ai/api/booking-request/${id}/cancel`, {
-        id: id,
-        user_id: user?.user_id || user?.id,
-        username: user?.username,
-        cancel_reason: "Plan changed"
+      const url = isActuallyPaid
+        ? `https://townmanor.ai/api/booking/${id}/cancel`
+        : `https://townmanor.ai/api/booking-request/${id}/cancel`;
+
+      console.log(`Cancelling Booking ID: ${id} at ${url}`);
+
+      // Sending both keys and identifiers to ensure backend compatibility
+      const res = await axios.patch(url, {
+        cancel_reason: isActuallyPaid ? "Cancellation of paid booking" : "Plan changed",
       }, {
         withCredentials: true,
         headers: {
@@ -204,7 +221,7 @@ const Dashboard = () => {
       });
 
       if (res.status === 200 || res.status === 204 || res.data?.success) {
-        alert("Booking request cancelled successfully.");
+        alert(isActuallyPaid ? "Cancellation requested. Our team will process your refund shortly." : "Booking request cancelled successfully.");
         fetchBookingRequests(); // Refresh the list
       } else {
         alert(`Failed to cancel: ${res.data?.message || "Unknown error"}`);
@@ -319,6 +336,13 @@ const Dashboard = () => {
           >
             <FaBell /> Notifications
           </li>
+
+          <li
+            className={itemClass("cancellation")}
+            onClick={() => handleMenuClick("cancellation")}
+          >
+            <FaHistory /> Cancellation History
+          </li>
         </ul>
       </aside>
 
@@ -352,111 +376,144 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {navigation === "dashboard" && <BookingDashboard />}
-        {navigation === "booking" && <BookingDetail />}
-        {navigation === "profile" && <ProfilePage />}
+        <>
+          {navigation === "dashboard" && <BookingDashboard />}
+          {navigation === "booking" && <BookingDetail />}
+          {navigation === "profile" && <ProfilePage />}
+          {navigation === "cancellation" && <CancellationHistory />}
 
-        {navigation === "notification" && (
-          <div className="notification-wrapper">
-            <h2 className="section-title">Booking Updates</h2>
+          {navigation === "notification" && (
+            <div className="notification-wrapper">
+              <h2 className="section-title">Booking Updates</h2>
 
-            {loadingNotification && (
-              <p className="loading-text">Fetching latest updates…</p>
-            )}
+              {loadingNotification && (
+                <p className="loading-text">Fetching latest updates…</p>
+              )}
 
-            {!loadingNotification && bookingRequests.length === 0 && (
-              <p className="empty-text">No booking updates yet.</p>
-            )}
+              {!loadingNotification && bookingRequests.length === 0 && (
+                <p className="empty-text">No booking updates yet.</p>
+              )}
 
-            {bookingRequests.map((req, index) => (
-              <div
-                key={req.id}
-                className={`notification-card animated-card ${
-                  req.status === "accepted"
-                    ? "card-accepted"
-                    : req.status === "rejected"
-                    ? "card-rejected"
-                    : "card-pending"
-                }`}
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="notification-left">
-                  <FaBell className="notification-icon-animated" />
-                </div>
-
-                <div className="notification-content">
-                  <div className="notification-header">
-                    <h3>{req.property?.name || req.property_name || "Unknown Property"}</h3>
-
-                    <span
-                      className={`status-badge ${
-                        req.status === "accepted"
-                          ? "status-accepted"
-                          : req.status === "rejected"
-                          ? "status-rejected"
-                          : "status-pending"
-                      }`}
-                    >
-                      {req.status === "cancelled" ? "CANCELLED" : req.status.toUpperCase()}
-                    </span>
+              {bookingRequests.map((req, index) => (
+                <div
+                  key={req.id}
+                  className={`notification-card animated-card ${
+                    req.status === "accepted"
+                      ? "card-accepted"
+                      : req.status === "rejected"
+                      ? "card-rejected"
+                      : "card-pending"
+                  }`}
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <div className="notification-left">
+                    <FaBell className="notification-icon-animated" />
                   </div>
 
-                  {req.status === "cancelled" && req.cancel_reason && (
-                    <p className="cancel-reason-text">
-                      <strong>Reason:</strong> {req.cancel_reason}
+                  <div className="notification-content">
+                    <div className="notification-header">
+                      <h3>{req.property?.name || req.property_name || "Unknown Property"}</h3>
+
+                      <span
+                        className={`status-badge ${
+                          req.status === "cancelled" || req.status === "rejected"
+                            ? "status-rejected"
+                            : (req.status === "confirmed" || req.status === "paid" || req.payment_status === "paid" || (req.status === "accepted" && req.payment_status === "paid"))
+                            ? "status-accepted"
+                            : "status-pending"
+                        }`}
+                        style={
+                          req.status === "cancelled"
+                            ? { background: "#eee", color: "#666" }
+                            : (req.status === "confirmed" || req.status === "paid" || req.payment_status === "paid" || (req.status === "accepted" && req.payment_status === "paid"))
+                            ? { background: "#d1fae5", color: "#065f46" }
+                            : {}
+                        }
+                      >
+                        {req.status === "cancelled" ? "CANCELLED" : (req.status === "confirmed" || req.status === "paid" || req.payment_status === "paid" || (req.status === "accepted" && req.payment_status === "paid")) ? "PAYMENT COMPLETED" : req.status?.toUpperCase() || "PENDING"}
+                      </span>
+                    </div>
+
+                    {req.status === "cancelled" && req.cancel_reason && (
+                      <p className="cancel-reason-text">
+                        <strong>Reason:</strong> {req.cancel_reason}
+                      </p>
+                    )}
+
+                    <p>
+                      <strong>City:</strong> {req.property?.city || req.city}
                     </p>
-                  )}
 
-                  <p>
-                    <strong>City:</strong> {req.property?.city || req.city}
-                  </p>
+                    <p>
+                      <strong>Stay:</strong>{" "}
+                      {new Date(req.start_date).toDateString()} →{" "}
+                      {new Date(req.end_date).toDateString()}
+                    </p>
 
-                  <p>
-                    <strong>Stay:</strong>{" "}
-                    {new Date(req.start_date).toDateString()} →{" "}
-                    {new Date(req.end_date).toDateString()}
-                  </p>
+                    <p className="date-text">
+                      Updated:{" "}
+                      {new Date(
+                        req.updated_at || req.created_at
+                      ).toLocaleString()}
+                    </p>
 
-                  <p className="date-text">
-                    Updated:{" "}
-                    {new Date(
-                      req.updated_at || req.created_at
-                    ).toLocaleString()}
-                  </p>
+                    {/* BUTTON LOGIC - Only show if not cancelled */}
+                    {req.status !== "cancelled" && (
+                      <div className="notification-actions">
+                        {req.status === "accepted" && req.payment_status !== "paid" && (
+                          <button
+                            className="proceed-btn"
+                            onClick={() => navigate(`/property/${req.property_id}`)}
+                          >
+                            Proceed to Booking →
+                          </button>
+                        )}
 
-                  {req.status === "accepted" && (
-                    <button
-                      className="proceed-btn"
-                      onClick={() => navigate(`/property/${req.property_id}`)}
-                    >
-                      Proceed to Booking →
-                    </button>
-                  )}
-
-                  {req.status === "pending" && (
-                    <button
-                      className="cancel-btn"
-                      style={{
-                        marginTop: "12px",
-                        padding: "8px 16px",
-                        background: "#dc2626",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        fontSize: "14px",
-                        fontWeight: "500"
-                      }}
-                      onClick={() => handleCancelBooking(req.id)}
-                    >
-                      Cancel Booking
-                    </button>
-                  )}
+                        {(req.status === "confirmed" || req.status === "paid" || req.payment_status === "paid" || (req.status === "accepted" && req.payment_status === "paid")) ? (
+                          <button
+                            className="cancel-btn"
+                            style={{
+                              marginTop: "12px",
+                              padding: "8px 16px",
+                              background: "#dc2626",
+                              color: "white",
+                              border: "none",
+                              borderRadius: "8px",
+                              cursor: "pointer",
+                              fontSize: "14px",
+                              fontWeight: "500"
+                            }}
+                            onClick={() => handleCancelBooking(req)}
+                          >
+                            Request Cancellation
+                          </button>
+                        ) : (
+                          <button
+                            className="cancel-btn"
+                            style={{
+                              marginTop: "12px",
+                              padding: "8px 16px",
+                              background: "#dc2626",
+                              color: "white",
+                              border: "none",
+                              borderRadius: "8px",
+                              cursor: "pointer",
+                              fontSize: "14px",
+                              fontWeight: "500"
+                            }}
+                            onClick={() => handleCancelBooking(req)}
+                          >
+                            Cancel Booking
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </>
       </main>
 
       {/* PROFESSIONAL PROFILE UPLOAD MODAL */}

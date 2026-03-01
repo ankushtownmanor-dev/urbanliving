@@ -23,24 +23,48 @@ function BookingDetail() {
   /* ================= FETCH BOOKINGS ================= */
   useEffect(() => {
     const fetchBookings = async () => {
-      if (!user?.id) return;
+      if (!user?.username) return;
       setLoading(true);
       setError("");
 
       try {
-        const res = await fetch(
-          `https://townmanor.ai/api/booking/user/${user.id}`
-        );
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
+        // 1. Fetch all booking requests
+        const bookingsRes = await fetch("https://townmanor.ai/api/booking-request");
+        if (!bookingsRes.ok) throw new Error(`Bookings HTTP ${bookingsRes.status}`);
+        const bookingsResult = await bookingsRes.json();
 
-        if (data?.success && Array.isArray(data.bookings)) {
-          setBookings(data.bookings);
-        } else {
-          setBookings([]);
-        }
+        let bookingsList = [];
+        if (Array.isArray(bookingsResult)) bookingsList = bookingsResult;
+        else if (Array.isArray(bookingsResult?.data)) bookingsList = bookingsResult.data;
+
+        // 2. Fetch all properties to get accurate pricing
+        const propsRes = await fetch("https://townmanor.ai/api/ovika/properties");
+        if (!propsRes.ok) throw new Error(`Properties HTTP ${propsRes.status}`);
+        const propsResult = await propsRes.json();
+        const allProperties = Array.isArray(propsResult) ? propsResult : (propsResult?.data || []);
+
+        // 3. Filter and enrich with property data
+        const enrichedBookings = bookingsList
+          .filter((b) => b.username === user.username)
+          .map((b) => {
+            // Find matched property
+            const matchedProp = allProperties.find(p => String(p.id || p._id) === String(b.property_id));
+            
+            return {
+              ...b,
+              booking_status: b.status || "pending",
+              // Use property API data if available, fallback to booking data
+              property_name: matchedProp?.name || b.property_name || b.property?.name || "Unknown Property",
+              property_address: matchedProp?.address || b.property_address || b.property?.address || "Address not available",
+              // Use total_price from booking, or calculate if missing (nights * property_price)
+              display_price: b.total_price || b.price || matchedProp?.price || 0
+            };
+          })
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+        setBookings(enrichedBookings);
       } catch (err) {
-        console.error("Error fetching bookings", err);
+        console.error("Error fetching or enriching bookings", err);
         setError("Failed to load bookings. Please try again later.");
       } finally {
         setLoading(false);
@@ -51,38 +75,54 @@ function BookingDetail() {
   }, [user]);
 
   /* ================= CANCEL BOOKING ================= */
-  const cancelBooking = async (bookingId) => {
-    const confirmCancel = window.confirm(
-      "Are you sure you want to cancel this booking?"
-    );
+  const cancelBooking = async (booking) => {
+    const bookingId = booking.id;
+    const isPaid = booking.status === 'confirmed' || booking.status === 'paid' || booking.payment_status === 'paid' || booking.booking_status === 'confirmed' || booking.booking_status === 'paid';
+
+    const confirmMsg = isPaid 
+      ? "This booking is PAID. If you cancel, a refund will be processed according to our policy. Do you want to proceed with the cancellation request?"
+      : "Are you sure you want to cancel this booking request?";
+
+    const confirmCancel = window.confirm(confirmMsg);
     if (!confirmCancel) return;
 
     try {
+      // Define status check
+      const isActuallyPaid = isPaid || booking.status === 'confirmed' || booking.status === 'paid' || booking.payment_status === 'paid';
+      
+      // Consistent with Dashboard.jsx - point to booking-request for records found there
+      const url = `https://townmanor.ai/api/booking-request/${bookingId}/cancel`;
+
+      console.log(`Cancelling Booking ID: ${bookingId} at ${url}`);
+
       const res = await fetch(
-        `https://townmanor.ai/api/booking/${bookingId}/cancel`,
+        url,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id: bookingId, user_id: user?.id }),
+          body: JSON.stringify({ 
+            cancel_reason: isActuallyPaid ? "Cancellation of paid booking" : "Plan changed", 
+          }),
         }
       );
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
+      
       const data = await res.json();
-      if (!data?.success) throw new Error("Cancel failed");
-
-      setBookings((prev) =>
-        prev.map((b) =>
-          b.id === bookingId
-            ? { ...b, cancelled: 1, booking_status: "cancelled" }
-            : b
-        )
-      );
-
-      alert(data.message || "Booking cancelled successfully.");
+      
+      if (res.ok || data?.success) {
+        setBookings((prev) =>
+          prev.map((b) =>
+            b.id === bookingId
+              ? { ...b, cancelled: 1, status: "cancelled", booking_status: "cancelled" }
+              : b
+          )
+        );
+        alert(data.message || "Booking request cancelled successfully.");
+      } else {
+        throw new Error(data.message || `HTTP ${res.status}`);
+      }
     } catch (e) {
       console.error("Cancel failed", e);
-      alert("Failed to cancel booking.");
+      alert(`Error: ${e.message || "Failed to cancel booking."}`);
     }
   };
 
@@ -137,8 +177,8 @@ function BookingDetail() {
            img.onload = resolve;
            img.onerror = reject;
         });
-        const logoWidth = 45;
-        const logoHeight = 12;
+        const logoWidth = 60;
+        const logoHeight = 16;
 
         // Top Left
         doc.addImage(img, 'PNG', 20, 10, logoWidth, logoHeight);
@@ -204,16 +244,19 @@ function BookingDetail() {
       doc.setFont(undefined, "bold");
       doc.text("Payment Details", x, y);
       y += 7;
-      const total = Number(b.total_price) || Number(b.price) || 0;
-      const gst = Number(b.gst_amount) || (total * 0.05 / 1.05);
+      const total = Number(b.display_price) || 0;
+      const gst = total > 0 ? (total * 0.05 / 1.05) : 0;
       const subtotal = total - gst;
 
-      row("Subtotal:", `₹${subtotal.toFixed(2)}`);
-      row("GST (5%):", `₹${gst.toFixed(2)}`);
-      row("Total Amount:", `₹${total.toFixed(2)}`);
-      row("Status:", (b.booking_status === 'confirmed' || b.booking_status === 'paid') ? 'PAYMENT COMPLETED' : b.booking_status);
+      row("Subtotal:", `Rs. ${subtotal.toFixed(2)}`);
+      row("GST (5%):", `Rs. ${gst.toFixed(2)}`);
+      row("Total Amount:", `Rs. ${total.toFixed(2)}`);
+      
+      const isPaid = (b.booking_status === 'confirmed' || b.booking_status === 'paid' || b.status === 'confirmed' || b.status === 'paid' || b.payment_status === 'paid');
+      row("Status:", isPaid ? 'PAYMENT COMPLETED' : 'PAYMENT PENDING');
+      
+      row("Booking Status:", (b.booking_status || b.status || "pending").toUpperCase());
       row("Created:", formatDateTime(b.created_at));
-      row("Updated:", formatDateTime(b.updated_at));
 
       doc.text(
         "This is a system-generated receipt by OvikaLiving.com",
@@ -326,16 +369,20 @@ function BookingDetail() {
       textTransform: "uppercase",
       letterSpacing: "0.05em",
       background:
-        status === "cancelled"
-          ? "#fef2f2"
+        status === "cancelled" || status === "rejected"
+          ? "#fee2e2"
           : status === "pending"
-          ? "#fffbeb"
+          ? "#fef3c7"
+          : (status === "confirmed" || status === "paid")
+          ? "#d1fae5"
           : "#ecfdf5",
       color:
-        status === "cancelled"
-          ? "#b91c1c"
+        status === "cancelled" || status === "rejected"
+          ? "#991b1b"
           : status === "pending"
           ? "#92400e"
+          : (status === "confirmed" || status === "paid")
+          ? "#065f46"
           : "#15803d",
     }),
     moreInfoBox: {
@@ -579,7 +626,7 @@ function BookingDetail() {
                     style={styles.tableValuePrice}
                     className="table-value-mobile table-value-small"
                   >
-                    ₹{Number(b.total_price || b.price).toLocaleString('en-IN')}
+                    ₹{Number(b.display_price || 0).toLocaleString('en-IN')}
                   </div>
                 </div>
 
@@ -636,7 +683,7 @@ function BookingDetail() {
                       <span
                         style={styles.statusBadge(b.booking_status)}
                       >
-                        {(b.booking_status === 'confirmed' || b.booking_status === 'paid') ? 'PAYMENT COMPLETED' : b.booking_status?.toUpperCase()}
+                        {b.booking_status === 'cancelled' ? 'CANCELLED' : (b.booking_status === 'confirmed' || b.booking_status === 'paid') ? 'PAYMENT COMPLETED' : b.booking_status?.toUpperCase()}
                       </span>
                   </div>
                 </div>
@@ -713,7 +760,7 @@ function BookingDetail() {
                   <button
                     style={{ ...styles.btn, ...styles.btnCancel }}
                     className="btn-hover btn-cancel-hover btn-mobile"
-                    onClick={() => cancelBooking(b.id)}
+                    onClick={() => cancelBooking(b)}
                   >
                     Cancel Booking
                   </button>

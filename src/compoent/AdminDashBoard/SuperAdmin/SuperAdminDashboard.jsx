@@ -21,6 +21,7 @@ const Icons = {
   Users: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>,
   Bookings: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>,
   Finance: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>,
+  Refunds: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"></path><path d="M18 12c0-1.1.9-2 2-2H4"></path><path d="M16 16c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z"></path></svg>,
   Settings: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
 };
 
@@ -535,7 +536,7 @@ export default function SuperAdminDashboard() {
 
     // If all are zero, provide a small trend for visual purposes but label it as synchronized
     const hasData = counts.some(c => c > 0);
-    const displayCounts = hasData ? counts : [2, 5, 8, 12, 15, totalProps];
+    const displayCounts = hasData ? counts : [2, 5, 8, 12, 15, properties.length];
 
     return {
       labels: last6Months,
@@ -629,6 +630,9 @@ export default function SuperAdminDashboard() {
                 </button>
                 <button className={view === 'finance' ? 'active' : ''} onClick={() => setView('finance')}>
                     <span className="sa-nav-icon"><Icons.Finance /></span> Finance
+                </button>
+                <button className={view === 'refunds' ? 'active' : ''} onClick={() => setView('refunds')}>
+                    <span className="sa-nav-icon"><Icons.Refunds /></span> Payments & Refunds
                 </button>
                 <button className={view === 'settings' ? 'active' : ''} onClick={() => setView('settings')}>
                     <span className="sa-nav-icon"><Icons.Settings /></span> Settings
@@ -1146,11 +1150,11 @@ export default function SuperAdminDashboard() {
                                             </td>
                                             <td>
                                                 <span className={`sa-badge-type`} style={{
-                                                    background: (b.status||'').toLowerCase() === 'accepted' ? '#dcfce7' : (b.status||'').toLowerCase() === 'rejected' ? '#fee2e2' : (b.status||'').toLowerCase() === 'cancelled' ? '#f3f4f6' : '#fef3c7',
-                                                    color: (b.status||'').toLowerCase() === 'accepted' ? '#166534' : (b.status||'').toLowerCase() === 'rejected' ? '#991b1b' : (b.status||'').toLowerCase() === 'cancelled' ? '#64748b' : '#92400e',
+                                                    background: (b.status||'').toLowerCase() === 'accepted' ? '#dcfce7' : (b.status||'').toLowerCase() === 'rejected' ? '#fee2e2' : (b.status||'').toLowerCase() === 'cancelled' ? '#f3f4f6' : (b.status||'').toLowerCase() === 'confirmed' || b.payment_status === 'paid' ? '#dcfce7' : '#fef3c7',
+                                                    color: (b.status||'').toLowerCase() === 'accepted' ? '#166534' : (b.status||'').toLowerCase() === 'rejected' ? '#991b1b' : (b.status||'').toLowerCase() === 'cancelled' ? '#64748b' : (b.status||'').toLowerCase() === 'confirmed' || b.payment_status === 'paid' ? '#166534' : '#92400e',
                                                     textTransform: 'capitalize'
                                                 }}>
-                                                    {b.status || 'Pending'}
+                                                    {(b.status||'').toLowerCase() === 'confirmed' || b.payment_status === 'paid' ? 'Paid' : b.status || 'Pending'}
                                                 </span>
                                                 {(b.status||'').toLowerCase() === 'cancelled' && b.cancel_reason && (
                                                     <div style={{ fontSize: '10px', color: '#ef4444', marginTop: '4px', maxWidth: '120px', fontStyle: 'italic' }}>
@@ -1198,6 +1202,114 @@ export default function SuperAdminDashboard() {
                      </table>
                 </div>
                 </>
+            )}
+
+            {/* VIEW: PAYMENTS & REFUNDS */}
+            {view === 'refunds' && (
+                <div className="sa-table-container">
+                    <div className="sa-table-header-row" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+                            <div>
+                                <h3 style={{ margin: 0 }}>Payment & Refund Tracking</h3>
+                                <p style={{ color: '#666', fontSize: '12px', marginTop: '4px' }}>Monitor paid bookings and manage refund processing for cancellations.</p>
+                            </div>
+                            <div style={{ display: 'flex', gap: '20px' }}>
+                                <div style={{ textAlign: 'right' }}>
+                                    <div style={{ fontSize: '11px', color: '#888', textTransform: 'uppercase' }}>Total Paid (Active)</div>
+                                    <div style={{ fontSize: '18px', fontWeight: '700', color: '#10b981' }}>
+                                        ₹{bookings.filter(b => b.payment_status === 'paid' && b.status !== 'cancelled').reduce((acc, b) => acc + calculateBookingAmount(b), 0).toLocaleString()}
+                                    </div>
+                                </div>
+                                <div style={{ textAlign: 'right' }}>
+                                    <div style={{ fontSize: '11px', color: '#888', textTransform: 'uppercase' }}>Total Refunds Due</div>
+                                    <div style={{ fontSize: '18px', fontWeight: '700', color: '#dc2626' }}>
+                                        ₹{bookings.filter(b => b.payment_status === 'paid' && b.status === 'cancelled').reduce((acc, b) => acc + calculateBookingAmount(b), 0).toLocaleString()}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table className="sa-table">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Property</th>
+                                <th>User (Payer)</th>
+                                <th>Total Paid</th>
+                                <th>Status</th>
+                                <th>Cancellation Details</th>
+                                <th>Refund Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {bookings.filter(b => b.payment_status === 'paid' || (b.status === 'cancelled' && b.payment_status === 'paid')).map(b => {
+                                const totalVal = calculateBookingAmount(b);
+                                const isCancelled = b.status === "cancelled";
+                                return (
+                                    <tr key={b.id}>
+                                        <td><span style={{ color: '#6366f1', fontWeight: '600' }}>#{b.id}</span></td>
+                                        <td>
+                                            <div style={{ fontWeight: '500' }}>{b.property?.name || b.property_name || "N/A"}</div>
+                                            <div style={{ fontSize: '11px', color: '#888' }}>{b.property?.city || b.city}</div>
+                                        </td>
+                                        <td>
+                                            <div style={{ fontWeight: '500' }}>{b.username || "Unknown"}</div>
+                                            <div style={{ fontSize: '11px', color: '#888' }}>ID: {b.user_id}</div>
+                                        </td>
+                                        <td style={{ fontWeight: '600' }}>₹{totalVal.toLocaleString()}</td>
+                                        <td>
+                                            <span style={{ 
+                                                padding: '4px 10px', 
+                                                borderRadius: '20px', 
+                                                fontSize: '11px', 
+                                                background: isCancelled ? '#fee2e2' : '#d1fae5', 
+                                                color: isCancelled ? '#991b1b' : '#065f46',
+                                                fontWeight: '600',
+                                                border: `1px solid ${isCancelled ? '#fecaca' : '#a7f3d0'}`
+                                            }}>
+                                                {isCancelled ? "CANCELLED" : "ACTIVE PAID"}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {isCancelled ? (
+                                                <div style={{ maxWidth: '250px' }}>
+                                                    <div style={{ fontSize: '12px', fontWeight: '600', color: '#444' }}>
+                                                        Reason: <span style={{ fontWeight: '400', fontStyle: 'italic' }}>"{b.cancel_reason || "Not specified"}"</span>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <span style={{ color: '#999', fontSize: '12px' }}>No cancellation</span>
+                                            )}
+                                        </td>
+                                        <td style={{ fontWeight: '700', fontSize: '15px', color: isCancelled ? '#dc2626' : '#6b7280' }}>
+                                            {isCancelled ? `₹${totalVal.toLocaleString()}` : "₹0"}
+                                        </td>
+                                        <td>
+                                            {isCancelled ? (
+                                                <button 
+                                                    className="sa-btn-primary" 
+                                                    style={{ padding: '6px 12px', fontSize: '11px', backgroundColor: '#dc2626' }}
+                                                    onClick={() => alert(`Initiating refund of ₹${totalVal.toLocaleString()} for Booking #${b.id}`)}
+                                                >
+                                                    Process Refund
+                                                </button>
+                                            ) : (
+                                                <button 
+                                                    className="sa-btn-primary" 
+                                                    style={{ padding: '6px 12px', fontSize: '11px', backgroundColor: '#6366f1' }}
+                                                    onClick={() => setView('bookings')}
+                                                >
+                                                    View Details
+                                                </button>
+                                            )}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
             )}
 
             {/* VIEW: FINANCE */}

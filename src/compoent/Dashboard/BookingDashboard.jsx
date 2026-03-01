@@ -28,29 +28,31 @@ const BookingDashboard = () => {
           return;
         }
 
-        const res = await fetch(`https://townmanor.ai/api/booking/user/${userId}`);
-        const data = await res.json();
+        const res = await fetch("https://townmanor.ai/api/booking-request");
+        const result = await res.json();
+        
+        let allData = [];
+        if (Array.isArray(result)) allData = result;
+        else if (Array.isArray(result?.data)) allData = result.data;
 
-        if (data?.success && Array.isArray(data.bookings)) {
-          const bookings = data.bookings;
-          const now = new Date();
-          
-          const upcoming = bookings.filter(b => 
-            (b.booking_status === 'confirmed' || b.booking_status === 'paid') && 
-            new Date(b.start_date) > now
-          ).length;
+        const userBookings = allData.filter(b => b.username === user.username);
+        const now = new Date();
+        
+        const upcoming = userBookings.filter(b => 
+          (b.status === 'confirmed' || b.status === 'paid' || b.payment_status === 'paid') && 
+          new Date(b.start_date) > now
+        ).length;
 
-          const completed = bookings.filter(b => 
-            (b.booking_status === 'confirmed' || b.booking_status === 'paid') && 
-            new Date(b.end_date) < now
-          ).length;
+        const completed = userBookings.filter(b => 
+          (b.status === 'confirmed' || b.status === 'paid' || b.payment_status === 'paid') && 
+          new Date(b.end_date) < now
+        ).length;
 
-          const canceled = bookings.filter(b => 
-            b.booking_status === 'cancelled' || b.cancelled === 1
-          ).length;
+        const canceled = userBookings.filter(b => 
+          b.status === 'cancelled' || b.cancelled === 1
+        ).length;
 
-          setStats({ upcoming, completed, canceled });
-        }
+        setStats({ upcoming, completed, canceled });
       } catch (err) {
         console.error("Error fetching dashboard stats", err);
       } finally {

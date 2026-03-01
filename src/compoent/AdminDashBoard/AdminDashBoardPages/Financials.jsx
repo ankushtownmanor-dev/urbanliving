@@ -1,7 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
+import axios from 'axios';
+import { AuthContext } from "../../Login/AuthContext";
+import { Loader } from "lucide-react";
+
+/* ================= HELPERS ================= */
+const extractOwnerId = (obj) => {
+  if (!obj || typeof obj !== "object") return null;
+  return (
+    obj.owner_id ||
+    obj.ownerId ||
+    obj.id ||
+    obj.user_id ||
+    obj.userId ||
+    (obj.user && extractOwnerId(obj.user)) ||
+    null
+  );
+};
 
 const Financials = () => {
-  const [financialData] = useState({
+  const { user } = useContext(AuthContext);
+  const [ownerId, setOwnerId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [financialData, setFinancialData] = useState({
     totalProperties: 0,
     totalBookings: 0,
     lifetimeIncome: 0,
@@ -11,6 +31,105 @@ const Financials = () => {
     recentTransactions: []
   });
 
+  const resolveOwnerId = useCallback(() => {
+    const idFromContext = extractOwnerId(user);
+    if (idFromContext) return String(idFromContext);
+    try {
+      const raw = localStorage.getItem("user");
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return extractOwnerId(parsed)?.toString() || null;
+    } catch {
+      return null;
+    }
+  }, [user]);
+
+  useEffect(() => {
+    const id = resolveOwnerId();
+    setOwnerId(id);
+  }, [resolveOwnerId]);
+
+  const fetchData = useCallback(async () => {
+    if (!ownerId) return;
+    try {
+      setLoading(true);
+      // 1. Fetch Owner Properties
+      const propsRes = await axios.get("https://townmanor.ai/api/ovika/properties");
+      const allProps = Array.isArray(propsRes.data) ? propsRes.data : (propsRes.data?.data || []);
+      const ownerProps = allProps.filter(p => String(p.owner_id || p.ownerId) === String(ownerId));
+      const ownerPropIds = ownerProps.map(p => Number(p.id || p._id));
+
+      // 2. Fetch All Bookings (Inquiries & Bookings)
+      const bookingsRes = await axios.get("https://townmanor.ai/api/booking-request");
+      const allBookings = Array.isArray(bookingsRes.data) ? bookingsRes.data : (bookingsRes.data?.data || []);
+      const ownerBookings = allBookings.filter(b => ownerPropIds.includes(Number(b.property_id)));
+
+      // 3. Calculate Stats
+      let totalRevenue = 0;
+      let completedRev = 0;
+      let pendingRev = 0;
+      let currentMonthRev = 0;
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const currentYear = now.getFullYear();
+
+      const cancelled = [];
+      const transactions = ownerBookings.map(b => {
+        const amount = Number(b.total_price || b.price || b.property?.price || 0);
+        const commission = amount * 0.15;
+        const net = amount - commission;
+        const bDate = new Date(b.created_at || b.start_date);
+        const isPaid = b.status === 'confirmed' || b.status === 'paid' || b.payment_status === 'paid';
+        const isAccepted = b.status === 'accepted'; 
+        const isCancelled = b.status === 'cancelled' || b.cancelled === 1;
+
+        if (isPaid) {
+          totalRevenue += amount;
+          completedRev += net;
+          if (bDate.getMonth() === currentMonth && bDate.getFullYear() === currentYear) {
+            currentMonthRev += net;
+          }
+        } else if (b.status === 'pending' || isAccepted) {
+          pendingRev += net;
+        }
+
+        const tObj = {
+          id: b.id,
+          bookingId: `BK-${b.id}`,
+          propertyName: b.property_name || b.property?.name || `Property #${b.property_id}`,
+          date: b.updated_at || b.created_at || b.start_date,
+          listingAmount: amount,
+          commissionAmount: commission,
+          ownerAmount: net,
+          status: isPaid ? 'completed' : isCancelled ? 'cancelled' : 'pending'
+        };
+
+        if (isCancelled) cancelled.push(tObj);
+        return tObj;
+      }).filter(t => t.status !== 'cancelled').sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      setFinancialData({
+        totalProperties: ownerProps.length,
+        totalBookings: ownerBookings.length,
+        lifetimeIncome: totalRevenue,
+        pendingPayments: pendingRev,
+        completedPayments: completedRev,
+        currentMonthEarnings: currentMonthRev,
+        recentTransactions: transactions,
+        cancelledTransactions: cancelled.sort((a, b) => new Date(b.date) - new Date(a.date))
+      });
+
+    } catch (err) {
+      console.error("Financial Data Fetch Error:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [ownerId]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -18,6 +137,23 @@ const Financials = () => {
       maximumFractionDigits: 0
     }).format(amount);
   };
+
+  if (loading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "60vh", flexDirection: "column", gap: "12px" }}>
+        <Loader size={40} style={{ animation: "spin 1s linear infinite", color: "#3b82f6" }} />
+        <p style={{ fontSize: "16px", color: "#6b7280", fontWeight: 500 }}>Calculating financials...</p>
+      </div>
+    );
+  }
+
+  if (!ownerId) {
+    return (
+      <div style={{ padding: '40px', textAlign: 'center' }}>
+        <h2>Please login as a property owner to view financials.</h2>
+      </div>
+    );
+  }
 
   return (
     <div style={styles.container}>
@@ -170,6 +306,56 @@ const Financials = () => {
               <span style={styles.metricValue}>{financialData.totalProperties}</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Cancellation Records Table */}
+      <div style={{...styles.tableSection, marginTop: '40px', borderTop: '4px solid #ef4444'}}>
+        <div style={styles.tableHeader}>
+          <h2 style={{...styles.sectionTitle, color: '#ef4444'}}>Cancellation Records</h2>
+          <span style={{fontSize: '14px', color: '#64748b'}}>{financialData.cancelledTransactions?.length || 0} cancellations recorded</span>
+        </div>
+
+        <div style={styles.tableWrapper}>
+          <table style={styles.table}>
+            <thead>
+              <tr style={styles.tableHeaderRow}>
+                <th style={styles.th}>Property Details</th>
+                <th style={styles.th}>Cancellation Date</th>
+                <th style={styles.th}>Original Amount</th>
+                <th style={styles.th}>Potential Net</th>
+                <th style={styles.th}>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {!financialData.cancelledTransactions || financialData.cancelledTransactions.length === 0 ? (
+                <tr>
+                  <td colSpan="5" style={styles.emptyState}>
+                    <p style={styles.emptyText}>No cancellation records</p>
+                  </td>
+                </tr>
+              ) : (
+                financialData.cancelledTransactions.map((transaction) => (
+                  <tr key={transaction.id} style={styles.tableRow}>
+                    <td style={styles.td}>
+                      <div>
+                        <div style={styles.propertyName}>{transaction.propertyName}</div>
+                        <div style={styles.bookingId}>{transaction.bookingId}</div>
+                      </div>
+                    </td>
+                    <td style={styles.td}>{new Date(transaction.date).toLocaleDateString('en-IN')}</td>
+                    <td style={styles.td}>{formatCurrency(transaction.listingAmount)}</td>
+                    <td style={{...styles.td, color: '#94a3b8'}}>{formatCurrency(transaction.ownerAmount)}</td>
+                    <td style={styles.td}>
+                      <span style={{...styles.statusPending, background: '#fee2e2', color: '#b91c1c'}}>
+                        Cancelled
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
