@@ -2035,3 +2035,98 @@ table {
   font-size: 0.82rem;
   color: #64748b;
 }
+
+/* =====================================================
+   ADD THESE STYLES TO YOUR PropertyDetailPage.css
+   ===================================================== */
+
+/* Bed Icon — small square like your sketch */
+.rm-bed-icon-wrap {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.rm-bed-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 22px;
+}
+
+.rm-bed-headboard {
+  width: 100%;
+  height: 5px;
+  background: #94a3b8;
+  border-radius: 2px 2px 0 0;
+}
+
+.rm-bed-body {
+  width: 100%;
+  height: 12px;
+  background: #cbd5e1;
+  border-radius: 0 0 2px 2px;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+}
+
+.rm-bed-pillow {
+  flex: 1;
+  background: white;
+  border-radius: 2px;
+  opacity: 0.85;
+}
+
+/* Book Now Button */
+.rm-book-btn {
+  padding: 7px 16px;
+  background: #8b0000;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.1s;
+  width: 100%;
+}
+
+.rm-book-btn:hover {
+  background: #6b0000;
+  transform: translateY(-1px);
+}
+
+/* Mobile Book Now override */
+.rm-mc-book-btn {
+  background: #8b0000 !important;
+  color: white !important;
+  font-weight: 600;
+}
+
+.rm-mc-book-btn:hover {
+  background: #6b0000 !important;
+}
+
+/* Mobile responsive — make table columns fit */
+@media (max-width: 768px) {
+  .rm-book-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.85rem;
+    margin-top: 6px;
+  }
+  
+  .rm-bed-icon-wrap {
+    width: 30px;
+    height: 30px;
+  }
+}
