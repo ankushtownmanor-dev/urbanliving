@@ -1,5 +1,5 @@
 * {
-  font-family: "Inter", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  
 }
 
 .featured-container {
@@ -13,7 +13,7 @@
 .featured-heading {
   font-size: 32px;
   color: #000;
-  font-weight: 500;
+  font-weight: 300 !important;
   margin-bottom: 50px;
 }
 
@@ -69,13 +69,13 @@
 .featured-city {
   color: #c2772b;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 300 !important;
   margin-bottom: 8px;
 }
 
 .featured-title {
   font-size: 19px;
-  font-weight: 500;
+  font-weight: 300 !important;
   color: #000;
   margin-bottom: 12px;
 }
@@ -100,7 +100,7 @@
 
 .featured-price {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 300 !important;
   color: #000;
   margin-bottom: 16px;
 }
@@ -113,7 +113,7 @@
   border-radius: 25px;
   font-size: 14px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 300 !important;
   display: block;
   margin: 0 auto;
   transition: all 0.3s ease;

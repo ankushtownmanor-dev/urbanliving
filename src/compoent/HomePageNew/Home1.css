@@ -123,7 +123,7 @@
 .ovika-card-title {
   color: #ffffff;
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: 300 !important;
   margin: 0;
   letter-spacing: 0.02em;
 }
@@ -131,7 +131,7 @@
 .ovika-card-subtitle {
   color: #f5c97a;
   font-size: 0.7rem;
-  font-weight: 500;
+  font-weight: 300 !important;
   margin: 0.02rem 0 0;
 }
 
@@ -149,7 +149,7 @@
   gap: 4px;
   color: #f5a623;
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 300 !important;
   text-decoration: none;
   margin-top: 0.2rem;
   transition: gap 0.2s;

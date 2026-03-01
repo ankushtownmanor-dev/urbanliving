@@ -1,5 +1,5 @@
 * {
-  font-family: "Inter", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  
 }
 
 /* ---------- Desktop / Tablet base ---------- */
@@ -15,7 +15,7 @@
 
 .why-heading-97 {
   font-size: 32px;
-  font-weight: 500;
+  font-weight: 300 !important;
   color: #000;
   margin-bottom: 60px;
 }
@@ -60,7 +60,7 @@
 
 .why-title-97 {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 300 !important;
   color: #000;
   margin-bottom: 12px;
 }
@@ -155,7 +155,7 @@
   .why-heading-97 {
     font-size: 24px;
     margin-bottom: 30px;
-    font-weight: 500;
+    font-weight: 300 !important;
   }
 
   /* 2x2 grid for mobile */

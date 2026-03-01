@@ -12,7 +12,7 @@
             align-items: flex-start;
             justify-content: center;
             padding: 1rem;
-            font-family: sans-serif;
+            
           }
 
           .booking-form-container {
@@ -68,13 +68,13 @@
 
           .progress-bar-step-name.is-active {
             color: #000;
-            font-weight: 600;
+            font-weight: 300 !important;
           }
 
           /* Step Content */
           .form-step-title {
             font-size: 1.5rem;
-            font-weight: bold;
+            font-weight: 300 !important;
             margin-bottom: 1rem;
           }
           
@@ -112,7 +112,7 @@
           
           .form-step-card-title {
             font-size: 1.25rem;
-            font-weight: bold;
+            font-weight: 300 !important;
             margin-bottom: 0.25rem;
           }
           
@@ -137,7 +137,7 @@
 
           .form-step-card-price {
             font-size: 1.5rem;
-            font-weight: bold;
+            font-weight: 300 !important;
             margin-top: 1rem;
           }
 
@@ -225,7 +225,7 @@
 
           .calendar-title {
             font-size: 1.125rem;
-            font-weight: 600;
+            font-weight: 300 !important;
             color: #374151;
             margin: 0;
           }
@@ -258,7 +258,7 @@
           .calendar-day-header {
             text-align: center;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 300 !important;
             color: #6b7280;
             padding: 0.5rem 0;
           }
@@ -269,7 +269,7 @@
             background: none;
             border-radius: 0.375rem;
             font-size: 0.875rem;
-            font-weight: 500;
+            font-weight: 300 !important;
             cursor: pointer;
             transition: all 0.2s ease-in-out;
             display: flex;
@@ -295,13 +295,13 @@
           .calendar-day-selected {
             background: var(--primary-gradient);
             color: white;
-            font-weight: 600;
+            font-weight: 300 !important;
           }
 
           .calendar-day-in-range {
             background-color: rgba(139, 0, 0, 0.1);
             color: #8b0000;
-            font-weight: 500;
+            font-weight: 300 !important;
           }
 
           .calendar-selection {
@@ -319,13 +319,13 @@
 
           .calendar-selection-label {
             font-size: 0.875rem;
-            font-weight: 500;
+            font-weight: 300 !important;
             color: #6b7280;
           }
 
           .calendar-selection-date {
             font-size: 0.875rem;
-            font-weight: 600;
+            font-weight: 300 !important;
             color: #374151;
           }
 
@@ -339,7 +339,7 @@
           .date-input-label {
             display: block;
             font-size: 0.875rem;
-            font-weight: 500;
+            font-weight: 300 !important;
           }
           
           .date-input {
@@ -365,7 +365,7 @@
           
           .pricing-summary-title {
             font-size: 1.125rem;
-            font-weight: 600;
+            font-weight: 300 !important;
             margin-bottom: 1rem;
           }
 
@@ -378,7 +378,7 @@
           }
 
           .pricing-total {
-            font-weight: bold;
+            font-weight: 300 !important;
             font-size: 1rem;
             margin-top: 1rem;
             padding-top: 0.5rem;
@@ -403,7 +403,7 @@
           
           .verification-title {
             font-size: 1.125rem;
-            font-weight: 600;
+            font-weight: 300 !important;
             margin-bottom: 0.5rem;
           }
 
@@ -433,7 +433,7 @@
           }
           .digit-inputs-label {
             font-size: 0.875rem;
-            font-weight: 500;
+            font-weight: 300 !important;
             color: #374151;
           }
 
@@ -534,7 +534,7 @@
 
 .veri-title-1 {
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 300 !important;
   margin-bottom: 0.5rem;
 }
 
@@ -560,7 +560,7 @@
 
 .veri-label-1 {
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 300 !important;
   color: #374151;
 }
 
@@ -730,7 +730,7 @@
           
           .upload-text span {
             color: #8b0000;
-            font-weight: 600;
+            font-weight: 300 !important;
           }
 
           .photo-preview-container {
@@ -739,7 +739,7 @@
 
           .photo-preview-title {
             font-size: 1.125rem;
-            font-weight: 600;
+            font-weight: 300 !important;
             margin-bottom: 0.5rem;
           }
 
@@ -769,13 +769,13 @@
           }
 
           .payment-price-amount {
-            font-weight: bold;
+            font-weight: 300 !important;
           }
 
           .pay-now-button {
             padding: 1rem 2rem;
             border-radius: 9999px;
-            font-weight: bold;
+            font-weight: 300 !important;
             color: #fff;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: all 0.3s ease-in-out;
@@ -810,7 +810,7 @@
           .navigation-button {
             padding: 0.5rem 1.5rem;
             border-radius: 0.375rem;
-            font-weight: 600;
+            font-weight: 300 !important;
             transition: all 0.3s ease-in-out;
           }
 
@@ -860,14 +860,14 @@
           
           .alert__message {
             font-size: 1.125rem;
-            font-weight: 500;
+            font-weight: 300 !important;
             margin-bottom: 1rem;
           }
           
           .alert__button {
             background-color: #e5e7eb;
             color: #4b5563;
-            font-weight: 600;
+            font-weight: 300 !important;
             padding: 0.5rem 1rem;
             border-radius: 0.375rem;
             transition-property: background-color, color;

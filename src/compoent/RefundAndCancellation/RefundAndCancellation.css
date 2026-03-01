@@ -9,7 +9,7 @@
 .refund-policy-wrapper-unique {
   width: 100%;
   background: #ffffff;
-  font-family: 'Poppins', Arial, sans-serif;
+  
   color: #333;
   overflow-x: hidden;
 }
@@ -25,7 +25,7 @@
 
 .refund-main-title-unique {
   font-size: clamp(26px, 6vw, 44px);
-  font-weight: 700;
+  font-weight: 300 !important;
   margin-bottom: 18px;
 }
 
@@ -81,12 +81,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
+  font-weight: 300 !important;
 }
 
 .refund-section-header-unique h2 {
   font-size: clamp(18px, 4.5vw, 26px);
-  font-weight: 700;
+  font-weight: 300 !important;
 }
 
 /* Content */
@@ -118,7 +118,7 @@
   font-size: 18px;
   color: #c98b3e;
   margin: 22px 0 12px;
-  font-weight: 700;
+  font-weight: 300 !important;
 }
 
 /* Cards */
@@ -144,7 +144,7 @@
   margin-bottom: 12px;
   display: inline-block;
   color: white;
-  font-weight: 700;
+  font-weight: 300 !important;
 }
 
 .refund-badge-flexible-unique { background: #2ecc71; }
@@ -188,7 +188,7 @@
   border-radius: 40px;
   background: white;
   color: #2c3e50;
-  font-weight: 600;
+  font-weight: 300 !important;
   text-decoration: none;
 }
 
@@ -203,7 +203,7 @@
   border-radius: 40px;
   background: #c98b3e;
   color: white;
-  font-weight: 700;
+  font-weight: 300 !important;
   text-decoration: none;
 }
 

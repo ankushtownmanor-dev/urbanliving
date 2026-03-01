@@ -8,7 +8,7 @@
   --tmxluxe-beige: #f5f2ee;
   --tmxluxe-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   --tmxluxe-gradient: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 100%);
-  font-family: 'Poppins', 'Open Sans', sans-serif;
+  
 }
 
 /* Reset and Base Styles */
@@ -19,7 +19,7 @@
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  
   color: var(--tmxluxe-text);
   line-height: 1.6;
 }
@@ -75,7 +75,7 @@ body {
 }
 
 .tmxluxe-logo-mark {
-  font-family: 'lato', sans-serif;
+  
   font-weight: 550;
   font-size: 90px;
   line-height: 1;
@@ -88,7 +88,7 @@ body {
 }
 
 .tmxluxe-logo-text {
-  font-family: 'salsa';
+  
   font-weight: 400;
   font-size: 50px;
   color: rgb(19, 0, 0);
@@ -102,9 +102,9 @@ body {
 
 /* Typography */
 .tmxluxe-heading {
-  font-family: 'lato',sans-serif;
+  
   font-size: 40px;
-  font-weight: 500;
+  font-weight: 300 !important;
   line-height: 1;
   color: rgb(3, 0, 0);
 }
@@ -140,7 +140,7 @@ body {
   color: rgb(0, 0, 0);
   padding: 16px 32px;
   border-radius: 50px;
-  font-weight: 600;
+  font-weight: 300 !important;
   font-size: 16px;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -164,7 +164,7 @@ body {
   z-index: 1;
   margin-top: -100px;
   padding-top: 180px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
 }
 
 .tmxluxe-section-title {
@@ -174,8 +174,8 @@ body {
   color: var(--tmxluxe-dark);
   position: relative;
   padding-bottom: 20px;
-  font-family: 'segoe UI';
-  font-weight: 500;
+  
+  font-weight: 300 !important;
 }
 
 .tmxluxe-section-title::after {
@@ -241,8 +241,8 @@ body {
   font-size: 24px;
   margin-bottom: 20px;
   color: var(--tmxluxe-dark);
-  font-weight: 500;
-  font-family: 'Segoe UI';
+  font-weight: 300 !important;
+  
 }
 
 .tmxluxe-feature p {
@@ -402,7 +402,7 @@ body {
   z-index: 1;
   margin-top: 20px;
   padding-top: 180px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
 }
 
 }

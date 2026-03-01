@@ -17,7 +17,7 @@
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  
   background: var(--bg-gradient);
   color: var(--text-main);
   -webkit-font-smoothing: antialiased;
@@ -60,7 +60,7 @@ body {
 
 .profilePage__title {
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 300 !important;
   color: var(--text-main);
   letter-spacing: -0.02em;
 }
@@ -74,7 +74,7 @@ body {
   color: #ffffff;
   padding: 10px 20px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 300 !important;
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -101,7 +101,7 @@ body {
 
 .profilePage__label {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 300 !important;
   color: var(--text-main);
   margin-bottom: 8px;
 }
@@ -168,7 +168,7 @@ body {
   color: #ffffff;
   padding: 14px;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 300 !important;
   border-radius: 12px;
   border: none;
   cursor: pointer;
@@ -212,7 +212,7 @@ body {
 
 .profilePage__modalTitle {
   font-size: 22px;
-  font-weight: 600;
+  font-weight: 300 !important;
   color: var(--text-main);
   margin-bottom: 24px;
   letter-spacing: -0.02em;
@@ -233,7 +233,7 @@ body {
   padding: 12px 24px;
   border-radius: 10px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 300 !important;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -249,7 +249,7 @@ body {
   padding: 12px 24px;
   border-radius: 10px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 300 !important;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(182, 0, 0, 0.25);
@@ -347,7 +347,7 @@ body {
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 300 !important;
   margin-left: 10px;
   white-space: nowrap;
 }

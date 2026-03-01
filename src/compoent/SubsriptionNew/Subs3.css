@@ -6,7 +6,7 @@
 .faq-title {
   text-align: center;
   font-size: 36px;
-  font-weight: 600;
+  font-weight: 300 !important;
   margin-bottom: 50px;
   color: #111;
 }
@@ -60,7 +60,7 @@
 
 .faq-icon {
   font-size: 22px;
-  font-weight: 600;
+  font-weight: 300 !important;
   color: #111;
 }
 

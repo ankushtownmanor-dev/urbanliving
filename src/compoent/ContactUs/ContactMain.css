@@ -1,6 +1,6 @@
 /* Global Styles */
 .contact-us-container {
-  font-family: 'Arial', sans-serif;
+  
   width: 100%;
   overflow-x: hidden;
 }
@@ -16,7 +16,7 @@
 .contact-header h1 {
   font-size: 42px;
   margin: 0 0 15px 0;
-  font-weight: 700;
+  font-weight: 300 !important;
 }
 
 .contact-header p {
@@ -126,7 +126,7 @@
   display: block;
   color: #333;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 300 !important;
   margin-bottom: 8px;
 }
 
@@ -140,7 +140,7 @@
   outline: none;
   transition: border-color 0.3s;
   box-sizing: border-box;
-  font-family: 'Arial', sans-serif;
+  
 }
 
 .form-group input:focus,
@@ -161,7 +161,7 @@
   border: none;
   border-radius: 8px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 300 !important;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 4px 15px rgba(200, 150, 95, 0.3);

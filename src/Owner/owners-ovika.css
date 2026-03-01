@@ -13,7 +13,7 @@
   .owners-ovika.section{
     background:var(--owners-ovika-bg);
     color:var(--owners-ovika-text);
-    font-family:"Inter","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    
   }
   
   .owners-ovika.container{
@@ -52,7 +52,7 @@
     height:50px;
     padding:0 22px;
     box-shadow:var(--owners-ovika-shadow);
-    font-weight:500;
+    font-weight: 300 !important;
     cursor:pointer;
     margin:16px;
     margin-right: 40px;

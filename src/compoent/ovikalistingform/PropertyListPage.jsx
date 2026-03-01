@@ -28,15 +28,40 @@
 //     return (Math.random() * (4.9 - 4.1) + 4.1).toFixed(1);
 //   }, [property.id]);
 
+//   // ✅ FIXED: getCount — number, array, object, string sab handle karta hai
 //   const getCount = (val) => {
-//     if (typeof val === 'number') return val;
-//     if (Array.isArray(val)) return val.reduce((a, c) => a + (Number(c.count) || 0), 0);
+//     if (val === null || val === undefined) return 0;
+
+//     // Already a plain number
+//     if (typeof val === 'number') return val > 0 ? val : 0;
+
+//     // Parse string first
+//     let parsed = val;
 //     if (typeof val === 'string') {
-//       try {
-//         const p = JSON.parse(val);
-//         if (Array.isArray(p)) return p.reduce((a, c) => a + (Number(c.count) || 0), 0);
-//       } catch { return parseInt(val) || 0; }
+//       const trimmed = val.trim();
+//       // Simple numeric string like "2" or "3"
+//       if (/^\d+$/.test(trimmed)) return parseInt(trimmed, 10);
+//       try { parsed = JSON.parse(trimmed); } catch { return parseInt(trimmed) || 0; }
 //     }
+
+//     // Array of room objects like [{count:1,...}, {count:2,...}]
+//     if (Array.isArray(parsed)) {
+//       // If array has count fields, sum them
+//       const hasCount = parsed.some(item => item && typeof item === 'object' && 'count' in item);
+//       if (hasCount) {
+//         return parsed.reduce((a, c) => a + (Number(c.count) || 0), 0);
+//       }
+//       // Otherwise just return array length (each item = 1 room)
+//       return parsed.length;
+//     }
+
+//     // Plain object with a count field
+//     if (typeof parsed === 'object' && parsed !== null) {
+//       if ('count' in parsed) return Number(parsed.count) || 0;
+//       // Object with numeric keys like {0: {...}, 1: {...}}
+//       return Object.keys(parsed).length;
+//     }
+
 //     return 0;
 //   };
 
@@ -67,24 +92,21 @@
 //         .map(b => Number(b.price) || Number(b.monthly_price) || 0)
 //         .filter(p => p > 0);
 //       if (prices.length > 0) return Math.min(...prices);
-//     } catch {}
+//     } catch { }
 //     return 0;
 //   };
 
 //   const getDisplayPrice = () => {
 //     if (property.property_category === 'PG') {
 //       if (isMonthly) {
-//         // Monthly: bedrooms array se minimum room price (6999, 13999 etc.)
 //         const minRoomPrice = getPgMinPrice();
 //         const monthly = minRoomPrice || Number(meta?.perMonthPrice) || Number(meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.base_rate) || 0;
 //         return { price: monthly, label: '/ month', prefix: 'Starts at' };
 //       } else {
-//         // Nightly: property ka actual per-night rate (base_rate ya price field)
 //         const nightly = Number(property.base_rate) || Number(property.price) || Number(meta?.perNightPrice) || 0;
 //         return { price: nightly, label: '/ night', prefix: 'Starts at' };
 //       }
 //     }
-//     // Non-PG properties
 //     if (isMonthly) {
 //       const monthly = Number(meta?.perMonthPrice) || Number(meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.price) || 0;
 //       return { price: monthly, label: '/ month', prefix: null };
@@ -98,6 +120,10 @@
 //     property.cover_photo ||
 //     (Array.isArray(property.photos) && property.photos[0]) ||
 //     'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
+
+//   // ✅ bed/bath count compute
+//   const bedCount = getCount(property.bedrooms);
+//   const bathCount = getCount(property.bathrooms);
 
 //   return (
 //     <div
@@ -188,11 +214,13 @@
 //         {/* Specs */}
 //         <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#717171', fontSize: 13 }}>
 //           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-//             <BiBed style={{ fontSize: 15 }} /><span>{getCount(property.bedrooms)} Beds</span>
+//             <BiBed style={{ fontSize: 15 }} />
+//             <span>{bedCount > 0 ? bedCount : '—'} Bed{bedCount !== 1 ? 's' : ''}</span>
 //           </div>
 //           <span style={{ color: '#ddd' }}>•</span>
 //           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-//             <BiBath style={{ fontSize: 15 }} /><span>{getCount(property.bathrooms)} Baths</span>
+//             <BiBath style={{ fontSize: 15 }} />
+//             <span>{bathCount > 0 ? bathCount : '—'} Bath{bathCount !== 1 ? 's' : ''}</span>
 //           </div>
 //           <span style={{ color: '#ddd' }}>•</span>
 //           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -245,14 +273,11 @@
 //   const [error, setError] = useState(null);
 //   const [search, setSearch] = useState('');
 //   const [activeCat, setActiveCat] = useState(null);
-//   const [rentalType, setRentalType] = useState(null); // 'short' | 'long' | null
+//   const [rentalType, setRentalType] = useState(null);
 //   const [showRentalPopup, setShowRentalPopup] = useState(false);
 //   const navigate = useNavigate();
 //   const location = useLocation();
 
-//   // Short-term form se aane wale property_type values:
-//   // "Entire place", "Private room", "Shared room", "Hotel room", "Homestay"
-//   // Long-term form se aane wale: "Apartment", "House", "Boys PG", "Girls PG", "Villa" etc.
 //   const SHORT_TERM_TYPES = [
 //     'Entire place', 'Private room', 'Shared room', 'Hotel room', 'Homestay'
 //   ];
@@ -262,10 +287,6 @@
 //     let result = list;
 //     const isMonthly = rental === 'long';
 
-//     // ── STEP 1: Rental type filter — ALL views (category ho ya na ho) ──
-//     // Monthly view  → sirf long-term + PG dikhao
-//     // Nightly view  → sirf short-term + PG dikhao
-//     // PG hamesha dono mein
 //     if (isMonthly) {
 //       result = result.filter(p =>
 //         p.property_category === 'PG' || isLongTermProperty(p)
@@ -276,19 +297,16 @@
 //       );
 //     }
 
-//     // ── STEP 2: Category tab filter ──
 //     if (cat) {
 //       result = result.filter(p => {
 //         if (cat.id === 'PG') return p.property_category === 'PG';
 //         if (p.property_category === 'PG') return false;
 
 //         if (isMonthly) {
-//           // Monthly: Economy = 8000–25000, Premium = 25000+
 //           const price = Number(p.price) || 0;
 //           if (cat.id === 'Economy Stay') return price >= 8000 && price <= 25000;
 //           if (cat.id === 'Premium Stay') return price > 25000;
 //         } else {
-//           // Nightly: original ranges
 //           const price = Number(p.price) || 0;
 //           return price >= cat.minPrice && price <= cat.maxPrice;
 //         }
@@ -296,7 +314,6 @@
 //       });
 //     }
 
-//     // ── STEP 3: Search ──
 //     if (q.trim()) {
 //       const qL = q.toLowerCase();
 //       result = result.filter(p =>
@@ -325,7 +342,6 @@
 //   useEffect(() => { fetchProperties(); }, []);
 //   useEffect(() => { setFiltered(applyFilter(properties, activeCat, search, rentalType)); }, [search, activeCat, properties, rentalType]);
 
-//   // Read category AND rentalType from URL params
 //   useEffect(() => {
 //     const params = new URLSearchParams(location.search);
 
@@ -519,7 +535,6 @@
 //             {/* Rental Type Popup */}
 //             {showRentalPopup && (
 //               <>
-//                 {/* Backdrop */}
 //                 <div
 //                   onClick={() => setShowRentalPopup(false)}
 //                   style={{
@@ -542,59 +557,59 @@
 //                     Select Rental Type
 //                   </h3>
 //                   <div style={{ display: 'flex', gap: 14, flexDirection: typeof window !== 'undefined' && window.innerWidth < 480 ? 'column' : 'row' }}>
-//                   {/* Nightly Card */}
-//                   <button
-//                     onClick={() => {
-//                       setRentalType('short');
-//                       sessionStorage.setItem('ovika_rental_type', 'short');
-//                       setShowRentalPopup(false);
-//                     }}
-//                     style={{
-//                       flex: 1, padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', borderRadius: 16,
-//                       border: `2px solid ${rentalType === 'short' ? '#C98B3E' : '#e8e8e8'}`,
-//                       background: rentalType === 'short' ? '#FFF6EE' : '#fafafa',
-//                       cursor: 'pointer', fontFamily: 'inherit',
-//                       display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
-//                       transition: 'all 0.2s',
-//                     }}
-//                   >
-//                     <div style={{
-//                       width: 64, height: 64, borderRadius: '50%',
-//                       background: rentalType === 'short' ? '#FFF6EE' : '#f0f4ff',
-//                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-//                     }}>
-//                       <FiMoon style={{ fontSize: 30, color: rentalType === 'short' ? '#C98B3E' : '#5B7FFF' }} />
-//                     </div>
-//                     <span style={{ fontWeight: 700, fontSize: 17, color: '#222' }}>Nightly Rental</span>
-//                     <span style={{ fontSize: 13, color: '#999', textAlign: 'center', lineHeight: 1.5 }}>Short stays, per night pricing</span>
-//                   </button>
+//                     {/* Nightly Card */}
+//                     <button
+//                       onClick={() => {
+//                         setRentalType('short');
+//                         sessionStorage.setItem('ovika_rental_type', 'short');
+//                         setShowRentalPopup(false);
+//                       }}
+//                       style={{
+//                         flex: 1, padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', borderRadius: 16,
+//                         border: `2px solid ${rentalType === 'short' ? '#C98B3E' : '#e8e8e8'}`,
+//                         background: rentalType === 'short' ? '#FFF6EE' : '#fafafa',
+//                         cursor: 'pointer', fontFamily: 'inherit',
+//                         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+//                         transition: 'all 0.2s',
+//                       }}
+//                     >
+//                       <div style={{
+//                         width: 64, height: 64, borderRadius: '50%',
+//                         background: rentalType === 'short' ? '#FFF6EE' : '#f0f4ff',
+//                         display: 'flex', alignItems: 'center', justifyContent: 'center',
+//                       }}>
+//                         <FiMoon style={{ fontSize: 30, color: rentalType === 'short' ? '#C98B3E' : '#5B7FFF' }} />
+//                       </div>
+//                       <span style={{ fontWeight: 700, fontSize: 17, color: '#222' }}>Nightly Rental</span>
+//                       <span style={{ fontSize: 13, color: '#999', textAlign: 'center', lineHeight: 1.5 }}>Short stays, per night pricing</span>
+//                     </button>
 
-//                   {/* Monthly Card */}
-//                   <button
-//                     onClick={() => {
-//                       setRentalType('long');
-//                       sessionStorage.setItem('ovika_rental_type', 'long');
-//                       setShowRentalPopup(false);
-//                     }}
-//                     style={{
-//                       flex: 1, padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', borderRadius: 16,
-//                       border: `2px solid ${rentalType === 'long' ? '#C98B3E' : '#e8e8e8'}`,
-//                       background: rentalType === 'long' ? '#FFF6EE' : '#fafafa',
-//                       cursor: 'pointer', fontFamily: 'inherit',
-//                       display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
-//                       transition: 'all 0.2s',
-//                     }}
-//                   >
-//                     <div style={{
-//                       width: 64, height: 64, borderRadius: '50%',
-//                       background: rentalType === 'long' ? '#FFF6EE' : '#f0fff4',
-//                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-//                     }}>
-//                       <FiCalendar style={{ fontSize: 30, color: rentalType === 'long' ? '#C98B3E' : '#22b55a' }} />
-//                     </div>
-//                     <span style={{ fontWeight: 700, fontSize: 17, color: '#222' }}>Monthly Rental</span>
-//                     <span style={{ fontSize: 13, color: '#999', textAlign: 'center', lineHeight: 1.5 }}>Long stays, monthly pricing</span>
-//                   </button>
+//                     {/* Monthly Card */}
+//                     <button
+//                       onClick={() => {
+//                         setRentalType('long');
+//                         sessionStorage.setItem('ovika_rental_type', 'long');
+//                         setShowRentalPopup(false);
+//                       }}
+//                       style={{
+//                         flex: 1, padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', borderRadius: 16,
+//                         border: `2px solid ${rentalType === 'long' ? '#C98B3E' : '#e8e8e8'}`,
+//                         background: rentalType === 'long' ? '#FFF6EE' : '#fafafa',
+//                         cursor: 'pointer', fontFamily: 'inherit',
+//                         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+//                         transition: 'all 0.2s',
+//                       }}
+//                     >
+//                       <div style={{
+//                         width: 64, height: 64, borderRadius: '50%',
+//                         background: rentalType === 'long' ? '#FFF6EE' : '#f0fff4',
+//                         display: 'flex', alignItems: 'center', justifyContent: 'center',
+//                       }}>
+//                         <FiCalendar style={{ fontSize: 30, color: rentalType === 'long' ? '#C98B3E' : '#22b55a' }} />
+//                       </div>
+//                       <span style={{ fontWeight: 700, fontSize: 17, color: '#222' }}>Monthly Rental</span>
+//                       <span style={{ fontSize: 13, color: '#999', textAlign: 'center', lineHeight: 1.5 }}>Long stays, monthly pricing</span>
+//                     </button>
 //                   </div>
 //                 </div>
 //               </>
@@ -730,40 +745,24 @@ const PropertyCard = ({ property, rentalType }) => {
     return (Math.random() * (4.9 - 4.1) + 4.1).toFixed(1);
   }, [property.id]);
 
-  // ✅ FIXED: getCount — number, array, object, string sab handle karta hai
   const getCount = (val) => {
     if (val === null || val === undefined) return 0;
-
-    // Already a plain number
     if (typeof val === 'number') return val > 0 ? val : 0;
-
-    // Parse string first
     let parsed = val;
     if (typeof val === 'string') {
       const trimmed = val.trim();
-      // Simple numeric string like "2" or "3"
       if (/^\d+$/.test(trimmed)) return parseInt(trimmed, 10);
       try { parsed = JSON.parse(trimmed); } catch { return parseInt(trimmed) || 0; }
     }
-
-    // Array of room objects like [{count:1,...}, {count:2,...}]
     if (Array.isArray(parsed)) {
-      // If array has count fields, sum them
       const hasCount = parsed.some(item => item && typeof item === 'object' && 'count' in item);
-      if (hasCount) {
-        return parsed.reduce((a, c) => a + (Number(c.count) || 0), 0);
-      }
-      // Otherwise just return array length (each item = 1 room)
+      if (hasCount) return parsed.reduce((a, c) => a + (Number(c.count) || 0), 0);
       return parsed.length;
     }
-
-    // Plain object with a count field
     if (typeof parsed === 'object' && parsed !== null) {
       if ('count' in parsed) return Number(parsed.count) || 0;
-      // Object with numeric keys like {0: {...}, 1: {...}}
       return Object.keys(parsed).length;
     }
-
     return 0;
   };
 
@@ -780,11 +779,8 @@ const PropertyCard = ({ property, rentalType }) => {
   };
 
   const meta = getMeta();
-
-  // ── Price Logic ──
   const isMonthly = rentalType === 'long';
 
-  // PG bedrooms array se minimum price nikalna
   const getPgMinPrice = () => {
     try {
       const beds = typeof property.bedrooms === 'string'
@@ -794,7 +790,7 @@ const PropertyCard = ({ property, rentalType }) => {
         .map(b => Number(b.price) || Number(b.monthly_price) || 0)
         .filter(p => p > 0);
       if (prices.length > 0) return Math.min(...prices);
-    } catch {}
+    } catch { }
     return 0;
   };
 
@@ -803,27 +799,30 @@ const PropertyCard = ({ property, rentalType }) => {
       if (isMonthly) {
         const minRoomPrice = getPgMinPrice();
         const monthly = minRoomPrice || Number(meta?.perMonthPrice) || Number(meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.base_rate) || 0;
-        return { price: monthly, label: '/ month', prefix: 'Starts at' };
+        // ── agar monthly price 1500 se kam hai to "Price on Request" dikhao ──
+        if (monthly <= 1500) return { price: 0, label: '', prefix: null, forceRequest: true };
+        return { price: monthly, label: '/ month', prefix: 'Starts at', forceRequest: false };
       } else {
         const nightly = Number(property.base_rate) || Number(property.price) || Number(meta?.perNightPrice) || 0;
-        return { price: nightly, label: '/ night', prefix: 'Starts at' };
+        return { price: nightly, label: '/ night', prefix: 'Starts at', forceRequest: false };
       }
     }
     if (isMonthly) {
       const monthly = Number(meta?.perMonthPrice) || Number(meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.price) || 0;
-      return { price: monthly, label: '/ month', prefix: null };
+      // ── agar monthly price 1500 se kam hai to "Price on Request" dikhao ──
+      if (monthly <= 1500) return { price: 0, label: '', prefix: null, forceRequest: true };
+      return { price: monthly, label: '/ month', prefix: null, forceRequest: false };
     }
-    return { price: Number(property.price) || 0, label: '/ night', prefix: null };
+    return { price: Number(property.price) || 0, label: '/ night', prefix: null, forceRequest: false };
   };
 
-  const { price: displayPrice, label: priceLabel, prefix: pricePrefix } = getDisplayPrice();
+  const { price: displayPrice, label: priceLabel, prefix: pricePrefix, forceRequest } = getDisplayPrice();
 
   const coverPhoto =
     property.cover_photo ||
     (Array.isArray(property.photos) && property.photos[0]) ||
     'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
 
-  // ✅ bed/bath count compute
   const bedCount = getCount(property.bedrooms);
   const bathCount = getCount(property.bathrooms);
 
@@ -865,7 +864,6 @@ const PropertyCard = ({ property, rentalType }) => {
           <FiHeart style={{ fill: fav ? '#e84040' : 'none' }} />
         </button>
 
-        {/* Category Badge */}
         {property.property_category && (
           <span style={{
             position: 'absolute', bottom: 10, left: 10,
@@ -877,7 +875,6 @@ const PropertyCard = ({ property, rentalType }) => {
           </span>
         )}
 
-        {/* Rental Type Badge */}
         <span style={{
           position: 'absolute', bottom: 10, right: 10,
           background: isMonthly ? 'rgba(201,139,62,0.92)' : 'rgba(30,30,30,0.82)',
@@ -948,19 +945,31 @@ const PropertyCard = ({ property, rentalType }) => {
           </div>
         )}
 
-        {/* Price */}
+        {/* ── PRICE SECTION ── */}
         <div style={{ marginTop: 'auto', paddingTop: 10, borderTop: '1px solid #f0f0f0' }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, flexWrap: 'wrap' }}>
-            {pricePrefix && (
-              <span style={{ fontSize: 12, color: '#999', fontWeight: 500 }}>{pricePrefix}</span>
-            )}
-            <span style={{ fontSize: 17, fontWeight: 700, color: '#222' }}>
-              {formatPrice(displayPrice)}
+          {forceRequest ? (
+            // ── Price on Request — monthly price < 1500 ──
+            <span style={{
+              fontSize: 13,
+              fontWeight: 600,
+              color: '#999',
+              fontStyle: 'italic',
+            }}>
+              Price on Request
             </span>
-            {displayPrice > 0 && (
-              <span style={{ fontSize: 13, color: '#717171' }}>{priceLabel}</span>
-            )}
-          </div>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, flexWrap: 'wrap' }}>
+              {pricePrefix && (
+                <span style={{ fontSize: 12, color: '#999', fontWeight: 500 }}>{pricePrefix}</span>
+              )}
+              <span style={{ fontSize: 17, fontWeight: 700, color: '#222' }}>
+                {formatPrice(displayPrice)}
+              </span>
+              {displayPrice > 0 && (
+                <span style={{ fontSize: 13, color: '#717171' }}>{priceLabel}</span>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -1046,7 +1055,6 @@ const PropertyListPage = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-
     const cId = params.get('category');
     if (cId && properties.length > 0) {
       const match = CATEGORIES.find(c =>
@@ -1054,7 +1062,6 @@ const PropertyListPage = () => {
       );
       if (match) setActiveCat(match);
     }
-
     const rt = params.get('rentalType');
     if (rt) {
       setRentalType(rt);
@@ -1130,7 +1137,7 @@ const PropertyListPage = () => {
             fontSize: 16, color: 'rgba(255,255,255,0.88)',
             margin: '0 0 30px', lineHeight: 1.65, maxWidth: 560, marginLeft: 'auto', marginRight: 'auto',
           }}>
-            Luxury studios, homestays, and serviced apartments — curated for comfortable short and extended stays
+            Luxury studios, homestays, Hotel Rooms, apartments, Villas & Farmhouses — curated for comfortable short and extended stays
           </p>
 
           {/* Search Bar */}
@@ -1259,59 +1266,59 @@ const PropertyListPage = () => {
                     Select Rental Type
                   </h3>
                   <div style={{ display: 'flex', gap: 14, flexDirection: typeof window !== 'undefined' && window.innerWidth < 480 ? 'column' : 'row' }}>
-                  {/* Nightly Card */}
-                  <button
-                    onClick={() => {
-                      setRentalType('short');
-                      sessionStorage.setItem('ovika_rental_type', 'short');
-                      setShowRentalPopup(false);
-                    }}
-                    style={{
-                      flex: 1, padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', borderRadius: 16,
-                      border: `2px solid ${rentalType === 'short' ? '#C98B3E' : '#e8e8e8'}`,
-                      background: rentalType === 'short' ? '#FFF6EE' : '#fafafa',
-                      cursor: 'pointer', fontFamily: 'inherit',
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
-                      transition: 'all 0.2s',
-                    }}
-                  >
-                    <div style={{
-                      width: 64, height: 64, borderRadius: '50%',
-                      background: rentalType === 'short' ? '#FFF6EE' : '#f0f4ff',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    }}>
-                      <FiMoon style={{ fontSize: 30, color: rentalType === 'short' ? '#C98B3E' : '#5B7FFF' }} />
-                    </div>
-                    <span style={{ fontWeight: 700, fontSize: 17, color: '#222' }}>Nightly Rental</span>
-                    <span style={{ fontSize: 13, color: '#999', textAlign: 'center', lineHeight: 1.5 }}>Short stays, per night pricing</span>
-                  </button>
+                    {/* Nightly Card */}
+                    <button
+                      onClick={() => {
+                        setRentalType('short');
+                        sessionStorage.setItem('ovika_rental_type', 'short');
+                        setShowRentalPopup(false);
+                      }}
+                      style={{
+                        flex: 1, padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', borderRadius: 16,
+                        border: `2px solid ${rentalType === 'short' ? '#C98B3E' : '#e8e8e8'}`,
+                        background: rentalType === 'short' ? '#FFF6EE' : '#fafafa',
+                        cursor: 'pointer', fontFamily: 'inherit',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      <div style={{
+                        width: 64, height: 64, borderRadius: '50%',
+                        background: rentalType === 'short' ? '#FFF6EE' : '#f0f4ff',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        <FiMoon style={{ fontSize: 30, color: rentalType === 'short' ? '#C98B3E' : '#5B7FFF' }} />
+                      </div>
+                      <span style={{ fontWeight: 700, fontSize: 17, color: '#222' }}>Nightly Rental</span>
+                      <span style={{ fontSize: 13, color: '#999', textAlign: 'center', lineHeight: 1.5 }}>Short stays, per night pricing</span>
+                    </button>
 
-                  {/* Monthly Card */}
-                  <button
-                    onClick={() => {
-                      setRentalType('long');
-                      sessionStorage.setItem('ovika_rental_type', 'long');
-                      setShowRentalPopup(false);
-                    }}
-                    style={{
-                      flex: 1, padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', borderRadius: 16,
-                      border: `2px solid ${rentalType === 'long' ? '#C98B3E' : '#e8e8e8'}`,
-                      background: rentalType === 'long' ? '#FFF6EE' : '#fafafa',
-                      cursor: 'pointer', fontFamily: 'inherit',
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
-                      transition: 'all 0.2s',
-                    }}
-                  >
-                    <div style={{
-                      width: 64, height: 64, borderRadius: '50%',
-                      background: rentalType === 'long' ? '#FFF6EE' : '#f0fff4',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    }}>
-                      <FiCalendar style={{ fontSize: 30, color: rentalType === 'long' ? '#C98B3E' : '#22b55a' }} />
-                    </div>
-                    <span style={{ fontWeight: 700, fontSize: 17, color: '#222' }}>Monthly Rental</span>
-                    <span style={{ fontSize: 13, color: '#999', textAlign: 'center', lineHeight: 1.5 }}>Long stays, monthly pricing</span>
-                  </button>
+                    {/* Monthly Card */}
+                    <button
+                      onClick={() => {
+                        setRentalType('long');
+                        sessionStorage.setItem('ovika_rental_type', 'long');
+                        setShowRentalPopup(false);
+                      }}
+                      style={{
+                        flex: 1, padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', borderRadius: 16,
+                        border: `2px solid ${rentalType === 'long' ? '#C98B3E' : '#e8e8e8'}`,
+                        background: rentalType === 'long' ? '#FFF6EE' : '#fafafa',
+                        cursor: 'pointer', fontFamily: 'inherit',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      <div style={{
+                        width: 64, height: 64, borderRadius: '50%',
+                        background: rentalType === 'long' ? '#FFF6EE' : '#f0fff4',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        <FiCalendar style={{ fontSize: 30, color: rentalType === 'long' ? '#C98B3E' : '#22b55a' }} />
+                      </div>
+                      <span style={{ fontWeight: 700, fontSize: 17, color: '#222' }}>Monthly Rental</span>
+                      <span style={{ fontSize: 13, color: '#999', textAlign: 'center', lineHeight: 1.5 }}>Long stays, monthly pricing</span>
+                    </button>
                   </div>
                 </div>
               </>

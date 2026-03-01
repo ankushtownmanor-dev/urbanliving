@@ -3,7 +3,7 @@
     max-width: 1200px;
     margin: 40px auto;
     text-align: center;
-    font-family: 'Inter', Arial, sans-serif;
+    
     padding: 0 16px;
   }
   /* Wrapper for title with lines */
@@ -63,7 +63,7 @@
   
   .booking-step-title {
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 300 !important;
     margin-bottom: 8px;
   }
   

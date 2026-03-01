@@ -6,21 +6,21 @@
   width: 100%;
   padding: 70px 20px;
   background-color: #fff;
-  font-family: 'Poppins', 'Inter', sans-serif;
+  
   text-align: center;
 }
 
 /* Title */
 .listing-steps-title {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
-  font-weight: 600;
+  font-weight: 300 !important;
   color: #111;
   margin-bottom: 60px;
 }
 
 .highlight-text {
   color: #f59e0b;
-  font-weight: 600;
+  font-weight: 300 !important;
 }
 
 /* Steps container (Desktop layout - horizontal cards) */
@@ -75,7 +75,7 @@
 /* Heading */
 .step-heading {
   font-size: 1.2rem;
-  font-weight: 600;
+  font-weight: 300 !important;
   color: #111;
   margin-bottom: 12px;
   line-height: 1.3;

@@ -6,7 +6,7 @@
 
 .pricing-header h2 {
   font-size: 36px;
-  font-weight: 700;
+  font-weight: 300 !important;
   margin-bottom: 12px;
   color: #1e1e1e;
 }
@@ -56,7 +56,7 @@
 
 .pricing-price {
   font-size: 30px;
-  font-weight: 700;
+  font-weight: 300 !important;
   margin: 15px 0 25px;
   color: #111827;
 }
@@ -73,7 +73,7 @@
   padding: 12px;
   border-radius: 8px;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 300 !important;
   cursor: pointer;
   margin-bottom: 25px;
   transition: all 0.3s ease;

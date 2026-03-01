@@ -12,7 +12,7 @@
 /* ✳️ Section Base */
 .faq-manage-section {
   background: var(--faq-manage-bg);
-  font-family: "Inter", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  
   color: var(--faq-manage-text);
 }
 

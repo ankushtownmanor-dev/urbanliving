@@ -10,11 +10,11 @@
   --ovk-shadow:0 15px 35px rgba(0,0,0,.25);
 }
 *{box-sizing:border-box}
-.ovk-orange{color:var(--ovk-orange);font-weight:600}
+.ovk-orange{color:var(--ovk-orange);font-weight: 300}
 
 /* Wrapper */
 .ovk-wrap{
-  font-family: Inter, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  
   background:#fff;
   padding: 50px 18px 70px;
 }
@@ -62,7 +62,7 @@
 /* Left text */
 .ovk-left{ color:#fff; max-width:640px; }
 .ovk-left__title{
-  font-weight:700;
+  font-weight: 300 !important;
   line-height:1.12;
   font-size: clamp(2.2rem, 3.2vw, 3.4rem);
   text-shadow: 0 4px 12px rgba(0,0,0,.55);
@@ -94,7 +94,7 @@
 .ovk-card__title{
   margin:4px 4px 8px;
   font-size: 1.6rem;
-  font-weight:700;
+  font-weight: 300 !important;
   color:#111827;
   text-align:center;
 }

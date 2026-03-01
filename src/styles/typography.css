@@ -42,7 +42,7 @@
 
 /* Base Typography */
 body {
-  font-family: var(--font-primary);
+  
   font-size: var(--text-base);
   line-height: var(--line-height-normal);
   font-weight: var(--font-weight-regular);
@@ -113,7 +113,7 @@ a:hover {
 
 /* Buttons */
 button, .btn {
-  font-family: var(--font-primary);
+  
   font-weight: var(--font-weight-medium);
   font-size: var(--text-sm);
   line-height: 1.5;
@@ -123,7 +123,7 @@ button, .btn {
 
 /* Form Elements */
 input, textarea, select {
-  font-family: var(--font-primary);
+  
   font-size: var(--text-sm);
   line-height: var(--line-height-normal);
 }

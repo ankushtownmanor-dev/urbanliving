@@ -12,7 +12,7 @@
   max-width: 400px;
   margin: 0 auto;
   padding: 20px 14px 40px;
-  font-family: 'Inter', sans-serif;
+  
   color: var(--primary);
   text-align: center;
 }
@@ -20,7 +20,7 @@
 /* Title */
 .tm-features-mobile__title {
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 300 !important;
   margin-bottom: 6px;
 }
 .tm-features-mobile__subtitle {
@@ -48,9 +48,9 @@
 
 .tm-watermark {
   font-size: 7rem;
-  font-weight: 700;
+  font-weight: 300 !important;
   color: var(--watermark);
-  font-family: 'Inter', sans-serif;
+  
   display: block;
   line-height: 1;
 }
@@ -60,9 +60,9 @@
   top: 50%;
   left: 70px;
   transform: translateY(-50%);
-  font-family: 'Salsa', cursive;
+  
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 300 !important;
   color: #000;
 }
 
@@ -86,7 +86,7 @@
 
 .tm-subtitle {
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 300 !important;
   margin: 6px 0 8px;
   color: #000;
 }
@@ -97,7 +97,7 @@
 
 .highlight { 
   color: gray; 
-  font-weight: 600; 
+  font-weight: 300 !important; 
 }
 
 .tm-desc {
@@ -120,7 +120,7 @@
   background: linear-gradient(90deg,#cf1518,#1b0101);
   color: #fff;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 300 !important;
 }
 .tm-btn .arrow-icon { font-size: 14px; }
 

@@ -24,7 +24,7 @@
 }
 
 body {
-  font-family: 'Inter', -apple-system, sans-serif;
+  
   -webkit-font-smoothing: antialiased;
 }
 
@@ -47,7 +47,7 @@ body {
 
 .dash-title {
   font-size: 32px;
-  font-weight: 700;
+  font-weight: 300 !important;
   color: var(--text-dark);
   margin-bottom: 8px;
 }
@@ -146,13 +146,13 @@ body {
 .stat-title {
   font-size: 14px;
   color: var(--text-gray);
-  font-weight: 500;
+  font-weight: 300 !important;
   margin-bottom: 6px;
 }
 
 .stat-number {
   font-size: 38px;
-  font-weight: 700;
+  font-weight: 300 !important;
   color: var(--text-dark);
 }
 
@@ -172,7 +172,7 @@ body {
 
 .gallery-heading {
   font-size: 26px;
-  font-weight: 700;
+  font-weight: 300 !important;
   color: var(--text-dark);
   margin-bottom: 8px;
 }
@@ -233,7 +233,7 @@ body {
 .image-label p {
   color: white;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 300 !important;
   margin: 0;
 }
 
@@ -248,7 +248,7 @@ body {
 
 .action-heading {
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 300 !important;
   color: var(--text-dark);
   margin-bottom: 12px;
 }
@@ -271,7 +271,7 @@ body {
   color: white;
   padding: 16px 36px;
   border-radius: 12px;
-  font-weight: 600;
+  font-weight: 300 !important;
   font-size: 15px;
   border: none;
   cursor: pointer;
@@ -308,7 +308,7 @@ body {
 
 .help-heading {
   font-size: 26px;
-  font-weight: 700;
+  font-weight: 300 !important;
   color: var(--text-dark);
   margin-bottom: 8px;
 }
@@ -366,7 +366,7 @@ body {
 
 .help-name {
   font-size: 17px;
-  font-weight: 700;
+  font-weight: 300 !important;
   color: var(--text-dark);
   margin-bottom: 8px;
 }
