@@ -1,11 +1,65 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaQuestionCircle, FaComments, FaPhone, FaArrowRight } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import "./BookingDashboard.css";
 
 const BookingDashboard = () => {
-  const navigate = (path) => {
-    console.log(`Navigating to ${path}`);
-  };
+  const [stats, setStats] = useState({
+    upcoming: 0,
+    completed: 0,
+    canceled: 0
+  });
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const raw = localStorage.getItem("user");
+        if (!raw) {
+          setLoading(false);
+          return;
+        }
+        const user = JSON.parse(raw);
+        const userId = user.user_id || user.id;
+
+        if (!userId) {
+          setLoading(false);
+          return;
+        }
+
+        const res = await fetch(`https://townmanor.ai/api/booking/user/${userId}`);
+        const data = await res.json();
+
+        if (data?.success && Array.isArray(data.bookings)) {
+          const bookings = data.bookings;
+          const now = new Date();
+          
+          const upcoming = bookings.filter(b => 
+            (b.booking_status === 'confirmed' || b.booking_status === 'paid') && 
+            new Date(b.start_date) > now
+          ).length;
+
+          const completed = bookings.filter(b => 
+            (b.booking_status === 'confirmed' || b.booking_status === 'paid') && 
+            new Date(b.end_date) < now
+          ).length;
+
+          const canceled = bookings.filter(b => 
+            b.booking_status === 'cancelled' || b.cancelled === 1
+          ).length;
+
+          setStats({ upcoming, completed, canceled });
+        }
+      } catch (err) {
+        console.error("Error fetching dashboard stats", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   return (
     <div className="booking-dashboard">
@@ -27,7 +81,7 @@ const BookingDashboard = () => {
             </div>
             <div className="stat-info">
               <p className="stat-title">Upcoming</p>
-              <h3 className="stat-number">2</h3>
+              <h3 className="stat-number">{loading ? "..." : stats.upcoming}</h3>
             </div>
           </div>
 
@@ -39,7 +93,7 @@ const BookingDashboard = () => {
             </div>
             <div className="stat-info">
               <p className="stat-title">Completed</p>
-              <h3 className="stat-number">8</h3>
+              <h3 className="stat-number">{loading ? "..." : stats.completed}</h3>
             </div>
           </div>
 
@@ -51,7 +105,7 @@ const BookingDashboard = () => {
             </div>
             <div className="stat-info">
               <p className="stat-title">Canceled</p>
-              <h3 className="stat-number">1</h3>
+              <h3 className="stat-number">{loading ? "..." : stats.canceled}</h3>
             </div>
           </div>
         </div>
@@ -141,7 +195,7 @@ const BookingDashboard = () => {
                 <FaPhone className="help-icon" />
               </div>
               <h4 className="help-name">Call Us</h4>
-              <p className="help-desc">+1 234 567 890</p>
+              <p className="help-desc">+91 99999 99999</p>
             </div>
           </div>
         </div>

@@ -2220,9 +2220,9 @@ function Payment() {
         productinfo: 'Room Booking',
         firstname: userData.name || username || 'Guest',
         email: userData.email || 'guest@townmanor.ai',
-        phone: userData.phone || mobileNumber || '9999999999',
-        surl: `https://townmanor.ai/api/boster/payu/success?redirectUrl=https://www.ovika.co.in/success`,
-        furl: `https://townmanor.ai/api/boster/payu/failure?redirectUrl=https://www.ovika.co.in/failure`,
+        phone: userData.phone || mobileNumber || '',
+        surl: `https://townmanor.ai/api/boster/payu/success?redirectUrl=https://ovikaliving.com/success`,
+        furl: `https://townmanor.ai/api/boster/payu/failure?redirectUrl=https://ovikaliving.com/failure`,
         udf1: String(bookingIdParam),
         service_provider: 'payu_paisa'
       };

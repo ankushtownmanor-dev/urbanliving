@@ -172,8 +172,8 @@ const Home4 = () => {
     id: 2,
     img: "/tmluxe1.jpeg",
     city: "Noida Sector 137",
-    title: "TM Luxe - 1",
-    text: "Experience refined urban living at TM Luxe 1, where thoughtfully designed spaces combine comfort, style, and convenience. Ideal for business executives, professionals, families, and tourists, the accommodation is fully furnished and features a comfortable living area with sofa, Google TV, air-conditioning, and a private balcony. A fully loaded kitchen and laundry provisions with washing machine, iron, and ironing board ensure a homelike experience. Guests also enjoy the ease of self check-in and check-out for a seamless and independent stay.",
+    title: "Ovika Luxe - 1",
+    text: "Experience refined urban living at Ovika Luxe 1, where thoughtfully designed spaces combine comfort, style, and convenience. Ideal for business executives, professionals, families, and tourists, the accommodation is fully furnished and features a comfortable living area with sofa, Google TV, air-conditioning, and a private balcony. A fully loaded kitchen and laundry provisions with washing machine, iron, and ironing board ensure a homelike experience. Guests also enjoy the ease of self check-in and check-out for a seamless and independent stay.",
     rating: "⭐ 4.7 (120 reviews)",
     price: "₹4,200 / night",
     btn: "View Property"
@@ -183,8 +183,8 @@ const Home4 = () => {
     id: 1,
     img: "/tmluxe22.jpg",
     city: "Greater Noida Knowledge Park",
-    title: "TM Luxe - 2",
-    text: "TM Luxe 2 is a private luxury room within a premium apartment, offering comfort and privacy for modern travelers. The room features an attached toilet and a private balcony, providing a relaxing personal space. It is equipped with an air conditioner, sofa, Google TV, and a coffeemaker for added convenience. The metro station is just a five-minute walk away, and popular shopping and entertainment centers are located in close vicinity.",
+    title: "Ovika Luxe - 2",
+    text: "Ovika Luxe 2 is a private luxury room within a premium apartment, offering comfort and privacy for modern travelers. The room features an attached toilet and a private balcony, providing a relaxing personal space. It is equipped with an air conditioner, sofa, Google TV, and a coffeemaker for added convenience. The metro station is just a five-minute walk away, and popular shopping and entertainment centers are located in close vicinity.",
     rating: "⭐ 4.9 (85 reviews)",
     price: "₹2,400 / night",
     btn: "View Property"
@@ -195,8 +195,8 @@ const Home4 = () => {
     id: 287,
     img: "https://s3.ap-south-1.amazonaws.com/townamnor.ai/tm-luxe-3/photos/WhatsApp%20Image%202026-02-25%20at%2011.39.39%20AM%20%281%29-1772109906818-19581457.jpeg",
     city: "Greater Noida, Sector 27 — Godrej Golf Links",
-    title: "TM Luxe - 3",
-    text: "TM Luxe 3 is a super-luxury studio overlooking the golf courses, stadium, and Jaypee Greens resorts. Spanning 710 sq. ft., the studio features a fitted kitchen, dining counter with high chairs, a modern toilet, and a private balcony. The space is elegantly furnished with sofas, Google TV, Wi-Fi, and other contemporary comforts. Guests can also enjoy the convenience of self check-in and check-out facilities.",
+    title: "Ovika Luxe - 3",
+    text: "Ovika Luxe 3 is a super-luxury studio overlooking the golf courses, stadium, and Jaypee Greens resorts. Spanning 710 sq. ft., the studio features a fitted kitchen, dining counter with high chairs, a modern toilet, and a private balcony. The space is elegantly furnished with sofas, Google TV, Wi-Fi, and other contemporary comforts. Guests can also enjoy the convenience of self check-in and check-out facilities.",
     rating: "⭐ 4.8 (43 reviews)",
     price: "₹4,000 / night",
     btn: "View Property"

@@ -43,9 +43,7 @@ import './PropertyDetailPage.css';
 import { AuthContext } from '../Login/AuthContext';
 
 const getValidPropertyId = (frontendId) => {
-  const id = Number(frontendId);
-  if (id === 1 || id === 2) return String(id);
-  return id % 2 === 0 ? '2' : '1';
+  return String(frontendId);
 };
 
 const API_BASE_URL = 'https://townmanor.ai/api/ovika';
@@ -604,7 +602,8 @@ const PropertyDetailPage = () => {
     checkOutDate: '',
     aadhaarVerified: false,
     passportVerified: false,
-    uploadedPhoto: null,
+    mobileVerified: false,
+    uploadedPhoto: '',
     termsAgreed: false,
   });
   const [availabilityRequested, setAvailabilityRequested] = useState(false);
@@ -612,6 +611,15 @@ const PropertyDetailPage = () => {
   const [aadhaarNumber, setAadhaarNumber] = useState('');
   const [isAadhaarLoading, setIsAadhaarLoading] = useState(false);
   const [verificationMethod, setVerificationMethod] = useState('aadhaar');
+
+  // MOBILE OTP STATES
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [clientId, setClientId] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpInput, setOtpInput] = useState('');
+  const [isOtpLoading, setIsOtpLoading] = useState(false);
+  const [isMobileVerifying, setIsMobileVerifying] = useState(false);
+
   const [pricing, setPricing] = useState({ subtotal: 0, discount: 0, discountPercentage: 0, gst: 0, total: 0, daysNeededForNextTier: 0, nextTierPercentage: 0 });
   const [isPayNowEnabled, setIsPayNowEnabled] = useState(false);
   const [isPhotoUploading, setIsPhotoUploading] = useState(false);
@@ -870,9 +878,11 @@ const PropertyDetailPage = () => {
     if (showPaymentModal && step === 3) {
       const fetchCalendarBlockedDates = async () => {
         try {
-          const validPropertyId = getValidPropertyId(id);
-          const propertyKeyMap = { '2': 'tm-luxe-1', '1': 'tm-luxe-2' };
-          const propertyKey = propertyKeyMap[validPropertyId] || 'tm-luxe-1';
+          // Use the real id instead of mapping to 1 or 2
+          const propertyIdStr = String(id);
+          const propertyKeyMap = { '2': 'tm-luxe-1', '1': 'tm-luxe-2', '287': 'tm-luxe-3' };
+          const propertyKey = propertyKeyMap[propertyIdStr] || `prop-${propertyIdStr}`;
+
           const { blocked } = await getCalendar(propertyKey);
           const disabledSet = buildDisabledDates(blocked || []);
           setDisabledDateSet(disabledSet);
@@ -982,6 +992,8 @@ useEffect(() => {
 
       const payload = {
         property_id: property.id,
+        property_name: property.property_name || property.name,
+        city: property.city,
         username: user?.username || username,
         start_date: checkInDate,
         end_date: checkOutDate
@@ -1014,7 +1026,16 @@ useEffect(() => {
 
     if (step === 2 && !formData.termsAgreed) return;
     if (step === 3 && (!formData.checkInDate || !formData.checkOutDate || pricing.total <= 0)) return;
-    if (step === 4 && !(formData.aadhaarVerified || formData.passportVerified)) return;
+    if (step === 4) {
+      if (!(formData.aadhaarVerified || formData.passportVerified)) {
+        showAlert('Please verify your ID (Aadhaar or Passport) first.');
+        return;
+      }
+      if (!formData.mobileVerified) {
+        showAlert('Please verify your mobile number with OTP.');
+        return;
+      }
+    }
     if (step === 5 && !formData.uploadedPhoto) return;
     if (step < steps.length) setStep(step + 1);
   };
@@ -1162,6 +1183,80 @@ const guestPolicy = property?.guest_policy || {};
     }
   };
 
+  const handleGenerateOTP = async () => {
+    if (!mobileNumber || !/^\d{10}$/.test(mobileNumber)) {
+      showAlert('Please enter a valid 10-digit mobile number.');
+      return;
+    }
+    setIsOtpLoading(true);
+    showAlert('Sending OTP to your mobile...');
+    try {
+      const response = await axios.post(
+        'https://kyc-api.surepass.app/api/v1/telecom/generate-otp',
+        { id_number: mobileNumber },
+        {
+          headers: {
+            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg',
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      if (response.data && response.data.success && response.data.data?.client_id) {
+        setClientId(response.data.data.client_id);
+        setOtpSent(true);
+        showAlert('OTP sent successfully!');
+      } else {
+        throw new Error(response.data?.message || 'Failed to send OTP');
+      }
+    } catch (error) {
+      console.error('OTP generation error:', error.response?.data || error);
+      const errorMessage = error.response?.data?.message || "Wrong phone number or API error";
+      showAlert(`Error: ${errorMessage}`);
+    } finally {
+      setIsOtpLoading(false);
+    }
+  };
+
+  const handleVerifyOTP = async () => {
+    if (!otpInput || otpInput.length < 4) {
+      showAlert('Please enter a valid OTP.');
+      return;
+    }
+    if (!clientId) {
+      showAlert('Client ID missing. Please request OTP again.');
+      return;
+    }
+    setIsMobileVerifying(true);
+    showAlert('Verifying OTP...');
+    try {
+      const response = await axios.post(
+        'https://kyc-api.surepass.app/api/v1/telecom/submit-otp',
+        {
+          client_id: clientId,
+          otp: otpInput
+        },
+        {
+          headers: {
+            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDE0NjA5NiwianRpIjoiNmM0YWMxNTMtNDE2MS00YzliLWI4N2EtZWIxYjhmNDRiOTU5IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LnVzZXJuYW1lXzJ5MTV1OWk0MW10bjR3eWpsaTh6b2p6eXZiZEBzdXJlcGFzcy5pbyIsIm5iZiI6MTcxMDE0NjA5NiwiZXhwIjoyMzQwODY2MDk2LCJ1c2VyX2NsYWltcyI6eyJzY29wZXMiOlsidXNlciJdfX0.DfipEQt4RqFBQbOK29jbQju3slpn0wF9aoccdmtIsPg',
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      if (response.data && response.data.success) {
+        setFormData(prev => ({ ...prev, mobileVerified: true }));
+        showAlert('Mobile number verified successfully!');
+      } else {
+        throw new Error(response.data?.message || 'OTP verification failed');
+      }
+    } catch (error) {
+      console.error('OTP verification error:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Verification failed';
+      showAlert(`Error: ${errorMessage}`);
+    } finally {
+      setIsMobileVerifying(false);
+    }
+  };
+
   const handlePayNow = async () => {
     if (!isPayNowEnabled || isSubmitting) return;
     setIsSubmitting(true);
@@ -1197,6 +1292,10 @@ const guestPolicy = property?.guest_policy || {};
 
       const bookingDetails = {
         property_id: validPropertyId,
+        user_id: userLocal.user_id || userLocal.id || user?.user_id || user?.id || 0,
+        property_name: property.property_name || property.name,
+        property_address: property.address,
+        city: property.city,
         start_date: format(new Date(formData.checkInDate), 'yyyy-MM-dd'),
         end_date: format(new Date(formData.checkOutDate), 'yyyy-MM-dd'),
         username: finalUsername,
@@ -1205,6 +1304,11 @@ const guestPolicy = property?.guest_policy || {};
         user_photo: formData.uploadedPhoto || '',
         terms_verified: true,
         email: userEmail,
+        total_price: pricing.total,
+        subtotal: pricing.subtotal,
+        gst_amount: pricing.gst,
+        nights: Math.ceil(Math.abs(new Date(formData.checkOutDate) - new Date(formData.checkInDate)) / (1000 * 60 * 60 * 24)),
+        discount_amount: pricing.discount || 0
       };
 
       const { data } = await axios.post(
@@ -1225,6 +1329,7 @@ const guestPolicy = property?.guest_policy || {};
       }
 
       localStorage.setItem('bookingId', String(newBookingId));
+      localStorage.setItem('property_id', String(validPropertyId));
       await handleProceedToPayment(newBookingId);
 
     } catch (error) {
@@ -1261,9 +1366,9 @@ const guestPolicy = property?.guest_policy || {};
         productinfo: 'Room Booking',
         firstname: userData.name || username || 'Guest',
         email: userData.email || 'guest@townmanor.ai',
-        phone: userData.phone || '9999999999',
-        surl: `https://townmanor.ai/api/boster/payu/success?redirectUrl=https://www.ovika.co.in/success`,
-        furl: `https://townmanor.ai/api/boster/payu/failure?redirectUrl=https://www.ovika.co.in/failure`,
+        phone: userData.phone || user?.phone || user?.phone_number || mobileNumber || '',
+        surl: `https://townmanor.ai/api/boster/payu/success?redirectUrl=https://ovikaliving.com/success`,
+        furl: `https://townmanor.ai/api/boster/payu/failure?redirectUrl=https://ovikaliving.com/failure`,
         udf1: String(bookingIdParam),
         service_provider: 'payu_paisa'
       };
@@ -1548,6 +1653,77 @@ const guestPolicy = property?.guest_policy || {};
                       {passportError && <p style={{ color: 'red', marginTop: '1rem', fontSize: '0.9rem' }}>{passportError}</p>}
                     </div>
                   )}
+
+                  <div className="divider" style={{ margin: '2rem 0', height: '1px', background: '#eee' }}></div>
+
+                  {/* MOBILE VERIFICATION SECTION */}
+                  <div style={{ padding: '2rem', background: '#f8fafc', borderRadius: '8px' }}>
+                    <h3 style={{ marginBottom: '1rem', fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                       📱 Mobile Number Verification
+                    </h3>
+                    
+                    {!otpSent ? (
+                      <div style={{ marginBottom: '1rem' }}>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Enter Mobile Number</label>
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={10}
+                            value={mobileNumber}
+                            onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g, ''))}
+                            placeholder="10-digit mobile number"
+                            disabled={formData.mobileVerified || isOtpLoading}
+                            style={{ flex: 1, padding: '14px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '1rem', background: formData.mobileVerified ? '#e8f5e9' : 'white' }}
+                          />
+                          <button
+                            onClick={handleGenerateOTP}
+                            disabled={formData.mobileVerified || !mobileNumber || mobileNumber.length !== 10 || isOtpLoading}
+                            style={{ padding: '0 20px', background: '#8b0000', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}
+                          >
+                            {isOtpLoading ? 'Sending...' : 'Send OTP'}
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div style={{ marginBottom: '1rem' }}>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Enter 6-Digit OTP</label>
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={6}
+                            value={otpInput}
+                            onChange={(e) => setOtpInput(e.target.value.replace(/\D/g, ''))}
+                            placeholder="Enter OTP"
+                            disabled={formData.mobileVerified || isMobileVerifying}
+                            style={{ flex: 1, padding: '14px', borderRadius: '6px', border: '1px solid #ddd', fontSize: '1rem', background: formData.mobileVerified ? '#e8f5e9' : 'white' }}
+                          />
+                          <button
+                            onClick={handleVerifyOTP}
+                            disabled={formData.mobileVerified || !otpInput || isMobileVerifying}
+                            style={{ padding: '0 20px', background: '#22c55e', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}
+                          >
+                            {isMobileVerifying ? 'Verifying...' : 'Verify OTP'}
+                          </button>
+                        </div>
+                        {!formData.mobileVerified && (
+                          <button 
+                            onClick={() => setOtpSent(false)} 
+                            style={{ marginTop: '10px', background: 'none', border: 'none', color: '#8b0000', cursor: 'pointer', fontSize: '0.85rem', textDecoration: 'underline' }}
+                          >
+                            Change Number
+                          </button>
+                        )}
+                      </div>
+                    )}
+
+                    {formData.mobileVerified && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#22c55e', fontWeight: '600', marginTop: '10px' }}>
+                        <CheckCircle size={20} /> Mobile Number Verified
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 

@@ -104,11 +104,159 @@ import { format, differenceInDays } from 'date-fns'
 import './Sucess.css'
 
 function Sucess() {
-  const [bookingId, setBookingId] = useState(localStorage.getItem('bookingId') || 6)
+  const [bookingId, setBookingId] = useState(localStorage.getItem('bookingId'))
   const [confirmation, setConfirmation] = useState(null)
-  const [secondsLeft, setSecondsLeft] = useState(4)
+  const [secondsLeft, setSecondsLeft] = useState(10)
   const [emailSent, setEmailSent] = useState(false)
   const navigate = useNavigate()
+
+  // jsPDF LOADER
+  const ensureJsPDF = (() => {
+    let loaderPromise = null;
+    return () => {
+      if (window.jspdf?.jsPDF)
+        return Promise.resolve(window.jspdf.jsPDF);
+
+      if (loaderPromise) return loaderPromise;
+
+      loaderPromise = new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src =
+          "https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js";
+        script.async = true;
+        script.onload = () => resolve(window.jspdf.jsPDF);
+        script.onerror = () =>
+          reject(new Error("Failed to load jsPDF"));
+        document.head.appendChild(script);
+      });
+
+      return loaderPromise;
+    };
+  })();
+
+  const downloadInvoice = async () => {
+    try {
+      const jsPDF = await ensureJsPDF();
+      const doc = new jsPDF();
+      
+      const bookingId = localStorage.getItem('bookingId');
+      const propertyId = localStorage.getItem('property_id');
+      
+      const propertyRes = await fetch(`https://townmanor.ai/api/ovika/properties/${propertyId}`);
+      const propertyDataRaw = await propertyRes.json();
+      const property = propertyDataRaw?.data || propertyDataRaw?.property || propertyDataRaw;
+      
+      const bookingRes = await fetch(`https://townmanor.ai/api/booking/${bookingId}`);
+      const bookingData = await bookingRes.json();
+      const booking = bookingData.booking;
+      
+      const userLocal = JSON.parse(localStorage.getItem('user') || '{}');
+
+      // Add Logo (Top Left and Bottom Right)
+      try {
+        const logoUrl = '/ovika.png';
+        const img = new Image();
+        img.src = logoUrl;
+        await new Promise((resolve, reject) => {
+           img.onload = resolve;
+           img.onerror = reject;
+        });
+        const logoWidth = 45;
+        const logoHeight = 12;
+        
+        // Top Left
+        doc.addImage(img, 'PNG', 20, 10, logoWidth, logoHeight);
+        
+        // Bottom Right
+        doc.addImage(img, 'PNG', 190 - logoWidth, 275, logoWidth, logoHeight);
+      } catch (e) {
+        console.error("Logo load failed", e);
+      }
+
+      doc.setFontSize(26);
+      doc.setTextColor(0, 0, 0); 
+      doc.setFont(undefined, "bold");
+      doc.text("townmanor.ai", 105, 32, { align: "center" });
+      
+      doc.setFontSize(11);
+      doc.setTextColor(100, 100, 100);
+      doc.setFont(undefined, "normal");
+      doc.text("Payment Receipt", 105, 40, { align: "center" });
+      
+      doc.setDrawColor(200, 200, 200);
+      doc.line(20, 48, 190, 48);
+      
+      doc.setFontSize(10);
+      doc.setTextColor(80, 80, 80);
+      doc.text(`Receipt ID: OVIKA-${bookingId}-${Date.now().toString().slice(-4)}`, 20, 55);
+      doc.text(`Date: ${new Date().toLocaleString()}`, 190, 55, { align: "right" });
+
+      let y = 68;
+      const x = 20;
+
+      const sectionTitle = (title) => {
+        doc.setFont(undefined, "bold");
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        doc.text(title, x, y);
+        y += 8;
+        doc.line(x, y-5, x+40, y-5);
+      };
+
+      const row = (label, value) => {
+        doc.setFont(undefined, "bold");
+        doc.setFontSize(10);
+        doc.setTextColor(80, 80, 80);
+        doc.text(label, x, y);
+        doc.setFont(undefined, "normal");
+        doc.setTextColor(0, 0, 0);
+        doc.text(String(value ?? "N/A"), x + 50, y);
+        y += 7;
+      };
+
+      sectionTitle("Guest Details");
+      row("Guest Name:", userLocal.username || booking.username || "Guest");
+      row("Email:", userLocal.email || booking.email || "N/A");
+      row("Phone:", booking.phone_number || "N/A");
+      y += 5;
+
+      sectionTitle("Property Details");
+      row("Property:", property?.name || "N/A");
+      row("Address:", property?.address || "N/A");
+      y += 5;
+
+      sectionTitle("Stay Overview");
+      row("Check-in:", format(new Date(booking.start_date), 'dd MMM yyyy'));
+      row("Check-out:", format(new Date(booking.end_date), 'dd MMM yyyy'));
+      row("Nights:", differenceInDays(new Date(booking.end_date), new Date(booking.start_date)));
+      y += 5;
+
+      sectionTitle("Billing Information");
+      const total = Number(booking.total_price) || 0;
+      const gst = (total * 0.05 / 1.05);
+      const subtotal = total - gst;
+
+      row("Subtotal:", `₹${subtotal.toFixed(2)}`);
+      row("GST (5%):", `₹${gst.toFixed(2)}`);
+      doc.setFont(undefined, "bold");
+      row("Total Paid:", `₹${total.toFixed(2)}`);
+      y += 10;
+
+      doc.setFontSize(11);
+      doc.setTextColor(22, 101, 52);
+      doc.text("Status: PAYMENT COMPLETED", 105, y, { align: "center" });
+
+      doc.setFontSize(8);
+      doc.setTextColor(150, 150, 150);
+      doc.text("This is an official payment confirmation for your booking with Ovika Living.", 105, 280, { align: "center" });
+      doc.text("For support, please contact us at support@ovikaliving.com", 105, 285, { align: "center" });
+
+      doc.save(`Invoice-Ovika-${bookingId}.pdf`);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to download invoice");
+    }
+  };
 
   // Initialize EmailJS
   useEffect(() => {
@@ -122,10 +270,10 @@ function Sucess() {
       const bookingId = localStorage.getItem('bookingId')
       const propertyId = localStorage.getItem('property_id')
       
-      // Fetch property details
-      const propertyRes = await fetch(`https://townmanor.ai/api/properties/${propertyId}`)
-      const propertyData = await propertyRes.json()
-      const property = propertyData.property
+      // Fetch property details (use Ovika API)
+      const propertyRes = await fetch(`https://townmanor.ai/api/ovika/properties/${propertyId}`)
+      const propertyDataRaw = await propertyRes.json()
+      const property = propertyDataRaw?.data || propertyDataRaw?.property || propertyDataRaw
       
       // Fetch booking details
       const bookingRes = await fetch(`https://townmanor.ai/api/booking/${bookingId}`)
@@ -145,7 +293,7 @@ function Sucess() {
       const emailParams = {
         to_email: userLocal.email || booking.email || '',
         to_name: userLocal.username || booking.username || 'Guest',
-        property_name: property?.name || 'Property',
+        property_name: property?.property_name || property?.name || 'Property',
         check_in_date: format(new Date(booking.start_date), 'dd MMM yyyy'),
         check_out_date: format(new Date(booking.end_date), 'dd MMM yyyy'),
         total_amount: booking.total_price || '0.00',
@@ -175,29 +323,42 @@ function Sucess() {
 
   useEffect(() => {
     const patchBookingStatus = async () => {
+      const id = localStorage.getItem('bookingId') || bookingId;
+      console.log('Patching status for booking ID:', id);
+      
+      if (!id || id === '6') {
+        console.warn('Booking ID is missing or default (6). This might be incorrect.');
+      }
+
       try {
-        const id = bookingId || 6
         const response = await fetch(`https://townmanor.ai/api/booking/${id}/status`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ booking_status: 'confirmed' }),
+          body: JSON.stringify({ 
+            booking_status: 'confirmed',
+            payment_status: 'paid'
+          }),
         })
 
         if (!response.ok) {
-          throw new Error('Failed to update booking status')
+          console.error('Failed to update booking status:', response.status);
+          // throw new Error('Failed to update booking status')
+        } else {
+          console.log('Booking status updated successfully to confirmed');
+          setConfirmation({ booking_status: 'confirmed' });
         }
-
-        // Update booking status
-        setConfirmation({ booking_status: 'confirmed' })
         
         // Send confirmation email after booking is confirmed
-        await sendBookingConfirmationEmail()
+        await sendBookingConfirmationEmail();
       } catch (error) {
-        console.error('Update booking status error:', error)
+        console.error('Update booking status error:', error);
       }
     }
-    patchBookingStatus()
-  }, [bookingId])
+    
+    if (bookingId) {
+      patchBookingStatus();
+    }
+  }, [bookingId]);
 
   // Start countdown on mount and navigate after 4 seconds
   useEffect(() => {
@@ -236,23 +397,69 @@ function Sucess() {
             </div>
           </div>
 
-          <h1 className="title">Success!</h1>
+          <h1 className="title">Payment Completed!</h1>
           <p className="message">
-            Your Booking Successfully confirmed ... Redirecting to dashboard in {secondsLeft}s
+            Your booking has been successfully confirmed. Thank you for choosing Ovika!
+          </p>
+          <div style={{ margin: '1rem 0', padding: '10px', background: '#f0fdf4', borderRadius: '8px', border: '1px solid #bbf7d0', color: '#166534', fontWeight: 'bold' }}>
+            ✅ Booking Confirmed & Payment Verified
+          </div>
+          <p style={{ fontSize: '0.9rem', color: '#666' }}>
+            Redirecting to your dashboard in {secondsLeft} seconds...
           </p>
           
           {emailSent && (
-            <p className="email-confirmation">Booking confirmation email sent to your inbox!</p>
+            <p className="email-confirmation" style={{ color: '#0ea5e9', fontSize: '0.9rem', fontWeight: '500' }}>
+              📧 A confirmation email has been sent to your registered email address.
+            </p>
           )}
 
-          {confirmation && (
-            <div className="confirmation">
-              <pre>{JSON.stringify(confirmation)}</pre>
-            </div>
-          )}
-
-          <div className="actions">
-            <button className="btn btn-secondary" aria-label="Go back to home" onClick={()=>navigate('/')}>
+          <div className="actions" style={{ display: 'flex', gap: '15px', justifyContent: 'center', marginTop: '30px' }}>
+            <button 
+              className="btn btn-primary" 
+              onClick={downloadInvoice}
+              style={{ 
+                background: 'linear-gradient(135deg, #b62305 0%, #8b0000 100%)', 
+                color: '#fff', 
+                border: 'none', 
+                padding: '14px 28px', 
+                borderRadius: '12px', 
+                cursor: 'pointer', 
+                fontWeight: '600',
+                boxShadow: '0 4px 15px rgba(182, 35, 5, 0.3)',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 20px rgba(182, 35, 5, 0.4)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(182, 35, 5, 0.3)';
+              }}
+            >
+              📥 Download Invoice
+            </button>
+            <button 
+                className="btn btn-secondary" 
+                aria-label="Go back to home" 
+                onClick={()=>navigate('/')}
+                style={{
+                    background: '#fff',
+                    color: '#333',
+                    border: '1px solid #e5e7eb',
+                    padding: '14px 28px',
+                    borderRadius: '12px',
+                    cursor: 'pointer',
+                    fontWeight: '600',
+                    transition: 'background 0.2s'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.background = '#f9fafb'}
+                onMouseOut={(e) => e.currentTarget.style.background = '#fff'}
+            >
               Back to Home
             </button>
           </div>

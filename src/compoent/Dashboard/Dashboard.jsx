@@ -386,7 +386,7 @@ const Dashboard = () => {
 
                 <div className="notification-content">
                   <div className="notification-header">
-                    <h3>{req.property?.name}</h3>
+                    <h3>{req.property?.name || req.property_name || "Unknown Property"}</h3>
 
                     <span
                       className={`status-badge ${
@@ -408,7 +408,7 @@ const Dashboard = () => {
                   )}
 
                   <p>
-                    <strong>City:</strong> {req.property?.city}
+                    <strong>City:</strong> {req.property?.city || req.city}
                   </p>
 
                   <p>

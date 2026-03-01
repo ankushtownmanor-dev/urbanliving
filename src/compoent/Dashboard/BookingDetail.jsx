@@ -128,13 +128,41 @@ function BookingDetail() {
       const jsPDF = await ensureJsPDF();
       const doc = new jsPDF();
 
-      doc.setFontSize(16);
-      doc.text("TownManor.ai - Payment Receipt", 105, 15, {
-        align: "center",
-      });
-      doc.line(15, 20, 195, 20);
+      // Add Logo (Top Left and Bottom Right)
+      try {
+        const logoUrl = '/ovika.png';
+        const img = new Image();
+        img.src = logoUrl;
+        await new Promise((resolve, reject) => {
+           img.onload = resolve;
+           img.onerror = reject;
+        });
+        const logoWidth = 45;
+        const logoHeight = 12;
 
-      let y = 30;
+        // Top Left
+        doc.addImage(img, 'PNG', 20, 10, logoWidth, logoHeight);
+
+        // Bottom Right
+        doc.addImage(img, 'PNG', 190 - logoWidth, 275, logoWidth, logoHeight);
+      } catch (e) {
+        console.error("Logo load failed", e);
+      }
+
+      doc.setFontSize(26);
+      doc.setTextColor(0, 0, 0); 
+      doc.setFont(undefined, "bold");
+      doc.text("townmanor.ai", 105, 32, { align: "center" });
+      
+      doc.setFontSize(11);
+      doc.setTextColor(100, 100, 100);
+      doc.setFont(undefined, "normal");
+      doc.text("Payment Receipt", 105, 40, { align: "center" });
+      
+      doc.setDrawColor(200, 200, 200);
+      doc.line(15, 48, 195, 48);
+
+      let y = 60;
       const x = 20;
 
       const row = (label, value) => {
@@ -169,19 +197,26 @@ function BookingDetail() {
       y += 7;
       row("Check-in:", formatDate(b.start_date));
       row("Check-out:", formatDate(b.end_date));
+      const nights = b.nights || 0;
+      if (nights > 0) row("Nights:", nights);
       y += 5;
 
       doc.setFont(undefined, "bold");
       doc.text("Payment Details", x, y);
       y += 7;
-      row("Amount:", `₹${b.price}`);
-      row("Status:", b.booking_status);
+      const total = Number(b.total_price) || Number(b.price) || 0;
+      const gst = Number(b.gst_amount) || (total * 0.05 / 1.05);
+      const subtotal = total - gst;
+
+      row("Subtotal:", `₹${subtotal.toFixed(2)}`);
+      row("GST (5%):", `₹${gst.toFixed(2)}`);
+      row("Total Amount:", `₹${total.toFixed(2)}`);
+      row("Status:", (b.booking_status === 'confirmed' || b.booking_status === 'paid') ? 'PAYMENT COMPLETED' : b.booking_status);
       row("Created:", formatDateTime(b.created_at));
       row("Updated:", formatDateTime(b.updated_at));
 
-      doc.setFontSize(9);
       doc.text(
-        "This is a system-generated receipt by TownManor.ai",
+        "This is a system-generated receipt by OvikaLiving.com",
         x,
         285
       );
@@ -544,7 +579,7 @@ function BookingDetail() {
                     style={styles.tableValuePrice}
                     className="table-value-mobile table-value-small"
                   >
-                    ₹{b.price}
+                    ₹{Number(b.total_price || b.price).toLocaleString('en-IN')}
                   </div>
                 </div>
 
@@ -598,11 +633,11 @@ function BookingDetail() {
                     style={styles.tableValue}
                     className="table-value-mobile table-value-small"
                   >
-                    <span
-                      style={styles.statusBadge(b.booking_status)}
-                    >
-                      {b.booking_status}
-                    </span>
+                      <span
+                        style={styles.statusBadge(b.booking_status)}
+                      >
+                        {(b.booking_status === 'confirmed' || b.booking_status === 'paid') ? 'PAYMENT COMPLETED' : b.booking_status?.toUpperCase()}
+                      </span>
                   </div>
                 </div>
               </div>

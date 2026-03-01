@@ -18,7 +18,7 @@ const TermsAndConditions = () => {
           operated under Townmanor Technologies ("Ovikaliving.com", "we", "us", "our").
         </p>
         <p>
-          By accessing, registering, or using our website(s) ovika.co.in and ovikaliving.com (collectively, the
+          By accessing, registering, or using our website(s) ovikaliving.com (collectively, the
           "Platform"), you agree to be legally bound by these Terms.
         </p>
         <p className="warning-text">
@@ -363,7 +363,7 @@ const TermsAndConditions = () => {
         </div>
         <div className="section-content">
         <p>
-  You agree to indemnify, defend, and hold harmless the Platform operated by Townmanor Technologies, including its websites such as <strong>ovikaliving.com</strong> and <strong>ovika.co.in</strong>, along with their respective directors, employees, affiliates, and service partners, from any claims, demands, losses, liabilities, damages, or expenses (including legal fees) arising out of or related to:
+  You agree to indemnify, defend, and hold harmless the Platform operated by Townmanor Technologies, including its websites such as <strong>ovikaliving.com</strong>, along with their respective directors, employees, affiliates, and service partners, from any claims, demands, losses, liabilities, damages, or expenses (including legal fees) arising out of or related to:
 </p>
 
           <ul className="list-style">

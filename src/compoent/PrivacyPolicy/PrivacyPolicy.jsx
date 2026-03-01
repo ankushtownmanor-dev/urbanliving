@@ -161,7 +161,7 @@
 //           </p>
 //           <p>This Privacy Policy applies to:</p>
 //           <ul style={listStyle}>
-//             <li>Our websites: <a href="https://www.ovika.co.in" style={linkStyle}>https://www.ovika.co.in</a> and <a href="https://ovikaliving.com/" style={linkStyle}>https://ovikaliving.com/</a></li>
+//             <li>Our websites: <a href="https://www.ovikaliving.com" style={linkStyle}>https://www.ovikaliving.com</a> and <a href="https://ovikaliving.com/" style={linkStyle}>https://ovikaliving.com/</a></li>
 //             <li>All services, features, tools, and communications provided through these platforms</li>
 //             <li>Any future mobile applications or digital interfaces operated by Ovikaliving or Townmanor Technologies.</li>
 //           </ul>

@@ -64,21 +64,21 @@ const Home2 = () => {
      {
       img: "/image 86.png",
       title: "Luxury Living Spaces",
-      text: "TM Luxe offers high-end, fully serviced apartments for those who value elegance, comfort, and privacy. With sophisticated interiors, modern amenities, and prime locations, TM Luxe is crafted for families, celeb business travelers, and individuals seeking a luxurious living experience.",
+      text: "Ovika Luxe offers high-end, fully serviced apartments for those who value elegance, comfort, and privacy. With sophisticated interiors, modern amenities, and prime locations, Ovika Luxe is crafted for families, business travelers, and individuals seeking a luxurious living experience.",
       btn: "Know more",
       link: "/tmluxe"
     },
     {
       img: "/image 91.png",
       title: "PG Living Spaces",
-      text: "TM Stay offers fully managed and affordable PG rentals tailored for students and working professionals. With clean, secure, precious and comfortable living spaces, we ensure a hassle-free stay that feels just like home – only better.",
+      text: "Ovika Stay offers fully managed and affordable PG rentals tailored for students and working professionals. With clean, secure, and comfortable living spaces, we ensure a hassle-free stay that feels just like home – only better.",
       btn: "View PGs",
-      link: "/properties?category=PG" // 👈 Updated to filter for PG properties
+      link: "/properties?category=PG"
     },
     {
       img: "/image 87.png",
       title: "Co- Living Spaces",
-      text: "TM Hive brings together vibrant communities in thoughtfully designed shared spaces. Whether you’re a young professional, a remote worker, or a creative soul, our co-living homes offer the perfect blend of privacy, social, and flexibility – so you can live, work, and grow together.",
+      text: "Ovika Hive brings together vibrant communities in thoughtfully designed shared spaces. Whether you’re a young professional, a remote worker, or a creative soul, our co-living homes offer the perfect blend of privacy, social connection, and flexibility – so you can live, work, and grow together.",
       btn: "Coming Soon",
       link: "/"
     },
