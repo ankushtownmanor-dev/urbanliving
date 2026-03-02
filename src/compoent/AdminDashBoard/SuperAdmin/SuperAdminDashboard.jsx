@@ -173,6 +173,12 @@ export default function SuperAdminDashboard() {
   };
 
   const calculateBookingAmount = (b) => {
+    // 1. If amount is already stored in the booking object (Common in modern systems)
+    if (b.total_amount) return Number(b.total_amount);
+    if (b.total_price) return Number(b.total_price);
+    if (b.amount) return Number(b.amount);
+
+    // 2. Fallback to calculation if no amount field exists
     let price = 0;
     if (b.property && b.property.price) {
         price = Number(b.property.price);
@@ -1118,13 +1124,10 @@ export default function SuperAdminDashboard() {
                             {bookings
                                 .filter(b => bookingFilter === 'ALL' || (b.status||'').toLowerCase() === bookingFilter.toLowerCase())
                                 .map(b => {
-                                    // Resolve name from property object or lookup
-                                    let propName = "Unknown Property";
-                                    let propCity = "";
-                                    if(b.property) {
-                                        propName = b.property.name || b.property.property_name;
-                                        propCity = b.property.city;
-                                    } else {
+                                    let propName = b.property_name || b.property?.property_name || b.property?.name || "Unknown Property";
+                                    let propCity = b.city || b.property?.city || "";
+                                    
+                                    if(propName === "Unknown Property") {
                                         const found = properties.find(p => p.id === b.property_id || p._id === b.property_id);
                                         if(found) {
                                             propName = found.property_name || found.name;
@@ -1250,8 +1253,8 @@ export default function SuperAdminDashboard() {
                                     <tr key={b.id}>
                                         <td><span style={{ color: '#6366f1', fontWeight: '600' }}>#{b.id}</span></td>
                                         <td>
-                                            <div style={{ fontWeight: '500' }}>{b.property?.name || b.property_name || "N/A"}</div>
-                                            <div style={{ fontSize: '11px', color: '#888' }}>{b.property?.city || b.city}</div>
+                                            <div style={{ fontWeight: '500' }}>{b.property?.name || b.property_name || b.property?.property_name || "Unknown Property"}</div>
+                                            <div style={{ fontSize: '11px', color: '#888' }}>{b.property?.city || b.city || ""}</div>
                                         </td>
                                         <td>
                                             <div style={{ fontWeight: '500' }}>{b.username || "Unknown"}</div>

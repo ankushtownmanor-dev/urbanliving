@@ -1328,7 +1328,11 @@ import Cookies from 'js-cookie';
 import { format } from 'date-fns';
 
 // ========== OVIKA IDs ==========
-const OVIKA_IDS = [287];
+const OVIKA_IDS = [287, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305];
+const isOvikaProperty = (id) => {
+  const nid = Number(id);
+  return nid >= 200 || OVIKA_IDS.includes(nid);
+};
 
 // ========== CALENDAR API HELPERS ==========
 const CALENDAR_API_BASE = 'https://townmanor.ai/api/calendar';
@@ -1730,9 +1734,10 @@ function Payment() {
             address: raw.address,
             images: Array.isArray(raw.photos) ? raw.photos : [],
             amenities: Array.isArray(raw.amenities) ? raw.amenities : [],
-            per_night_price: 4000,   // ✅ TM Luxe 3 fixed nightly price
+            per_night_price: Number(raw.price) || 4000,   // ✅ Use actual price or fallback
             latitude: raw.latitude,
             longitude: raw.longitude,
+            calendar_key: raw.calendar_key || `prop-${raw.id}`
           });
         } else {
           // ── Purani API (TM Luxe 1 & 2) ──
@@ -1763,9 +1768,9 @@ function Payment() {
         const propertyKeyMap = {
           2: 'tm-luxe-1',
           1: 'tm-luxe-2',
-          287: 'tm-luxe-3',   // ✅ TM Luxe 3 ka calendar key
+          287: 'tm-luxe-3',
         };
-        const propertyKey = propertyKeyMap[pid] || 'tm-luxe-1';
+        const propertyKey = property?.calendar_key || propertyKeyMap[pid] || `prop-${pid}`;
 
         const { blocked } = await getCalendar(propertyKey);
         const disabledSet = buildDisabledDates(blocked || []);
@@ -2109,8 +2114,8 @@ function Payment() {
         return;
       }
 
-      // ✅ TM Luxe 3 (id=287) — booking API skip, directly PayU
-      if (String(propertyId) === '287') {
+      // ✅ Ovika Properties (New Flow) — skip internal booking API, directly use PayU
+      if (isOvikaProperty(propertyId)) {
         const tm3BookingRef = 'TM3-' + Date.now();
         localStorage.setItem('bookingId', tm3BookingRef);
         await handleProceedToPayment(tm3BookingRef);
