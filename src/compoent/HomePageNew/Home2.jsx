@@ -62,7 +62,7 @@ const Home2 = () => {
 
   const cards = [
      {
-      img: "/image 86.png",
+      img: "/newnew.jpeg",
       title: "Luxury Living Spaces",
       text: "Ovika Luxe offers high-end, fully serviced apartments for those who value elegance, comfort, and privacy. With sophisticated interiors, modern amenities, and prime locations, Ovika Luxe is crafted for families, business travelers, and individuals seeking a luxurious living experience.",
       btn: "Know more",
