@@ -153,9 +153,9 @@ export default function Home1() {
           <h1 className="ovika-urban-hero-heading">
             <span className="ovika-brand-name">OvikaLiving.com</span> – India's Smart Stay Marketplace
           </h1>
-          <p className="ovika-urban-hero-text">
+          {/* <p className="ovika-urban-hero-text">
             Book verified short-term stays or host your property and earn — all in one platform.
-          </p>
+          </p> */}
         </div>
 
         {/* Right Cards */}

@@ -9,6 +9,7 @@
   margin-top: -80px;
 }
 
+/* ---- Desktop Background (default) ---- */
 .ovika-urban-hero-bg {
   position: absolute;
   top: 1.5rem;
@@ -17,13 +18,13 @@
   bottom: 1.5rem;
   width: calc(100% - 3rem);
   height: calc(100% - 3rem);
-  background-image: url('/public/Group 1655.png');
+  background-image: url('/public/home1desktop.jpeg');
   background-size: cover;
   background-position: center;
   border-radius: 1.5rem;
 }
 
-/* ---- Layout: left + right ---- */
+/* ---- Layout ---- */
 .ovika-urban-hero-wrapper {
   position: relative;
   z-index: 10;
@@ -39,7 +40,6 @@
   margin: 0 auto;
 }
 
-/* Left block */
 .ovika-hero-left {
   flex: 1;
   display: flex;
@@ -74,7 +74,7 @@
   transform: translateY(clamp(-4px, -2vw, -9px));
 }
 
-/* ---- Right Cards — Desktop: slim & compact ---- */
+/* ---- Right Cards ---- */
 .ovika-hero-cards {
   display: flex;
   flex-direction: column;
@@ -162,20 +162,21 @@
 }
 
 /* =========================
-   Mobile View (below 768px)
+   Mobile (max-width: 768px)
+   — sirf yahan background image switch hogi
    ========================= */
 @media (max-width: 768px) {
+
   .ovika-urban-hero-bg {
-    position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/public/Group 165.png');
-    background-position: center;
+    background-image: url('/public/home1mobile.jpeg'); /* mobile wali image */
     background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
     border-radius: 0;
   }
@@ -186,7 +187,6 @@
     padding: 0;
   }
 
-  /* Stack vertically on mobile */
   .ovika-urban-hero-wrapper {
     flex-direction: column;
     justify-content: flex-end;
@@ -197,14 +197,12 @@
     min-height: 100vh;
   }
 
-  .ovika-hero-left {
-    width: 100%;
-  }
+  .ovika-hero-left { width: 100%; }
 
   .ovika-urban-hero-heading {
     font-size: 20px;
     line-height: 1.2;
-    margin-bottom: 0.75rem;
+    margin-bottom: 12.75rem;
     width: 100%;
     max-width: 340px;
   }
@@ -221,7 +219,6 @@
     margin-bottom: 0.5rem;
   }
 
-  /* Cards on mobile — column format, right aligned */
   .ovika-hero-cards {
     width: auto;
     flex-direction: column;
@@ -241,19 +238,8 @@
     gap: 0.35rem;
   }
 
-  .ovika-card-icon {
-    font-size: 0.85rem;
-  }
-
-  .ovika-card-title {
-    font-size: 0.66rem;
-  }
-
-  .ovika-card-subtitle {
-    font-size: 0.56rem;
-  }
-
-  .ovika-card-desc {
-    font-size: 0.54rem;
-  }
+  .ovika-card-icon    { font-size: 0.85rem; }
+  .ovika-card-title   { font-size: 0.66rem; }
+  .ovika-card-subtitle{ font-size: 0.56rem; }
+  .ovika-card-desc    { font-size: 0.54rem; }
 }
