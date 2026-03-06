@@ -1199,6 +1199,8 @@ const PropertyListPage = () => {
                       whiteSpace: 'nowrap', flex: '1 1 0', justifyContent: 'center',
                       minWidth: 0,
                     }}
+
+
                     onMouseEnter={e => {
                       if (!isActive) {
                         e.currentTarget.style.background = 'rgba(255,255,255,0.26)';
