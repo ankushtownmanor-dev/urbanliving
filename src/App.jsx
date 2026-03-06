@@ -85,7 +85,7 @@ function App() {
         <AnalyticsTracker />
         {/* Top Navbar */}
         <Navbar />
-
+    
         {/* All Routes */}
         <Routes>
           {/* Main Website Pages */}
