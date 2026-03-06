@@ -526,7 +526,7 @@ export default function Navbar() {
             <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer" }} onClick={() => navigate("/")}>
                 <span style={{ fontSize: 22, fontWeight: 400, color: "#c2772b", fontFamily: "Georgia, 'Times New Roman', serif", letterSpacing: "0.5px" }}>OvikaLiving</span>
-                <span style={{ fontSize: 8, color: "#c2772b", fontWeight: 400, marginTop: 1, letterSpacing: "0.2px", opacity: 0.85 }}>A flagship rental brand of Townmonor Technologies Pvt. Ltd.</span>
+                <span style={{ fontSize: 8, color: "#c2772b", fontWeight: 400, marginTop: 1, letterSpacing: "0.2px", opacity: 0.85 }}>A flagship rental brand of Townmanor Technologies Pvt. Ltd.</span>
               </div>
             </div>
 
@@ -741,7 +741,7 @@ export default function Navbar() {
               opacity: 0.75,
               whiteSpace: "nowrap",
               fontFamily: "Poppins, sans-serif",
-            }}>A flagship rental brand of Townmonor Technologies Pvt. Ltd.</span>
+            }}>A flagship rental brand of Townmanor Technologies Pvt. Ltd.</span>
           </div>
 
           {/* RIGHT — fixed width 160px, auth aligned right */}
