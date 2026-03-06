@@ -140,6 +140,8 @@ const PGListingForm = () => {
       attachedBathroom: true,
       price: "",
       securityDeposit: "",
+      maintenanceCharge: "",
+      maintenanceCycle: "Monthly",
       areaSqFt: "",
       availabilityDate: "",
       windowType: "Normal",
@@ -566,6 +568,30 @@ const PGListingForm = () => {
                               setForm(f => ({ ...f, bedroomDetails: newList }));
                             }} />
                           </div>
+                          
+                          <div className="field-group">
+                            <label>Maintenance Charge (₹)</label>
+                            <input type="number" placeholder="per month/cycle" value={room.maintenanceCharge} onChange={(e) => {
+                              const newList = [...form.bedroomDetails];
+                              newList[idx].maintenanceCharge = e.target.value;
+                              setForm(f => ({ ...f, bedroomDetails: newList }));
+                            }} />
+                          </div>
+
+                          <div className="field-group">
+                            <label>Maintenance Cycle</label>
+                            <select value={room.maintenanceCycle} onChange={(e) => {
+                              const newList = [...form.bedroomDetails];
+                              newList[idx].maintenanceCycle = e.target.value;
+                              setForm(f => ({ ...f, bedroomDetails: newList }));
+                            }}>
+                              <option value="Monthly">Monthly</option>
+                              <option value="Quarterly">Quarterly</option>
+                              <option value="Half-Yearly">Half-Yearly</option>
+                              <option value="Yearly">Yearly</option>
+                              <option value="One-Time">One-Time</option>
+                            </select>
+                          </div>
 
                           <div className="field-group full">
                             <label>Furnishing Items Available in Room</label>
@@ -631,6 +657,8 @@ const PGListingForm = () => {
                         attachedBathroom: true,
                         price: "",
                         securityDeposit: "",
+                        maintenanceCharge: "",
+                        maintenanceCycle: "Monthly",
                         areaSqFt: ""
                       }] }));
                     }}>
