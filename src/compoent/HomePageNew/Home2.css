@@ -186,11 +186,12 @@
 @media (max-width: 768px) {
   .living-container {
     padding: 40px 20px;
-    margin-top: -190px;
+    margin-top: -240px;
   }
   
   .living-heading {
     font-size: 26px;
+    margin-top: 32px;
   }
   
   .living-subtext {
