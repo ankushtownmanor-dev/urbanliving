@@ -1229,7 +1229,7 @@ export default function Home1() {
               position: 'absolute',
               top: '88px',
               left: '1rem',
-              width: 'calc(48% - 1rem)',
+              width: 'calc(70% - 1rem)',
               zIndex: 25,
               display: 'flex',
               flexDirection: 'column',
