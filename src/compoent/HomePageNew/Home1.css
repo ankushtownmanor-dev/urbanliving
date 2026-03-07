@@ -3,13 +3,12 @@
 .ovika-urban-hero-container {
   position: relative;
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  height: 90vh; /* Reduced height slightly to avoid full viewport cut-off */
   padding: 1.5rem;
   margin-top: -80px;
 }
 
-/* ---- Desktop Background (default) ---- */
+/* ---- Desktop Background ---- */
 .ovika-urban-hero-bg {
   position: absolute;
   top: 1.5rem;
@@ -18,7 +17,7 @@
   bottom: 1.5rem;
   width: calc(100% - 3rem);
   height: calc(100% - 3rem);
-  background-image: url('/public/home1desktop.jpeg');
+  background-image: url('/home1desktop.jpeg'); /* FIXED: Removed /public/ prefix */
   background-size: cover;
   background-position: center;
   border-radius: 1.5rem;
@@ -45,6 +44,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-bottom: 80px; /* Room for overlapping search bar */
 }
 
 /* ---- Typography ---- */
@@ -53,18 +53,7 @@
   font-size: 3.10rem;
   font-weight: 400;
   line-height: 1.2;
-  margin-bottom: 1.5rem;
-}
-
-.ovika-urban-hero-text {
-  color: white;
-  font-size: 1.08rem;
-  max-width: 40rem;
-  margin-bottom: 2.5rem;
-  line-height: 1.7;
-  opacity: 0.9;
-  font-weight: 200;
-  word-spacing: 3px;
+  margin-bottom: 2rem;
 }
 
 .ovika-brand-name {
@@ -72,6 +61,171 @@
   font-size: 3.10rem;
   display: inline-block;
   transform: translateY(clamp(-4px, -2vw, -9px));
+}
+
+/* ---- Search Section Styles ---- */
+.ovika-search-section {
+  position: absolute;
+  bottom: 1.5rem; /* Aligns with the bottom edge of hero image */
+  left: 50%;
+  transform: translate(-50%, 50%); /* Creates the overlap look */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 90%;
+  max-width: 1050px;
+  z-index: 100;
+}
+
+.ovika-search-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 400;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.pin-icon {
+  margin-right: 4px;
+}
+
+.ovika-search-bar-container {
+  background: white;
+  border-radius: 1.2rem;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  width: 100%;
+}
+
+.ovika-search-field {
+  padding: 0.5rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  position: relative;
+  min-width: 140px;
+}
+
+.field-icon-box {
+  color: #555;
+}
+
+.field-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-label {
+  font-size: 0.75rem;
+  color: #888;
+  font-weight: 500;
+}
+
+.field-value {
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.date-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  color: #333;
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: -2px;
+}
+
+.field-divider {
+  width: 1px;
+  height: 35px;
+  background: #eee;
+}
+
+.city-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 200px;
+  background: white;
+  border-radius: 0.8rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  margin-top: 10px;
+  z-index: 100;
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+}
+
+.city-option {
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  color: #444;
+  transition: background 0.2s;
+}
+
+.city-option:hover {
+  background: #f8f8f8;
+  color: #f5a623;
+}
+
+.guests-field {
+  min-width: 160px;
+  justify-content: space-between;
+}
+
+.guest-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.guest-controls button {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.guest-controls button:hover {
+  background: #f5a623;
+  color: white;
+  border-color: #f5a623;
+}
+
+.ovika-search-btn {
+  background: #f5a623;
+  color: #222;
+  border: none;
+  border-radius: 0.8rem;
+  padding: 0.8rem 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+  height: 100%;
+}
+
+.ovika-search-btn:hover {
+  background: #e5951a;
+  transform: translateY(-2px);
 }
 
 /* ---- Right Cards ---- */
@@ -143,24 +297,6 @@
   font-weight: 400;
 }
 
-.ovika-card-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: #f5a623;
-  font-size: 0.72rem;
-  font-weight: 300 !important;
-  text-decoration: none;
-  margin-top: 0.2rem;
-  transition: gap 0.2s;
-  letter-spacing: 0.02em;
-}
-
-.ovika-card-link:hover {
-  gap: 8px;
-  color: #ffc85a;
-}
-
 /* =========================
    Mobile (max-width: 768px)
    ========================= */
@@ -173,7 +309,7 @@
     bottom: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/public/home1mobile.jpeg');
+    background-image: url('/home1mobile.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -181,72 +317,78 @@
   }
 
   .ovika-urban-hero-container {
-    height: 100vh;
+    height: auto;
     min-height: 100vh;
     padding: 0;
     overflow: hidden;
   }
 
-  /* wrapper: relative so cards can be absolutely positioned */
   .ovika-urban-hero-wrapper {
-    position: relative;
     flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-start;
     padding: 6rem 1rem 2rem;
-    gap: 0.75rem;
-    height: 100vh;
+    gap: 2rem;
+    height: auto;
     min-height: 100vh;
   }
 
-  .ovika-hero-left { width: 100%; }
+  .ovika-hero-left { 
+    width: 100%; 
+    align-items: center;
+    text-align: center;
+  }
 
   .ovika-urban-hero-heading {
-    font-size: 20px;
-    line-height: 1.2;
-    margin-bottom: 30.75rem;
-    width: 100%;
-    max-width: 340px;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
   }
 
   .ovika-brand-name {
-    font-size: 20px !important;
-    transform: translateY(-1px) !important;
+    font-size: 1.8rem !important;
   }
 
-  .ovika-urban-hero-text {
-    font-size: 0.9rem;
-    max-width: 99%;
-    line-height: 1.5;
-    margin-bottom: 0.5rem;
-  }
-
-  /* Cards: absolute, right edge, at eye level of girl (~37% from top) */
-  .ovika-hero-cards {
-    position: absolute;
-    right: 0;
-    top: 43%;
-    transform: translateY(-50%);
-    flex-direction: column;
-    gap: 0.35rem;
-    margin: 0;
-    width: auto;
-    min-width: 120px;
-    max-width: 46%;
-  }
-
-  /* flush against right screen edge — no right border-radius */
-  .ovika-hero-card {
-    flex-direction: row;
+  .ovika-search-section {
+    max-width: 100%;
     align-items: center;
-    padding: 0.22rem 0.35rem;
-    border-radius: 0.4rem 0 0 0.4rem;
-    gap: 0.28rem;
-    border-right: none;
   }
 
-  .ovika-card-icon    { font-size: 0.7rem; }
-  .ovika-card-title   { font-size: 0.58rem; }
-  .ovika-card-subtitle{ font-size: 0.5rem; }
-  .ovika-card-desc    { font-size: 0.48rem; }
+  .ovika-search-title {
+    font-size: 1.2rem;
+  }
+
+  .ovika-search-bar-container {
+    flex-direction: column;
+    width: 100%;
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+
+  .ovika-search-field {
+    width: 100%;
+    padding: 0.8rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  .field-divider {
+    display: none;
+  }
+
+  .ovika-search-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 1rem;
+    padding: 1rem;
+  }
+
+  .ovika-hero-cards {
+    position: static;
+    transform: none;
+    width: 100%;
+    margin: 2rem 0;
+    gap: 0.8rem;
+  }
+
+  .ovika-hero-card {
+    border-radius: 0.8rem;
+    padding: 0.8rem;
+  }
 }

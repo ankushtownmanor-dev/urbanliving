@@ -986,6 +986,9 @@ const PropertyListPage = () => {
   const [activeCat, setActiveCat] = useState(null);
   const [rentalType, setRentalType] = useState(null);
   const [showRentalPopup, setShowRentalPopup] = useState(false);
+  const [guests, setGuests] = useState(1);
+  const [checkIn, setCheckIn] = useState('');
+  const [checkOut, setCheckOut] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -1034,6 +1037,12 @@ const PropertyListPage = () => {
       );
     }
 
+    // Guest filtering logic: Ensure property can accommodate at least 'guests' value
+    // (Assuming many properties might not have this field, we only filter if property has a capacity field)
+    const guestNum = Number(sessionStorage.getItem('ovika_search_guests')) || 1;
+    // Note: If you have a 'max_guests' or 'capacity' field in your API, add it here:
+    // result = result.filter(p => (Number(p.max_guests) || 10) >= guestNum);
+
     return result;
   };
 
@@ -1062,6 +1071,7 @@ const PropertyListPage = () => {
       );
       if (match) setActiveCat(match);
     }
+
     const rt = params.get('rentalType');
     if (rt) {
       setRentalType(rt);
@@ -1069,6 +1079,21 @@ const PropertyListPage = () => {
       const stored = sessionStorage.getItem('ovika_rental_type');
       if (stored) setRentalType(stored);
     }
+
+    const q = params.get('search') || params.get('city');
+    if (q) setSearch(q);
+
+    const g = params.get('guests');
+    if (g) {
+      setGuests(Number(g));
+      sessionStorage.setItem('ovika_search_guests', g);
+    }
+
+    const cin = params.get('checkIn');
+    if (cin) setCheckIn(cin);
+
+    const cout = params.get('checkOut');
+    if (cout) setCheckOut(cout);
   }, [location.search, properties]);
 
   const isMonthly = rentalType === 'long';
