@@ -186,6 +186,7 @@
 @media (max-width: 768px) {
   .living-container {
     padding: 40px 20px;
+    margin-top: -100px;
   }
   
   .living-heading {

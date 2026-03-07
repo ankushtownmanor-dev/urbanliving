@@ -1,4 +1,4 @@
-/* Home1.css */
+/* Home1.css — sirf desktop search bar + calendar styles */
 
 @keyframes ovika-fadeUp {
   from { opacity: 0; transform: translateY(20px); }
@@ -9,180 +9,7 @@
   to   { opacity: 1; transform: translate(-50%, 50%); }
 }
 
-/* ========================
-   HERO CONTAINER
-   ======================== */
-.ovika-urban-hero-container {
-  position: relative;
-  width: 100%;
-  height: 85vh;                   /* height kam ki — 100vh se 85vh */
-  min-height: 540px;
-  padding: 1rem;
-  margin-top: -80px;
-  box-sizing: border-box;
-}
-
-.ovika-urban-hero-bg {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  right: 1rem;
-  bottom: 1rem;
-  width: calc(100% - 2rem);
-  height: calc(100% - 2rem);
-  border-radius: 1.5rem;
-  overflow: hidden;
-}
-
-.ovika-bg-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 30%;
-  display: block;
-  border-radius: 1.5rem;
-}
-
-.ovika-mobile-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(8,4,0,0.85) 0%, rgba(8,4,0,0.25) 55%, transparent 100%);
-}
-
-/* ========================
-   HERO WRAPPER — DESKTOP
-   flex-direction: column, align right
-   ======================== */
-.ovika-urban-hero-wrapper {
-  position: relative;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;          /* sab kuch right side */
-  height: 100%;
-  padding: 80px 3rem 80px;
-  max-width: 1400px;
-  width: 100%;
-  gap: 0;
-  margin: 0 auto;
-  box-sizing: border-box;
-}
-
-/* ========================
-   RIGHT BLOCK — heading + cards stacked
-   ======================== */
-.ovika-hero-right-block {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;          /* right-align karo */
-  gap: 1rem;
-  margin-bottom: 2rem;            /* search bar se thodi gap */
-}
-
-/* ========================
-   HEADING — right aligned
-   ======================== */
-.ovika-hero-left {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
-  padding-bottom: 0;
-}
-
-.ovika-urban-hero-heading {
-  color: white;
-  font-size: clamp(1.2rem, 1.6vw, 2rem);   /* thoda chhota taaki ek line mein aaye */
-  font-weight: 400;
-  line-height: 1.25;
-  margin-bottom: 0;
-  max-width: none;
-  text-align: right;
-  white-space: nowrap;                       /* ek hi line enforce */
-  margin-right: 40px;                        /* right se 40px margin */
-}
-
-.ovika-brand-name {
-  color: #f5a623;
-  font-size: inherit;
-  display: inline-block;
-}
-
-/* ========================
-   CARDS — heading ke neeche, right side
-   ======================== */
-.ovika-hero-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  flex-shrink: 0;
-  width: 260px;
-  align-self: flex-end;
-  margin-left: 0;
-  margin-top: 0.25rem;
-  margin-right: 40px;             /* heading ke saath align */
-}
-
-.ovika-hero-card {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  background: #1a100699;
-  border-left: 3px solid #d97706;
-  border-top: 1px solid rgba(217,119,6,0.25);
-  border-right: 1px solid rgba(217,119,6,0.15);
-  border-bottom: 1px solid rgba(217,119,6,0.15);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 0.55rem;
-  padding: 0.5rem 0.75rem;
-  transition: transform 0.25s ease, border-left-color 0.25s ease, background 0.25s ease;
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
-}
-
-.ovika-hero-card:hover {
-  transform: translateX(-5px);
-  border-left-color: #f5a623;
-  background: rgba(18,10,2,0.92);
-}
-
-.ovika-card-icon {
-  font-size: 1.1rem;
-  flex-shrink: 0;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-}
-
-.ovika-card-body { display: flex; flex-direction: column; gap: 0; }
-
-.ovika-card-title {
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 300 !important;
-  margin: 0;
-  letter-spacing: 0.02em;
-}
-
-.ovika-card-subtitle {
-  color: #f5c97a;
-  font-size: 0.68rem;
-  font-weight: 300 !important;
-  margin: 0.02rem 0 0;
-}
-
-.ovika-card-desc {
-  color: rgba(220,210,195,0.9);
-  font-size: 0.64rem;
-  line-height: 1.35;
-  margin: 0.04rem 0 0;
-  font-weight: 400;
-}
-
-/* ========================
-   SEARCH BAR — desktop (same as before)
-   ======================== */
+/* ── Desktop Search Section ── */
 .ovika-search-section {
   position: absolute;
   bottom: 1rem;
@@ -325,14 +152,11 @@
 .guest-controls { display: flex; gap: 5px; align-items: center; }
 
 .guest-controls button {
-  width: 22px;
-  height: 22px;
+  width: 22px; height: 22px;
   border-radius: 50%;
   border: 1.5px solid #ddd;
   background: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   font-size: 0.85rem;
   transition: all 0.2s;
@@ -371,329 +195,75 @@
   box-shadow: 0 8px 24px rgba(245,166,35,0.6);
 }
 
-/* ========================
-   MOBILE
-   ======================== */
-@media (max-width: 768px) {
-
-  .ovika-urban-hero-container {
-    height: 100vh;
-    min-height: 100vh;
-    padding: 0;
-    overflow: visible;
-    margin-top: -80px;
-  }
-
-  .ovika-urban-hero-bg {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    width: 100%; height: 100%;
-    border-radius: 0;
-  }
-
-  .ovika-bg-img {
-    object-position: center 15%;
-    border-radius: 0;
-  }
-
-  .ovika-urban-hero-wrapper {
-    position: relative;
-    z-index: 10;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-start;
-    padding: 0 1rem 2rem;
-    gap: 0.5rem;
-    height: 100vh;
-    min-height: 100vh;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  /* Mobile: right block reset karo — normal flow */
-  .ovika-hero-right-block {
-    width: 100%;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0;
-    margin-bottom: 0;
-    position: static;
-  }
-
-  .ovika-hero-left {
-    width: 100%;
-    padding-bottom: 0;
-    align-items: flex-start;
-    animation: ovika-fadeUp 0.6s ease 0.1s both;
-  }
-
-  .ovika-urban-hero-heading {
-    font-size: 22px;
-    line-height: 1.3;
-    margin-bottom: 620px;
-    width: 100%;
-    max-width: 300px;
-    text-align: left;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    white-space: normal;           /* mobile mein wrap karne do */
-    margin-right: 0;               /* mobile mein right margin nahi */
-  }
-
-  .ovika-brand-name {
-    font-size: 22px !important;
-    transform: translateY(-1px) !important;
-  }
-
-  .ovika-hero-cards {
-    position: absolute;
-    right: 0;
-    top: 34%;
-    transform: translateY(-50%);
-    flex-direction: column;
-    gap: 0.4rem;
-    margin: 0;
-    width: auto;
-    min-width: 115px;
-    max-width: 44%;
-    z-index: 20;
-    align-self: auto;
-    animation: ovika-fadeUp 0.6s ease 0.2s both;
-  }
-
-  .ovika-hero-card {
-    flex-direction: row;
-    align-items: center;
-    padding: 0.28rem 0.4rem;
-    border-radius: 0.45rem 0 0 0.45rem;
-    gap: 0.3rem;
-    border-right: none;
-    background: rgba(15,8,0,0.75);
-    backdrop-filter: blur(16px);
-  }
-
-  .ovika-card-icon    { font-size: 0.75rem; }
-  .ovika-card-title   { font-size: 0.6rem; }
-  .ovika-card-subtitle{ font-size: 0.52rem; }
-  .ovika-card-desc    { font-size: 0.5rem; }
-
-  .ovika-search-section {
-    position: static;
-    transform: none;
-    width: 100%;
-    max-width: 100%;
-    align-items: flex-start;
-    color: #c8851a;
-    padding: 0;
-    margin-top: 0.75rem;
-    margin-bottom: -30px;
-    gap: 0.25rem;
-    animation: ovika-fadeUp 0.6s ease 0.3s both;
-  }
-
-  .ovika-search-title {
-    font-size: 0.78rem;
-    padding-left: 4px;
-    opacity: 0.9;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
-    margin-bottom: 0.25rem;
-  }
-
-  .ovika-search-bar-container {
-    flex-direction: row;
-    align-items: center;
-    height: 48px;
-    border-radius: 14px;
-    padding: 4px;
-    gap: 0;
-    background: rgba(255,255,255,0.97);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.06);
-    width: 100%;
-    overflow: visible;
-  }
-
-  .ovika-search-field {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 5px;
-    padding: 0 8px;
-    height: 100%;
-    border-radius: 0;
-    background: transparent;
-    border: none;
-    border-right: 1px solid rgba(0,0,0,0.08);
-    overflow: visible;
-    box-sizing: border-box;
-    min-width: 0;
-    cursor: pointer;
-    position: relative;
-  }
-
-  .ovika-search-field:last-of-type { border-right: none; }
-  .ovika-search-field:hover,
-  .ovika-search-field:focus-within { background: rgba(245,166,35,0.05); }
-
-  .ovika-search-field .field-icon-box {
-    width: auto; height: auto;
-    background: none; border-radius: 0;
-    color: #888; flex-shrink: 0;
-    display: flex; align-items: center;
-  }
-
-  .ovika-search-field .field-text {
-    display: flex; flex-direction: column;
-    min-width: 0; flex: 1; overflow: hidden;
-  }
-
-  .ovika-search-field .field-label { display: none; }
-
-  .ovika-search-field .field-value {
-    font-size: 0.8rem; color: #333;
-    font-weight: 500; white-space: nowrap;
-    overflow: hidden; text-overflow: ellipsis; line-height: 1;
-  }
-
-  .ovika-search-field .date-input {
-    font-size: 0.75rem; width: 100%; min-width: 0;
-    border: none; background: transparent; outline: none;
-    color: #333; font-family: inherit; font-weight: 500;
-    padding: 0; margin: 0; line-height: 1;
-  }
-
-  .guests-field { flex: 1; min-width: 0; justify-content: flex-start; }
-  .guests-field .guest-controls { display: flex; gap: 3px; flex-shrink: 0; }
-  .guests-field .guest-controls button { width: 18px; height: 18px; font-size: 0.7rem; }
-
-  .field-divider { display: none; }
-
-  .ovika-search-btn {
-    flex-shrink: 0; width: auto;
-    height: 40px; border-radius: 10px;
-    padding: 0 14px; font-size: 0.82rem;
-    margin: 0; gap: 5px;
-  }
-
-  .city-dropdown { width: 180px; border-radius: 12px; top: calc(100% + 6px); left: 0; }
-
-  .guest-popup {
-    position: absolute;
-    bottom: calc(100% + 8px);
-    right: 0;
-    background: white;
-    border-radius: 14px;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06);
-    padding: 12px 16px;
-    z-index: 300;
-    min-width: 150px;
-  }
-
-  .guest-popup-header {
-    display: flex; align-items: center;
-    justify-content: space-between; margin-bottom: 10px;
-  }
-
-  .guest-popup-title {
-    font-size: 0.75rem; font-weight: 600;
-    color: #333; text-transform: uppercase; letter-spacing: 0.5px;
-  }
-
-  .guest-popup-close {
-    background: none; border: none; cursor: pointer;
-    color: #999; padding: 2px; display: flex; align-items: center;
-  }
-
-  .guest-popup-row {
-    display: flex; align-items: center;
-    justify-content: center; gap: 16px;
-  }
-
-  .guest-popup-btn {
-    width: 32px; height: 32px; border-radius: 50%;
-    border: 1.5px solid #e0c07a; background: white;
-    font-size: 1.1rem; color: #c8851a; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s; padding: 0;
-  }
-
-  .guest-popup-btn:hover { background: #f5a623; color: white; border-color: #f5a623; }
-
-  .guest-popup-count {
-    font-size: 1.1rem; font-weight: 600;
-    color: #1a1a1a; min-width: 24px; text-align: center;
-  }
-
-  .ovika-cal-popup {
-    position: absolute;
-    bottom: calc(100% + 10px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.18), 0 0 0 1px rgba(245,166,35,0.15);
-    padding: 14px 12px 12px;
-    z-index: 400;
-    width: 260px;
-    user-select: none;
-  }
-
-  .ovika-cal-header {
-    display: flex; align-items: center;
-    justify-content: space-between; margin-bottom: 8px;
-  }
-
-  .ovika-cal-title {
-    font-size: 0.65rem; font-weight: 700;
-    color: #c8851a; text-transform: uppercase; letter-spacing: 0.8px;
-  }
-
-  .ovika-cal-close {
-    background: none; border: none; cursor: pointer;
-    color: #bbb; padding: 2px; display: flex;
-    align-items: center; border-radius: 50%; transition: background 0.15s;
-  }
-  .ovika-cal-close:hover { background: #fdf0e0; color: #c8851a; }
-
-  .ovika-cal-nav {
-    display: flex; align-items: center;
-    justify-content: space-between; margin-bottom: 10px;
-  }
-
-  .ovika-cal-nav-btn {
-    background: none; border: none; cursor: pointer;
-    color: #c8851a; display: flex; align-items: center;
-    padding: 4px; border-radius: 8px; transition: background 0.15s;
-  }
-  .ovika-cal-nav-btn:hover { background: #fdf0e0; }
-
-  .ovika-cal-month-label { font-size: 0.82rem; font-weight: 600; color: #333; }
-
-  .ovika-cal-grid {
-    display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
-  }
-
-  .ovika-cal-day-name {
-    font-size: 0.55rem; font-weight: 700; color: #c8a060;
-    text-align: center; text-transform: uppercase;
-    padding: 2px 0 4px; letter-spacing: 0.3px;
-  }
-
-  .ovika-cal-cell {
-    aspect-ratio: 1; display: flex; align-items: center;
-    justify-content: center; font-size: 0.75rem; color: #333;
-    border-radius: 50%; cursor: default;
-    transition: background 0.15s, color 0.15s; font-weight: 400;
-  }
-
-  .ovika-cal-cell--active { cursor: pointer; }
-  .ovika-cal-cell--active:hover { background: #fdf0e0; color: #c8851a; font-weight: 600; }
-  .ovika-cal-cell--selected {
-    background: linear-gradient(135deg, #f5a623, #e08c10) !important;
-    color: #fff !important; font-weight: 700 !important;
-    box-shadow: 0 3px 10px rgba(245,166,35,0.45);
-  }
-  .ovika-cal-cell--past { color: #ccc !important; cursor: not-allowed !important; }
-  .ovika-cal-cell--past:hover { background: transparent !important; color: #ccc !important; }
+/* ── Calendar Popup (used in both mobile/desktop) ── */
+.ovika-cal-popup {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18), 0 0 0 1px rgba(245,166,35,0.15);
+  padding: 14px 12px 12px;
+  z-index: 400;
+  width: 260px;
+  user-select: none;
 }
+
+.ovika-cal-header {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 8px;
+}
+
+.ovika-cal-title {
+  font-size: 0.65rem; font-weight: 700;
+  color: #c8851a; text-transform: uppercase; letter-spacing: 0.8px;
+}
+
+.ovika-cal-close {
+  background: none; border: none; cursor: pointer;
+  color: #bbb; padding: 2px; display: flex;
+  align-items: center; border-radius: 50%; transition: background 0.15s;
+}
+.ovika-cal-close:hover { background: #fdf0e0; color: #c8851a; }
+
+.ovika-cal-nav {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 10px;
+}
+
+.ovika-cal-nav-btn {
+  background: none; border: none; cursor: pointer;
+  color: #c8851a; display: flex; align-items: center;
+  padding: 4px; border-radius: 8px; transition: background 0.15s;
+}
+.ovika-cal-nav-btn:hover { background: #fdf0e0; }
+
+.ovika-cal-month-label { font-size: 0.82rem; font-weight: 600; color: #333; }
+
+.ovika-cal-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
+}
+
+.ovika-cal-day-name {
+  font-size: 0.55rem; font-weight: 700; color: #c8a060;
+  text-align: center; text-transform: uppercase;
+  padding: 2px 0 4px; letter-spacing: 0.3px;
+}
+
+.ovika-cal-cell {
+  aspect-ratio: 1; display: flex; align-items: center;
+  justify-content: center; font-size: 0.75rem; color: #333;
+  border-radius: 50%; cursor: default;
+  transition: background 0.15s, color 0.15s; font-weight: 400;
+}
+
+.ovika-cal-cell--active { cursor: pointer; }
+.ovika-cal-cell--active:hover { background: #fdf0e0; color: #c8851a; font-weight: 600; }
+.ovika-cal-cell--selected {
+  background: linear-gradient(135deg, #f5a623, #e08c10) !important;
+  color: #fff !important; font-weight: 700 !important;
+  box-shadow: 0 3px 10px rgba(245,166,35,0.45);
+}
+.ovika-cal-cell--past { color: #ccc !important; cursor: not-allowed !important; }
+.ovika-cal-cell--past:hover { background: transparent !important; color: #ccc !important; }
