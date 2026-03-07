@@ -1180,7 +1180,7 @@ export default function Home1() {
         right: isMobile ? 0 : '1rem',
         bottom: isMobile ? 0 : '1rem',
         width: isMobile ? '100%' : 'calc(100% - 2rem)',
-        height: isMobile ? '85%' : 'calc(100% - 2rem)',
+        height: isMobile ? '75%' : 'calc(100% - 2rem)',
         borderRadius: isMobile ? 0 : '1.5rem',
         overflow: 'hidden',
       }}>
@@ -1308,7 +1308,7 @@ export default function Home1() {
               display: 'flex',
               flexDirection: 'column',
               gap: '0.2rem',
-              marginBottom: '81px',
+              marginBottom: '174px',
               marginTop: '0.5rem',
             }}>
               {/* Label */}
