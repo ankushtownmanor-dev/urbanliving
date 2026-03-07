@@ -69,14 +69,14 @@ const Home2 = () => {
       link: "/tmluxe"
     },
     {
-      img: "/image 91.png",
+      img: "/pglivingspace.jpeg",
       title: "PG Living Spaces",
       text: "Ovika Stay offers fully managed and affordable PG rentals tailored for students and working professionals. With clean, secure, and comfortable living spaces, we ensure a hassle-free stay that feels just like home – only better.",
       btn: "View PGs",
       link: "/properties?category=PG"
     },
     {
-      img: "/image 87.png",
+      img: "/colivingspace.jpeg",
       title: "Co- Living Spaces",
       text: "Ovika Hive brings together vibrant communities in thoughtfully designed shared spaces. Whether you’re a young professional, a remote worker, or a creative soul, our co-living homes offer the perfect blend of privacy, social connection, and flexibility – so you can live, work, and grow together.",
       btn: "Coming Soon",
