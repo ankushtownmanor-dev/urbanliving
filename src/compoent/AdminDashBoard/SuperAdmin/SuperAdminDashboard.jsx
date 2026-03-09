@@ -11,7 +11,8 @@ import {
   Title,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
+  Filler
 } from 'chart.js';
 
 // Icons Components
@@ -22,7 +23,8 @@ const Icons = {
   Bookings: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>,
   Finance: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>,
   Refunds: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"></path><path d="M18 12c0-1.1.9-2 2-2H4"></path><path d="M16 16c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z"></path></svg>,
-  Settings: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+  Settings: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>,
+  Leads: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
 };
 
 // Register Chart.js components
@@ -34,7 +36,8 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
+  Filler
 );
 
 const API_PROPERTIES = "https://townmanor.ai/api/ovika/properties";
@@ -55,10 +58,11 @@ const AMENITIES_MASTER = {
 };
 
 export default function SuperAdminDashboard() {
-  const [view, setView] = useState('dashboard'); // 'dashboard', 'properties', 'users', 'bookings', 'finance', 'settings'
+  const [view, setView] = useState('dashboard'); // 'dashboard', 'properties', 'users', 'bookings', 'finance', 'settings', 'leads'
   const [properties, setProperties] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [usersList, setUsersList] = useState([]); // Real users from API
+  const [leads, setLeads] = useState([]); // Lead generation data
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ 
     totalProps: 0, 
@@ -101,12 +105,13 @@ export default function SuperAdminDashboard() {
   const [userPage, setUserPage] = useState(1);
   const [ownerPage, setOwnerPage] = useState(1);
   const [guestPage, setGuestPage] = useState(1);
+  const [leadPage, setLeadPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
 
   // --- Fetch Data ---
   const fetchAllData = async () => {
     setLoading(true);
-    await Promise.all([fetchAllProperties(), fetchAllBookings(), fetchAllUsers()]);
+    await Promise.all([fetchAllProperties(), fetchAllBookings(), fetchAllUsers(), fetchAllLeads()]);
     setLoading(false);
   };
 
@@ -154,6 +159,19 @@ export default function SuperAdminDashboard() {
         setUsersList(data);
     } catch (e) {
         console.error("Fetch users failed", e);
+    }
+  };
+
+  const fetchAllLeads = async () => {
+    try {
+        const res = await axios.get("https://www.townmanor.ai/api/formlead/leads");
+        if (Array.isArray(res.data)) {
+            setLeads(res.data);
+        } else if (res.data && Array.isArray(res.data.data)) {
+            setLeads(res.data.data);
+        }
+    } catch (e) {
+        console.error("Fetch leads failed", e);
     }
   };
 
@@ -640,6 +658,9 @@ export default function SuperAdminDashboard() {
                 <button className={view === 'refunds' ? 'active' : ''} onClick={() => setView('refunds')}>
                     <span className="sa-nav-icon"><Icons.Refunds /></span> Payments & Refunds
                 </button>
+                <button className={view === 'leads' ? 'active' : ''} onClick={() => setView('leads')}>
+                    <span className="sa-nav-icon"><Icons.Leads /></span> Leads & Inquiries
+                </button>
                 <button className={view === 'settings' ? 'active' : ''} onClick={() => setView('settings')}>
                     <span className="sa-nav-icon"><Icons.Settings /></span> Settings
                 </button>
@@ -659,6 +680,7 @@ export default function SuperAdminDashboard() {
                 {view === 'users' && 'User Administration'}
                 {view === 'bookings' && 'Booking Management'}
                 {view === 'finance' && 'Financial Reports'}
+                {view === 'leads' && 'Lead Generation Management'}
                 {view === 'settings' && 'Platform Settings'}
             </h2>
             <div className="sa-user-controls">
@@ -748,7 +770,7 @@ export default function SuperAdminDashboard() {
                         </thead>
                         <tbody>
                             {filteredProperties.slice(0, 50).map(p => {
-                                const img = (Array.isArray(p.photos) ? p.photos[0] : (p.photos ? p.photos.split(',')[0] : '')) || 'https://via.placeholder.com/60';
+                                const img = (Array.isArray(p.photos) ? p.photos[0] : (p.photos ? p.photos.split(',')[0] : '')) || 'https://placehold.co/60x60?text=No+Image';
                                 
                                 let type = p.property_type || p.property_category || "N/A";
                                 if (!p.property_type && !p.property_category && p.meta) {
@@ -1336,6 +1358,115 @@ export default function SuperAdminDashboard() {
                     <p style={{ color:'#64748b' }}>Detailed Transaction Logs are currently being synchronized with the Payment Gateway.</p>
                 </div>
                 </>
+            )}
+
+            {/* VIEW: LEADS */}
+            {view === 'leads' && (
+                <div className="sa-table-container">
+                    <div className="sa-table-header-row">
+                        <h3>Leads & Form Inquiries</h3>
+                        <div style={{ display: 'flex', gap: '12px' }}>
+                            <input 
+                                type="text" 
+                                placeholder="Search leads..." 
+                                className="sa-search-input"
+                                value={searchTerm}
+                                onChange={(e) => {
+                                    setSearchTerm(e.target.value);
+                                    setLeadPage(1);
+                                }}
+                            />
+                            <button className="sa-btn-primary" onClick={fetchAllLeads}>Refresh</button>
+                        </div>
+                    </div>
+                    <table className="sa-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Name</th>
+                                <th>Contact Number</th>
+                                <th>Property/Purpose</th>
+                                <th>Source</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {(() => {
+                                const filtered = leads.filter(l => {
+                                    if(!searchTerm) return true;
+                                    const s = searchTerm.toLowerCase();
+                                    return (l.name || "").toLowerCase().includes(s) || 
+                                           (l.phone_number || "").toLowerCase().includes(s) || 
+                                           (l.purpose || "").toLowerCase().includes(s) ||
+                                           (l.source || "").toLowerCase().includes(s);
+                                });
+                                const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+                                
+                                return (
+                                    <>
+                                        {filtered.slice((leadPage - 1) * ITEMS_PER_PAGE, leadPage * ITEMS_PER_PAGE).map(lead => (
+                                            <tr key={lead.id}>
+                                                <td>{new Date(lead.created_at).toLocaleDateString()}</td>
+                                                <td style={{ fontWeight: '600' }}>{lead.name}</td>
+                                                <td style={{ fontFamily: 'Inter' }}>{lead.phone_number}</td>
+                                                <td>
+                                                    <div style={{ maxWidth: '300px' }}>
+                                                        <div style={{ fontWeight: '600', color: '#3b82f6', marginBottom: '4px' }}>
+                                                            {lead.property_name || "General Inquiry"}
+                                                        </div>
+                                                        <div style={{ fontSize: '13px', color: '#64748b', whiteSpace: 'pre-wrap' }}>
+                                                            {lead.purpose}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td><span className="sa-badge-type standard">{lead.source || "N/A"}</span></td>
+                                                <td>
+                                                    <span className="sa-admin-tag" style={{ backgroundColor: '#f0fdf4', color: '#16a34a', borderColor: '#dcfce7' }}>
+                                                        Active
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {filtered.length === 0 && (
+                                            <tr>
+                                                <td colSpan="6" className="sa-empty">No leads found in the database.</td>
+                                            </tr>
+                                        )}
+                                        {filtered.length > 0 && (
+                                            <tr>
+                                                <td colSpan="6" style={{ padding: '20px', background: '#f8fafc' }}>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                        <div style={{ fontSize: '13px', color: '#64748b' }}>
+                                                            Showing {((leadPage - 1) * ITEMS_PER_PAGE) + 1} to {Math.min(leadPage * ITEMS_PER_PAGE, filtered.length)} of {filtered.length} leads
+                                                        </div>
+                                                        <div style={{ display: 'flex', gap: '10px' }}>
+                                                            <button 
+                                                                className="sa-btn-primary" 
+                                                                disabled={leadPage === 1}
+                                                                onClick={() => setLeadPage(p => p - 1)}
+                                                                style={{ backgroundColor: leadPage === 1 ? '#e2e8f0' : '#3b82f6', color: leadPage === 1 ? '#94a3b8' : '#fff', cursor: leadPage === 1 ? 'not-allowed' : 'pointer' }}
+                                                            >
+                                                                Previous
+                                                            </button>
+                                                            <button 
+                                                                className="sa-btn-primary" 
+                                                                disabled={leadPage >= totalPages}
+                                                                onClick={() => setLeadPage(p => p + 1)}
+                                                                style={{ backgroundColor: leadPage >= totalPages ? '#e2e8f0' : '#3b82f6', color: leadPage >= totalPages ? '#94a3b8' : '#fff', cursor: leadPage >= totalPages ? 'not-allowed' : 'pointer' }}
+                                                            >
+                                                                Next
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </>
+                                );
+                            })()}
+</tbody>
+                    </table>
+                </div>
             )}
 
             {/* VIEW: SETTINGS */}

@@ -49,6 +49,7 @@ import SuperAdminDashboard from './compoent/AdminDashBoard/SuperAdmin/SuperAdmin
 import { Notification } from "./compoent/Dashboard/Notification";
 import PGUpdateForm from "./compoent/ovikalistingform/PGUpdateForm";
 import  ContactMain  from "./compoent/ContactUs/ContactMain";
+import CareerSupport from "./compoent/CareerSupport/CareerSupport";
 
 
 // 🔒 Protected Route Component
@@ -141,6 +142,7 @@ function App() {
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/refund-cancellation-policy" element={<RefundAndCancellation />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/career-support" element={<CareerSupport />} />
 
           {/* =========================
               🔒 PROTECTED ADMIN DASHBOARD SECTION
