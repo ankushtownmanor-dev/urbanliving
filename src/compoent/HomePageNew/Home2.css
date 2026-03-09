@@ -9,7 +9,7 @@
   box-shadow: 0 1px 1px 1px rgba(50, 48, 48, 0.2);
   transition: all 0.3s ease;
   max-width: 100%;
-  margin: 0 auto;
+  margin-top: -65px;
 }
 
 .living-heading {

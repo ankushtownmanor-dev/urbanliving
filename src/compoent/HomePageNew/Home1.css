@@ -1,4 +1,9 @@
-/* Home1.css — sirf desktop search bar + calendar styles */
+/* ══════════════════════════════════════════════════════════
+   Home1.css  —  zoom-proof layout
+   Key principle: NO fixed px for positions/heights on outer
+   containers. Use %, min(), max(), clamp() everywhere.
+   px is OK only for small UI details (borders, radii, gaps).
+══════════════════════════════════════════════════════════ */
 
 @keyframes ovika-fadeUp {
   from { opacity: 0; transform: translateY(20px); }
@@ -9,16 +14,219 @@
   to   { opacity: 1; transform: translate(-50%, 50%); }
 }
 
-/* ── Desktop Search Section ── */
+/* ── Root wrapper ──────────────────────────────────────── */
+.home1-root {
+  position: relative;
+  width: 100%;
+  /* 
+    Use dvh so it's always the real viewport height regardless of zoom.
+    Falls back to vh for older browsers.
+  */
+  height: 100dvh;
+  min-height: 520px;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+/* ── Background container ──────────────────────────────── */
+.home1-bg {
+  position: absolute;
+  overflow: hidden;
+}
+
+/* Mobile bg: full bleed, top 75% */
+.home1-bg--mobile {
+  inset: 0;
+  width: 100%;
+  height: 75%;
+  border-radius: 0;
+}
+
+/* Desktop bg: inset with rounded corners */
+.home1-bg--desktop {
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  width: calc(100% - 2rem);
+  height: calc(100% - 6rem);
+  border-radius: 1.5rem;
+  /* Negative margin-top handled by parent page, not here */
+}
+
+.home1-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.home1-bg-img--desktop {
+  border-radius: 1.5rem;
+}
+
+.home1-mobile-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(8,4,0,0.82) 0%, rgba(8,4,0,0.18) 52%, transparent 100%);
+}
+
+/* ── Content wrapper ───────────────────────────────────── */
+.home1-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.home1-content--mobile {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: 0 1rem 2rem;
+}
+
+.home1-content--desktop {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  /*
+    Use % padding instead of fixed px so it scales with zoom.
+    4% ≈ ~55px on 1400px wide, ~40px on 1000px wide — fluid.
+  */
+  padding: 5% 4% 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  /* Push content down to account for navbar */
+  margin-top: -80px;
+}
+
+/* ── Desktop right block (heading + cards) ─────────────── */
+.home1-right-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: clamp(0.5rem, 1.5vh, 1rem);
+  margin-bottom: clamp(1rem, 2.5vh, 2rem);
+  /* 
+    Use max-width % so it never exceeds ~35% of screen
+    and scales with zoom naturally 
+  */
+  max-width: min(400px, 32%);
+  width: 100%;
+}
+
+.home1-heading-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+}
+
+.home1-heading {
+  color: white;
+  /* clamp: min 1rem, preferred 1.4vw, max 1.75rem */
+  font-size: clamp(1rem, 1.4vw, 1.75rem);
+  font-weight: 400;
+  line-height: 1.25;
+  margin: 0;
+  text-align: right;
+  white-space: nowrap;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.home1-subheading {
+  color: rgba(255,255,255,0.75);
+  /* clamp: min 0.65rem, preferred 0.75vw, max 0.9rem */
+  font-size: clamp(0.65rem, 0.75vw, 0.9rem);
+  margin: 0;
+  text-align: right;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* ── Desktop cards ─────────────────────────────────────── */
+.home1-cards {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.25rem, 0.5vh, 0.45rem);
+  width: 100%;
+  align-self: flex-end;
+}
+
+.home1-card {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: rgba(26,16,6,0.6);
+  border-left: 3px solid #d97706;
+  border-top: 1px solid rgba(217,119,6,0.25);
+  border-right: 1px solid rgba(217,119,6,0.15);
+  border-bottom: 1px solid rgba(217,119,6,0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 0.55rem;
+  /* Use % vertical padding so cards stay proportional at any zoom */
+  padding: clamp(0.35rem, 0.7vh, 0.6rem) 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s;
+}
+.home1-card:hover {
+  background: rgba(26,16,6,0.8);
+}
+
+.home1-card-icon {
+  /* clamp keeps emoji from getting too big or small */
+  font-size: clamp(0.85rem, 1vw, 1.1rem);
+  flex-shrink: 0;
+}
+
+.home1-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.home1-card-title {
+  color: #fff;
+  font-size: clamp(0.7rem, 0.8vw, 0.85rem);
+  font-weight: 300;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.home1-card-subtitle {
+  color: #f5c97a;
+  font-size: clamp(0.6rem, 0.68vw, 0.72rem);
+  font-weight: 300;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.home1-card-desc {
+  color: rgba(220,210,195,0.9);
+  font-size: clamp(0.55rem, 0.62vw, 0.68rem);
+  line-height: 1.35;
+  margin: 0;
+}
+
+/* ══════════════════════════════════════════════════════════
+   Desktop Search Section
+   KEY: position absolute with % bottom, centered with %
+══════════════════════════════════════════════════════════ */
 .ovika-search-section {
   position: absolute;
-  bottom: 1rem;
+  bottom: 6rem;
   left: 50%;
   transform: translate(-50%, 50%);
   display: flex;
   flex-direction: column;
   align-items: normal;
   gap: 0.4rem;
+  /* % width so it shrinks/grows with viewport at all zoom levels */
   width: 92%;
   max-width: 1100px;
   z-index: 100;
@@ -30,14 +238,16 @@
   align-items: center;
   gap: 0.4rem;
   color: white;
-  font-size: 0.95rem;
+  font-size: clamp(0.78rem, 0.9vw, 1rem);
   font-weight: 400;
   letter-spacing: 0.4px;
   text-shadow: 0 2px 6px rgba(0,0,0,0.4);
 }
 
-.pin-icon { margin-right: 2px;
-color: rgb(245, 166, 35) }
+.pin-icon {
+  margin-right: 2px;
+  color: rgb(245, 166, 35);
+}
 
 .ovika-search-bar-container {
   background: rgba(255,255,255,0.97);
@@ -47,8 +257,13 @@ color: rgb(245, 166, 35) }
   padding: 3px 4px 3px 6px;
   box-shadow: 0 12px 36px rgba(0,0,0,0.2);
   width: 100%;
-  height: 46px;
+  /* 
+    Use min() so bar never gets too tall at high zoom.
+    clamp between 40px and 50px based on 4.5vh.
+  */
+  height: clamp(40px, 4.5vh, 50px);
   transition: box-shadow 0.3s;
+  box-sizing: border-box;
 }
 
 .ovika-search-bar-container:focus-within {
@@ -66,6 +281,7 @@ color: rgb(245, 166, 35) }
   height: 100%;
   border-radius: 40px;
   transition: background 0.2s;
+  min-width: 0;
 }
 
 .ovika-search-field:hover { background: #fdf8f0; }
@@ -82,10 +298,11 @@ color: rgb(245, 166, 35) }
   flex-direction: column;
   justify-content: center;
   gap: 2px;
+  min-width: 0;
 }
 
 .field-label {
-  font-size: 0.55rem;
+  font-size: clamp(0.48rem, 0.52vw, 0.58rem);
   color: #999;
   font-weight: 600;
   text-transform: uppercase;
@@ -94,10 +311,13 @@ color: rgb(245, 166, 35) }
 }
 
 .field-value {
-  font-size: 0.78rem;
+  font-size: clamp(0.7rem, 0.78vw, 0.85rem);
   color: #1a1a1a;
   font-weight: 500;
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .date-input {
@@ -106,10 +326,11 @@ color: rgb(245, 166, 35) }
   outline: none;
   color: #1a1a1a;
   font-family: inherit;
-  font-size: 0.76rem;
+  font-size: clamp(0.68rem, 0.76vw, 0.82rem);
   font-weight: 500;
   cursor: pointer;
-  width: 100px;
+  /* Use % max-width instead of fixed px */
+  width: clamp(80px, 9vw, 110px);
   padding: 0;
   margin: 0;
 }
@@ -146,7 +367,7 @@ color: rgb(245, 166, 35) }
 .city-option:hover { background: #fff8ee; color: #c8851a; }
 
 .guests-field {
-  min-width: 150px;
+  min-width: 130px;
   justify-content: space-between;
 }
 
@@ -163,6 +384,7 @@ color: rgb(245, 166, 35) }
   transition: all 0.2s;
   padding: 0;
   color: #666;
+  flex-shrink: 0;
 }
 
 .guest-controls button:hover {
@@ -176,15 +398,15 @@ color: rgb(245, 166, 35) }
   color: #fff;
   border: none;
   border-radius: 50px;
-  padding: 0 20px;
+  padding: 0 clamp(14px, 1.5vw, 22px);
   display: flex;
   align-items: center;
   gap: 6px;
   font-weight: 600;
-  font-size: 0.82rem;
+  font-size: clamp(0.72rem, 0.82vw, 0.9rem);
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
-  height: 38px;
+  height: clamp(32px, 3.8vh, 40px);
   white-space: nowrap;
   flex-shrink: 0;
   letter-spacing: 0.3px;
@@ -196,7 +418,7 @@ color: rgb(245, 166, 35) }
   box-shadow: 0 8px 24px rgba(245,166,35,0.6);
 }
 
-/* ── Calendar Popup (used in both mobile/desktop) ── */
+/* ── Calendar Popup ────────────────────────────────────── */
 .ovika-cal-popup {
   position: absolute;
   bottom: calc(100% + 10px);
