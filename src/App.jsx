@@ -142,7 +142,7 @@ function App() {
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/refund-cancellation-policy" element={<RefundAndCancellation />} />
           <Route path="/faq" element={<FAQ />} />
-          <Route path="/career-support" element={<CareerSupport />} />
+          <Route path="/career-support" element={<RequireAuth><CareerSupport /></RequireAuth>} />
 
           {/* =========================
               🔒 PROTECTED ADMIN DASHBOARD SECTION
