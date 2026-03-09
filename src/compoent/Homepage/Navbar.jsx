@@ -1853,7 +1853,7 @@ export default function Navbar() {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 8, flex: 1 }}>
                 {[
-                  { icon: "🏠", label: "Home", sub: "Return to homepage", action: () => { setSideMenuOpen(false); navigate("/"); } },
+                  // { icon: "🏠", label: "Home", sub: "Return to homepage", action: () => { setSideMenuOpen(false); navigate("/"); } },
                   { icon: "🏖️", label: "Book a Stay", sub: "Browse and book properties", action: () => { setSideMenuOpen(false); navigate("/properties"); } },
                   { icon: "✨", label: "Signature Stays", sub: "Our curated premium properties", action: handleSignatureStaysClick },
                   { icon: "🏘️", label: "Become a Host", sub: "List your property and earn", action: goListingPage },
