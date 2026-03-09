@@ -120,7 +120,7 @@ const CareerSupport = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="message">What do you know about Ovika? *Resume Link *</label>
+              <label htmlFor="message">What do you know about OvikaLiving? *Resume Link *</label>
               <textarea
                 id="message"
                 name="message"
