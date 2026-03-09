@@ -106,6 +106,7 @@ export default function SuperAdminDashboard() {
   const [ownerPage, setOwnerPage] = useState(1);
   const [guestPage, setGuestPage] = useState(1);
   const [leadPage, setLeadPage] = useState(1);
+  const [leadFilterSource, setLeadFilterSource] = useState("ALL");
   const ITEMS_PER_PAGE = 10;
 
   // --- Fetch Data ---
@@ -1365,7 +1366,22 @@ export default function SuperAdminDashboard() {
                 <div className="sa-table-container">
                     <div className="sa-table-header-row">
                         <h3>Leads & Form Inquiries</h3>
-                        <div style={{ display: 'flex', gap: '12px' }}>
+                        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                            <select 
+                                className="sa-search-input" 
+                                style={{ width: '200px' }}
+                                value={leadFilterSource}
+                                onChange={(e) => {
+                                    setLeadFilterSource(e.target.value);
+                                    setLeadPage(1);
+                                }}
+                            >
+                                <option value="ALL">All Sources</option>
+                                <option value="Career Support Form">Career Support Form</option>
+                                {Array.from(new Set(leads.map(l => l.source))).filter(s => s && s !== "Career Support Form").map(source => (
+                                    <option key={source} value={source}>{source}</option>
+                                ))}
+                            </select>
                             <input 
                                 type="text" 
                                 placeholder="Search leads..." 
@@ -1393,6 +1409,9 @@ export default function SuperAdminDashboard() {
                         <tbody>
                             {(() => {
                                 const filtered = leads.filter(l => {
+                                    // Source Filter
+                                    if (leadFilterSource !== "ALL" && l.source !== leadFilterSource) return false;
+
                                     if(!searchTerm) return true;
                                     const s = searchTerm.toLowerCase();
                                     return (l.name || "").toLowerCase().includes(s) || 
