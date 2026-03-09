@@ -64,21 +64,24 @@ const Home2 = () => {
      {
       img: "/newnew.jpeg",
       title: "Luxury Living Spaces",
-      text: "Ovika Luxe offers high-end, fully serviced apartments for those who value elegance, comfort, and privacy. With sophisticated interiors, modern amenities, and prime locations, Ovika Luxe is crafted for families, business travelers, and individuals seeking a luxurious living experience.",
+      text:"Ovika Signature offers premium fully furnished apartments and suites designed for refined urban living. Enjoy stylish interiors, a kitchenette, and the freedom of seamless self check-in and check-out. Perfect for families, executives, and business travelers seeking privacy, comfort, and a luxurious stay in prime locations.",
+      // text: "Ovika Luxe offers high-end, fully serviced apartments for those who value elegance, comfort, and privacy. With sophisticated interiors, modern amenities, and prime locations, Ovika Luxe is crafted for families, business travelers, and individuals seeking a luxurious living experience.",
       btn: "Know more",
       link: "/tmluxe"
     },
     {
       img: "/pglivingspace.jpeg",
       title: "PG Living Spaces",
-      text: "Ovika Stay offers fully managed and affordable PG rentals tailored for students and working professionals. With clean, secure, and comfortable living spaces, we ensure a hassle-free stay that feels just like home – only better.",
+      text:"Ovika PG helps you discover verified and trusted PG accommodations across Noida & Greater Noida. Our platform aggregates a wide range of comfortable and affordable PG options for students and working professionals. Browse listings, compare amenities, and choose the stay that suits your lifestyle - all in one place.",
+      // text: "Ovika Stay offers fully managed and affordable PG rentals tailored for students and working professionals. With clean, secure, and comfortable living spaces, we ensure a hassle-free stay that feels just like home – only better.",
       btn: "View PGs",
       link: "/properties?category=PG"
     },
     {
       img: "/colivingspace.jpeg",
       title: "Co- Living Spaces",
-      text: "Ovika Hive brings together vibrant communities in thoughtfully designed shared spaces. Whether you’re a young professional, a remote worker, or a creative soul, our co-living homes offer the perfect blend of privacy, social connection, and flexibility – so you can live, work, and grow together.",
+      text:"Ovika Co-Living brings modern community-driven co-living spaces for young professionals and urban residents. perience shared living that blends comfort, flexibility, and connection in thoughtfully designed homes",
+      // text: "Ovika Hive brings together vibrant communities in thoughtfully designed shared spaces. Whether you’re a young professional, a remote worker, or a creative soul, our co-living homes offer the perfect blend of privacy, social connection, and flexibility – so you can live, work, and grow together.",
       btn: "Coming Soon",
       link: "/"
     },
