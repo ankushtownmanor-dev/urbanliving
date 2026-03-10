@@ -31,15 +31,16 @@
 .cs-hero-img {
   position: absolute;
   inset: 0;
-  background-image: url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=80');
+  background-image: url('./careerdesktop.png');
   background-size: cover;
-  background-position: center 30%;
-  filter: brightness(0.35);
+  background-position: center center;
+  /* filter: brightness(0.90); */
 }
 
 .cs-hero-overlay {
   position: absolute;
   inset: 0;
+  background:linear-gradient(to right, rgb(0 0 0) 0%, rgb(29 18 6 / 7%) 45%, rgb(18 15 12 / 0%) 100%);
 }
 
 .cs-hero-content {
@@ -861,7 +862,14 @@
 }
 
 @media (max-width: 640px) {
-  .cs-hero-content { padding: 90px 20px 60px; }
+  /* Mobile hero — switch to portrait image */
+  .cs-hero-img {
+    background-image: url('./careermobile.png');
+    background-position: top center;
+    filter: brightness(0.90);
+  }
+  .cs-hero-content { padding: 90px 20px 60px;
+  margin-top: -238px; }
   .cs-stats { flex-wrap: wrap; gap: 24px; }
   .cs-stat { border-right: none; padding: 0 24px; flex: 0 0 40%; }
   .cs-form-card { padding: 30px 20px; }
