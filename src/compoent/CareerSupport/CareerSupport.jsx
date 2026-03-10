@@ -329,7 +329,7 @@ export default function CareerSupport() {
             <div className="cs-about-img-col">
               <div className="cs-about-img-main">
                 <img
-                  src="/public/mission.jpeg"
+                  src="/mission.jpeg"
                   alt="OvikaLiving property"
                 />
               </div>
