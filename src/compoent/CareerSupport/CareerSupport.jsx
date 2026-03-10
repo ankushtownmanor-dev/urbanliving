@@ -169,7 +169,7 @@ const roles = [
   {
     title: "Software Intern",
     dept: "Engineering",
-    type: "Internship · 3–6 Months",
+    type: "Internship · 3–4 Months",
     location: "Noida",
     Icon: FiCode,
     tags: ["React", "Node.js", "REST APIs"],
@@ -178,7 +178,7 @@ const roles = [
   {
     title: "AI Marketing Intern",
     dept: "Marketing & Growth",
-    type: "Internship · 3–6 Months",
+    type: "Internship · 3–4 Months",
     location: "Noida",
     Icon: MdOutlineRocketLaunch,
     tags: ["AI Tools", "Content Strategy", "Growth Hacking"],
