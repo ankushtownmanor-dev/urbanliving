@@ -1,8 +1,5 @@
 /* ══════════════════════════════════════════════════════════
    Home1.css  —  zoom-proof layout
-   Key principle: NO fixed px for positions/heights on outer
-   containers. Use %, min(), max(), clamp() everywhere.
-   px is OK only for small UI details (borders, radii, gaps).
 ══════════════════════════════════════════════════════════ */
 
 @keyframes ovika-fadeUp {
@@ -18,10 +15,6 @@
 .home1-root {
   position: relative;
   width: 100%;
-  /* 
-    Use dvh so it's always the real viewport height regardless of zoom.
-    Falls back to vh for older browsers.
-  */
   height: 100dvh;
   min-height: 520px;
   box-sizing: border-box;
@@ -34,7 +27,6 @@
   overflow: hidden;
 }
 
-/* Mobile bg: full bleed, top 75% */
 .home1-bg--mobile {
   inset: 0;
   width: 100%;
@@ -42,7 +34,6 @@
   border-radius: 0;
 }
 
-/* Desktop bg: inset with rounded corners */
 .home1-bg--desktop {
   top: 1rem;
   left: 1rem;
@@ -51,7 +42,6 @@
   width: calc(100% - 2rem);
   height: calc(100% - 6rem);
   border-radius: 1.5rem;
-  /* Negative margin-top handled by parent page, not here */
 }
 
 .home1-bg-img {
@@ -92,59 +82,61 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
-  /*
-    Use % padding instead of fixed px so it scales with zoom.
-    4% ≈ ~55px on 1400px wide, ~40px on 1000px wide — fluid.
-  */
   padding: 5% 4% 0;
   max-width: 1400px;
   margin: 0 auto;
-  /* Push content down to account for navbar */
   margin-top: -80px;
+  position: relative;
 }
 
-/* ── Desktop right block (heading + cards) ─────────────── */
+/* ══════════════════════════════════════════════════════════
+   Desktop right block — CARDS only, stays RIGHT (original)
+══════════════════════════════════════════════════════════ */
 .home1-right-block {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: clamp(0.5rem, 1.5vh, 1rem);
   margin-bottom: clamp(1rem, 2.5vh, 2rem);
-  /* 
-    Use max-width % so it never exceeds ~35% of screen
-    and scales with zoom naturally 
-  */
   max-width: min(400px, 32%);
   width: 100%;
 }
 
+/* ══════════════════════════════════════════════════════════
+   Heading block — ABSOLUTE, LEFT side, above model's head
+══════════════════════════════════════════════════════════ */
 .home1-heading-block {
+  position: absolute;
+  top: 17%;
+  left: 4%;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 0.3rem;
+  max-width: 64%;
+  z-index: 20;
+  /* font-size: 300px; */
 }
 
+/* BIGGER font size */
 .home1-heading {
   color: white;
-  /* clamp: min 1rem, preferred 1.4vw, max 1.75rem */
-  font-size: clamp(1rem, 1.4vw, 1.75rem);
-  font-weight: 400;
+  font-size: clamp(2.2rem, 1.8vw, 2.1rem);
+  font-weight: 500;
   line-height: 1.25;
   margin: 0;
-  text-align: right;
-  white-space: nowrap;
+  text-align: left;
+  white-space: normal;
   text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
+/* BIGGER font size */
 .home1-subheading {
   color: rgba(255,255,255,0.75);
-  /* clamp: min 0.65rem, preferred 0.75vw, max 0.9rem */
-  font-size: clamp(0.65rem, 0.75vw, 0.9rem);
+  font-size: clamp(0.78rem, 0.92vw, 1.05rem);
   margin: 0;
-  text-align: right;
+  text-align: left;
   line-height: 1.4;
-  white-space: nowrap;
 }
 
 /* ── Desktop cards ─────────────────────────────────────── */
@@ -168,7 +160,6 @@
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 0.55rem;
-  /* Use % vertical padding so cards stay proportional at any zoom */
   padding: clamp(0.35rem, 0.7vh, 0.6rem) 0.75rem;
   text-decoration: none;
   color: inherit;
@@ -179,7 +170,6 @@
 }
 
 .home1-card-icon {
-  /* clamp keeps emoji from getting too big or small */
   font-size: clamp(0.85rem, 1vw, 1.1rem);
   flex-shrink: 0;
 }
@@ -215,7 +205,6 @@
 
 /* ══════════════════════════════════════════════════════════
    Desktop Search Section
-   KEY: position absolute with % bottom, centered with %
 ══════════════════════════════════════════════════════════ */
 .ovika-search-section {
   position: absolute;
@@ -226,7 +215,6 @@
   flex-direction: column;
   align-items: normal;
   gap: 0.4rem;
-  /* % width so it shrinks/grows with viewport at all zoom levels */
   width: 92%;
   max-width: 1100px;
   z-index: 100;
@@ -257,10 +245,6 @@
   padding: 3px 4px 3px 6px;
   box-shadow: 0 12px 36px rgba(0,0,0,0.2);
   width: 100%;
-  /* 
-    Use min() so bar never gets too tall at high zoom.
-    clamp between 40px and 50px based on 4.5vh.
-  */
   height: clamp(40px, 4.5vh, 50px);
   transition: box-shadow 0.3s;
   box-sizing: border-box;
@@ -329,7 +313,6 @@
   font-size: clamp(0.68rem, 0.76vw, 0.82rem);
   font-weight: 500;
   cursor: pointer;
-  /* Use % max-width instead of fixed px */
   width: clamp(80px, 9vw, 110px);
   padding: 0;
   margin: 0;
