@@ -170,7 +170,7 @@ const roles = [
     title: "Software Intern",
     dept: "Engineering",
     type: "Internship · 3–6 Months",
-    location: "Noida / Remote",
+    location: "Noida",
     Icon: FiCode,
     tags: ["React", "Node.js", "REST APIs"],
     desc: "Work directly with our product & engineering team to build features used by thousands of guests and hosts across India.",
@@ -179,7 +179,7 @@ const roles = [
     title: "AI Marketing Intern",
     dept: "Marketing & Growth",
     type: "Internship · 3–6 Months",
-    location: "Remote / Noida",
+    location: "Noida",
     Icon: MdOutlineRocketLaunch,
     tags: ["AI Tools", "Content Strategy", "Growth Hacking"],
     desc: "Use cutting-edge AI tools to drive campaigns, create viral content, and grow OvikaLiving's digital presence at scale.",
@@ -302,6 +302,7 @@ export default function CareerSupport() {
               className="cs-btn-outline-white"
               onClick={() =>
                 document.getElementById("cs-roles")?.scrollIntoView({ behavior: "smooth" })
+                
               }
             >
               View Open Roles
