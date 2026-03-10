@@ -287,12 +287,11 @@ export default function CareerSupport() {
             We're Hiring
           </div>
           <h1 className="cs-hero-title">
-            Build the<br />
-            <span>Future of Living</span>
+            Build India’s <br />
+            <span> Next Generation Living Platform</span>
           </h1>
           <p className="cs-hero-sub">
-            Join OvikaLiving — where every team member helps redefine how
-            India experiences premium rental living.
+           Join OvikaLiving and help build a trusted platform aggregating short-term and long-term rental homes, co-living spaces, and premium stays across India.
           </p>
           <div className="cs-hero-btns">
             <button className="cs-btn-gold" onClick={scrollToForm}>
@@ -330,7 +329,7 @@ export default function CareerSupport() {
             <div className="cs-about-img-col">
               <div className="cs-about-img-main">
                 <img
-                  src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=900&q=80"
+                  src="/public/mission.jpeg"
                   alt="OvikaLiving property"
                 />
               </div>

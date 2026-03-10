@@ -2349,6 +2349,7 @@ export default function Navbar() {
               { label: "Signature Stays", action: handleSignatureStaysClick },
               { label: "Become a Host", action: handleBecomeHostClick },
             ].map((btn) => (
+              
               <button
                 key={btn.label}
                 onClick={btn.action}
