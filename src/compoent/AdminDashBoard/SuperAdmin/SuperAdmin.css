@@ -518,3 +518,81 @@ body {
   .sa-table-header-row { flex-direction: column; align-items: stretch; }
   .sa-search-input { width: 100%; }
 }
+
+/* Super Admin Login Styles */
+.sa-login-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #0f172a; /* Same as sidebar bg */
+  padding: 20px;
+}
+
+.sa-login-card {
+  background: white;
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.sa-login-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.sa-login-header .sa-brand {
+  color: #0f172a;
+  justify-content: center;
+  margin-bottom: 12px;
+  font-size: 24px;
+}
+
+.sa-login-header p {
+  color: #64748b;
+  font-size: 14px;
+  margin: 0;
+}
+
+.sa-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sa-login-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.sa-login-error {
+  color: #ef4444;
+  font-size: 13px;
+  text-align: center;
+  margin: 0;
+  background: #fef2f2;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #fee2e2;
+}
+
+.sa-logout-btn {
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sa-logout-btn:hover {
+  background: #f1f5f9;
+  color: #ef4444;
+  border-color: #fecaca;
+}

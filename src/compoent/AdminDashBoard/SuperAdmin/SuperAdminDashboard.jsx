@@ -58,6 +58,12 @@ const AMENITIES_MASTER = {
 };
 
 export default function SuperAdminDashboard() {
+  const [isSuperAdminAuthenticated, setIsSuperAdminAuthenticated] = useState(() => {
+    return sessionStorage.getItem('sa_auth') === 'true';
+  });
+  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
+  const [loginError, setLoginError] = useState('');
+
   const [view, setView] = useState('dashboard'); // 'dashboard', 'properties', 'users', 'bookings', 'finance', 'settings', 'leads'
   const [properties, setProperties] = useState([]);
   const [bookings, setBookings] = useState([]);
@@ -303,10 +309,31 @@ export default function SuperAdminDashboard() {
   };
 
   useEffect(() => {
-    fetchAllData();
-  }, []);
+    if (isSuperAdminAuthenticated) {
+      fetchAllData();
+    }
+  }, [isSuperAdminAuthenticated]);
 
   // --- Handlers ---
+  const handleSALogin = (e) => {
+    e.preventDefault();
+    // Setting hardcoded credentials as requested for "id/password" protection
+    const ADMIN_EMAIL = "superadmin@urbanliving.com";
+    const ADMIN_PASS = "urban@2024"; // You can change this or I can make it dynamic
+
+    if (loginForm.email === ADMIN_EMAIL && loginForm.password === ADMIN_PASS) {
+      setIsSuperAdminAuthenticated(true);
+      sessionStorage.setItem('sa_auth', 'true');
+      setLoginError('');
+    } else {
+      setLoginError('Invalid Email or Password');
+    }
+  };
+
+  const handleSALogout = () => {
+    setIsSuperAdminAuthenticated(false);
+    sessionStorage.removeItem('sa_auth');
+  };
 
   
   // --- Edit Handlers ---
@@ -630,6 +657,45 @@ export default function SuperAdminDashboard() {
   });
 
   // --- Render ---
+  if (!isSuperAdminAuthenticated) {
+    return (
+      <div className="sa-login-overlay">
+        <div className="sa-login-card">
+          <div className="sa-login-header">
+            <span className="sa-brand">Ovika<span className="sa-badge">Admin</span></span>
+            <p>Please sign in to access control panel</p>
+          </div>
+          <form onSubmit={handleSALogin} className="sa-login-form">
+            <div className="sa-input-group">
+              <label>Email Address</label>
+              <input 
+                type="email" 
+                placeholder="Enter admin email"
+                value={loginForm.email}
+                onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
+                required
+              />
+            </div>
+            <div className="sa-input-group">
+              <label>Password</label>
+              <input 
+                type="password" 
+                placeholder="Enter password"
+                value={loginForm.password}
+                onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+                required
+              />
+            </div>
+            {loginError && <p className="sa-login-error">{loginError}</p>}
+            <button type="submit" className="sa-btn-primary sa-login-btn">
+              Acess Dashboard
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) return <div className="sa-loading-screen">Loading Super Admin Dashboard...</div>;
 
   return (
@@ -686,6 +752,7 @@ export default function SuperAdminDashboard() {
             </h2>
             <div className="sa-user-controls">
                 <span className="sa-admin-tag">Super Admin</span>
+                <button onClick={handleSALogout} className="sa-logout-btn">Logout</button>
             </div>
         </header>
 
