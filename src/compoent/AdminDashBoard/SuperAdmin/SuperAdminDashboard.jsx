@@ -662,7 +662,7 @@ export default function SuperAdminDashboard() {
       <div className="sa-login-overlay">
         <div className="sa-login-card">
           <div className="sa-login-header">
-            <span className="sa-brand">Ovika<span className="sa-badge">Admin</span></span>
+            <span className="sa-brand">OvikaLiving<span className="sa-badge">Admin</span></span>
             <p>Please sign in to access control panel</p>
           </div>
           <form onSubmit={handleSALogin} className="sa-login-form">
