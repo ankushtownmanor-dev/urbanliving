@@ -50,6 +50,7 @@ import { Notification } from "./compoent/Dashboard/Notification";
 import PGUpdateForm from "./compoent/ovikalistingform/PGUpdateForm";
 import  ContactMain  from "./compoent/ContactUs/ContactMain";
 import CareerSupport from "./compoent/CareerSupport/CareerSupport";
+import CookieConsent from "./compoent/CookieConsent/CookieConsent";
 
 
 // 🔒 Protected Route Component
@@ -165,6 +166,9 @@ function App() {
 
         {/* Bottom Footer */}
         <HoomieFooter />
+        
+        {/* Cookie Consent Banner */}
+        <CookieConsent />
       </Router>
     </AuthProvider>
   );
