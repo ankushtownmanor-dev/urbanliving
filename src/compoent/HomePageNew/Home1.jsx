@@ -723,7 +723,7 @@ export default function Home1() {
               display: 'flex', flexDirection: 'column', gap: '0.25rem',
             }}>
               <h1 style={{ color: '#fff', fontSize: '16px', fontWeight: 500, lineHeight: 1.3, margin: 0, textAlign: 'left', textShadow: '0 2px 12px rgba(0,0,0,0.95)' }}>
-                <span style={{ color: '#f5a623' }}>OvikaLiving.com</span>{' '}– India's Smart Stay Marketplace
+                <span style={{ color: '#f5a623' }}>OvikaLiving.com</span>{' '}– India's Smart Stay Marketplace For Flexible Urban Living
               </h1>
               <p style={{ color: 'rgba(255,255,255,0.82)', fontSize: '0.56rem', margin: 0, textAlign: 'left', lineHeight: 1.4, textShadow: '0 1px 6px rgba(0,0,0,0.75)' }}>
                 Book Verified PG's, Apartments and Premium Homes across India — Nightly or Monthly
@@ -824,7 +824,7 @@ export default function Home1() {
             <div className="home1-right-block">
               <div className="home1-heading-block">
                 <h1 className="home1-heading">
-                  <span style={{ color: '#f5a623' }}>OvikaLiving.com</span> – India's Smart Stay Marketplace
+                  <span style={{ color: '#f5a623' }}>OvikaLiving.com</span> – India's Smart Stay Marketplace For Flexible Urban Living
                 </h1>
                 <p className="home1-subheading">
                   Book Verified PG's, Apartments and Premium Homes across India — Nightly or Monthly
