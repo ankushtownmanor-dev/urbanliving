@@ -318,7 +318,7 @@ export default function SuperAdminDashboard() {
   const handleSALogin = (e) => {
     e.preventDefault();
     // Setting hardcoded credentials as requested for "id/password" protection
-    const ADMIN_EMAIL = "superadmin@urbanliving.com";
+    const ADMIN_EMAIL = "townmanoritteam@gmail.com";
     const ADMIN_PASS = "urban@2024"; // You can change this or I can make it dynamic
 
     if (loginForm.email === ADMIN_EMAIL && loginForm.password === ADMIN_PASS) {
