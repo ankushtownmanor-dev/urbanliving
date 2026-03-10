@@ -31,7 +31,7 @@
 .cs-hero-img {
   position: absolute;
   inset: 0;
-  background-image: url('./careerdesktop.png');
+  background-image: url('/public/careerdesktop.png');
   background-size: cover;
   background-position: center center;
   /* filter: brightness(0.90); */
@@ -864,7 +864,7 @@
 @media (max-width: 640px) {
   /* Mobile hero — switch to portrait image */
   .cs-hero-img {
-    background-image: url('./careermobile.png');
+    background-image: url('/public/careermobile.png');
     background-position: top center;
     filter: brightness(0.90);
   }
