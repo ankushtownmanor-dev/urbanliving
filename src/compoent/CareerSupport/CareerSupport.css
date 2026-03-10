@@ -1,143 +1,870 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&display=swap');
 
-.career-support-container {
-  min-height: 100vh;
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ══════════════════════════════════════════
+   BASE
+══════════════════════════════════════════ */
+.cs-page {
+  font-family: 'Poppins', sans-serif;
+  background: #fdf8f2;
+  color: #232323;
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════════════════
+   HERO
+══════════════════════════════════════════ */
+.cs-hero {
+  min-height: 92vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: #fff;
+}
+
+.cs-hero-img {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=80');
+  background-size: cover;
+  background-position: center 30%;
+  filter: brightness(0.35);
+}
+
+.cs-hero-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.cs-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 100px 48px 80px;
+  width: 100%;
+}
+
+.cs-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(194, 119, 43, 0.15);
+  border: 1px solid rgba(194, 119, 43, 0.5);
+  color: #e8ab5c;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 28px;
+  animation: csSlideUp 0.7s ease both;
+}
+
+.cs-hero-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #c2772b;
+  animation: csPulse 2s ease infinite;
+}
+
+@keyframes csPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(1.5); }
+}
+
+.cs-hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 6.5vw, 82px);
+  font-weight: 700;
+  line-height: 1.05;
+  color: #ffffff;
+  margin-bottom: 24px;
+  animation: csSlideUp 0.8s ease 0.1s both;
+}
+
+.cs-hero-title span {
+  color: #c2772b;
+  font-style: normal;
+}
+
+.cs-hero-sub {
+  font-size: clamp(15px, 1.6vw, 18px);
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 520px;
+  line-height: 1.75;
+  margin-bottom: 44px;
+  font-weight: 300;
+  animation: csSlideUp 0.9s ease 0.2s both;
+}
+
+.cs-hero-btns {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  animation: csSlideUp 1s ease 0.3s both;
+}
+
+@keyframes csSlideUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════════ */
+.cs-btn-gold {
+  padding: 13px 34px;
+  background: linear-gradient(135deg, #c2772b 0%, #a85e1f 100%);
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 18px rgba(194, 119, 43, 0.38);
+  letter-spacing: 0.3px;
+}
+
+.cs-btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(194, 119, 43, 0.5);
+  background: linear-gradient(135deg, #d4882f 0%, #b8681f 100%);
+}
+
+.cs-btn-outline-white {
+  padding: 13px 34px;
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 100px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+}
+
+.cs-btn-outline-white:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.65);
+  transform: translateY(-2px);
+}
+
+.cs-btn-outline-gold {
+  padding: 13px 34px;
+  background: transparent;
+  color: #c2772b;
+  border: 1.5px solid #c2772b;
+  border-radius: 100px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+}
+
+.cs-btn-outline-gold:hover {
+  background: #c2772b;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(194, 119, 43, 0.3);
+}
+
+/* ══════════════════════════════════════════
+   STATS BAR
+══════════════════════════════════════════ */
+.cs-stats {
+  background: #ffffff;
+  border-top: 1px solid #f0e8d8;
+  border-bottom: 1px solid #f0e8d8;
   display: flex;
   justify-content: center;
-  align-items: center;
-  background-color: #f4f7f6;
-  font-family: 'Poppins', sans-serif;
-  padding: 80px 20px;
+  gap: 0;
+  padding: 36px 24px;
 }
 
-.career-content {
-  background-color: #fff;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  padding: 40px;
-  width: 100%;
-  max-width: 600px;
+.cs-stat {
   text-align: center;
+  padding: 0 52px;
+  border-right: 1px solid #f0e8d8;
 }
 
-.career-content h1 {
-  font-size: 32px;
+.cs-stat:last-child {
+  border-right: none;
+}
+
+.cs-stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 34px;
   font-weight: 700;
-  color: #333;
-  margin-bottom: 10px;
+  color: #c2772b;
+  display: block;
 }
 
-.career-content p {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 30px;
+.cs-stat-label {
+  font-size: 12px;
+  color: #9a7a5a;
+  font-weight: 400;
+  margin-top: 4px;
+  letter-spacing: 0.4px;
 }
 
-.career-form {
-  text-align: left;
+/* ══════════════════════════════════════════
+   SECTION WRAPPER
+══════════════════════════════════════════ */
+.cs-section {
+  padding: 90px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-row {
+.cs-section-tag {
   display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #c2772b;
+  margin-bottom: 14px;
+}
+
+.cs-section-tag::before {
+  content: '';
+  display: inline-block;
+  width: 22px;
+  height: 2px;
+  background: #c2772b;
+  border-radius: 2px;
+}
+
+.cs-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(30px, 4.5vw, 50px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: #1f1207;
+  margin-bottom: 18px;
+}
+
+.cs-section-desc {
+  font-size: 16px;
+  color: #7a6248;
+  line-height: 1.8;
+  max-width: 500px;
+}
+
+/* ══════════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════════ */
+.cs-reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+.cs-reveal.cs-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cs-d1 { transition-delay: 0.08s; }
+.cs-d2 { transition-delay: 0.18s; }
+.cs-d3 { transition-delay: 0.28s; }
+
+/* ══════════════════════════════════════════
+   MISSION / ABOUT SPLIT
+══════════════════════════════════════════ */
+.cs-about-wrap {
+  background: #fdf8f2;
+  border-top: 1px solid #f0e8d8;
+  border-bottom: 1px solid #f0e8d8;
+}
+
+.cs-about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: center;
+}
+
+.cs-about-img-col {
+  position: relative;
+}
+
+.cs-about-img-main {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(58, 36, 16, 0.18);
+}
+
+.cs-about-img-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cs-about-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(20px, 2.5vw, 30px);
+  font-style: normal;
+  color: #c2772b;
+  line-height: 1.45;
+  margin: 14px 0 22px;
+}
+
+.cs-about-text {
+  font-size: 15px;
+  color: #6a5038;
+  line-height: 1.85;
+  margin-bottom: 14px;
+}
+
+.cs-about-divider {
+  width: 38px;
+  height: 2px;
+  background: #c2772b;
+  border-radius: 2px;
+  margin: 24px 0;
+}
+
+/* ══════════════════════════════════════════
+   OPEN ROLES
+══════════════════════════════════════════ */
+.cs-roles-wrap {
+  background: #fdf8f2;
+  border-top: 1px solid #f0e8d8;
+  border-bottom: 1px solid #f0e8d8;
+}
+
+.cs-roles-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
   gap: 20px;
 }
 
-.form-row .form-group {
-  flex: 1;
+.cs-roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
 }
 
-.form-group label {
-  display: block;
+.cs-role-card {
+  background: #fff;
+  border: 1.5px solid #f0e8d8;
+  border-radius: 20px;
+  padding: 32px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(58, 36, 16, 0.06);
+}
+
+.cs-role-card::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #c2772b, #a85e1f);
+  border-radius: 3px 0 0 3px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cs-role-card:hover {
+  border-color: #c2772b;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(194, 119, 43, 0.14);
+}
+
+.cs-role-card:hover::after {
+  opacity: 1;
+}
+
+.cs-role-card.cs-active {
+  border-color: #c2772b;
+  background: #fffaf4;
+  box-shadow: 0 8px 32px rgba(194, 119, 43, 0.16);
+}
+
+.cs-role-card.cs-active::after {
+  opacity: 1;
+}
+
+.cs-role-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.cs-role-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #fef3e8;
+  border: 1px solid #f0d8b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c2772b;
+  flex-shrink: 0;
+}
+
+.cs-role-badge {
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: #fef3e8;
+  border: 1px solid #f0d8b8;
+  color: #a85e1f;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.cs-role-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 21px;
+  font-weight: 700;
+  color: #1f1207;
+  margin-bottom: 5px;
+}
+
+.cs-role-dept {
+  font-size: 13px;
+  color: #c2772b;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.cs-role-desc {
   font-size: 14px;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 8px;
+  color: #7a6248;
+  line-height: 1.7;
+  margin-bottom: 18px;
 }
 
-.form-group input, 
-.form-group textarea {
+.cs-role-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #a08060;
+  background: #fdf8f2;
+  border: 1px solid #f0e8d8;
+  padding: 4px 12px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.cs-role-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.cs-role-tag {
+  font-size: 11px;
+  padding: 3px 10px;
+  background: rgba(194, 119, 43, 0.08);
+  border: 1px solid rgba(194, 119, 43, 0.18);
+  color: #c2772b;
+  border-radius: 100px;
+  font-weight: 500;
+}
+
+.cs-role-apply-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #c2772b 0%, #a85e1f 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+  box-shadow: 0 3px 12px rgba(194, 119, 43, 0.25);
+}
+
+.cs-role-apply-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(194, 119, 43, 0.4);
+}
+
+/* ══════════════════════════════════════════
+   PERKS
+══════════════════════════════════════════ */
+.cs-perks-wrap {
+  background: #fdf8f2;
+  border-top: 1px solid #f0e8d8;
+  border-bottom: 1px solid #f0e8d8;
+}
+
+.cs-perks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 52px;
+}
+
+.cs-perk-card {
+  background: #ffffff;
+  border: 1.5px solid #ede0cc;
+  border-radius: 18px;
+  padding: 30px 26px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(58, 36, 16, 0.06);
+}
+
+.cs-perk-card:hover {
+  border-color: rgba(194, 119, 43, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(194, 119, 43, 0.1);
+}
+
+.cs-perk-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #fef3e8;
+  border: 1px solid #f0d8b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c2772b;
+  margin-bottom: 18px;
+}
+
+.cs-perk-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f1207;
+  margin-bottom: 7px;
+}
+
+.cs-perk-desc {
+  font-size: 13px;
+  color: #8a6c50;
+  line-height: 1.65;
+}
+
+/* ══════════════════════════════════════════
+   PHOTO STRIP
+══════════════════════════════════════════ */
+.cs-photo-strip {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 12px;
+  height: 340px;
+  padding: 0 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.cs-photo-strip-item {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.cs-photo-strip-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.cs-photo-strip-item:hover img {
+  transform: scale(1.04);
+}
+
+/* ══════════════════════════════════════════
+   FORM SECTION
+══════════════════════════════════════════ */
+.cs-form-wrap {
+  background: #fdf8f2;
+  border-top: 1px solid #f0e8d8;
+}
+
+.cs-form-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 90px 24px 100px;
+}
+
+.cs-form-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.cs-form-card {
+  background: #ffffff;
+  border: 1.5px solid #ede0cc;
+  border-radius: 24px;
+  padding: 44px 40px;
+  box-shadow: 0 8px 40px rgba(58, 36, 16, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.cs-form-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, #c2772b 50%, transparent 100%);
+}
+
+.cs-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.cs-form-group {
+  margin-bottom: 20px;
+}
+
+.cs-form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #5a4030;
+  margin-bottom: 7px;
+  letter-spacing: 0.2px;
+}
+
+.cs-form-group input,
+.cs-form-group textarea {
   width: 100%;
   padding: 12px 15px;
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
-  font-size: 15px;
+  background: #ffffff;
+  border: 1.5px solid #e0ceb5;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #232323;
   font-family: 'Poppins', sans-serif;
   outline: none;
   transition: all 0.3s ease;
   box-sizing: border-box;
 }
 
-.form-group input:focus, 
-.form-group textarea:focus {
-  border-color: #c98b3e;
-  box-shadow: 0 0 8px rgba(201, 139, 62, 0.2);
+.cs-form-group input::placeholder,
+.cs-form-group textarea::placeholder {
+  color: #c0a88a;
 }
 
-.submit-btn {
+.cs-form-group input:focus,
+.cs-form-group textarea:focus {
+  border-color: #c2772b;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(194, 119, 43, 0.1);
+}
+
+.cs-form-group textarea {
+  resize: vertical;
+}
+
+.cs-char-count {
+  font-size: 11px;
+  color: #b8a090;
+  text-align: right;
+  margin-top: 5px;
+}
+
+.cs-role-banner {
+  margin-bottom: 24px;
+  padding: 11px 16px;
+  background: #fef8f0;
+  border: 1px solid #f0d8b0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cs-role-banner-text {
+  font-size: 13px;
+  color: #a85e1f;
+  font-weight: 500;
+}
+
+.cs-role-banner-close {
+  background: none;
+  border: none;
+  color: #b8a090;
+  cursor: pointer;
+  font-size: 17px;
+  line-height: 1;
+  padding: 0 3px;
+  transition: color 0.2s;
+}
+
+.cs-role-banner-close:hover {
+  color: #c2772b;
+}
+
+.cs-submit-btn {
   width: 100%;
-  padding: 14px;
-  background: linear-gradient(90deg, #b62305 0%, #000 100%);
+  padding: 15px;
+  background: linear-gradient(135deg, #c2772b 0%, #a85e1f 100%);
   color: #fff;
   border: none;
-  border-radius: 10px;
-  font-size: 16px;
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 20px;
+  margin-top: 6px;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 18px rgba(194, 119, 43, 0.3);
 }
 
-.submit-btn:hover {
+.cs-submit-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(182, 35, 5, 0.3);
+  box-shadow: 0 8px 28px rgba(194, 119, 43, 0.45);
 }
 
-.submit-btn:disabled {
-  background: #ccc;
+.cs-submit-btn:disabled {
+  background: #e8d8c0;
+  color: #a08060;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
-.success-message {
-  padding: 20px;
+/* ══════════════════════════════════════════
+   SUCCESS
+══════════════════════════════════════════ */
+.cs-success {
+  text-align: center;
+  padding: 56px 16px;
 }
 
-.success-icon {
-  width: 80px;
-  height: 80px;
-  background-color: #4CAF50;
-  color: #fff;
-  font-size: 40px;
-  line-height: 80px;
+.cs-success-ring {
+  width: 84px;
+  height: 84px;
   border-radius: 50%;
-  margin: 0 auto 20px;
+  background: #fef3e8;
+  border: 2px solid #c2772b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c2772b;
+  margin: 0 auto 24px;
+  animation: csScaleIn 0.45s ease;
 }
 
-.back-btn {
-  margin-top: 20px;
-  background: none;
-  border: 2px solid #b62305;
-  color: #b62305;
-  padding: 10px 25px;
-  border-radius: 10px;
+@keyframes csScaleIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.cs-success-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  color: #1f1207;
+  margin-bottom: 10px;
+}
+
+.cs-success-desc {
+  color: #7a6248;
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 360px;
+  margin: 0 auto 28px;
+}
+
+.cs-back-btn {
+  background: transparent;
+  border: 1.5px solid #c2772b;
+  color: #c2772b;
+  padding: 11px 26px;
+  border-radius: 100px;
   cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all 0.3s;
 }
 
-.back-btn:hover {
-  background-color: #b62305;
+.cs-back-btn:hover {
+  background: #c2772b;
   color: #fff;
 }
 
-@media (max-width: 600px) {
-  .form-row {
-    flex-direction: column;
-    gap: 0;
-  }
+/* ══════════════════════════════════════════
+   FOOTER CTA
+══════════════════════════════════════════ */
+.cs-footer-cta {
+  background: #fdf8f2;
+  border-top: 1px solid #f0e8d8;
+  text-align: center;
+  padding: 76px 24px;
+}
+
+.cs-footer-cta-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(26px, 4vw, 46px);
+  color: #1f1207;
+  margin-bottom: 14px;
+}
+
+.cs-footer-cta-title span {
+  color: #c2772b;
+  font-style: normal;
+}
+
+.cs-footer-cta-sub {
+  color: #9a7a5a;
+  font-size: 15px;
+  margin-bottom: 34px;
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .cs-about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .cs-about-img-main { aspect-ratio: 16 / 9; }
+  .cs-photo-strip { grid-template-columns: 1fr; height: auto; }
+  .cs-photo-strip-item { height: 220px; }
+  .cs-photo-strip-item:nth-child(2),
+  .cs-photo-strip-item:nth-child(3) { display: none; }
+}
+
+@media (max-width: 640px) {
+  .cs-hero-content { padding: 90px 20px 60px; }
+  .cs-stats { flex-wrap: wrap; gap: 24px; }
+  .cs-stat { border-right: none; padding: 0 24px; flex: 0 0 40%; }
+  .cs-form-card { padding: 30px 20px; }
+  .cs-form-row { grid-template-columns: 1fr; }
+  .cs-roles-grid { grid-template-columns: 1fr; }
 }

@@ -1,149 +1,598 @@
-import React, { useState } from "react";
+// import React, { useState } from "react";
+// import "./CareerSupport.css";
+
+// const CareerSupport = () => {
+//   const [formData, setFormData] = useState({
+//     name: "",
+//     email: "",
+//     phone_number: "",
+//     message: ""
+//   });
+//   const [isSubmitting, setIsSubmitting] = useState(false);
+//   const [showSuccess, setShowSuccess] = useState(false);
+
+//   const handleInputChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData(prev => ({
+//       ...prev,
+//       [name]: value
+//     }));
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setIsSubmitting(true);
+
+//     try {
+//       // Structure precisely matching working forms and documentation screenshot
+//       const payload = {
+//         name: formData.name,
+//         phone_number: formData.phone_number,
+//         purpose: `Email: ${formData.email} | Application Details: ${formData.message}`,
+//         source: "Career Support Form",
+//         city: "N/A",
+//         property_id: 0,
+//         property_name: "Career Page"
+//       };
+
+//       console.log("Submitting payload:", payload);
+
+//       const response = await fetch("https://www.townmanor.ai/api/formlead/leads", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(payload),
+//       });
+
+//       if (response.ok) {
+//         console.log("Form submitted successfully");
+//         setShowSuccess(true);
+//         setFormData({ name: "", email: "", phone_number: "", message: "" });
+//       } else {
+//         const errorData = await response.json().catch(() => ({ message: "Unknown error" }));
+//         console.error("Server Error Response:", errorData);
+//         throw new Error(errorData.message || "Submission failed");
+//       }
+//     } catch (error) {
+//       console.error("Error submitting application:", error);
+//       alert("Failed to submit. Please try again or check your phone/email format.");
+//     } finally {
+//       setIsSubmitting(false);
+//     }
+//   };
+
+//   return (
+//     <div className="career-support-container">
+//       <div className="career-content">
+//         <h1>Career Support</h1>
+//         <p>Join our team and help us redefine smart urban living.</p>
+
+//         {showSuccess ? (
+//           <div className="success-message">
+//             <div className="success-icon">✓</div>
+//             <h2>Application Submitted!</h2>
+//             <p>Thank you for your interest in OvikaLiving. We'll review your application and get back to you soon.</p>
+//             <button onClick={() => setShowSuccess(false)} className="back-btn">Submit Another</button>
+//           </div>
+//         ) : (
+//           <form className="career-form" onSubmit={handleSubmit}>
+//             <div className="form-group">
+//               <label htmlFor="name">Full Name *</label>
+//               <input
+//                 type="text"
+//                 id="name"
+//                 name="name"
+//                 value={formData.name}
+//                 onChange={handleInputChange}
+//                 required
+//                 placeholder="Enter your full name"
+//               />
+//             </div>
+
+//             <div className="form-row">
+//               <div className="form-group">
+//                 <label htmlFor="email">Email Address *</label>
+//                 <input
+//                   type="email"
+//                   id="email"
+//                   name="email"
+//                   value={formData.email}
+//                   onChange={handleInputChange}
+//                   required
+//                   placeholder="Enter your email"
+//                 />
+//               </div>
+//               <div className="form-group">
+//                 <label htmlFor="phone_number">Phone Number *</label>
+//                 <input
+//                   type="tel"
+//                   id="phone_number"
+//                   name="phone_number"
+//                   value={formData.phone_number}
+//                   onChange={handleInputChange}
+//                   required
+//                   placeholder="Enter 10-digit number"
+//                   pattern="[0-9]{10}"
+//                   maxLength="10"
+//                 />
+//               </div>
+//             </div>
+
+//             <div className="form-group">
+//               <label htmlFor="message">What do you know about OvikaLiving? *Resume Link *</label>
+//               <textarea
+//                 id="message"
+//                 name="message"
+//                 value={formData.message}
+//                 onChange={handleInputChange}
+//                 required
+//                 rows="6"
+//                 maxLength="400"
+//                 placeholder="Tell us what you know about OvikaLiving and paste your resume link (Google Drive/LinkedIn) here..."
+//               ></textarea>
+//               <small style={{ color: "#888", display: "block", marginTop: "5px", textAlign: "right" }}>
+//                 {formData.message.length}/400 characters
+//               </small>
+//             </div>
+
+//             <button type="submit" className="submit-btn" disabled={isSubmitting}>
+//               {isSubmitting ? "Submitting..." : "Submit Application"}
+//             </button>
+//           </form>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default CareerSupport;
+
+import React, { useState, useEffect, useRef } from "react";
 import "./CareerSupport.css";
 
-const CareerSupport = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone_number: "",
-    message: ""
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+// react-icons imports
+import { FiCode, FiTrendingUp, FiMapPin, FiArrowRight, FiX, FiCheck } from "react-icons/fi";
+import { MdOutlineRocketLaunch } from "react-icons/md";
+import { BsBuildingsFill } from "react-icons/bs";
+import {
+  HiOutlineHome,
+  HiOutlineChartBar,
+  HiOutlineAcademicCap,
+  HiOutlineHeart,
+  HiOutlinePaperAirplane,
+  HiOutlineCurrencyRupee,
+} from "react-icons/hi";
 
-  const handleInputChange = (e) => {
+/* ── DATA ──────────────────────────────── */
+const roles = [
+  {
+    title: "Software Intern",
+    dept: "Engineering",
+    type: "Internship · 3–6 Months",
+    location: "Noida / Remote",
+    Icon: FiCode,
+    tags: ["React", "Node.js", "REST APIs"],
+    desc: "Work directly with our product & engineering team to build features used by thousands of guests and hosts across India.",
+  },
+  {
+    title: "AI Marketing Intern",
+    dept: "Marketing & Growth",
+    type: "Internship · 3–6 Months",
+    location: "Remote / Noida",
+    Icon: MdOutlineRocketLaunch,
+    tags: ["AI Tools", "Content Strategy", "Growth Hacking"],
+    desc: "Use cutting-edge AI tools to drive campaigns, create viral content, and grow OvikaLiving's digital presence at scale.",
+  },
+];
+
+const perks = [
+  { Icon: BsBuildingsFill,         title: "Industry-Level Work",     desc: "Ship real products used by 50,000+ guests. No dummy projects — you'll own features from day one." },
+  { Icon: HiOutlineChartBar,       title: "Smart Leadership",        desc: "Work under founders and senior leaders who've built and scaled products across India's top proptech firms." },
+  { Icon: FiCode,                  title: "Deep Tech Exposure",      desc: "Hands-on with modern stacks — React, Node, AI tooling, and cloud infra. Build skills that matter in 2025." },
+  { Icon: HiOutlineAcademicCap,    title: "Learning & Mentorship",   desc: "Dedicated learning budget, weekly knowledge sessions, and 1:1 mentorship from domain experts." },
+  { Icon: HiOutlinePaperAirplane,  title: "Travel Allowance",        desc: "Site visits, team offsites, and property tours covered — because great products need real-world context." },
+  { Icon: HiOutlineCurrencyRupee,  title: "Genuine Pay & Perks",     desc: "Competitive stipends, performance bonuses, and a clear path to a full-time role with ESOP eligibility." },
+];
+
+const stats = [
+  { number: "200+",  label: "Properties Listed" },
+  { number: "50K+",  label: "Happy Guests"      },
+  { number: "3",     label: "Cities & Growing"  },
+  { number: "4.8★",  label: "Avg. Rating"       },
+];
+
+const stripImages = [
+  { src: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&q=80",  alt: "Premium living space"      },
+  { src: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&q=80", alt: "Cozy apartment interior" },
+  { src: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80", alt: "Modern office workspace"  },
+];
+
+/* ── COMPONENT ─────────────────────────── */
+export default function CareerSupport() {
+  const [formData,     setFormData]     = useState({ name: "", email: "", phone_number: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess,  setShowSuccess]  = useState(false);
+  const [activeRole,   setActiveRole]   = useState(null);
+  const [visible,      setVisible]      = useState({});
+  const formRef     = useRef(null);
+  const observerRef = useRef(null);
+
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting)
+            setVisible((prev) => ({ ...prev, [e.target.dataset.section]: true }));
+        }),
+      { threshold: 0.13 }
+    );
+    document.querySelectorAll("[data-section]").forEach((el) =>
+      observerRef.current.observe(el)
+    );
+    return () => observerRef.current?.disconnect();
+  }, []);
+
+  const scrollToForm = () =>
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
-      // Structure precisely matching working forms and documentation screenshot
       const payload = {
-        name: formData.name,
-        phone_number: formData.phone_number,
-        purpose: `Email: ${formData.email} | Application Details: ${formData.message}`,
-        source: "Career Support Form",
-        city: "N/A",
-        property_id: 0,
-        property_name: "Career Page"
+        name:          formData.name,
+        phone_number:  formData.phone_number,
+        purpose:       `Email: ${formData.email} | Application Details: ${formData.message}`,
+        source:        "Career Support Form",
+        city:          "N/A",
+        property_id:   0,
+        property_name: "Career Page",
       };
-
-      console.log("Submitting payload:", payload);
-
-      const response = await fetch("https://www.townmanor.ai/api/formlead/leads", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+      const res = await fetch("https://www.townmanor.ai/api/formlead/leads", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(payload),
       });
-
-      if (response.ok) {
-        console.log("Form submitted successfully");
+      if (res.ok) {
         setShowSuccess(true);
         setFormData({ name: "", email: "", phone_number: "", message: "" });
       } else {
-        const errorData = await response.json().catch(() => ({ message: "Unknown error" }));
-        console.error("Server Error Response:", errorData);
-        throw new Error(errorData.message || "Submission failed");
+        throw new Error("failed");
       }
-    } catch (error) {
-      console.error("Error submitting application:", error);
-      alert("Failed to submit. Please try again or check your phone/email format.");
+    } catch {
+      alert("Submission failed. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const rv = (key) => `cs-reveal${visible[key] ? " cs-visible" : ""}`;
+
   return (
-    <div className="career-support-container">
-      <div className="career-content">
-        <h1>Career Support</h1>
-        <p>Join our team and help us redefine smart urban living.</p>
+    <div className="cs-page">
 
-        {showSuccess ? (
-          <div className="success-message">
-            <div className="success-icon">✓</div>
-            <h2>Application Submitted!</h2>
-            <p>Thank you for your interest in OvikaLiving. We'll review your application and get back to you soon.</p>
-            <button onClick={() => setShowSuccess(false)} className="back-btn">Submit Another</button>
+      {/* ═══ HERO ═══════════════════════════════════════════ */}
+      <section className="cs-hero">
+        <div className="cs-hero-img" />
+        <div className="cs-hero-overlay" />
+        <div className="cs-hero-content">
+          <div className="cs-hero-badge">
+            <span className="cs-hero-badge-dot" />
+            We're Hiring
           </div>
-        ) : (
-          <form className="career-form" onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="name">Full Name *</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-                placeholder="Enter your full name"
-              />
-            </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="email">Email Address *</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="Enter your email"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="phone_number">Phone Number *</label>
-                <input
-                  type="tel"
-                  id="phone_number"
-                  name="phone_number"
-                  value={formData.phone_number}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="Enter 10-digit number"
-                  pattern="[0-9]{10}"
-                  maxLength="10"
-                />
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="message">What do you know about OvikaLiving? *Resume Link *</label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleInputChange}
-                required
-                rows="6"
-                maxLength="400"
-                placeholder="Tell us what you know about OvikaLiving and paste your resume link (Google Drive/LinkedIn) here..."
-              ></textarea>
-              <small style={{ color: "#888", display: "block", marginTop: "5px", textAlign: "right" }}>
-                {formData.message.length}/400 characters
-              </small>
-            </div>
-
-            <button type="submit" className="submit-btn" disabled={isSubmitting}>
-              {isSubmitting ? "Submitting..." : "Submit Application"}
+          <h1 className="cs-hero-title">
+            Build the<br />
+            <span>Future of Living</span>
+          </h1>
+          <p className="cs-hero-sub">
+            Join OvikaLiving — where every team member helps redefine how
+            India experiences premium rental living.
+          </p>
+          <div className="cs-hero-btns">
+            <button className="cs-btn-gold" onClick={scrollToForm}>
+              Apply Now <FiArrowRight style={{ marginLeft: 6, verticalAlign: "middle" }} />
             </button>
-          </form>
-        )}
+            <button
+              className="cs-btn-outline-white"
+              onClick={() =>
+                document.getElementById("cs-roles")?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              View Open Roles
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ STATS BAR ══════════════════════════════════════ */}
+      {/* <div className="cs-stats">
+        {stats.map((s) => (
+          <div className="cs-stat" key={s.label}>
+            <span className="cs-stat-num">{s.number}</span>
+            <span className="cs-stat-label">{s.label}</span>
+          </div>
+        ))}
+      </div> */}
+
+      {/* ═══ ABOUT / MISSION ════════════════════════════════ */}
+      <div className="cs-about-wrap">
+        <div className="cs-section" data-section="about">
+          <div className={`cs-about-grid ${rv("about")}`}>
+
+            {/* image — no float card */}
+            <div className="cs-about-img-col">
+              <div className="cs-about-img-main">
+                <img
+                  src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=900&q=80"
+                  alt="OvikaLiving property"
+                />
+              </div>
+            </div>
+
+            {/* text */}
+            <div>
+              <div className="cs-section-tag">Our Mission</div>
+              <h2 className="cs-section-title">
+                More than a job.<br />A movement.
+              </h2>
+              <div className="cs-about-quote">
+                "Luxury living, made accessible."
+              </div>
+              <p className="cs-about-text">
+                OvikaLiving is a flagship rental brand of Townmanor Technologies
+                Pvt. Ltd. We curate premium short- and long-term accommodations
+                across India's fastest growing cities.
+              </p>
+              <div className="cs-about-divider" />
+              <p className="cs-about-text">
+                When you join us, you're not filling a seat — you're shaping how
+                an entire generation will rent, live, and experience spaces.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* ═══ PHOTO STRIP ════════════════════════════════════ */}
+      <div style={{ padding: "48px 0 0", background: "#fdf8f2" }}>
+        <div className="cs-photo-strip">
+          {stripImages.map((img) => (
+            <div className="cs-photo-strip-item" key={img.src}>
+              <img src={img.src} alt={img.alt} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ═══ OPEN ROLES ═════════════════════════════════════ */}
+      <div className="cs-roles-wrap" id="cs-roles">
+        <div className="cs-section" data-section="roles">
+
+          <div className={`cs-roles-head ${rv("roles")}`}>
+            <div>
+              <div className="cs-section-tag">Open Positions</div>
+              <h2 className="cs-section-title">
+                Find your<br />perfect role
+              </h2>
+            </div>
+            <p className="cs-section-desc" style={{ fontSize: 14, maxWidth: 260 }}>
+              Can't find the right fit? Apply anyway — we'll reach out when
+              something matches.
+            </p>
+          </div>
+
+          <div className="cs-roles-grid">
+            {roles.map((role, i) => {
+              const RoleIcon = role.Icon;
+              return (
+                <div
+                  key={role.title}
+                  className={`cs-role-card cs-reveal cs-d${i + 1}${visible["roles"] ? " cs-visible" : ""}${activeRole === i ? " cs-active" : ""}`}
+                >
+                  <div className="cs-role-top">
+                    <div className="cs-role-icon-box">
+                      <RoleIcon size={22} />
+                    </div>
+                    <span className="cs-role-badge">{role.type}</span>
+                  </div>
+
+                  <div className="cs-role-title">{role.title}</div>
+                  <div className="cs-role-dept">{role.dept}</div>
+                  <p className="cs-role-desc">{role.desc}</p>
+
+                  <div className="cs-role-location">
+                    <FiMapPin size={12} />
+                    {role.location}
+                  </div>
+
+                  <div className="cs-role-tags">
+                    {role.tags.map((t) => (
+                      <span className="cs-role-tag" key={t}>{t}</span>
+                    ))}
+                  </div>
+
+                  <button
+                    className="cs-role-apply-btn"
+                    onClick={() => { setActiveRole(i); scrollToForm(); }}
+                  >
+                    Apply Now <FiArrowRight style={{ marginLeft: 6, verticalAlign: "middle" }} />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* ═══ PERKS ══════════════════════════════════════════ */}
+      <div className="cs-perks-wrap">
+        <div className="cs-section" data-section="perks">
+          <div className={rv("perks")}>
+            <div className="cs-section-tag">Why OvikaLiving</div>
+            <h2 className="cs-section-title">Life at Ovika</h2>
+            <p className="cs-section-desc">
+              We invest in people who invest in our mission.
+            </p>
+          </div>
+          <div className="cs-perks-grid">
+            {perks.map((p, i) => {
+              const PerkIcon = p.Icon;
+              return (
+                <div
+                  key={p.title}
+                  className={`cs-perk-card cs-reveal cs-d${(i % 3) + 1}${visible["perks"] ? " cs-visible" : ""}`}
+                >
+                  <div className="cs-perk-icon-box">
+                    <PerkIcon size={22} />
+                  </div>
+                  <div className="cs-perk-title">{p.title}</div>
+                  <div className="cs-perk-desc">{p.desc}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* ═══ APPLICATION FORM ═══════════════════════════════ */}
+      <div className="cs-form-wrap" ref={formRef}>
+        <div className="cs-form-inner" data-section="form">
+
+          <div className={`cs-form-header ${rv("form")}`}>
+            <div className="cs-section-tag" style={{ justifyContent: "center" }}>
+              Apply Now
+            </div>
+            <h2 className="cs-section-title">
+              {activeRole !== null
+                ? `Apply for ${roles[activeRole].title}`
+                : "Submit Your Application"}
+            </h2>
+            <p className="cs-section-desc" style={{ margin: "0 auto", textAlign: "center" }}>
+              Tell us who you are and why Ovika is where you belong.
+            </p>
+          </div>
+
+          <div className={`cs-form-card cs-reveal cs-d1${visible["form"] ? " cs-visible" : ""}`}>
+
+            {showSuccess ? (
+              <div className="cs-success">
+                <div className="cs-success-ring">
+                  <FiCheck size={36} />
+                </div>
+                <h2 className="cs-success-title">Application Received!</h2>
+                <p className="cs-success-desc">
+                  Thank you for your interest in OvikaLiving. Our team will
+                  review your application and reach out within 5–7 business days.
+                </p>
+                <button
+                  className="cs-back-btn"
+                  onClick={() => { setShowSuccess(false); setActiveRole(null); }}
+                >
+                  Submit Another Application
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit}>
+
+                {activeRole !== null && (
+                  <div className="cs-role-banner">
+                    <span className="cs-role-banner-text">
+                      Applying for: <strong>{roles[activeRole].title}</strong>
+                    </span>
+                    <button
+                      type="button"
+                      className="cs-role-banner-close"
+                      onClick={() => setActiveRole(null)}
+                    >
+                      <FiX size={16} />
+                    </button>
+                  </div>
+                )}
+
+                <div className="cs-form-group">
+                  <label>Full Name *</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    placeholder="Your full name"
+                  />
+                </div>
+
+                <div className="cs-form-row">
+                  <div className="cs-form-group">
+                    <label>Email Address *</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      placeholder="you@email.com"
+                    />
+                  </div>
+                  <div className="cs-form-group">
+                    <label>Phone Number *</label>
+                    <input
+                      type="tel"
+                      name="phone_number"
+                      value={formData.phone_number}
+                      onChange={handleChange}
+                      required
+                      placeholder="10-digit number"
+                      pattern="[0-9]{10}"
+                      maxLength="10"
+                    />
+                  </div>
+                </div>
+
+                <div className="cs-form-group">
+                  <label>About You + Resume Link *</label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    rows={6}
+                    maxLength={400}
+                    placeholder="Tell us what you know about OvikaLiving and paste your resume link (Google Drive / LinkedIn)..."
+                  />
+                  <div className="cs-char-count">{formData.message.length} / 400</div>
+                </div>
+
+                <button type="submit" className="cs-submit-btn" disabled={isSubmitting}>
+                  {isSubmitting ? "Submitting..." : (
+                    <>Submit Application <FiArrowRight style={{ marginLeft: 6, verticalAlign: "middle" }} /></>
+                  )}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ═══ FOOTER CTA ═════════════════════════════════════ */}
+      <div className="cs-footer-cta">
+        <h2 className="cs-footer-cta-title">
+          Not ready to apply?<br />
+          <span>Stay in touch.</span>
+        </h2>
+        <p className="cs-footer-cta-sub">
+          Follow us for updates on new openings and life at OvikaLiving.
+        </p>
+        <button className="cs-btn-gold" onClick={scrollToForm}>
+          Apply Anyway <FiArrowRight style={{ marginLeft: 6, verticalAlign: "middle" }} />
+        </button>
+      </div>
+
     </div>
   );
-};
-
-export default CareerSupport;
+}
