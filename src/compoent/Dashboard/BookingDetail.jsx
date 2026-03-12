@@ -271,7 +271,7 @@ function BookingDetail() {
       doc.text(
         "This is a system-generated receipt by OvikaLiving.com and does not require a manual signature",
         x,
-        280
+        250
       );
 
       doc.save(`receipt-${b.id}.pdf`);
