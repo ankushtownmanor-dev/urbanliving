@@ -264,7 +264,7 @@ function BookingDetail() {
         b.payment_id || b.txnid
       );
       
-      row("Booking Status:", isPaid ? 'CONFIRMED' : (b.booking_status || b.status || "pending").toUpperCase());
+      row("Booking Status:", isPaid ? 'CONFIRMED' : (b.booking_status || b.status || "CONFIRMED").toUpperCase());
       row("Created:", formatDateTime(b.created_at));
 
       doc.setFontSize(10);
