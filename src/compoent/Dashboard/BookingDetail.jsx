@@ -52,7 +52,7 @@ function BookingDetail() {
             
             return {
               ...b,
-              booking_status: b.status || "pending",
+              booking_status: b.status || "completed",
               // Use property API data if available, fallback to booking data
               property_name: matchedProp?.name || b.property_name || b.property?.name || "Unknown Property",
               property_address: matchedProp?.address || b.property_address || b.property?.address || "Address not available",
@@ -264,7 +264,11 @@ function BookingDetail() {
         b.payment_id || b.txnid
       );
       
-      row("Booking Status:", isPaid ? 'CONFIRMED' : (b.booking_status || b.status || "CONFIRMED").toUpperCase());
+      let displayStatus = (b.booking_status || b.status || "").toUpperCase();
+      if (displayStatus === "PENDING" || !displayStatus) {
+        displayStatus = "SUCCESS";
+      }
+      row("Booking Status:", isPaid ? 'CONFIRMED' : displayStatus);
       row("Created:", formatDateTime(b.created_at));
 
       doc.setFontSize(10);
