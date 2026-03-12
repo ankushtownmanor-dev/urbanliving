@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import "./tmx9pf-form.css";
 import { AuthContext } from "../Login/AuthContext";
 
-const API_BASE = "https://townmanor.ai/api";
+const API_BASE = "https://www.townmanor.ai/api";
 const STORAGE_KEY = "user";
 
 const AMENITIES = {

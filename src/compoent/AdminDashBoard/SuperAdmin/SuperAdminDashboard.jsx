@@ -40,10 +40,10 @@ ChartJS.register(
   Filler
 );
 
-const API_PROPERTIES = "https://townmanor.ai/api/ovika/properties";
-const API_PROPERTIES_UPLOAD = "https://townmanor.ai/api/ovika/properties/upload";
-const API_BOOKINGS = "https://townmanor.ai/api/booking-request";
-const API_USERS = "https://townmanor.ai/api/users-list";
+const API_PROPERTIES = "https://www.townmanor.ai/api/ovika/properties";
+const API_PROPERTIES_UPLOAD = "https://www.townmanor.ai/api/ovika/properties/upload";
+const API_BOOKINGS = "https://www.townmanor.ai/api/booking-request";
+const API_USERS = "https://www.townmanor.ai/api/users-list";
 
 const SHARING_TYPES = ["Single Room", "Double Sharing", "Triple Sharing", "Four Sharing", "Dormitory"];
 const BEDROOM_TYPES = ["King Bed", "Queen Bed", "Single Bed", "Bunk Bed", "Twin Bed", "Other"];

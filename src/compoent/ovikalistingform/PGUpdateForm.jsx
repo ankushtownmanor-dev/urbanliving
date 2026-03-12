@@ -20,7 +20,7 @@ import {
   CheckCircle2
 } from "lucide-react";
 
-const API_BASE = "https://townmanor.ai/api";
+const API_BASE = "https://www.townmanor.ai/api";
 
 const PROPERTY_CATEGORIES = [
   { id: "Flat", label: "Flat / Apartment", sub: "Apartments, Penthouses, Studio", icon: <Building size={20} /> },
@@ -491,7 +491,7 @@ const PGUpdateForm = ({ propId: passedId, onComplete }) => {
       console.log("Submitting Robust Payload for ID:", idStr, payload);
 
       // Using the exact URL format from the SuperAdminDashboard
-      const res = await axios.put(`https://townmanor.ai/api/ovika/properties/${idStr}`, payload, {
+      const res = await axios.put(`https://www.townmanor.ai/api/ovika/properties/${idStr}`, payload, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true
       });

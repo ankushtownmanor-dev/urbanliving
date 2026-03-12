@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { FiSearch, FiMapPin, FiHeart, FiPlus, FiStar, FiX, FiMoon, FiCalendar, FiTag, FiHome, FiTrendingUp, FiAward, FiClock } from 'react-icons/fi';
 import { BiBed, BiBath, BiArea } from 'react-icons/bi';
 
-const API_BASE_URL = 'https://townmanor.ai/api/ovika';
+const API_BASE_URL = 'https://www.townmanor.ai/api/ovika';
 
 const CATEGORIES = [
   { id: 'PG', title: 'PG', minPrice: 0, maxPrice: 1499 },

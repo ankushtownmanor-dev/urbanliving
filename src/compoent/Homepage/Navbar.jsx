@@ -2422,7 +2422,7 @@ export default function Navbar() {
                   { icon: "📞", label: "Contact / Support", sub: "Get help and assistance", action: () => { setHamburgerMenuOpen(false); navigate("/contactus"); } },
                   // ── NEW CAREER OPTION ──
                   { icon: "💼", label: "Career", sub: "Join our growing team", action: goCareer },
-                  { icon: "🗺️", label: "Explore Townmanor", sub: "Discover amazing places", action: () => { setHamburgerMenuOpen(false); window.open("https://townmanor.ai/", "_blank"); } },
+                  { icon: "🗺️", label: "Explore Townmanor", sub: "Discover amazing places", action: () => { setHamburgerMenuOpen(false); window.open("https://www.townmanor.ai/", "_blank"); } },
                 ].map((item) => (
                   <button key={item.label} onClick={item.action} style={{ ...panelButtonStyle, padding: "8px 4px" }}>
                     <span style={{ ...iconBoxStyle, width: 28, height: 28, fontSize: 14 }}>{item.icon}</span>
@@ -2640,7 +2640,7 @@ export default function Navbar() {
                 { icon: "📞", label: "Contact / Support", sub: "Get help and assistance", action: () => { setHamburgerMenuOpen(false); navigate("/contactus"); } },
                 // ── NEW CAREER OPTION ──
                 { icon: "💼", label: "Career", sub: "Join our growing team", action: goCareer },
-                { icon: "🗺️", label: "Explore Townmanor", sub: "Discover amazing places", action: () => { setHamburgerMenuOpen(false); window.open("https://townmanor.ai/", "_blank"); } },
+                { icon: "🗺️", label: "Explore Townmanor", sub: "Discover amazing places", action: () => { setHamburgerMenuOpen(false); window.open("https://www.townmanor.ai/", "_blank"); } },
               ].map((item) => (
                 <button key={item.label} onClick={item.action} style={{ border: "none", background: "transparent", padding: "7px 4px", display: "flex", alignItems: "center", gap: 10, cursor: "pointer", width: "100%", borderRadius: 8, transition: "background 0.15s" }}
                   onMouseEnter={(e) => { e.currentTarget.style.background = "#fef9f2"; }}

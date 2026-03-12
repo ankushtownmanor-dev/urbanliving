@@ -112,7 +112,7 @@ const PropertyForm = () => {
       });
 
       // Make API call
-      const response = await fetch('http://localhost:3030/api/ovika/properties', {
+      const response = await fetch('https://www.townmanor.ai/api/ovika/properties', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

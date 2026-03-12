@@ -45,9 +45,9 @@ const getValidPropertyId = (frontendId) => {
   return String(frontendId);
 };
 
-const API_BASE_URL = 'https://townmanor.ai/api/ovika';
-const CALENDAR_API_BASE = 'https://townmanor.ai/api/calendar';
-const BOOKING_REQUEST_API = 'https://townmanor.ai/api/booking-request';
+const API_BASE_URL = 'https://www.townmanor.ai/api/ovika';
+const CALENDAR_API_BASE = 'https://www.townmanor.ai/api/booking/calendar';
+const BOOKING_REQUEST_API = 'https://www.townmanor.ai/api/booking-request';
 
 const getPhotoUrl = (photo) => {
   if (!photo) return null;
@@ -130,17 +130,8 @@ function buildDisabledDates(blockedRanges = []) {
 }
 
 async function getCalendar(propertyKey) {
-  try {
-    const res = await fetch(`${CALENDAR_API_BASE}/${propertyKey}`);
-    if (!res.ok) {
-      console.warn('Calendar API failed, continuing without blocked dates');
-      return { blocked: [] };
-    }
-    return await res.json();
-  } catch (error) {
-    console.warn('Calendar API error:', error);
-    return { blocked: [] };
-  }
+  // Calendar fetch disabled per user request
+  return { blocked: [] };
 }
 
 // IMAGE VIEWER COMPONENT
@@ -687,7 +678,7 @@ const PropertyDetailPage = () => {
     const fetchHostUser = async () => {
       if (!property?.owner_id) return;
       try {
-        const res = await axios.get("https://townmanor.ai/api/users-list");
+        const res = await axios.get("https://www.townmanor.ai/api/users-list");
         const users = Array.isArray(res.data) ? res.data : [];
         const matchedUser = users.find((u) => String(u.id) === String(property.owner_id));
         if (matchedUser) setHostUser({ name: matchedUser.username });
@@ -702,7 +693,7 @@ const PropertyDetailPage = () => {
     const fetchHostImage = async () => {
       if (!property?.owner_id) return;
       try {
-        const res = await axios.get(`https://townmanor.ai/api/user-details?user_id=${property.owner_id}`);
+        const res = await axios.get(`https://www.townmanor.ai/api/user-details?user_id=${property.owner_id}`);
         if (res.data?.profile_photo) setHostImage(res.data.profile_photo);
       } catch (error) {
         console.error("Failed to fetch host image", error);
@@ -713,7 +704,7 @@ const PropertyDetailPage = () => {
 
   useEffect(() => {
     if (user?.username && property?.id) {
-      axios.get(`https://townmanor.ai/api/booking-request?username=${user.username}`)
+      axios.get(`https://www.townmanor.ai/api/booking-request?username=${user.username}`)
         .then(res => {
           if (res.data.success && Array.isArray(res.data.data)) {
             setUserBookingRequests(res.data.data);
@@ -797,7 +788,7 @@ const PropertyDetailPage = () => {
         start_date: checkInDate,
         end_date: checkOutDate
       };
-      await axios.post('https://townmanor.ai/api/booking-request', payload, { headers: { 'Content-Type': 'application/json' } });
+      await axios.post('https://www.townmanor.ai/api/booking-request', payload, { headers: { 'Content-Type': 'application/json' } });
       showAlert('Request sent to owner for date confirmation.');
       setShowRequestSentPopup(true);
     } catch (err) {
@@ -967,7 +958,7 @@ const PropertyDetailPage = () => {
       let finalUsername = userLocal.username || username || 'guest';
       if (username) {
         try {
-          const userRes = await fetch(`https://townmanor.ai/api/user/${username}`);
+          const userRes = await fetch(`https://www.townmanor.ai/api/user/${username}`);
           if (userRes.ok) { const userData = await userRes.json(); userEmail = userData.email || userEmail; userPhone = userData.phone || userPhone; }
         } catch {}
       }
@@ -1005,8 +996,8 @@ const PropertyDetailPage = () => {
         discount_amount: pricing.discount || 0
       };
       
-      const { data } = await axios.post('https://townmanor.ai/api/booking', bookingDetails, { headers: { 'Content-Type': 'application/json' } });
-      const newBookingId = data?.booking?.id || data?.booking_id || data?.id || data?.bookingId || null;
+      const { data } = await axios.post(BOOKING_REQUEST_API, bookingDetails, { headers: { 'Content-Type': 'application/json' } });
+      const newBookingId = data?.booking?.id || data?.booking_id || data?.id || data?.bookingId || data?.request_id || null;
       if (!newBookingId) throw new Error('Booking created but booking ID not returned');
       localStorage.setItem('bookingId', String(newBookingId));
       localStorage.setItem('property_id', String(validPropertyId));
@@ -1031,11 +1022,11 @@ const PropertyDetailPage = () => {
         key: 'UvTrjC', txnid, amount: pricing.total.toFixed(2), productinfo: 'Room Booking',
         firstname: userData.name || username || 'Guest', email: userData.email || 'guest@townmanor.ai',
         phone: userData.phone || user?.phone || user?.phone_number || mobileNumber || '',
-        surl: `https://townmanor.ai/api/boster/payu/success?redirectUrl=https://ovikaliving.com/success`,
-        furl: `https://townmanor.ai/api/boster/payu/failure?redirectUrl=https://ovikaliving.com/failure`,
+        surl: `https://www.townmanor.ai/api/boster/payu/success?redirectUrl=https://ovikaliving.com/success`,
+        furl: `https://www.townmanor.ai/api/boster/payu/failure?redirectUrl=https://ovikaliving.com/failure`,
         udf1: String(bookingIdParam), service_provider: 'payu_paisa'
       };
-      const response = await axios.post('https://townmanor.ai/api/payu/payment', paymentData);
+      const response = await axios.post('https://www.townmanor.ai/api/payu/payment', paymentData);
       if (!response.data || !response.data.paymentUrl || !response.data.params) throw new Error('Invalid payment response received');
       const form = document.createElement('form');
       form.method = 'POST';

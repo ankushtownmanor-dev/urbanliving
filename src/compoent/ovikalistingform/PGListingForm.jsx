@@ -18,7 +18,7 @@ import {
   CheckCircle2
 } from "lucide-react";
 
-const API_BASE = "https://townmanor.ai/api";
+const API_BASE = "https://www.townmanor.ai/api";
 
 const PROPERTY_CATEGORIES = [
   { id: "Flat", label: "Flat / Apartment", sub: "Apartments, Penthouses, Studio", icon: <Building size={20} /> },

@@ -1617,7 +1617,7 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
       };
 
       // ✅ FIX 4: Correct URL - townmanor.ai (without www)
-      const apiUrl = `https://townmanor.ai/api/ovika/properties/${propertyId}`;
+      const apiUrl = `https://www.townmanor.ai/api/ovika/properties/${propertyId}`;
       
       console.log("=== UPDATE DEBUG ===");
       console.log("Property ID:", propertyId);
@@ -2174,7 +2174,7 @@ export default function DashBoardAdmin() {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.get("https://townmanor.ai/api/ovika/properties", { timeout: 10000 });
+      const res = await axios.get("https://www.townmanor.ai/api/ovika/properties", { timeout: 10000 });
       let all = [];
       if (!res || !res.data) { all = []; }
       else if (Array.isArray(res.data)) { all = res.data; }
@@ -2340,7 +2340,7 @@ export default function DashBoardAdmin() {
                       if (!window.confirm("Are you sure you want to delete this property?")) return;
                       try {
                         const id = prop.id || prop._id;
-                        await axios.delete(`https://townmanor.ai/api/ovika/properties/${id}`);
+                        await axios.delete(`https://www.townmanor.ai/api/ovika/properties/${id}`);
                         setProperties(prev => prev.filter(p => (p.id || p._id) !== id));
                       } catch (e) { alert("Failed to delete property"); console.error(e); }
                     }}

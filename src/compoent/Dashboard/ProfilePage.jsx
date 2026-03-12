@@ -4,8 +4,8 @@ import "./ProfilePage.css";
 
 import { AuthContext } from "../Login/AuthContext";
 
-const API_BASE_AUTH = "https://townmanor.ai/api/auth";
-const API_BASE = "https://townmanor.ai/api"; // General API base
+const API_BASE_AUTH = "https://www.townmanor.ai/api/auth";
+const API_BASE = "https://www.townmanor.ai/api"; // General API base
 
 const ProfilePage = () => {
   const { user, login } = useContext(AuthContext);

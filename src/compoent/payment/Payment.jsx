@@ -1338,27 +1338,11 @@ const OVIKA_PRICE_OVERRIDE = {
 };
 
 // ========== CALENDAR API HELPERS ==========
-const CALENDAR_API_BASE = 'https://townmanor.ai/api/calendar';
+const CALENDAR_API_BASE = 'https://www.townmanor.ai/api/booking/calendar';
 
 async function getCalendar(propertyKey) {
-  try {
-    const res = await fetch(`${CALENDAR_API_BASE}/${propertyKey}`, { 
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-    
-    if (!res.ok) {
-      console.warn('Calendar API response not OK, falling back to default data');
-      return { blocked: [] };
-    }
-    
-    return await res.json();
-  } catch (error) {
-    console.warn('Failed to fetch calendar, using default data:', error);
-    return { blocked: [] };
-  }
+  // Calendar fetch disabled per user request
+  return { blocked: [] };
 }
 
 // ========== DISABLED DATE BUILDER ==========
@@ -1726,7 +1710,7 @@ function Payment() {
       try {
         if (OVIKA_IDS.includes(numId)) {
           // ── Ovika API (TM Luxe 3) ──
-          const res = await fetch(`https://townmanor.ai/api/ovika/properties/${numId}`);
+          const res = await fetch(`https://www.townmanor.ai/api/ovika/properties/${numId}`);
           if (!res.ok) throw new Error(`Request failed: ${res.status}`);
           const json = await res.json();
           const raw = json?.data ?? json;
@@ -1745,7 +1729,7 @@ function Payment() {
           });
         } else {
           // ── Purani API (TM Luxe 1 & 2) ──
-          const res = await fetch(`https://townmanor.ai/api/properties/${id}`);
+          const res = await fetch(`https://www.townmanor.ai/api/properties/${id}`);
           const json = await res.json();
           if (json && json.success && json.property) {
             setProperty(json.property);
@@ -1782,7 +1766,7 @@ function Payment() {
       } catch (e) {
         console.error('Failed to load calendar blocked dates', e);
         try {
-          const res = await fetch('https://townmanor.ai/api/booking/dates');
+          const res = await fetch('https://www.townmanor.ai/api/booking/dates');
           const json = await res.json();
           const pid = Number(propertyId || '2');
           const bookings = Array.isArray(json?.bookings) ? json.bookings : [];
@@ -2165,7 +2149,7 @@ function Payment() {
       
       console.log('Booking details being sent:', bookingDetails);
       
-      const { data } = await axios.post('https://townmanor.ai/api/booking', bookingDetails, {
+      const { data } = await axios.post('https://www.townmanor.ai/api/booking-request', bookingDetails, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -2173,7 +2157,7 @@ function Payment() {
       
       console.log('Booking API response:', data);
       
-      const newBookingId = data?.booking?.id || data?.booking_id || data?.id || data?.bookingId || null;
+      const newBookingId = data?.booking?.id || data?.booking_id || data?.id || data?.bookingId || data?.request_id || null;
 
       if (data?.success && data?.booking) {
         const b = data.booking;
@@ -2230,15 +2214,15 @@ function Payment() {
         firstname: userData.name || username || 'Guest',
         email: userData.email || 'guest@townmanor.ai',
         phone: userData.phone || mobileNumber || '',
-        surl: `https://townmanor.ai/api/boster/payu/success?redirectUrl=https://ovikaliving.com/success`,
-        furl: `https://townmanor.ai/api/boster/payu/failure?redirectUrl=https://ovikaliving.com/failure`,
+        surl: `https://www.townmanor.ai/api/boster/payu/success?redirectUrl=https://ovikaliving.com/success`,
+        furl: `https://www.townmanor.ai/api/boster/payu/failure?redirectUrl=https://ovikaliving.com/failure`,
         udf1: String(bookingIdParam),
         service_provider: 'payu_paisa'
       };
 
       console.log('Payment data being sent:', paymentData);
 
-      const response = await axios.post('https://townmanor.ai/api/payu/payment', paymentData);
+      const response = await axios.post('https://www.townmanor.ai/api/payu/payment', paymentData);
 
       if (!response.data || !response.data.paymentUrl || !response.data.params) {
         throw new Error('Invalid payment response received');

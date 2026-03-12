@@ -332,7 +332,7 @@ import { useNavigate, useLocation } from "react-router";
 import { AuthContext } from "./AuthContext";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
-const API_BASE = "https://townmanor.ai/api";
+const API_BASE = "https://www.townmanor.ai/api";
 const STORAGE_KEY = "user"; // keep same as AuthContext
 
 export default function AuthPage() {

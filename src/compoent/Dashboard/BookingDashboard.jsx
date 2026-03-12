@@ -28,7 +28,7 @@ const BookingDashboard = () => {
           return;
         }
 
-        const res = await fetch("https://townmanor.ai/api/booking-request");
+        const res = await fetch("https://www.townmanor.ai/api/booking-request");
         const result = await res.json();
         
         let allData = [];

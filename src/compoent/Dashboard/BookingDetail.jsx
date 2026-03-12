@@ -29,7 +29,7 @@ function BookingDetail() {
 
       try {
         // 1. Fetch all booking requests
-        const bookingsRes = await fetch("https://townmanor.ai/api/booking-request");
+        const bookingsRes = await fetch("https://www.townmanor.ai/api/booking-request");
         if (!bookingsRes.ok) throw new Error(`Bookings HTTP ${bookingsRes.status}`);
         const bookingsResult = await bookingsRes.json();
 
@@ -38,7 +38,7 @@ function BookingDetail() {
         else if (Array.isArray(bookingsResult?.data)) bookingsList = bookingsResult.data;
 
         // 2. Fetch all properties to get accurate pricing
-        const propsRes = await fetch("https://townmanor.ai/api/ovika/properties");
+        const propsRes = await fetch("https://www.townmanor.ai/api/ovika/properties");
         if (!propsRes.ok) throw new Error(`Properties HTTP ${propsRes.status}`);
         const propsResult = await propsRes.json();
         const allProperties = Array.isArray(propsResult) ? propsResult : (propsResult?.data || []);
@@ -91,7 +91,7 @@ function BookingDetail() {
       const isActuallyPaid = isPaid || booking.status === 'confirmed' || booking.status === 'paid' || booking.payment_status === 'paid';
       
       // Consistent with Dashboard.jsx - point to booking-request for records found there
-      const url = `https://townmanor.ai/api/booking-request/${bookingId}/cancel`;
+      const url = `https://www.townmanor.ai/api/booking-request/${bookingId}/cancel`;
 
       console.log(`Cancelling Booking ID: ${bookingId} at ${url}`);
 

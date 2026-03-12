@@ -104,7 +104,7 @@ const ShareProperty = () => {
               Start Earning <span className="share-arrow">→</span>
             </button>
             <a
-              href="https://townmanor.ai/"
+              href="https://www.townmanor.ai/"
               target="_blank"
               rel="noreferrer"
               className="share-link"

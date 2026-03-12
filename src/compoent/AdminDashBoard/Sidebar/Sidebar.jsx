@@ -48,7 +48,7 @@ function Sidebar({ isOpen, onClose }) {
 
       try {
         const res = await axios.get(
-          `https://townmanor.ai/api/user-details?user_id=${userId}`
+          `https://www.townmanor.ai/api/user-details?user_id=${userId}`
         );
 
         if (res.data) {
