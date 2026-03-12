@@ -1333,6 +1333,9 @@ const isOvikaProperty = (id) => {
   const nid = Number(id);
   return nid >= 200 || OVIKA_IDS.includes(nid);
 };
+const OVIKA_PRICE_OVERRIDE = {
+  287: 4000,  // ← yahan Ovika Signature 3 ka sahi ID daalo
+};
 
 // ========== CALENDAR API HELPERS ==========
 const CALENDAR_API_BASE = 'https://townmanor.ai/api/calendar';
@@ -1734,7 +1737,8 @@ function Payment() {
             address: raw.address,
             images: Array.isArray(raw.photos) ? raw.photos : [],
             amenities: Array.isArray(raw.amenities) ? raw.amenities : [],
-            per_night_price: Number(raw.price) || 4000,   // ✅ Use actual price or fallback
+            // per_night_price: Number(raw.price) || 4000,   // ✅ Use actual price or fallback
+            per_night_price: OVIKA_PRICE_OVERRIDE[numId] ?? Number(raw.price) ?? 4000,
             latitude: raw.latitude,
             longitude: raw.longitude,
             calendar_key: raw.calendar_key || `prop-${raw.id}`

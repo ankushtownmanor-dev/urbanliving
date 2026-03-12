@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Calendar, Users, Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
