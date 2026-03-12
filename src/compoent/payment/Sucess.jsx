@@ -161,37 +161,38 @@ function Sucess() {
            img.onload = resolve;
            img.onerror = reject;
         });
-        const logoWidth = 45;
-        const logoHeight = 12;
+        const logoRatio = img.width / img.height;
+        const logoHeight = 32;
+        const logoWidth = logoHeight * logoRatio;
         
         // Top Left
         doc.addImage(img, 'PNG', 20, 10, logoWidth, logoHeight);
         
         // Bottom Right
-        doc.addImage(img, 'PNG', 190 - logoWidth, 275, logoWidth, logoHeight);
+        doc.addImage(img, 'PNG', 190 - logoWidth, 260, logoWidth, logoHeight);
       } catch (e) {
         console.error("Logo load failed", e);
       }
 
-      doc.setFontSize(26);
+      doc.setFontSize(22);
       doc.setTextColor(0, 0, 0); 
       doc.setFont(undefined, "bold");
-      doc.text("townmanor.ai", 105, 32, { align: "center" });
+      doc.text("Townmanor Technologies Pvt Ltd.", 105, 50, { align: "center" });
       
       doc.setFontSize(11);
       doc.setTextColor(100, 100, 100);
       doc.setFont(undefined, "normal");
-      doc.text("Payment Receipt", 105, 40, { align: "center" });
+      doc.text("Payment Receipt", 105, 58, { align: "center" });
       
       doc.setDrawColor(200, 200, 200);
-      doc.line(20, 48, 190, 48);
+      doc.line(20, 66, 190, 66);
       
       doc.setFontSize(10);
       doc.setTextColor(80, 80, 80);
-      doc.text(`Receipt ID: OVIKA-${bookingId}-${Date.now().toString().slice(-4)}`, 20, 55);
-      doc.text(`Date: ${new Date().toLocaleString()}`, 190, 55, { align: "right" });
+      doc.text(`Receipt ID: OVIKA-${bookingId}-${Date.now().toString().slice(-4)}`, 20, 73);
+      doc.text(`Date: ${new Date().toLocaleString()}`, 190, 73, { align: "right" });
 
-      let y = 68;
+      let y = 84;
       const x = 20;
 
       const sectionTitle = (title) => {
@@ -232,19 +233,19 @@ function Sucess() {
       y += 5;
 
       sectionTitle("Billing Information");
-      const total = Number(booking.total_price) || 0;
-      const gst = (total * 0.05 / 1.05);
-      const subtotal = total - gst;
+      const subtotal = Number(booking.total_price) || 0;
+      const gst = subtotal * 0.05;
+      const finalTotal = subtotal + gst;
 
       row("Subtotal:", `₹${subtotal.toFixed(2)}`);
       row("GST (5%):", `₹${gst.toFixed(2)}`);
       doc.setFont(undefined, "bold");
-      row("Total Paid:", `₹${total.toFixed(2)}`);
+      row("Total Paid:", `₹${finalTotal.toFixed(2)}`);
       y += 10;
 
       doc.setFontSize(11);
       doc.setTextColor(22, 101, 52);
-      doc.text("Status: PAYMENT COMPLETED", 105, y, { align: "center" });
+      doc.text("Booking Status: CONFIRMED", 105, y, { align: "center" });
 
       doc.setFontSize(8);
       doc.setTextColor(150, 150, 150);
@@ -296,9 +297,9 @@ function Sucess() {
         property_name: property?.property_name || property?.name || 'Property',
         check_in_date: format(new Date(booking.start_date), 'dd MMM yyyy'),
         check_out_date: format(new Date(booking.end_date), 'dd MMM yyyy'),
-        total_amount: booking.total_price || '0.00',
-        subtotal: (booking.total_price / 1.05).toFixed(2) || '0.00',
-        gst: (booking.total_price * 0.05 / 1.05).toFixed(2) || '0.00',
+        total_amount: (Number(booking.total_price || 0) * 1.05).toFixed(2),
+        subtotal: Number(booking.total_price || 0).toFixed(2),
+        gst: (Number(booking.total_price || 0) * 0.05).toFixed(2),
         booking_id: bookingId || 'N/A',
         phone_number: booking.phone_number || '',
         property_address: property?.address || '',

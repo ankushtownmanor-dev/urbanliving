@@ -177,32 +177,33 @@ function BookingDetail() {
            img.onload = resolve;
            img.onerror = reject;
         });
-        const logoWidth = 60;
-        const logoHeight = 16;
+        const logoRatio = img.width / img.height;
+        const logoHeight = 32;
+        const logoWidth = logoHeight * logoRatio;
 
         // Top Left
         doc.addImage(img, 'PNG', 20, 10, logoWidth, logoHeight);
 
         // Bottom Right
-        doc.addImage(img, 'PNG', 190 - logoWidth, 275, logoWidth, logoHeight);
+        doc.addImage(img, 'PNG', 190 - logoWidth, 255, logoWidth, logoHeight);
       } catch (e) {
         console.error("Logo load failed", e);
       }
 
-      doc.setFontSize(26);
+      doc.setFontSize(22);
       doc.setTextColor(0, 0, 0); 
       doc.setFont(undefined, "bold");
-      doc.text("townmanor.ai", 105, 32, { align: "center" });
+      doc.text("Townmanor Technologies Pvt Ltd.", 105, 50, { align: "center" });
       
       doc.setFontSize(11);
       doc.setTextColor(100, 100, 100);
       doc.setFont(undefined, "normal");
-      doc.text("Payment Receipt", 105, 40, { align: "center" });
+      doc.text("Payment Receipt", 105, 58, { align: "center" });
       
       doc.setDrawColor(200, 200, 200);
-      doc.line(15, 48, 195, 48);
+      doc.line(15, 66, 195, 66);
 
-      let y = 60;
+      let y = 74;
       const x = 20;
 
       const row = (label, value) => {
@@ -244,24 +245,33 @@ function BookingDetail() {
       doc.setFont(undefined, "bold");
       doc.text("Payment Details", x, y);
       y += 7;
-      const total = Number(b.display_price) || 0;
-      const gst = total > 0 ? (total * 0.05 / 1.05) : 0;
-      const subtotal = total - gst;
+      const subtotal = Number(b.display_price) || 0;
+      const gst = subtotal > 0 ? (subtotal * 0.05) : 0;
+      const finalTotal = subtotal + gst;
 
       row("Subtotal:", `Rs. ${subtotal.toFixed(2)}`);
       row("GST (5%):", `Rs. ${gst.toFixed(2)}`);
-      row("Total Amount:", `Rs. ${total.toFixed(2)}`);
+      row("Total Amount:", `Rs. ${finalTotal.toFixed(2)}`);
       
-      const isPaid = (b.booking_status === 'confirmed' || b.booking_status === 'paid' || b.status === 'confirmed' || b.status === 'paid' || b.payment_status === 'paid');
-      row("Status:", isPaid ? 'PAYMENT COMPLETED' : 'PAYMENT PENDING');
+      const bStatus = (b.booking_status || "").toLowerCase();
+      const st = (b.status || "").toLowerCase();
+      const pStatus = (b.payment_status || "").toLowerCase();
       
-      row("Booking Status:", (b.booking_status || b.status || "pending").toUpperCase());
+      const isPaid = (
+        bStatus === 'confirmed' || bStatus === 'paid' || bStatus === 'success' || bStatus === 'completed' ||
+        st === 'confirmed' || st === 'paid' || st === 'success' || st === 'completed' ||
+        pStatus === 'paid' || pStatus === 'success' || pStatus === 'completed' ||
+        b.payment_id || b.txnid
+      );
+      
+      row("Booking Status:", isPaid ? 'CONFIRMED' : (b.booking_status || b.status || "pending").toUpperCase());
       row("Created:", formatDateTime(b.created_at));
 
+      doc.setFontSize(10);
       doc.text(
-        "This is a system-generated receipt by OvikaLiving.com",
+        "This is a system-generated receipt by OvikaLiving.com and does not require a manual signature",
         x,
-        285
+        280
       );
 
       doc.save(`receipt-${b.id}.pdf`);
