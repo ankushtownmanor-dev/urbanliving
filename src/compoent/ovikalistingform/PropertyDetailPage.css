@@ -712,7 +712,7 @@ img, video, canvas, table { max-width: 100%; }
 
 .rm-area-val { font-weight: 600; color: #475569; font-size: 0.85rem; }
 .rm-td--price { min-width: 120px; }
-.rm-price-cell {
+.rm-price-cell {   
   display: flex;
   flex-direction: row;
   align-items: baseline;
@@ -721,7 +721,7 @@ img, video, canvas, table { max-width: 100%; }
   white-space: nowrap;
 }
 
-.rm-price-main {
+.rm-price-main { 
   font-size: 1.05rem;
   font-weight: 800;
   color: #0f172a;
@@ -844,7 +844,6 @@ img, video, canvas, table { max-width: 100%; }
 
 @media (max-width: 768px) {
 
-  /* Hide desktop table, show mobile */
   .rm-table-outer { display: none !important; }
 
   .rm-mob-wrap {
@@ -864,22 +863,21 @@ img, video, canvas, table { max-width: 100%; }
     background: #fff;
   }
 
-  /* Header */
   .rm-mob-tbl thead tr { background: #0f172a; }
 
   .rm-mob-th {
-    padding: 5px 2px;
+    padding: 0 2px;
+    height: 30px;
     font-size: 0.42rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.3px;
     color: rgba(255,255,255,0.45);
     text-align: left;
-    overflow: hidden;
     white-space: nowrap;
+    vertical-align: middle;
   }
 
-  /* Fixed column widths — tuned so all 6 fit */
   .rm-mob-th--room   { width: 22%; padding-left: 6px; color: rgba(255,255,255,0.88); }
   .rm-mob-th--bath   { width: 18%; }
   .rm-mob-th--area   { width: 13%; }
@@ -887,19 +885,20 @@ img, video, canvas, table { max-width: 100%; }
   .rm-mob-th--avail  { width: 12%; }
   .rm-mob-th--action { width: 16%; text-align: right; padding-right: 5px; }
 
-  /* Rows */
   .rm-mob-row { border-bottom: 1px solid #f1f5f9; }
   .rm-mob-row--last { border-bottom: none; }
 
+  .rm-mob-tbl tbody tr { height: 48px; }
+
   .rm-mob-td {
-    padding: 7px 2px;
-    vertical-align: middle;
+    padding: 0 2px;
+    vertical-align: middle !important;
     overflow: hidden;
+    line-height: 1;
   }
   .rm-mob-td:first-child { padding-left: 6px; }
   .rm-mob-td:last-child  { padding-right: 5px; }
 
-  /* Col 1: Room — very small font, strict ellipsis */
   .rm-mob-name {
     display: block;
     font-weight: 700;
@@ -909,7 +908,8 @@ img, video, canvas, table { max-width: 100%; }
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
-    line-height: 1.2;
+    line-height: 1;
+    margin: 0;
   }
 
   .rm-mob-tags { display: flex; gap: 2px; margin-top: 2px; flex-wrap: nowrap; overflow: hidden; }
@@ -924,10 +924,10 @@ img, video, canvas, table { max-width: 100%; }
     border: 1px solid #e2e8f0;
     white-space: nowrap;
     flex-shrink: 0;
+    line-height: 1.2;
   }
   .rm-mob-tag--ac { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
 
-  /* Col 2: Bath */
   .rm-mob-bath {
     display: inline-flex;
     align-items: center;
@@ -937,6 +937,8 @@ img, video, canvas, table { max-width: 100%; }
     padding: 2px 4px;
     border-radius: 99px;
     white-space: nowrap;
+    line-height: 1;
+    margin: 0;
   }
   .rm-mob-bath--att { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
   .rm-mob-bath--sh  { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
@@ -945,7 +947,6 @@ img, video, canvas, table { max-width: 100%; }
   .rm-mob-bath--att .rm-mob-bath-dot { background: #16a34a; }
   .rm-mob-bath--sh  .rm-mob-bath-dot { background: #94a3b8; }
 
-  /* Col 3: Area */
   .rm-mob-area {
     font-size: 0.5rem;
     font-weight: 600;
@@ -954,9 +955,10 @@ img, video, canvas, table { max-width: 100%; }
     overflow: hidden;
     text-overflow: ellipsis;
     display: block;
+    line-height: 1;
+    margin: 0;
   }
 
-  /* Col 4: Price — force single line */
   .rm-mob-td--price { white-space: nowrap; }
 
   .rm-mob-price-wrap {
@@ -973,10 +975,9 @@ img, video, canvas, table { max-width: 100%; }
     line-height: 1;
     white-space: nowrap;
   }
-  .rm-mob-punit { font-size: 0.42rem; color: #94a3b8; font-weight: 600; white-space: nowrap; }
-  .rm-mob-incl  { font-size: 0.48rem; font-weight: 600; color: #94a3b8; font-style: italic; }
+  .rm-mob-punit { font-size: 0.42rem; color: #94a3b8; font-weight: 600; white-space: nowrap; line-height: 1; }
+  .rm-mob-incl  { font-size: 0.48rem; font-weight: 600; color: #94a3b8; font-style: italic; line-height: 1; }
 
-  /* Col 5: Availability */
   .rm-mob-avail {
     display: inline-flex;
     align-items: center;
@@ -986,6 +987,8 @@ img, video, canvas, table { max-width: 100%; }
     padding: 2px 3px;
     border-radius: 99px;
     white-space: nowrap;
+    line-height: 1;
+    margin: 0;
   }
   .rm-mob-avail--now  { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
   .rm-mob-avail--date { background: #fefce8; color: #a16207; border: 1px solid #fef08a; }
@@ -994,13 +997,12 @@ img, video, canvas, table { max-width: 100%; }
   .rm-mob-avail--now  .rm-mob-avail-dot { background: #22c55e; animation: rmPulse 1.8s infinite; }
   .rm-mob-avail--date .rm-mob-avail-dot { background: #eab308; }
 
-  /* Col 6: Action */
   .rm-mob-td--action { text-align: right; }
 
   .rm-mob-btns { display: flex; flex-direction: column; gap: 2px; align-items: stretch; }
 
   .rm-mob-btn {
-    padding: 4px 2px;
+    padding: 5px 3px;
     border: none;
     border-radius: 4px;
     font-size: 0.48rem;
@@ -1010,6 +1012,7 @@ img, video, canvas, table { max-width: 100%; }
     transition: background 0.15s;
     text-align: center;
     width: 100%;
+    line-height: 1;
   }
   .rm-mob-btn--book { background: #8b0000; color: #fff; }
   .rm-mob-btn--book:hover { background: #6b0000; }
