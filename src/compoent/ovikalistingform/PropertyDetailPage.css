@@ -829,7 +829,7 @@ img, video, canvas, table { max-width: 100%; }
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.2s, transform 0.1s;
+  transition: background 0.2s, transform 0.1s;  
   width: 100%;
 }
 
