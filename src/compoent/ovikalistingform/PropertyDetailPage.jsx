@@ -154,10 +154,8 @@ const MobileRoomTable = ({ bedrooms, pricingMode, property, onBookNow, onEnquire
         <tbody>
           {rows.map((room, i) => {
             const nightlyP = Number(property.meta?.perNightPrice) || Number(property.price) || 0;
-const monthlyP = Number(room.price) || Number(property.meta?.perMonthPrice) || Number(property.meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.price) || 0;
-
             // const nightlyP = Number(room.price) || Number(property.meta?.perNightPrice) || Number(property.price) || 0;
-            // const monthlyP = Number(room.price) || Number(property.meta?.perMonthPrice) || Number(property.meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.price) || 0;
+            const monthlyP = Number(room.price) || Number(property.meta?.perMonthPrice) || Number(property.meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.price) || 0;
             const displayP = pricingMode === 'monthly' ? monthlyP : nightlyP;
             const priceUnit = pricingMode === 'monthly' ? '/mo' : '/nt';
             const area = room.areaSqFt ? `${room.areaSqFt} sqft` : (property.area ? `${property.area} sqft` : '—');
@@ -780,8 +778,7 @@ const PropertyDetailPage = () => {
       roomPrice = Number(property.meta?.perMonthPrice) || Number(property.meta?.monthlyPrice)
         || Number(property.monthly_price) || Number(property.price) || 0;
     } else {
-      roomPrice = Number(property.meta?.perNightPrice) || Number(property.price) || 0;
-      // roomPrice = Number(room.price) || Number(property.meta?.perNightPrice) || Number(property.price) || 0;
+      roomPrice = Number(room.price) || Number(property.meta?.perNightPrice) || Number(property.price) || 0;
     }
     setSelectedPrice(roomPrice);
     if (pricingMode === 'monthly') {
@@ -1453,9 +1450,8 @@ const PropertyDetailPage = () => {
                       {property.parsedBedrooms?.map((room, i) => {
                         const isLast = i === property.parsedBedrooms.length - 1;
                         const nightlyP = Number(property.meta?.perNightPrice) || Number(property.price) || 0;
-const monthlyP = Number(room.price) || Number(property.meta?.perMonthPrice) || Number(property.meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.price) || 0;
                         // const nightlyP = Number(room.price) || Number(property.meta?.perNightPrice) || Number(property.price) || 0;
-                        // const monthlyP = Number(property.meta?.perMonthPrice) || Number(property.meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.price) || 0;
+                        const monthlyP = Number(property.meta?.perMonthPrice) || Number(property.meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.price) || 0;
                         const displayP = pricingMode === 'monthly' ? monthlyP : nightlyP;
                         return (
                           <tr key={`bed-${i}`} className={`rm-row ${isLast ? 'rm-row--last' : ''}`}>
