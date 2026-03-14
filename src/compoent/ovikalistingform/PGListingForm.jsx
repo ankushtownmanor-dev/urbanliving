@@ -357,12 +357,34 @@ const PGListingForm = () => {
       fd.append("price", form.baseRate);
       fd.append("booking_type", String(form.bookingType));
       fd.append("owner_id", user?.id || "99"); // Using a fallback owner_id
+      // ===== DEBUG CONSOLE - HATA DENA BAAD MEIN =====
+console.log("=== NIGHTLY FORM (Tmx9PropertyForm) ===");
+console.log("TOP-LEVEL fd fields:", {
+  property_name: fd.get("property_name"),
+  price: fd.get("price"),
+  booking_type: fd.get("booking_type"),
+  owner_id: fd.get("owner_id"),
+});
+console.log("META object:", JSON.parse(fd.get("meta") || "{}"));
+// ===== DEBUG END =====
       
       // Explicitly send these fields if backend has columns for them
       fd.append("bedrooms", JSON.stringify(form.bedroomDetails));
       fd.append("bathrooms", JSON.stringify([{ type: "Attached", count: form.bathrooms }]));
       fd.append("amenities", JSON.stringify(Object.keys(form.amenities).filter(k => form.amenities[k])));
       fd.append("beds", String(totalBeds));
+      // ===== DEBUG CONSOLE - HATA DENA BAAD MEIN =====
+console.log("=== MONTHLY FORM (PGListingForm) ===");
+console.log("TOP-LEVEL fd fields:", {
+  property_name: fd.get("property_name"),
+  price: fd.get("price"),
+  booking_type: fd.get("booking_type"),
+  owner_id: fd.get("owner_id"),
+  bedrooms: fd.get("bedrooms"),
+  beds: fd.get("beds"),
+});
+console.log("META object:", JSON.parse(fd.get("meta") || "{}"));
+// ===== DEBUG END =====
 
       const guidebook = {
         transport_tips: form.transportTips,

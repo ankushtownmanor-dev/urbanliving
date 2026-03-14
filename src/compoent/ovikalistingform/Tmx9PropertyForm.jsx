@@ -520,6 +520,11 @@ const Tmx9PropertyForm = () => {
       if (form.baseRate !== "" && form.baseRate !== null) fd.append("price", Number(form.baseRate).toFixed(2));
       fd.append("booking_type", String(form.bookingType));
       fd.append("owner_id", String(ownerId));
+      console.log("=== NIGHTLY FORM SUBMIT DATA ===");
+console.log("meta object:", JSON.parse(fd.get("meta") || "{}"));
+console.log("property_name:", fd.get("property_name"));
+console.log("price:", fd.get("price"));
+console.log("booking_type:", fd.get("booking_type"));
 
       const guidebook = {
         transport_tips: {
@@ -611,7 +616,9 @@ const Tmx9PropertyForm = () => {
       });
 
       const data = await response.json().catch(() => ({ success: false, message: "Invalid JSON response" }));
-
+console.log("=== API RESPONSE (NIGHTLY) ===");
+console.log("Full response data:", data);
+console.log("Property saved as:", data?.data);
       if (!response.ok) {
         console.error("API error", data);
         alert(data.message || "Failed to create property");
