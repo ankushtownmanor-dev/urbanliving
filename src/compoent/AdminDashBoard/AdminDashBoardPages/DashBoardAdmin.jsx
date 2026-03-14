@@ -1594,7 +1594,7 @@ function EditPropertyModal({ property, onClose, onRefresh }) {
             ))}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <label htmlFor="modal-file-upload" style={{ ...btnStyle, padding: '8px 16px', background: '#f0f9ff', color: '#0284c7', border: '1px solid #bae6fd', display: 'inline-block', fontSize: '13px', cursor: 'pointer' }}>
+            <label htmlFor="modal-file-upload" style={{ ...btnStyle, padding: '8px 16px', background: '#fff8f0', color: '#c2772b', border: '1px solid #f6d4a8', display: 'inline-block', fontSize: '13px', cursor: 'pointer' }}>
               <i className="fa-solid fa-cloud-arrow-up" style={{ marginRight: '6px' }} />Select Photos
             </label>
             <input id="modal-file-upload" type="file" multiple accept="image/*" onChange={handleFileSelect} style={{ display: 'none' }} />
@@ -1929,7 +1929,7 @@ function EmptyState({ type, onAdd }) {
       minHeight: '40vh', padding: '40px 20px',
       background: isMonthly
         ? 'linear-gradient(135deg, #fffbf5 0%, #fef3e2 100%)'
-        : 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
+        : 'linear-gradient(135deg, #fff8f0 0%, #fef3e2 100%)',
       borderRadius: '16px'
     }}>
       <div style={{
@@ -1937,7 +1937,7 @@ function EmptyState({ type, onAdd }) {
         boxShadow: '0 10px 25px rgba(0,0,0,0.08)', maxWidth: '480px', width: '100%', textAlign: 'center'
       }}>
         <div style={{
-          background: isMonthly ? '#c2772b' : '#0284c7',
+          background: isMonthly ? '#c2772b' : '#c2772b',
           width: '80px', height: '80px', borderRadius: '50%',
           display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px'
         }}>
@@ -1957,7 +1957,7 @@ function EmptyState({ type, onAdd }) {
           type="button"
           onClick={onAdd}
           style={{
-            background: isMonthly ? '#c2772b' : '#0284c7',
+            background: isMonthly ? '#c2772b' : '#c2772b',
             color: '#fff', padding: '12px 28px', borderRadius: '10px',
             border: 'none', fontSize: '15px', fontWeight: '600', cursor: 'pointer',
             display: 'inline-flex', alignItems: 'center', gap: '8px'
@@ -1985,7 +1985,7 @@ function RentalTabs({ activeTab, onChange, monthlyCount, nightlyCount }) {
     }}>
       {[
         { key: 'monthly', label: 'Monthly Rentals', count: monthlyCount, icon: <Calendar size={15} />, color: '#c2772b' },
-        { key: 'nightly', label: 'Nightly Rentals', count: nightlyCount, icon: <Moon size={15} />, color: '#0284c7' },
+        { key: 'nightly', label: 'Nightly Rentals', count: nightlyCount, icon: <Moon size={15} />, color: '#c2772b' },
       ].map(tab => {
         const active = activeTab === tab.key;
         return (
@@ -2289,7 +2289,7 @@ export default function DashBoardAdmin() {
               onClick={() => navigate(activeTab === 'monthly' ? '/list-pg' : '/listed1')}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '7px',
-                background: activeTab === 'monthly' ? '#c2772b' : '#0284c7',
+                background: activeTab === 'monthly' ? '#c2772b' : '#c2772b',
                 color: '#fff',
                 padding: '9px 18px', borderRadius: '8px', border: 'none',
                 fontSize: '14px', fontWeight: '600', cursor: 'pointer',
@@ -2348,7 +2348,7 @@ export default function DashBoardAdmin() {
       }} className={styles.mobileTabBar}>
         {[
           { key: 'monthly', label: 'Monthly', icon: <Calendar size={18} />, color: '#c2772b' },
-          { key: 'nightly', label: 'Nightly', icon: <Moon size={18} />, color: '#0284c7' },
+          { key: 'nightly', label: 'Nightly', icon: <Moon size={18} />, color: '#c2772b' },
         ].map(tab => {
           const active = activeTab === tab.key;
           return (
@@ -2359,7 +2359,7 @@ export default function DashBoardAdmin() {
               style={{
                 flex: 1, display: 'flex', flexDirection: 'column',
                 alignItems: 'center', gap: '3px',
-                background: active ? (tab.key === 'monthly' ? '#fff8f0' : '#f0f9ff') : 'transparent',
+                background: active ? (tab.key === 'monthly' ? '#fff8f0' : '#fff8f0') : 'transparent',
                 border: active ? `1.5px solid ${tab.color}` : '1.5px solid transparent',
                 borderRadius: '10px', padding: '8px 4px',
                 color: active ? tab.color : '#9ca3af',
