@@ -2033,11 +2033,46 @@ const transformPropertyData = (data) => {
     meta: parsedMeta,
   };
 
+  // ── Bedroom resolution ──────────────────────────────────────────────────────
+  // Priority: meta.bedroomDetails (full data from form) → data.bedrooms → parsedMeta.bedrooms
+  const rawBedrooms = parseJsonField(data.bedrooms || parsedMeta.bedrooms);
+  const detailedBedrooms = parseJsonField(parsedMeta.bedroomDetails);
+
+  let parsedBedrooms;
+  if (detailedBedrooms.length > 0) {
+    // detailedBedrooms already has attachedBathroom field — use as-is
+    parsedBedrooms = detailedBedrooms;
+  } else if (rawBedrooms.length > 0) {
+    // ── Bathroom mapping from bathrooms array ─────────────────────────────────
+    // bathrooms array shape: [{type:"Attached", count:1}, {type:"Common", count:1}, ...]
+    // Logic:
+    //   - Count how many "Attached" bathrooms exist (sum of count where type === 'Attached')
+    //   - First N bedrooms (by index) get attachedBathroom = true
+    //   - Remaining bedrooms get attachedBathroom = false (Shared/Common)
+    //   - If bedroom already has its own attachedBathroom field set → respect that
+    const parsedBathsArr = parseJsonField(data.bathrooms || parsedMeta.bathrooms);
+
+    const attachedCount = parsedBathsArr
+      .filter(b => b.type === 'Attached')
+      .reduce((sum, b) => sum + (Number(b.count) || 0), 0);
+
+    parsedBedrooms = rawBedrooms.map((room, idx) => ({
+      ...room,
+      attachedBathroom: room.attachedBathroom !== undefined
+        ? Boolean(room.attachedBathroom)   // already set on room → respect it
+        : idx < attachedCount              // infer from bathrooms array
+          ? true
+          : false,
+    }));
+  } else {
+    parsedBedrooms = [];
+  }
+
   return {
     ...combined,
     amenities: parseJsonField(data.amenities || parsedMeta.amenities),
     photos: Array.isArray(data.photos) ? data.photos : (data.photos ? [data.photos] : []),
-    parsedBedrooms: parseJsonField(data.bedrooms || parsedMeta.bedrooms),
+    parsedBedrooms,
     parsedBathrooms: parseJsonField(data.bathrooms || parsedMeta.bathrooms),
     guidebook: combined.guidebook || parsedMeta.guidebook || {},
     guest_policy: combined.guest_policy || parsedMeta.guest_policy || {}
@@ -2075,136 +2110,376 @@ async function getCalendar(propertyKey) {
 }
 
 // ─── KEY HELPER: Determine if rooms have distinct prices ─────────────────────
-// Returns true if there are 2+ rooms with different non-zero prices
 const hasDistinctRoomPrices = (bedrooms, meta) => {
   if (!Array.isArray(bedrooms) || bedrooms.length === 0) return false;
-  // Check meta flag first (set by the form)
   if (meta?.usePerRoomPricing === true) return true;
-  // Fallback: check if room prices actually differ
   const prices = bedrooms.map(r => Number(r.price) || 0).filter(p => p > 0);
   if (prices.length < 2) return false;
   return new Set(prices).size > 1;
 };
 
-// ─── MOBILE ROOM TABLE ────────────────────────────────────────────────────────
-const MobileRoomTable = ({ bedrooms, pricingMode, property, onBookNow, onEnquire, showEnquire, showSingleBookRow }) => {
-  const rows = bedrooms || [];
-  if (!rows.length) return null;
+// ─── ROOM TABLE COMPONENTS ────────────────────────────────────────────────────
 
-  // If single pricing mode → show one merged row
-  if (showSingleBookRow) {
-    const price = pricingMode === 'monthly'
-      ? (Number(property.meta?.perMonthPrice) || Number(property.meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.price) || 0)
-      : (Number(property.meta?.perNightPrice) || Number(property.price) || 0);
-    const priceUnit = pricingMode === 'monthly' ? '/mo' : '/nt';
-    return (
-      <div className="rm-mob-wrap">
-        <table className="rm-mob-tbl">
-          <thead>
-            <tr>
-              <th className="rm-mob-th">Rooms</th>
-              <th className="rm-mob-th">Bathrooms</th>
-              <th className="rm-mob-th">Price</th>
-              <th className="rm-mob-th"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="rm-mob-row rm-mob-row--last">
-              <td className="rm-mob-td">
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                  {rows.map((room, i) => (
-                    <span key={i} className="rm-mob-name" style={{ fontSize: '0.78rem' }}>
-                      {room.type || `Room ${i + 1}`}
-                      {room.ac && <span className="rm-mob-tag rm-mob-tag--ac" style={{ marginLeft: '4px' }}>AC</span>}
-                    </span>
-                  ))}
-                </div>
-              </td>
-              <td className="rm-mob-td">
-                <span className="rm-mob-bath rm-mob-bath--att">
-                  <span className="rm-mob-bath-dot"></span>
-                  {rows.filter(r => r.attachedBathroom).length} Attached
-                </span>
-              </td>
-              <td className="rm-mob-td rm-mob-td--price">
-                {price > 0 ? (
-                  <><span className="rm-mob-pval">₹{price.toLocaleString('en-IN')}</span><span className="rm-mob-punit">{priceUnit}</span></>
-                ) : <span className="rm-mob-incl">On Req.</span>}
-              </td>
-              <td className="rm-mob-td rm-mob-td--action">
-                <button className="rm-mob-btn rm-mob-btn--book" onClick={() => onBookNow(rows[0])}>Book</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    );
-  }
-
-  // Per-room pricing → individual rows
+const RoomBadge = ({ children, color = 'default' }) => {
+  const styles = {
+    default: { background: '#f1f5f9', color: '#475569', border: '1px solid #e2e8f0' },
+    ac:      { background: '#eff6ff', color: '#1d4ed8', border: '1px solid #bfdbfe' },
+    green:   { background: '#f0fdf4', color: '#15803d', border: '1px solid #bbf7d0' },
+  };
+  const s = styles[color] || styles.default;
   return (
-    <div className="rm-mob-wrap">
-      <table className="rm-mob-tbl">
+    <span style={{ fontSize: '0.68rem', padding: '1px 6px', borderRadius: '20px', whiteSpace: 'nowrap', ...s }}>
+      {children}
+    </span>
+  );
+};
+
+const AvailBadge = ({ date }) => {
+  const dotStyle = { width: 7, height: 7, borderRadius: '50%', display: 'inline-block', marginRight: 5, flexShrink: 0 };
+  if (date) {
+    const label = new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+    return <div style={{ display:'flex', alignItems:'center', fontSize:'0.78rem', color:'#64748b' }}><span style={{ ...dotStyle, background:'#64748b' }}/>{label}</div>;
+  }
+  return <div style={{ display:'flex', alignItems:'center', fontSize:'0.78rem', color:'#16a34a' }}><span style={{ ...dotStyle, background:'#22c55e' }}/>Now</div>;
+};
+
+// BathBadge — attached=true → Attached (green), false → Shared (gray), null/undefined → —
+const BathBadge = ({ attached }) => {
+  if (attached === null || attached === undefined) {
+    return <span style={{ fontSize:'0.78rem', color:'#94a3b8' }}>—</span>;
+  }
+  return (
+    <div style={{ display:'flex', alignItems:'center', fontSize:'0.78rem', fontWeight:600, color: attached ? '#16a34a' : '#64748b' }}>
+      <span style={{ width:7, height:7, borderRadius:'50%', background: attached ? '#22c55e' : '#94a3b8', display:'inline-block', marginRight:5, flexShrink:0 }}/>
+      {attached ? 'Attached' : 'Shared'}
+    </div>
+  );
+};
+
+const PriceCell = ({ price, unit }) => {
+  if (!price || price <= 0) return <span style={{ fontSize:'0.78rem', color:'#94a3b8' }}>On Request</span>;
+  return (
+    <div>
+      <span style={{ fontWeight:600, fontSize:'0.92rem', color:'#1e293b' }}>₹{price.toLocaleString('en-IN')}</span>
+      <span style={{ fontSize:'0.72rem', color:'#64748b' }}>/{unit}</span>
+    </div>
+  );
+};
+
+// ─── SCENARIO 1 / 4: Whole property, single Book Now ─────────────────────────
+const RoomTableSingle = ({ rooms, price, priceUnit, area, availableFrom, onBookNow }) => {
+  const rowCount = rooms.length;
+  return (
+    <div className="rm-table-outer">
+      <table className="rm-table" style={{ tableLayout:'fixed', width:'100%' }}>
+        <colgroup>
+          <col style={{ width:'34%' }}/>
+          <col style={{ width:'16%' }}/>
+          <col style={{ width:'13%' }}/>
+          <col style={{ width:'15%' }}/>
+          <col style={{ width:'12%' }}/>
+          <col style={{ width:'10%' }}/>
+        </colgroup>
         <thead>
           <tr>
-            <th className="rm-mob-th rm-mob-th--room">Room</th>
-            <th className="rm-mob-th rm-mob-th--bath">Bathroom</th>
-            <th className="rm-mob-th rm-mob-th--area">Area</th>
-            <th className="rm-mob-th rm-mob-th--price">Price</th>
-            <th className="rm-mob-th rm-mob-th--avail">Avail.</th>
-            <th className="rm-mob-th rm-mob-th--action"></th>
+            <th className="rm-th rm-th--room">Room</th>
+            <th className="rm-th">Bathroom</th>
+            <th className="rm-th">Area</th>
+            <th className="rm-th rm-th--price">Price / {priceUnit}</th>
+            <th className="rm-th">Available</th>
+            <th className="rm-th rm-th--action"></th>
           </tr>
         </thead>
         <tbody>
-          {rows.map((room, i) => {
-            const nightlyP = Number(property.meta?.perNightPrice) || Number(property.price) || 0;
-            const monthlyP = Number(room.price) || Number(property.meta?.perMonthPrice) || Number(property.meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.price) || 0;
-            const displayP = pricingMode === 'monthly' ? monthlyP : nightlyP;
-            const priceUnit = pricingMode === 'monthly' ? '/mo' : '/nt';
-            const area = room.areaSqFt ? `${room.areaSqFt} sqft` : (property.area ? `${property.area} sqft` : '—');
-            const isLast = i === rows.length - 1;
+          {rooms.map((room, i) => {
+            const isFirst = i === 0;
+            const isLast  = i === rowCount - 1;
             return (
-              <tr key={i} className={`rm-mob-row${isLast ? ' rm-mob-row--last' : ''}`}>
-                <td className="rm-mob-td">
-                  <span className="rm-mob-name">{room.type || 'Bedroom'}</span>
-                  <div className="rm-mob-tags">
-                    {room.bedType && <span className="rm-mob-tag">{room.bedType}</span>}
-                    {room.ac && <span className="rm-mob-tag rm-mob-tag--ac">AC</span>}
+              <tr key={i} className={`rm-row${isLast ? ' rm-row--last' : ''}`}>
+
+                {/* Col 1: Room name + tags */}
+                <td className="rm-td rm-td--room">
+                  <div style={{ display:'flex', alignItems:'flex-start', gap:10 }}>
+                    <div style={{ width:32, height:24, flexShrink:0, background:'#f1f5f9', borderRadius:4, border:'1px solid #e2e8f0', display:'flex', alignItems:'center', justifyContent:'center', marginTop:2 }}>
+                      <svg width="18" height="13" viewBox="0 0 18 13" fill="none">
+                        <rect x="1" y="5" width="16" height="7" rx="1.5" fill="#94a3b8"/>
+                        <rect x="1" y="1" width="4" height="5" rx="1" fill="#cbd5e1"/>
+                        <rect x="13" y="1" width="4" height="5" rx="1" fill="#cbd5e1"/>
+                        <rect x="0.5" y="11" width="3" height="1.5" rx="0.5" fill="#94a3b8"/>
+                        <rect x="14.5" y="11" width="3" height="1.5" rx="0.5" fill="#94a3b8"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <div style={{ fontWeight:700, fontSize:'0.88rem', color:'#0f172a', lineHeight:1.3 }}>
+                        {room.type || `Bedroom ${i+1}`}
+                      </div>
+                      <div style={{ display:'flex', gap:4, marginTop:4, flexWrap:'wrap' }}>
+                        {room.bedType   && <RoomBadge>{room.bedType}</RoomBadge>}
+                        {room.ac        && <RoomBadge color="ac">❄ AC</RoomBadge>}
+                        {room.furnished && <RoomBadge color="green">Furnished</RoomBadge>}
+                      </div>
+                    </div>
                   </div>
                 </td>
-                <td className="rm-mob-td">
-                  <span className={`rm-mob-bath ${room.attachedBathroom ? 'rm-mob-bath--att' : 'rm-mob-bath--sh'}`}>
-                    <span className="rm-mob-bath-dot"></span>
-                    {room.attachedBathroom ? 'Attached' : 'Shared'}
-                  </span>
+
+                {/* Col 2: THIS room's bathroom — per row from mapped data */}
+                <td className="rm-td">
+                  <BathBadge attached={room.attachedBathroom} />
                 </td>
-                <td className="rm-mob-td rm-mob-td--area"><span className="rm-mob-area">{area}</span></td>
-                <td className="rm-mob-td rm-mob-td--price">
-                  {displayP > 0 ? (
-                    <><span className="rm-mob-pval">₹{displayP.toLocaleString('en-IN')}</span><span className="rm-mob-punit">{priceUnit}</span></>
-                  ) : <span className="rm-mob-incl">On Req.</span>}
-                </td>
-                <td className="rm-mob-td">
-                  {room.availabilityDate ? (
-                    <span className="rm-mob-avail rm-mob-avail--date">
-                      <span className="rm-mob-avail-dot"></span>
-                      {new Date(room.availabilityDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
-                    </span>
+
+                {/* Col 3: Area — rowspan on first row */}
+                {isFirst && (
+                  <td className="rm-td" rowSpan={rowCount} style={{ verticalAlign:'middle' }}>
+                    <span className="rm-area-val">{area || '—'}</span>
+                  </td>
+                )}
+
+                {/* Col 4: Price — rowspan on first row */}
+                {isFirst && (
+                  <td className="rm-td rm-td--price" rowSpan={rowCount} style={{ verticalAlign:'middle' }}>
+                    <PriceCell price={price} unit={priceUnit} />
+                  </td>
+                )}
+
+                {/* Col 5: Availability — rowspan on first row */}
+                {isFirst && (
+                  <td className="rm-td" rowSpan={rowCount} style={{ verticalAlign:'middle' }}>
+                    <AvailBadge date={availableFrom} />
+                  </td>
+                )}
+
+                {/* Col 6: Book Now — rowspan on first row */}
+                {isFirst && (
+                  <td className="rm-td rm-td--cta" rowSpan={rowCount} style={{ verticalAlign:'middle' }}>
+                    <button className="rm-book-btn" onClick={() => onBookNow(rooms[0])}>Book Now</button>
+                  </td>
+                )}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+// Mobile version of S1/S4
+const RoomTableSingleMobile = ({ rooms, price, priceUnit, availableFrom, onBookNow }) => {
+  const isAvailNow = !availableFrom;
+  const availLabel = availableFrom
+    ? new Date(availableFrom).toLocaleDateString('en-IN', { day:'numeric', month:'short' })
+    : 'Now';
+
+  return (
+    <div className="rm-mob-wrap">
+      <div className="rm-mob-card">
+        <div className="rm-mob-card-head">
+          <div style={{ flex:1 }}>
+            <div style={{ fontSize:'0.65rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.5px', color:'#94a3b8', marginBottom:8 }}>
+              Entire property · {rooms.length} bedroom{rooms.length !== 1 ? 's' : ''}
+            </div>
+            {rooms.map((room, i) => (
+              <div key={i} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:8, marginBottom: i < rooms.length - 1 ? 10 : 0, paddingBottom: i < rooms.length - 1 ? 10 : 0, borderBottom: i < rooms.length - 1 ? '1px dashed #f1f5f9' : 'none' }}>
+                <div style={{ display:'flex', alignItems:'center', gap:8, flex:1, minWidth:0 }}>
+                  <div style={{ width:24, height:18, flexShrink:0, background:'#f1f5f9', borderRadius:3, border:'1px solid #e2e8f0', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                    <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
+                      <rect x="0.5" y="3.5" width="13" height="6" rx="1.5" fill="#94a3b8"/>
+                      <rect x="0.5" y="0.5" width="3" height="4" rx="1" fill="#cbd5e1"/>
+                      <rect x="10.5" y="0.5" width="3" height="4" rx="1" fill="#cbd5e1"/>
+                    </svg>
+                  </div>
+                  <div style={{ minWidth:0 }}>
+                    <div className="rm-mob-card-title" style={{ marginBottom:3 }}>
+                      {room.type || `Bedroom ${i+1}`}
+                    </div>
+                    <div className="rm-mob-card-tags">
+                      {room.bedType   && <span className="rm-mob-tag">{room.bedType}</span>}
+                      {room.ac        && <span className="rm-mob-tag rm-mob-tag--ac">❄ AC</span>}
+                      {room.furnished && <span className="rm-mob-tag">Furnished</span>}
+                    </div>
+                  </div>
+                </div>
+                {/* THIS room's bathroom badge — from mapped data */}
+                <div style={{ flexShrink:0 }}>
+                  {room.attachedBathroom === null || room.attachedBathroom === undefined ? (
+                    <span style={{ fontSize:'0.72rem', color:'#94a3b8' }}>—</span>
                   ) : (
-                    <span className="rm-mob-avail rm-mob-avail--now"><span className="rm-mob-avail-dot"></span>Now</span>
+                    <span style={{
+                      display:'inline-flex', alignItems:'center', gap:4,
+                      fontSize:'0.72rem', fontWeight:600, padding:'3px 8px',
+                      borderRadius:99, whiteSpace:'nowrap',
+                      background: room.attachedBathroom ? '#f0fdf4' : '#f8fafc',
+                      color:      room.attachedBathroom ? '#16a34a' : '#64748b',
+                      border:     room.attachedBathroom ? '1px solid #bbf7d0' : '1px solid #e2e8f0',
+                    }}>
+                      <span style={{ width:5, height:5, borderRadius:'50%', background: room.attachedBathroom ? '#22c55e' : '#94a3b8', display:'inline-block', flexShrink:0 }}/>
+                      {room.attachedBathroom ? 'Attached' : 'Shared'}
+                    </span>
                   )}
-                </td>
-                <td className="rm-mob-td rm-mob-td--action">
-                  <div className="rm-mob-btns">
-                    {showEnquire && <button className="rm-mob-btn rm-mob-btn--enq" onClick={() => onEnquire && onEnquire(room)}>Enq.</button>}
-                    <button className="rm-mob-btn rm-mob-btn--book" onClick={() => onBookNow(room)}>Book</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rm-mob-card-stats">
+          <div className="rm-mob-stat">
+            <span className="rm-mob-stat-label">Price</span>
+            <span className="rm-mob-stat-value">
+              {price > 0
+                ? <><span className="rm-mob-stat-value--price">₹{price.toLocaleString('en-IN')}</span><span className="rm-mob-stat-unit">/{priceUnit}</span></>
+                : <span style={{ color:'#94a3b8', fontStyle:'italic' }}>On Request</span>
+              }
+            </span>
+          </div>
+          <div className="rm-mob-stat" style={{ borderRight:'none' }}>
+            <span className="rm-mob-stat-label">Available</span>
+            <span className={`rm-mob-stat-value ${isAvailNow ? 'rm-mob-stat-value--green' : 'rm-mob-stat-value--amber'}`}>
+              <span className={`rm-mob-avail-dot rm-mob-avail-dot--${isAvailNow ? 'now' : 'date'}`}></span>
+              {availLabel}
+            </span>
+          </div>
+        </div>
+
+        <div className="rm-mob-card-foot">
+          <button className="rm-mob-btn rm-mob-btn--book" onClick={() => onBookNow(rooms[0])}>
+            Book Now
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─── SCENARIO 2: Per-room pricing ────────────────────────────────────────────
+const RoomTablePerRoom = ({ rooms, pricingMode, propertyPrice, propertyArea, onBookNow }) => {
+  const priceUnit = pricingMode === 'monthly' ? 'month' : 'night';
+  return (
+    <div className="rm-table-outer">
+      <table className="rm-table">
+        <thead>
+          <tr>
+            <th className="rm-th rm-th--room">Room</th>
+            <th className="rm-th">Bathroom</th>
+            <th className="rm-th">Area</th>
+            <th className="rm-th rm-th--price">Price / {priceUnit}</th>
+            <th className="rm-th">Available</th>
+            <th className="rm-th rm-th--action"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {rooms.map((room, i) => {
+            const isLast = i === rooms.length - 1;
+            const nightlyP = Number(propertyPrice) || 0;
+            const monthlyP = Number(room.price) || Number(propertyPrice) || 0;
+            const displayP = pricingMode === 'monthly' ? monthlyP : nightlyP;
+            const area = room.areaSqFt ? `${room.areaSqFt} sqft` : (propertyArea ? `${propertyArea} sqft` : '—');
+            return (
+              <tr key={i} className={`rm-row ${isLast ? 'rm-row--last' : ''}`}>
+                <td className="rm-td rm-td--room">
+                  <div className="rm-room-cell">
+                    <div className="rm-bed-icon-wrap">
+                      <div className="rm-bed-icon">
+                        <div className="rm-bed-headboard"></div>
+                        <div className="rm-bed-body"><div className="rm-bed-pillow"></div><div className="rm-bed-pillow"></div></div>
+                      </div>
+                    </div>
+                    <div className="rm-room-info">
+                      <span className="rm-room-name">{room.type || 'Bedroom'}</span>
+                      <div className="rm-room-tags">
+                        {room.bedType   && <span className="rm-tag">{room.bedType}</span>}
+                        {room.ac        && <span className="rm-tag rm-tag--ac">❄ AC</span>}
+                        {room.furnished && <span className="rm-tag">Furnished</span>}
+                      </div>
+                    </div>
                   </div>
+                </td>
+                <td className="rm-td"><BathBadge attached={room.attachedBathroom} /></td>
+                <td className="rm-td"><span className="rm-area-val">{area}</span></td>
+                <td className="rm-td rm-td--price">
+                  <PriceCell price={displayP} unit={priceUnit} />
+                </td>
+                <td className="rm-td"><AvailBadge date={room.availabilityDate} /></td>
+                <td className="rm-td rm-td--cta">
+                  <button className="rm-book-btn" onClick={() => onBookNow(room)}>Book Now</button>
                 </td>
               </tr>
             );
           })}
         </tbody>
       </table>
+    </div>
+  );
+};
+
+// Mobile version of S2 + S3
+const RoomTablePerRoomMobile = ({ rooms, pricingMode, propertyPrice, onBookNow, onEnquire, showEnquire }) => {
+  const priceUnit = pricingMode === 'monthly' ? 'month' : 'night';
+  return (
+    <div className="rm-mob-wrap">
+      {rooms.map((room, i) => {
+        const nightlyP = Number(propertyPrice) || 0;
+        const monthlyP = Number(room.price) || Number(propertyPrice) || 0;
+        const displayP = pricingMode === 'monthly' ? monthlyP : nightlyP;
+        const isAvailNow = !room.availabilityDate;
+        const availLabel = room.availabilityDate
+          ? new Date(room.availabilityDate).toLocaleDateString('en-IN', { day:'numeric', month:'short' })
+          : 'Now';
+
+        return (
+          <div key={i} className="rm-mob-card">
+            <div className="rm-mob-card-head">
+              <div style={{ flex:1 }}>
+                <div className="rm-mob-card-title">{room.type || 'Standard Room'}</div>
+                <div className="rm-mob-card-tags">
+                  {room.bedType   && <span className="rm-mob-tag">{room.bedType}</span>}
+                  {room.ac        && <span className="rm-mob-tag rm-mob-tag--ac">❄ AC</span>}
+                  {room.furnished && <span className="rm-mob-tag">Furnished</span>}
+                </div>
+              </div>
+            </div>
+
+            <div className="rm-mob-card-stats">
+              <div className="rm-mob-stat">
+                <span className="rm-mob-stat-label">Bathroom</span>
+                <span className={`rm-mob-stat-value ${room.attachedBathroom ? 'rm-mob-stat-value--green' : ''}`}>
+                  {room.attachedBathroom ? 'Attached' : 'Shared'}
+                </span>
+              </div>
+              <div className="rm-mob-stat">
+                <span className="rm-mob-stat-label">Price</span>
+                <span className="rm-mob-stat-value">
+                  {displayP > 0
+                    ? <><span className="rm-mob-stat-value--price">₹{displayP.toLocaleString('en-IN')}</span><span className="rm-mob-stat-unit">/{priceUnit}</span></>
+                    : <span style={{ color:'#94a3b8', fontStyle:'italic' }}>On Request</span>
+                  }
+                </span>
+                {room.securityDeposit && (
+                  <span className="rm-mob-deposit">Dep: ₹{Number(room.securityDeposit).toLocaleString('en-IN')}</span>
+                )}
+              </div>
+              <div className="rm-mob-stat" style={{ borderRight:'none' }}>
+                <span className="rm-mob-stat-label">Available</span>
+                <span className={`rm-mob-stat-value ${isAvailNow ? 'rm-mob-stat-value--green' : 'rm-mob-stat-value--amber'}`}>
+                  <span className={`rm-mob-avail-dot rm-mob-avail-dot--${isAvailNow ? 'now' : 'date'}`}></span>
+                  {availLabel}
+                </span>
+              </div>
+            </div>
+
+            <div className="rm-mob-card-foot">
+              {showEnquire && (
+                <button className="rm-mob-btn rm-mob-btn--enq" onClick={() => onEnquire?.(room)}>
+                  Enquire
+                </button>
+              )}
+              <button className="rm-mob-btn rm-mob-btn--book" onClick={() => onBookNow(room)}>
+                Book Now
+              </button>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
@@ -2662,16 +2937,13 @@ const PropertyDetailPage = () => {
   }, [user?.username, property?.id]);
 
   // ── ROOM TABLE LOGIC ─────────────────────────────────────────────────────
-  // Determine if this property has distinct per-room prices or a single price
   const showDistinctRoomPrices = property ? hasDistinctRoomPrices(property.parsedBedrooms, property.meta) : false;
-  // Single book row: when non-PG AND no distinct prices → one row for all rooms  
   const showSingleBookRow = !showDistinctRoomPrices && property?.property_category !== 'PG';
 
   const handleRoomBookNow = (room) => {
     if (!user) { navigate('/login', { state: { from: location } }); return; }
     let roomPrice;
     if (pricingMode === 'monthly') {
-      // If per-room pricing is active, use the specific room price
       if (showDistinctRoomPrices && room?.price) {
         roomPrice = Number(room.price);
       } else {
@@ -2906,7 +3178,6 @@ const PropertyDetailPage = () => {
   const photos = property.photos || [];
   const isPG = property.property_category === 'PG';
 
-  // ── Compute the display price for the booking card ──
   const displayBasePrice = pricingMode === 'monthly'
     ? (selectedPrice || Number(property.meta?.perMonthPrice) || Number(property.meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.price) || 0)
     : (selectedPrice || Number(property.meta?.perNightPrice) || Number(property.price) || 0);
@@ -2935,7 +3206,6 @@ const PropertyDetailPage = () => {
           <div style={{ maxWidth: '900px', margin: '0 auto', background: 'white', borderRadius: '12px', padding: '2rem', position: 'relative' }}>
             <button onClick={() => setShowPaymentModal(false)} style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.5rem' }}><FiX /></button>
 
-            {/* Step indicators */}
             <div style={{ marginBottom: '2rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem' }}>
                 {steps.map((stepName, index) => (
@@ -3189,7 +3459,7 @@ const PropertyDetailPage = () => {
             </div>
           </div>
 
-          {/* ── NON-PG ROOM TABLE ──────────────────────────────────────────── */}
+          {/* NON-PG ROOM ARRANGEMENTS */}
           {property.parsedBedrooms?.length > 0 && !isPG && (
             <>
               <div className="divider"></div>
@@ -3198,185 +3468,74 @@ const PropertyDetailPage = () => {
                   <div className="rm-section-left">
                     <span className="rm-pill">Layout</span>
                     <h3 className="rm-section-title">Room Arrangements</h3>
-                    {showDistinctRoomPrices && (
-                      <p className="rm-section-sub" style={{ color: '#64748b', fontSize: '0.85rem' }}>
-                        Each room is individually priced — select a room to book
-                      </p>
-                    )}
+                    <p style={{ fontSize:'0.82rem', color:'#64748b', margin:'2px 0 0' }}>
+                      {showSingleBookRow
+                        ? `${property.parsedBedrooms.length} bedroom${property.parsedBedrooms.length > 1 ? 's' : ''} — entire property rented together`
+                        : `${property.parsedBedrooms.length} rooms — individually priced, each room bookable separately`}
+                    </p>
                   </div>
                   <div className="rm-section-stats">
-                    <div className="rm-stat-box"><span className="rm-stat-num">{property.parsedBedrooms.length}</span><span className="rm-stat-lbl">Bedrooms</span></div>
-                    {property.parsedBathrooms?.length > 0 && (
-                      <div className="rm-stat-box rm-stat-box--gold"><span className="rm-stat-num">{property.parsedBathrooms.length}</span><span className="rm-stat-lbl">Bathrooms</span></div>
-                    )}
+                    <div className="rm-stat-box">
+                      <span className="rm-stat-num">{property.parsedBedrooms.length}</span>
+                      <span className="rm-stat-lbl">Bedroom{property.parsedBedrooms.length !== 1 ? 's' : ''}</span>
+                    </div>
+                    <div className="rm-stat-box rm-stat-box--gold">
+                      <span className="rm-stat-num">
+                        {property.parsedBedrooms.filter(r => r.attachedBathroom).length +
+                          (Number(property.bathrooms) || property.parsedBathrooms?.length || 0)}
+                      </span>
+                      <span className="rm-stat-lbl">Bathrooms</span>
+                    </div>
                   </div>
                 </div>
 
-                {showSingleBookRow ? (
-                  /* ── SINGLE PRICE MODE: one merged row ────────────────── */
-                  <div className="rm-table-outer">
-                    <table className="rm-table">
-                      <thead>
-                        <tr>
-                          <th className="rm-th rm-th--room">Rooms Included</th>
-                          <th className="rm-th">Bathrooms</th>
-                          <th className="rm-th">Total Area</th>
-                          <th className="rm-th rm-th--price">Price / {pricingMode === 'monthly' ? 'Month' : 'Night'}</th>
-                          <th className="rm-th">Available</th>
-                          <th className="rm-th rm-th--action"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr className="rm-row rm-row--last">
-                          {/* Col 1: all rooms listed */}
-                          <td className="rm-td rm-td--room">
-                            <div className="rm-room-cell" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '6px' }}>
-                              {property.parsedBedrooms.map((room, i) => (
-                                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                  <div className="rm-bed-icon-wrap" style={{ flexShrink: 0 }}>
-                                    <div className="rm-bed-icon">
-                                      <div className="rm-bed-headboard"></div>
-                                      <div className="rm-bed-body"><div className="rm-bed-pillow"></div><div className="rm-bed-pillow"></div></div>
-                                    </div>
-                                  </div>
-                                  <div className="rm-room-info">
-                                    <span className="rm-room-name" style={{ fontSize: '0.85rem' }}>{room.type || `Room ${i + 1}`}</span>
-                                    <div className="rm-room-tags" style={{ display: 'flex', gap: '4px' }}>
-                                      {room.bedType && <span className="rm-tag" style={{ fontSize: '0.7rem' }}>{room.bedType}</span>}
-                                      {room.ac && <span className="rm-tag rm-tag--ac" style={{ fontSize: '0.7rem' }}>❄ AC</span>}
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </td>
-                          {/* Col 2: bathroom summary */}
-                          <td className="rm-td">
-                            <div className="rm-bath rm-bath--attached">
-                              <span className="rm-bath-dot"></span>
-                              <span>{property.parsedBedrooms.filter(r => r.attachedBathroom).length} Attached</span>
-                            </div>
-                            {property.parsedBedrooms.some(r => !r.attachedBathroom) && (
-                              <div className="rm-bath rm-bath--shared" style={{ marginTop: '4px' }}>
-                                <span className="rm-bath-dot"></span>
-                                <span>{property.parsedBedrooms.filter(r => !r.attachedBathroom).length} Shared</span>
-                              </div>
-                            )}
-                          </td>
-                          {/* Col 3: total area */}
-                          <td className="rm-td">
-                            <span className="rm-area-val">{property.area ? `${property.area} sqft` : '—'}</span>
-                          </td>
-                          {/* Col 4: single price */}
-                          <td className="rm-td rm-td--price">
-                            {displayBasePrice > 0 ? (
-                              <div className="rm-price-cell">
-                                <span className="rm-price-main">₹{displayBasePrice.toLocaleString('en-IN')}</span>
-                                <span className="rm-price-unit">/{pricingMode === 'monthly' ? 'month' : 'night'}</span>
-                              </div>
-                            ) : <span className="rm-on-request">On Request</span>}
-                          </td>
-                          {/* Col 5: availability */}
-                          <td className="rm-td">
-                            {property.availableFrom ? (
-                              <div className="rm-avail rm-avail--date"><span className="rm-avail-dot"></span>{new Date(property.availableFrom).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</div>
-                            ) : (
-                              <div className="rm-avail rm-avail--now"><span className="rm-avail-dot"></span>Available Now</div>
-                            )}
-                          </td>
-                          {/* Col 6: single Book Now */}
-                          <td className="rm-td rm-td--cta">
-                            <button className="rm-book-btn" onClick={() => handleRoomBookNow(property.parsedBedrooms[0])}>Book Now</button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  /* ── PER-ROOM PRICING: individual rows ─────────────────── */
-                  <div className="rm-table-outer">
-                    <table className="rm-table">
-                      <thead>
-                        <tr>
-                          <th className="rm-th rm-th--room">Room</th>
-                          <th className="rm-th">Bathroom</th>
-                          <th className="rm-th">Area</th>
-                          <th className="rm-th rm-th--price">Price / {pricingMode === 'monthly' ? 'Month' : 'Night'}</th>
-                          <th className="rm-th">Available</th>
-                          <th className="rm-th rm-th--action"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {property.parsedBedrooms.map((room, i) => {
-                          const isLast = i === property.parsedBedrooms.length - 1;
-                          const nightlyP = Number(property.meta?.perNightPrice) || Number(property.price) || 0;
-                          const monthlyP = Number(room.price) || Number(property.meta?.perMonthPrice) || Number(property.meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.price) || 0;
-                          const displayP = pricingMode === 'monthly' ? monthlyP : nightlyP;
-                          return (
-                            <tr key={i} className={`rm-row ${isLast ? 'rm-row--last' : ''}`}>
-                              <td className="rm-td rm-td--room">
-                                <div className="rm-room-cell">
-                                  <div className="rm-bed-icon-wrap">
-                                    <div className="rm-bed-icon">
-                                      <div className="rm-bed-headboard"></div>
-                                      <div className="rm-bed-body"><div className="rm-bed-pillow"></div><div className="rm-bed-pillow"></div></div>
-                                    </div>
-                                  </div>
-                                  <div className="rm-room-info">
-                                    <span className="rm-room-name">{room.type || 'Bedroom'}</span>
-                                    <div className="rm-room-tags">
-                                      {room.bedType && <span className="rm-tag">{room.bedType}</span>}
-                                      {room.ac && <span className="rm-tag rm-tag--ac">❄ AC</span>}
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="rm-td">
-                                <div className={`rm-bath ${room.attachedBathroom ? 'rm-bath--attached' : 'rm-bath--shared'}`}>
-                                  <span className="rm-bath-dot"></span><span>{room.attachedBathroom ? 'Attached' : 'Shared'}</span>
-                                </div>
-                              </td>
-                              <td className="rm-td"><span className="rm-area-val">{room.areaSqFt ? `${room.areaSqFt} sqft` : (property.area ? `${property.area} sqft` : '—')}</span></td>
-                              <td className="rm-td rm-td--price">
-                                {displayP > 0 ? (
-                                  <div className="rm-price-cell">
-                                    <span className="rm-price-main">₹{displayP.toLocaleString('en-IN')}</span>
-                                    <span className="rm-price-unit">/{pricingMode === 'monthly' ? 'month' : 'night'}</span>
-                                  </div>
-                                ) : <span className="rm-on-request">On Request</span>}
-                              </td>
-                              <td className="rm-td">
-                                {room.availabilityDate ? (
-                                  <div className="rm-avail rm-avail--date"><span className="rm-avail-dot"></span>{new Date(room.availabilityDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</div>
-                                ) : (
-                                  <div className="rm-avail rm-avail--now"><span className="rm-avail-dot"></span>Available Now</div>
-                                )}
-                              </td>
-                              <td className="rm-td rm-td--cta">
-                                <button className="rm-book-btn" onClick={() => handleRoomBookNow(room)}>Book Now</button>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
+                {showSingleBookRow && (
+                  <>
+                    <RoomTableSingle
+                      rooms={property.parsedBedrooms}
+                      price={displayBasePrice}
+                      priceUnit={pricingMode === 'monthly' ? 'month' : 'night'}
+                      area={property.area ? `${property.area} sqft` : '—'}
+                      availableFrom={property.availableFrom || property.meta?.availableFrom}
+                      onBookNow={handleRoomBookNow}
+                    />
+                    <RoomTableSingleMobile
+                      rooms={property.parsedBedrooms}
+                      price={displayBasePrice}
+                      priceUnit={pricingMode === 'monthly' ? 'month' : 'night'}
+                      availableFrom={property.availableFrom || property.meta?.availableFrom}
+                      onBookNow={handleRoomBookNow}
+                    />
+                  </>
                 )}
 
-                {/* Mobile table */}
-                <MobileRoomTable
-                  bedrooms={property.parsedBedrooms}
-                  pricingMode={pricingMode}
-                  property={property}
-                  onBookNow={handleRoomBookNow}
-                  showEnquire={false}
-                  showSingleBookRow={showSingleBookRow}
-                />
+                {!showSingleBookRow && (
+                  <>
+                    <RoomTablePerRoom
+                      rooms={property.parsedBedrooms}
+                      pricingMode={pricingMode}
+                      propertyPrice={pricingMode === 'monthly'
+                        ? (Number(property.meta?.perMonthPrice) || Number(property.monthly_price) || Number(property.price) || 0)
+                        : (Number(property.meta?.perNightPrice) || Number(property.price) || 0)}
+                      propertyArea={property.area}
+                      onBookNow={handleRoomBookNow}
+                    />
+                    <RoomTablePerRoomMobile
+                      rooms={property.parsedBedrooms}
+                      pricingMode={pricingMode}
+                      propertyPrice={pricingMode === 'monthly'
+                        ? (Number(property.meta?.perMonthPrice) || Number(property.monthly_price) || Number(property.price) || 0)
+                        : (Number(property.meta?.perNightPrice) || Number(property.price) || 0)}
+                      onBookNow={handleRoomBookNow}
+                      showEnquire={false}
+                    />
+                  </>
+                )}
               </div>
             </>
           )}
 
-          {/* ── PG ROOM TABLE ─────────────────────────────────────────────── */}
+          {/* S3: PG / HOSTEL — monthly */}
           {property.parsedBedrooms?.length > 0 && isPG && pricingMode === 'monthly' && (
             <>
               <div className="divider"></div>
@@ -3385,15 +3544,22 @@ const PropertyDetailPage = () => {
                   <div className="rm-section-left">
                     <span className="rm-pill">Room Inventory</span>
                     <h3 className="rm-section-title">Available Rooms & Rates</h3>
-                    <p className="rm-section-sub">
+                    <p style={{ fontSize:'0.82rem', color:'#64748b', margin:'2px 0 0' }}>
                       {property.parsedBedrooms.length} room type{property.parsedBedrooms.length > 1 ? 's' : ''} · Starting{' '}
-                      <strong>₹{Math.min(...property.parsedBedrooms.map(r => Number(r.price) || Infinity).filter(p => p < Infinity)).toLocaleString('en-IN')}/month</strong>
+                      <strong>
+                        ₹{Math.min(...property.parsedBedrooms.map(r => Number(r.price) || Infinity).filter(p => p < Infinity)).toLocaleString('en-IN')}/month
+                      </strong>
                     </p>
                   </div>
                   <div className="rm-section-stats">
-                    <div className="rm-stat-box"><span className="rm-stat-num">{property.parsedBedrooms.length}</span><span className="rm-stat-lbl">Types</span></div>
+                    <div className="rm-stat-box">
+                      <span className="rm-stat-num">{property.parsedBedrooms.length}</span>
+                      <span className="rm-stat-lbl">Types</span>
+                    </div>
                     <div className="rm-stat-box rm-stat-box--gold">
-                      <span className="rm-stat-num" style={{ fontSize: '0.78rem' }}>₹{Math.min(...property.parsedBedrooms.map(r => Number(r.price) || Infinity).filter(p => p < Infinity)).toLocaleString('en-IN')}</span>
+                      <span className="rm-stat-num" style={{ fontSize:'0.78rem' }}>
+                        ₹{Math.min(...property.parsedBedrooms.map(r => Number(r.price) || Infinity).filter(p => p < Infinity)).toLocaleString('en-IN')}
+                      </span>
                       <span className="rm-stat-lbl">From</span>
                     </div>
                   </div>
@@ -3423,39 +3589,31 @@ const PropertyDetailPage = () => {
                                 <div className="rm-room-info">
                                   <span className="rm-room-name">{room.type || 'Standard Room'}</span>
                                   <div className="rm-room-tags">
-                                    {room.bedType && <span className="rm-tag">{room.bedType}</span>}
-                                    {room.ac && <span className="rm-tag rm-tag--ac">❄ AC</span>}
+                                    {room.bedType   && <span className="rm-tag">{room.bedType}</span>}
+                                    {room.ac        && <span className="rm-tag rm-tag--ac">❄ AC</span>}
                                     {room.furnished && <span className="rm-tag">Furnished</span>}
                                   </div>
                                 </div>
                               </div>
                             </td>
-                            <td className="rm-td">
-                              <div className={`rm-bath ${room.attachedBathroom ? 'rm-bath--attached' : 'rm-bath--shared'}`}>
-                                <span className="rm-bath-dot"></span><span>{room.attachedBathroom ? 'Attached' : 'Shared'}</span>
-                              </div>
-                            </td>
+                            <td className="rm-td"><BathBadge attached={room.attachedBathroom} /></td>
                             <td className="rm-td"><span className="rm-area-val">{room.areaSqFt ? `${room.areaSqFt} sqft` : '—'}</span></td>
                             <td className="rm-td rm-td--price">
                               {monthlyPrice > 0 ? (
                                 <div className="rm-price-cell">
-                                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
+                                  <div style={{ display:'flex', alignItems:'baseline', gap:'2px' }}>
                                     <span className="rm-price-main">₹{monthlyPrice.toLocaleString('en-IN')}</span>
                                     <span className="rm-price-unit">/mo</span>
                                   </div>
-                                  {room.securityDeposit && <div className="rm-deposit">Dep: ₹{Number(room.securityDeposit).toLocaleString('en-IN')}</div>}
+                                  {room.securityDeposit && (
+                                    <div className="rm-deposit">Dep: ₹{Number(room.securityDeposit).toLocaleString('en-IN')}</div>
+                                  )}
                                 </div>
                               ) : <span className="rm-on-request">On Request</span>}
                             </td>
-                            <td className="rm-td">
-                              {room.availabilityDate ? (
-                                <div className="rm-avail rm-avail--date"><span className="rm-avail-dot"></span>{new Date(room.availabilityDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</div>
-                              ) : (
-                                <div className="rm-avail rm-avail--now"><span className="rm-avail-dot"></span>Available Now</div>
-                              )}
-                            </td>
+                            <td className="rm-td"><AvailBadge date={room.availabilityDate} /></td>
                             <td className="rm-td rm-td--cta">
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                              <div style={{ display:'flex', flexDirection:'column', gap:'6px' }}>
                                 <button className="rm-enquire-btn" onClick={() => { setSelectedRoomForLead(room.type); setShowLeadModal(true); }}>Enquire</button>
                                 <button className="rm-book-btn" onClick={() => handleRoomBookNow(room)}>Book Now</button>
                               </div>
@@ -3467,14 +3625,13 @@ const PropertyDetailPage = () => {
                   </table>
                 </div>
 
-                <MobileRoomTable
-                  bedrooms={property.parsedBedrooms}
-                  pricingMode={pricingMode}
-                  property={property}
+                <RoomTablePerRoomMobile
+                  rooms={property.parsedBedrooms}
+                  pricingMode="monthly"
+                  propertyPrice={0}
                   onBookNow={handleRoomBookNow}
                   onEnquire={(room) => { setSelectedRoomForLead(room.type); setShowLeadModal(true); }}
                   showEnquire={true}
-                  showSingleBookRow={false}
                 />
               </div>
             </>
@@ -3609,7 +3766,7 @@ const PropertyDetailPage = () => {
 
           <div className="divider"></div>
 
-          {/* Booking card for non-PG monthly or all daily */}
+          {/* Booking card */}
           {!(isPG && pricingMode === 'monthly') && (
             <div style={{ margin: '2rem 0' }}>
               <div className="booking-card" style={{ position: 'static', maxWidth: 'none', boxShadow: 'none', border: '1px solid #e2e8f0', background: '#f8fafc' }}>
