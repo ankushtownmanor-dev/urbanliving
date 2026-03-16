@@ -3751,9 +3751,9 @@ const PropertyDetailPage = () => {
             <>
               <div className="divider"></div>
               <section className="gbWrap">
-                <div className="gbHeader">
+                {/* <div className="gbHeader">
                   <div><h3 className="gbTitle">Local Guide</h3><p className="gbSubTitle">Helpful local information for your stay.</p></div>
-                </div>
+                </div> */}
                 <div className="gbGrid">
                   {property.guidebook?.transport_tips && (
                     <div className="gbCard">
