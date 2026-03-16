@@ -147,10 +147,6 @@ function App() {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/career-support" element={<RequireAuth><CareerSupport /></RequireAuth>} />
 
-          {/* =========================
-              🔒 PROTECTED ADMIN DASHBOARD SECTION
-              Ab yeh saare routes bina login ke access nahi ho sakte
-          ========================== */}
           <Route path="/admindashboard" element={<ProtectedAdminLayout />}>
             <Route index element={<AdminDashBoard />} />
             <Route path="inquiriesbookings" element={<InquiriesBookings />} />

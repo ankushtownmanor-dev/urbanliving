@@ -1184,8 +1184,8 @@ const parseMeta = (prop) => {
 // Ye categories SIRF nightly short-term properties mein hain
 const NIGHTLY_ONLY_CATEGORIES = ["villa", "cabin", "bungalow", "hotel"];
 // Ye categories SIRF PGListingForm (monthly/long-term) mein hain
-// NOTE: "apartment" yahan NAHI hai — dono forms use karte hain; check_in_time se decide hoga
-const MONTHLY_ONLY_CATEGORIES = ["flat", "penthouse", "pg", "house", "studio", "suite"];
+// NOTE: "apartment", "house", "studio", "suite" dono forms use karte hain; check_in_time se decide hoga
+const MONTHLY_ONLY_CATEGORIES = ["flat", "penthouse", "pg"];
 
 // PGUpdateForm ke default check_in/out times — ye real nightly signal NAHI hain
 const PG_UPDATE_DEFAULT_TIMES = ["12:00", "12:00:00", "11:00", "11:00:00"];
