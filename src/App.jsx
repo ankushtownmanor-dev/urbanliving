@@ -8,6 +8,7 @@ import Navbar from "./compoent/Homepage/Navbar";
 import HoomieFooter from "./compoent/Homepage/HoomieFooter";
 
 // Homepage & other main pages
+// import Home from "./compoent/Homepage/Home";
 import Home from "./compoent/Homepage/Home";
 import LuxeMain from "./compoent/Secondpage/LuxeMain";
 import ThirdMain from "./compoent/ThirdPage/ThirdMain";
