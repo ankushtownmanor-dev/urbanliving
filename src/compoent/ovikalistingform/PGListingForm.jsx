@@ -1425,6 +1425,7 @@ const PGListingForm = () => {
         unmarried_couple_allowed: form.houseRules.includes("Couple Friendly"),
         bachelors_allowed: form.preferredTenants.some(t => t.includes("Bachelors")),
       }));
+      fd.append("coverPhotoIndex", String(coverIndex));
 
       photoPreviews.previews.forEach((p) => {
         if(p.file) fd.append("photos", p.file);
