@@ -172,6 +172,29 @@ const PGUpdateForm = ({ propId: passedId, onComplete }) => {
   const [newPhotoPreviews, setNewPhotoPreviews] = useState([]);
   const [coverIndex, setCoverIndex] = useState(0);
 
+  const uploadPhotos = async (files) => {
+    const fd = new FormData();
+    files.forEach(f => fd.append('images', f));
+
+    // Use the same upload endpoint used by the admin dashboard
+    const res = await fetch('https://www.townmanor.ai/api/image/aws-upload-owner-images', {
+      method: 'POST',
+      body: fd,
+    });
+
+    const data = await res.json().catch(() => null);
+    if (!res.ok || !data) {
+      throw new Error(`Upload failed: ${res.status} ${res.statusText}`);
+    }
+
+    // API returns { fileUrls: [ ... ] }
+    if (Array.isArray(data.fileUrls) && data.fileUrls.length > 0) {
+      return data.fileUrls;
+    }
+
+    throw new Error('No URLs returned from upload');
+  };
+
   const STEPS = [
     { id: 0, title: "Category", icon: <Zap size={18} /> },
     { id: 1, title: "Info", icon: <Info size={18} /> },
@@ -274,6 +297,7 @@ const PGUpdateForm = ({ propId: passedId, onComplete }) => {
       if (Array.isArray(data.photos)) photos = data.photos;
       else if (typeof data.photos === 'string') photos = data.photos.split(',').filter(Boolean);
       setExistingPhotos(photos);
+      setCoverIndex(data.cover_photo_index || 0);
 
       setIsLoading(false);
     } catch (err) {
@@ -334,11 +358,16 @@ const PGUpdateForm = ({ propId: passedId, onComplete }) => {
 
   const removeExistingPhoto = (idx) => {
     setExistingPhotos(existingPhotos.filter((_, i) => i !== idx));
+    if (coverIndex === idx) setCoverIndex(0);
+    else if (coverIndex > idx) setCoverIndex(coverIndex - 1);
   };
 
   const removeNewPhoto = (idx) => {
     setNewPhotos(newPhotos.filter((_, i) => i !== idx));
     setNewPhotoPreviews(newPhotoPreviews.filter((_, i) => i !== idx));
+    const newIndex = existingPhotos.length + idx;
+    if (coverIndex === newIndex) setCoverIndex(0);
+    else if (coverIndex > newIndex) setCoverIndex(coverIndex - 1);
   };
 
   const handleSendOtp = async () => {
@@ -438,6 +467,19 @@ const PGUpdateForm = ({ propId: passedId, onComplete }) => {
     try {
       const idStr = String(id);
       
+      // Upload new photos if any
+      let uploadedUrls = [];
+      if (newPhotos.length > 0) {
+        try {
+          uploadedUrls = await uploadPhotos(newPhotos);
+        } catch (err) {
+          // Continue even if upload fails (e.g., endpoint missing or response not JSON)
+          console.warn('Photo upload failed, continuing without new photos:', err);
+          alert('Could not upload new photos. The update will proceed without them.');
+          uploadedUrls = [];
+        }
+      }
+      
       // Calculate total beds correctly
       const totalBeds = (form.bedroomDetails || []).reduce((sum, r) => sum + (Number(r.bedCount) || 1), 0);
       
@@ -449,6 +491,9 @@ const PGUpdateForm = ({ propId: passedId, onComplete }) => {
       
       // Build payload exactly like SuperAdminDashboard (Verified reference for PUT updates)
       // We exclude 'meta' and 'photos' here as SuperAdminDashboard doesn't send them in PUT
+      const updatedPhotos = [...existingPhotos, ...uploadedUrls];
+      const coverPhotoUrl = updatedPhotos[coverIndex] || updatedPhotos[0] || "";
+
       const payload = {
         property_name: form.title || "Untitled",
         description: (form.mainDescription || "") + extraInfo,
@@ -476,11 +521,13 @@ const PGUpdateForm = ({ propId: passedId, onComplete }) => {
         cleaning_fee: Number(form.cleaning_fee) || 0,
         weekly_discount_pct: Number(form.weekly_discount_pct) || 0,
         monthly_discount_pct: Number(form.monthly_discount_pct) || 0,
+        cover_photo_index: coverIndex,
 
         // JSON fields (stringified as per SuperAdminDashboard)
         amenities: JSON.stringify(Object.keys(form.amenities || {}).filter(k => form.amenities[k])),
         bedrooms: JSON.stringify(form.bedroomDetails || []),
         bathrooms: JSON.stringify([{ type: "Attached", count: form.bathrooms || 1 }]),
+        photos: JSON.stringify(updatedPhotos),
         guest_policy: JSON.stringify({
           family_allowed: form.preferredTenants?.includes("Family Only"),
           unmarried_couple_allowed: form.houseRules?.includes("Couple Friendly"),
@@ -859,7 +906,7 @@ const PGUpdateForm = ({ propId: passedId, onComplete }) => {
               <div className="section-subtitle">Existing Photos</div>
               <div className="preview-grid" style={{marginBottom: '30px'}}>
                  {existingPhotos.map((url, i) => (
-                   <div key={i} className="preview-item">
+                   <div key={i} className={`preview-item ${coverIndex === i ? 'is-cover' : ''}`}>
                       <img src={url} alt="prop" />
                       <div className="preview-overlay-fixed">
                          <div className="top-actions">
@@ -871,6 +918,14 @@ const PGUpdateForm = ({ propId: passedId, onComplete }) => {
                                <Trash2 size={14} />
                                <span>Remove</span>
                             </button>
+                         </div>
+                         <div className="bottom-actions">
+                            <div 
+                              className={`badge-cover-premium ${coverIndex === i ? 'active' : ''}`} 
+                              onClick={() => setCoverIndex(i)}
+                            >
+                              {coverIndex === i ? 'Main Cover' : 'Set as Cover'}
+                            </div>
                          </div>
                       </div>
                    </div>
@@ -887,7 +942,7 @@ const PGUpdateForm = ({ propId: passedId, onComplete }) => {
               </div>
               <div className="preview-grid">
                  {newPhotoPreviews.map((p, i) => (
-                   <div key={i} className="preview-item">
+                   <div key={i} className={`preview-item ${coverIndex === (existingPhotos.length + i) ? 'is-cover' : ''}`}>
                       <img src={p.url} alt="prop" />
                       <div className="preview-overlay-fixed">
                          <div className="top-actions">
@@ -899,6 +954,14 @@ const PGUpdateForm = ({ propId: passedId, onComplete }) => {
                                <Trash2 size={14} />
                                <span>Discard</span>
                             </button>
+                         </div>
+                         <div className="bottom-actions">
+                            <div 
+                              className={`badge-cover-premium ${coverIndex === (existingPhotos.length + i) ? 'active' : ''}`} 
+                              onClick={() => setCoverIndex(existingPhotos.length + i)}
+                            >
+                              {coverIndex === (existingPhotos.length + i) ? 'Main Cover' : 'Set as Cover'}
+                            </div>
                          </div>
                       </div>
                    </div>

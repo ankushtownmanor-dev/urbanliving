@@ -82,7 +82,6 @@
 //       if (isMonthly) {
 //         const minRoomPrice = getPgMinPrice();
 //         const monthly = minRoomPrice || Number(meta?.perMonthPrice) || Number(meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.base_rate) || 0;
-//         // ── agar monthly price 1500 se kam hai to "Price on Request" dikhao ──
 //         if (monthly <= 1500) return { price: 0, label: '', prefix: null, forceRequest: true };
 //         return { price: monthly, label: '/ month', prefix: 'Starts at', forceRequest: false };
 //       } else {
@@ -92,7 +91,6 @@
 //     }
 //     if (isMonthly) {
 //       const monthly = Number(meta?.perMonthPrice) || Number(meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.price) || 0;
-//       // ── agar monthly price 1500 se kam hai to "Price on Request" dikhao ──
 //       if (monthly <= 1500) return { price: 0, label: '', prefix: null, forceRequest: true };
 //       return { price: monthly, label: '/ month', prefix: null, forceRequest: false };
 //     }
@@ -101,10 +99,18 @@
 
 //   const { price: displayPrice, label: priceLabel, prefix: pricePrefix, forceRequest } = getDisplayPrice();
 
-//   const coverPhoto =
-//     property.cover_photo ||
-//     (Array.isArray(property.photos) && property.photos[0]) ||
-//     'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
+//   const coverPhoto = (() => {
+//     // Prefer explicit cover index (updated via admin update form).
+//     const photos = Array.isArray(property.photos) ? property.photos : [];
+//     const idx = Number(property.cover_photo_index);
+//     if (!Number.isNaN(idx) && idx >= 0 && idx < photos.length && photos[idx]) {
+//       return photos[idx];
+//     }
+//     // Fallbacks
+//     if (Array.isArray(photos) && photos.length > 0) return photos[0];
+//     if (property.cover_photo) return property.cover_photo;
+//     return 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
+//   })();
 
 //   const bedCount = getCount(property.bedrooms);
 //   const bathCount = getCount(property.bathrooms);
@@ -231,13 +237,7 @@
 //         {/* ── PRICE SECTION ── */}
 //         <div style={{ marginTop: 'auto', paddingTop: 10, borderTop: '1px solid #f0f0f0' }}>
 //           {forceRequest ? (
-//             // ── Price on Request — monthly price < 1500 ──
-//             <span style={{
-//               fontSize: 13,
-//               fontWeight: 600,
-//               color: '#999',
-//               fontStyle: 'italic',
-//             }}>
+//             <span style={{ fontSize: 13, fontWeight: 600, color: '#999', fontStyle: 'italic' }}>
 //               Price on Request
 //             </span>
 //           ) : (
@@ -280,6 +280,16 @@
 //   ];
 //   const isLongTermProperty = (p) => !SHORT_TERM_TYPES.includes(p.property_type);
 
+//   // ── Helper: get PG nightly price ──────────────────────────────────────────
+//   const getPgNightlyPrice = (p) => {
+//     const meta = (() => {
+//       if (!p.meta) return {};
+//       if (typeof p.meta === 'object') return p.meta;
+//       try { return JSON.parse(p.meta); } catch { return {}; }
+//     })();
+//     return Number(p.base_rate) || Number(p.price) || Number(meta?.perNightPrice) || 0;
+//   };
+
 //   const applyFilter = (list, cat, q, rental) => {
 //     let result = list;
 //     const isMonthly = rental === 'long';
@@ -292,6 +302,15 @@
 //       result = result.filter(p =>
 //         p.property_category === 'PG' || !isLongTermProperty(p)
 //       );
+
+//       // ── PG nightly filter: hide PG properties with nightly price > ₹3000 ──
+//       // Non-PG properties are NOT affected by this rule
+//       result = result.filter(p => {
+//         if (p.property_category !== 'PG') return true;
+//         const nightlyPrice = getPgNightlyPrice(p);
+//         // agar price 0 hai (unknown) → dikhao; agar > 3000 → hide karo
+//         return nightlyPrice === 0 || nightlyPrice <= 3000;
+//       });
 //     }
 
 //     if (cat) {
@@ -319,12 +338,6 @@
 //         p.city?.toLowerCase().includes(qL)
 //       );
 //     }
-
-//     // Guest filtering logic: Ensure property can accommodate at least 'guests' value
-//     // (Assuming many properties might not have this field, we only filter if property has a capacity field)
-//     const guestNum = Number(sessionStorage.getItem('ovika_search_guests')) || 1;
-//     // Note: If you have a 'max_guests' or 'capacity' field in your API, add it here:
-//     // result = result.filter(p => (Number(p.max_guests) || 10) >= guestNum);
 
 //     return result;
 //   };
@@ -507,8 +520,6 @@
 //                       whiteSpace: 'nowrap', flex: '1 1 0', justifyContent: 'center',
 //                       minWidth: 0,
 //                     }}
-
-
 //                     onMouseEnter={e => {
 //                       if (!isActive) {
 //                         e.currentTarget.style.background = 'rgba(255,255,255,0.26)';
@@ -556,10 +567,7 @@
 //               <>
 //                 <div
 //                   onClick={() => setShowRentalPopup(false)}
-//                   style={{
-//                     position: 'fixed', inset: 0, zIndex: 99,
-//                     background: 'rgba(0,0,0,0.25)',
-//                   }}
+//                   style={{ position: 'fixed', inset: 0, zIndex: 99, background: 'rgba(0,0,0,0.25)' }}
 //                 />
 //                 <div style={{
 //                   position: 'fixed', top: '50%', left: '50%',
@@ -576,7 +584,6 @@
 //                     Select Rental Type
 //                   </h3>
 //                   <div style={{ display: 'flex', gap: 14, flexDirection: typeof window !== 'undefined' && window.innerWidth < 480 ? 'column' : 'row' }}>
-//                     {/* Nightly Card */}
 //                     <button
 //                       onClick={() => {
 //                         setRentalType('short');
@@ -603,7 +610,6 @@
 //                       <span style={{ fontSize: 13, color: '#999', textAlign: 'center', lineHeight: 1.5 }}>Short stays, per night pricing</span>
 //                     </button>
 
-//                     {/* Monthly Card */}
 //                     <button
 //                       onClick={() => {
 //                         setRentalType('long');
@@ -755,6 +761,61 @@ const CategoryIcon = ({ id, size = 14, color = 'currentColor' }) => {
   return null;
 };
 
+// ─── SHARED BED/BATH HELPERS (same logic as PropertyDetailPage) ──────────────
+
+/**
+ * Parse any field that could be a JSON string, array, or number into an array.
+ */
+const parseJsonField = (field) => {
+  if (!field) return [];
+  if (Array.isArray(field)) return field;
+  if (typeof field === 'string') {
+    const trimmed = field.trim();
+    // Pure integer string → NOT an array, return []
+    if (/^\d+$/.test(trimmed)) return [];
+    try {
+      const parsed = JSON.parse(trimmed);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+};
+
+/**
+ * Get bedroom COUNT — consistent with DetailPage's getDisplayCount():
+ *   - If parsedBedrooms array has items → use its length
+ *   - Otherwise fall back to Number(raw)
+ */
+const getBedCount = (rawBedrooms) => {
+  const parsed = parseJsonField(rawBedrooms);
+  if (parsed.length > 0) return parsed.length;
+  const n = Number(rawBedrooms);
+  return isNaN(n) ? 0 : Math.max(0, n);
+};
+
+/**
+ * Get bathroom COUNT — consistent with DetailPage's getDisplayCount():
+ *   - If parsedBathrooms array has items → sum all 'count' fields (same as DetailPage does for attached count)
+ *   - Otherwise fall back to Number(raw)
+ */
+const getBathCount = (rawBathrooms) => {
+  const parsed = parseJsonField(rawBathrooms);
+  if (parsed.length > 0) {
+    // Each item may have a { type, count } shape
+    const hasCount = parsed.some(item => item && typeof item === 'object' && 'count' in item);
+    if (hasCount) {
+      return parsed.reduce((sum, item) => sum + (Number(item.count) || 0), 0);
+    }
+    return parsed.length;
+  }
+  const n = Number(rawBathrooms);
+  return isNaN(n) ? 0 : Math.max(0, n);
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 /* ─── Property Card ─────────────────────────────── */
 const PropertyCard = ({ property, rentalType }) => {
   const navigate = useNavigate();
@@ -763,27 +824,6 @@ const PropertyCard = ({ property, rentalType }) => {
   const randomRating = useMemo(() => {
     return (Math.random() * (4.9 - 4.1) + 4.1).toFixed(1);
   }, [property.id]);
-
-  const getCount = (val) => {
-    if (val === null || val === undefined) return 0;
-    if (typeof val === 'number') return val > 0 ? val : 0;
-    let parsed = val;
-    if (typeof val === 'string') {
-      const trimmed = val.trim();
-      if (/^\d+$/.test(trimmed)) return parseInt(trimmed, 10);
-      try { parsed = JSON.parse(trimmed); } catch { return parseInt(trimmed) || 0; }
-    }
-    if (Array.isArray(parsed)) {
-      const hasCount = parsed.some(item => item && typeof item === 'object' && 'count' in item);
-      if (hasCount) return parsed.reduce((a, c) => a + (Number(c.count) || 0), 0);
-      return parsed.length;
-    }
-    if (typeof parsed === 'object' && parsed !== null) {
-      if ('count' in parsed) return Number(parsed.count) || 0;
-      return Object.keys(parsed).length;
-    }
-    return 0;
-  };
 
   const formatPrice = (price) => {
     const n = Number(price);
@@ -835,13 +875,21 @@ const PropertyCard = ({ property, rentalType }) => {
 
   const { price: displayPrice, label: priceLabel, prefix: pricePrefix, forceRequest } = getDisplayPrice();
 
-  const coverPhoto =
-    property.cover_photo ||
-    (Array.isArray(property.photos) && property.photos[0]) ||
-    'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
+  const coverPhoto = (() => {
+    const photos = Array.isArray(property.photos) ? property.photos : [];
+    const idx = Number(property.cover_photo_index);
+    if (!Number.isNaN(idx) && idx >= 0 && idx < photos.length && photos[idx]) {
+      return photos[idx];
+    }
+    if (Array.isArray(photos) && photos.length > 0) return photos[0];
+    if (property.cover_photo) return property.cover_photo;
+    return 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
+  })();
 
-  const bedCount = getCount(property.bedrooms);
-  const bathCount = getCount(property.bathrooms);
+  // ── USE SHARED HELPERS (same as DetailPage) ──────────────────────────────
+  const bedCount  = getBedCount(property.bedrooms);
+  const bathCount = getBathCount(property.bathrooms);
+  // ─────────────────────────────────────────────────────────────────────────
 
   return (
     <div
@@ -927,7 +975,7 @@ const PropertyCard = ({ property, rentalType }) => {
           </span>
         </div>
 
-        {/* Specs */}
+        {/* Specs — using shared getBedCount / getBathCount helpers */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#717171', fontSize: 13 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <BiBed style={{ fontSize: 15 }} />
@@ -1008,7 +1056,6 @@ const PropertyListPage = () => {
   ];
   const isLongTermProperty = (p) => !SHORT_TERM_TYPES.includes(p.property_type);
 
-  // ── Helper: get PG nightly price ──────────────────────────────────────────
   const getPgNightlyPrice = (p) => {
     const meta = (() => {
       if (!p.meta) return {};
@@ -1031,12 +1078,9 @@ const PropertyListPage = () => {
         p.property_category === 'PG' || !isLongTermProperty(p)
       );
 
-      // ── PG nightly filter: hide PG properties with nightly price > ₹3000 ──
-      // Non-PG properties are NOT affected by this rule
       result = result.filter(p => {
         if (p.property_category !== 'PG') return true;
         const nightlyPrice = getPgNightlyPrice(p);
-        // agar price 0 hai (unknown) → dikhao; agar > 3000 → hide karo
         return nightlyPrice === 0 || nightlyPrice <= 3000;
       });
     }
