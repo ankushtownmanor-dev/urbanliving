@@ -331,7 +331,7 @@
 
 //       // ✅ FIX 4: Correct URL - townmanor.ai (without www)
 //       const apiUrl = `https://www.townmanor.ai/api/ovika/properties/${propertyId}`;
-      
+
 //       console.log("=== UPDATE DEBUG ===");
 //       console.log("Property ID:", propertyId);
 //       console.log("API URL:", apiUrl);
@@ -1078,6 +1078,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Dashboard.module.css";
 import { AuthContext } from "../../Login/AuthContext";
 import { Home, Plus, Loader, Moon, Calendar } from "lucide-react";
+import PGUpdateForm from "../../ovikalistingform/PGUpdateForm";
 
 function KeyItem({ text, filetype = "pdf" }) {
   const isXlsx = filetype === "xlsx";
@@ -1180,45 +1181,71 @@ const parseMeta = (prop) => {
 //   4. meta mein checkInTime filled → NIGHTLY
 //   5. Default → MONTHLY (safe side — PGListingForm data)
 
-// Ye categories SIRF Tmx9PropertyForm (nightly) mein hain
-const NIGHTLY_ONLY_CATEGORIES = ["apartment", "villa", "cabin", "bungalow", "hotel"];
-// Ye categories SIRF PGListingForm (monthly) mein hain  
-const MONTHLY_ONLY_CATEGORIES = ["flat", "penthouse", "pg"];
+// Ye categories SIRF nightly short-term properties mein hain
+const NIGHTLY_ONLY_CATEGORIES = ["villa", "cabin", "bungalow", "hotel"];
+// Ye categories SIRF PGListingForm (monthly/long-term) mein hain
+// NOTE: "apartment" yahan NAHI hai — dono forms use karte hain; check_in_time se decide hoga
+const MONTHLY_ONLY_CATEGORIES = ["flat", "penthouse", "pg", "house", "studio", "suite"];
+
+// PGUpdateForm ke default check_in/out times — ye real nightly signal NAHI hain
+const PG_UPDATE_DEFAULT_TIMES = ["12:00", "12:00:00", "11:00", "11:00:00"];
+
+// ── ID-based hardcode overrides (highest priority) ──
+// Nightly short-term Ovika Signature properties (small price: ₹2,299-4,200/night)
+const NIGHTLY_OVERRIDE_IDS = new Set([77, 78, 79, 80, 81]);
+// Monthly long-term Ovika Signature properties (big price: ₹34,999-59,999/month)
+const MONTHLY_OVERRIDE_IDS = new Set([314, 315, 316, 317]);
 
 const isMonthlyProperty = (prop) => {
   if (!prop) return false;
 
+  const propId = Number(prop.id || prop._id || 0);
+
+  // ── Step -1: Hard ID overrides — override EVERYTHING ──
+  if (NIGHTLY_OVERRIDE_IDS.has(propId)) return false; // force NIGHTLY
+  if (MONTHLY_OVERRIDE_IDS.has(propId)) return true;  // force MONTHLY
+
   const meta = parseMeta(prop);
 
-  // ── Step 1: check_in_time top-level DB column (STRONGEST signal) ──
-  const cin  = (prop.check_in_time  || "").toString().trim();
-  const cout = (prop.check_out_time || "").toString().trim();
-  if (cin  !== "" && cin  !== "null" && cin  !== "undefined") return false; // NIGHTLY
-  if (cout !== "" && cout !== "null" && cout !== "undefined") return false; // NIGHTLY
+  // ── Step 0 (HIGHEST PRIORITY): PGListingForm ke unique meta fields ──
+  // Agar ye fields hain toh property DEFINITELY monthly hai, chahe check_in_time kuch bhi ho
+  const hasLongTermSignals = [
+    'noticePeriod', 'lockInPeriod', 'baseRate', 'bedroomDetails',
+    'gateClosingTime', 'preferredTenants', 'tenantPreferences',
+    'securityDeposit', 'maintenanceCharge'
+  ].some(k => meta[k] !== undefined);
+  if (hasLongTermSignals) return true;
 
-  // ── Step 2: property_category se identify karo ──
+  // ── Step 1: MONTHLY category check — check_in_time se PEHLE ──
+  // Important: PGUpdateForm "12:00" default se bachne ke liye category pehle check karo
   const cat = (prop.property_category || "").toLowerCase().trim();
-  if (NIGHTLY_ONLY_CATEGORIES.includes(cat)) return false; // NIGHTLY
-  if (MONTHLY_ONLY_CATEGORIES.includes(cat))  return true;  // MONTHLY
-
-  // ── Step 3: meta.propertyCategory check ──
   const metaCat = (meta.propertyCategory || "").toLowerCase().trim();
+  if (MONTHLY_ONLY_CATEGORIES.includes(cat)) return true;   // MONTHLY — category wins
+  if (MONTHLY_ONLY_CATEGORIES.includes(metaCat)) return true;   // MONTHLY
+
+  // ── Step 2: Real check_in_time check (PGUpdateForm defaults exclude karo) ──
+  const cin = (prop.check_in_time || "").toString().trim();
+  const cout = (prop.check_out_time || "").toString().trim();
+  const hasRealCheckIn = cin !== "" && cin !== "null" && cin !== "undefined" && !PG_UPDATE_DEFAULT_TIMES.includes(cin);
+  const hasRealCheckOut = cout !== "" && cout !== "null" && cout !== "undefined" && !PG_UPDATE_DEFAULT_TIMES.includes(cout);
+  if (hasRealCheckIn || hasRealCheckOut) return false; // Real nightly check-in time → NIGHTLY
+
+  // ── Step 3: NIGHTLY-only category (without check_in_time) ──
+  if (NIGHTLY_ONLY_CATEGORIES.includes(cat)) return false; // NIGHTLY
   if (NIGHTLY_ONLY_CATEGORIES.includes(metaCat)) return false; // NIGHTLY
-  if (MONTHLY_ONLY_CATEGORIES.includes(metaCat))  return true;  // MONTHLY
 
-  // ── Step 4: meta checkInTime fallback ──
-  const metaCin  = (meta.checkInTime  || "").toString().trim();
+  // ── Step 4: meta.checkInTime fallback (defaults exclude) ──
+  const metaCin = (meta.checkInTime || "").toString().trim();
   const metaCout = (meta.checkOutTime || "").toString().trim();
-  if (metaCin  !== "" && metaCin  !== "null") return false; // NIGHTLY
-  if (metaCout !== "" && metaCout !== "null") return false; // NIGHTLY
+  if (metaCin !== "" && metaCin !== "null" && !PG_UPDATE_DEFAULT_TIMES.includes(metaCin)) return false;
+  if (metaCout !== "" && metaCout !== "null" && !PG_UPDATE_DEFAULT_TIMES.includes(metaCout)) return false;
 
-  // ── Step 5: Explicit rental_type ──
+  // ── Step 5: Explicit rental_type field ──
   const rentalType = (prop.rental_type || prop.listing_type || meta.rental_type || meta.listing_type || "").toLowerCase();
   if (rentalType === "monthly" || rentalType === "long-term") return true;
   if (rentalType === "nightly" || rentalType === "short-term") return false;
 
-  // ── Step 6: Default → MONTHLY ──
-  // (safe fallback for PGListingForm data jiska category "House"/"Studio"/"Suite" ho)
+  // ── Step 6: Default → MONTHLY (safe fallback) ──
   return true;
 };
 
@@ -2084,6 +2111,7 @@ export default function DashBoardAdmin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [editingProperty, setEditingProperty] = useState(null);
+  const [editingMonthlyProperty, setEditingMonthlyProperty] = useState(null);
   const [activeTab, setActiveTab] = useState("monthly");
 
   const resolveOwnerIdFromSources = useCallback(() => {
@@ -2209,12 +2237,19 @@ export default function DashBoardAdmin() {
         : `₹${Number(prop.price).toLocaleString("en-IN")} / night`
       : "";
     const photoUrl = getPropertyPhoto(prop);
+    const isMonthly = isMonthlyProperty(prop);
     return (
       <PropertyCard
         key={prop.id || prop._id || Math.random()}
         photoUrl={photoUrl} name={name} location={location} details={details} priceText={priceText}
         onView={() => navigate(`/property/${prop.id || prop._id}`)}
-        onEdit={() => setEditingProperty(prop)}
+        onEdit={() => {
+          if (isMonthly) {
+            setEditingMonthlyProperty(prop);
+          } else {
+            setEditingProperty(prop);
+          }
+        }}
         onDelete={async () => {
           if (!window.confirm("Are you sure you want to delete this property?")) return;
           try {
@@ -2326,12 +2361,43 @@ export default function DashBoardAdmin() {
           )}
         </section>
 
+        {/* ── Short-term (Nightly) Update Modal ── */}
         {editingProperty && (
           <EditPropertyModal
             property={editingProperty}
             onClose={() => setEditingProperty(null)}
             onRefresh={refresh}
           />
+        )}
+
+        {/* ── Long-term (Monthly/PG) Update Modal ── */}
+        {editingMonthlyProperty && (
+          <div style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)',
+            zIndex: 9999, overflowY: 'auto', display: 'flex', alignItems: 'flex-start',
+            justifyContent: 'center', padding: '20px 0',
+          }}>
+            <div style={{ width: '100%', maxWidth: '960px', position: 'relative', borderRadius: '16px', overflow: 'hidden' }}>
+              <button
+                type="button"
+                onClick={() => setEditingMonthlyProperty(null)}
+                style={{
+                  position: 'absolute', top: '16px', right: '20px', zIndex: 10001,
+                  background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: '50%',
+                  width: '36px', height: '36px', fontSize: '20px', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                }}
+                title="Close"
+              >
+                &times;
+              </button>
+              <PGUpdateForm
+                propId={String(editingMonthlyProperty.id || editingMonthlyProperty._id)}
+                onComplete={() => { setEditingMonthlyProperty(null); refresh(); }}
+              />
+            </div>
+          </div>
         )}
       </main>
 
