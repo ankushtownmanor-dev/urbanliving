@@ -1200,9 +1200,9 @@ const PGUpdateForm = ({ propId: passedId, onComplete }) => {
     
     foodAvailable: false,
     foodDetails: { breakfast: true, lunch: false, dinner: true, type: "Both" },
-    noticePeriod: 30,
-    lockInPeriod: 1,
-    gateClosingTime: "11:00 PM",
+    noticePeriod: "",
+    lockInPeriod: "",
+    gateClosingTime: "",
     
     baseRate: "", 
     securityDeposit: "",
@@ -1571,11 +1571,6 @@ const PGUpdateForm = ({ propId: passedId, onComplete }) => {
       
       const totalBeds = (form.bedroomDetails || []).reduce((sum, r) => sum + (Number(r.bedCount) || 1), 0);
       
-      let extraInfo = "\n\n--- PG Details ---";
-      if (form.noticePeriod) extraInfo += `\nNotice Period: ${form.noticePeriod} Days`;
-      if (form.gateClosingTime) extraInfo += `\nGate Closing Time: ${form.gateClosingTime}`;
-      if (form.securityDeposit) extraInfo += `\nSecurity Deposit: ₹${form.securityDeposit}`;
-      
       const updatedPhotos = [...existingPhotos, ...uploadedUrls];
 
       // ── BATHROOM FIX: real bathroomDetails array use karo, hardcode nahi ──
@@ -1588,7 +1583,7 @@ const PGUpdateForm = ({ propId: passedId, onComplete }) => {
 
       const payload = {
         property_name: form.title || "Untitled",
-        description: (form.mainDescription || "") + extraInfo,
+        description: form.mainDescription || "",
         price: Number(form.baseRate) || 0,
         address: form.address || "",
         city: form.city || "",

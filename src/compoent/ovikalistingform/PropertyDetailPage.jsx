@@ -3192,6 +3192,18 @@ const PropertyDetailPage = () => {
   const photos = property.photos || [];
   const isPG = property.property_category === 'PG';
 
+  const cleanDescription = (desc) => {
+    if (!desc) return "";
+    return desc
+      .split('\n\n--- PG Details ---')[0]
+      .split('\n--- PG Details ---')[0]
+      .split('--- PG Details ---')[0]
+      .split('\n\n--- Local Guide ---')[0]
+      .split('\n--- Local Guide ---')[0]
+      .split('--- Local Guide ---')[0]
+      .trim();
+  };
+
   const displayBasePrice = pricingMode === 'monthly'
     ? (selectedPrice || Number(property.meta?.perMonthPrice) || Number(property.meta?.monthlyPrice) || Number(property.monthly_price) || Number(property.price) || 0)
     : (selectedPrice || Number(property.meta?.perNightPrice) || Number(property.price) || 0);
@@ -3250,7 +3262,7 @@ const PropertyDetailPage = () => {
                     <div style={{ flex: 1, minWidth: '200px' }}>
                       <h3 style={{ fontSize: '1.3rem', marginBottom: '0.5rem' }}>{property.property_name}</h3>
                       <p style={{ color: '#666', marginBottom: '0.5rem' }}>{property.address}, {property.city}</p>
-                      <p style={{ color: '#555', fontSize: '0.95rem', marginBottom: '1rem' }}>{property.description}</p>
+                      <p style={{ color: '#555', fontSize: '0.95rem', marginBottom: '1rem' }}>{cleanDescription(property.description)}</p>
                       <p style={{ fontSize: '1.5rem', fontWeight: '600', color: '#8b0000' }}>
                         <MdCurrencyRupee style={{ display: 'inline', verticalAlign: 'middle' }} />
                         {formatCurrency(displayBasePrice)}
@@ -3487,7 +3499,7 @@ const PropertyDetailPage = () => {
           <div className="text-section about-mobile-wrap">
             <h3>About this space</h3>
             <div className="about-mobile-card">
-              <p>{property.description || "No description provided."}</p>
+              <p>{cleanDescription(property.description) || "No description provided."}</p>
             </div>
           </div>
 

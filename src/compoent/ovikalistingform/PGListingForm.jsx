@@ -1171,9 +1171,9 @@ const PGListingForm = () => {
     
     foodAvailable: false,
     foodDetails: { breakfast: true, lunch: false, dinner: true, type: "Both" },
-    noticePeriod: 30,
-    lockInPeriod: 1,
-    gateClosingTime: "11:00 PM",
+    noticePeriod: "",
+    lockInPeriod: "",
+    gateClosingTime: "",
     
     baseRate: "",         // property-level price (used when usePerRoomPricing=false for non-PG)
     securityDeposit: "",

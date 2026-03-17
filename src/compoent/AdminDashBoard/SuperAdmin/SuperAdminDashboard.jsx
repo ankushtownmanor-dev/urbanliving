@@ -112,6 +112,8 @@ export default function SuperAdminDashboard() {
   const [ownerPage, setOwnerPage] = useState(1);
   const [guestPage, setGuestPage] = useState(1);
   const [leadPage, setLeadPage] = useState(1);
+  const [propertyPage, setPropertyPage] = useState(1);
+  const [bookingPage, setBookingPage] = useState(1);
   const [leadFilterSource, setLeadFilterSource] = useState("ALL");
   const ITEMS_PER_PAGE = 10;
 
@@ -400,6 +402,25 @@ export default function SuperAdminDashboard() {
       });
   };
 
+  const cleanDescription = (desc) => {
+    if (!desc || typeof desc !== 'string') return "";
+    return desc
+      .split('\n\n--- PG Details ---')[0]
+      .split('\n--- PG Details ---')[0]
+      .split('--- PG Details ---')[0]
+      .split('\n\n--- Local Guide ---')[0]
+      .split('\n--- Local Guide ---')[0]
+      .split('--- Local Guide ---')[0]
+      .trim();
+  };
+
+  const handleEdit = (prop) => {
+      setEditingProp({
+          ...prop,
+          description: cleanDescription(prop.description)
+      });
+      setShowEditModal(true);
+  };
   const toggleAmenity = (a) => {
       setEditingProp(prev => {
           const currentAmenities = Array.isArray(prev.amenities) 
@@ -428,31 +449,10 @@ export default function SuperAdminDashboard() {
     if(!editingProp) return;
     
     try {
-        // Prepare PG/Advanced details to be appended to description if they don't have columns
-        let extraInfo = "";
-        if (editingProp.property_type === 'PG' || editingProp.property_type === 'Hostel') {
-            extraInfo += "\n\n--- PG Details ---";
-            if (editingProp.meta?.noticePeriod) extraInfo += `\nNotice Period: ${editingProp.meta.noticePeriod} Days`;
-            if (editingProp.meta?.lockInPeriod) extraInfo += `\nLock-in: ${editingProp.meta.lockInPeriod} Months`;
-            if (editingProp.meta?.electricityCharges) extraInfo += `\nElectricity: ${editingProp.meta.electricityCharges}`;
-            if (editingProp.meta?.gateClosingTime) extraInfo += `\nGate Closing Time: ${editingProp.meta.gateClosingTime}`;
-            if (editingProp.meta?.securityDeposit) extraInfo += `\nSecurity Deposit: ₹${editingProp.meta.securityDeposit}`;
-            if (editingProp.meta?.foodAvailable) extraInfo += `\nFood: Available`;
-        }
-
-        if (editingProp.guidebook) {
-            extraInfo += "\n\n--- Local Guide ---";
-            const g = editingProp.guidebook;
-            if (g.transport_tips) extraInfo += `\nTransport: ${g.transport_tips}`;
-            if (g.nearby_essentials) extraInfo += `\nEssentials: ${g.nearby_essentials}`;
-            if (g.cafes_restaurants) extraInfo += `\nCafes: ${g.cafes_restaurants}`;
-            if (g.must_visit) extraInfo += `\nMust Visit: ${g.must_visit}`;
-        }
-
         // 1. Build Payload with ONLY verified columns (from DashBoardAdmin.jsx reference)
         const payload = {
             property_name: editingProp.property_name || editingProp.name || "Untitled",
-            description: (editingProp.description || "") + extraInfo,
+            description: editingProp.description || "",
             price: Number(editingProp.price) || 0,
             address: editingProp.address || "",
             city: editingProp.city || "",
@@ -808,13 +808,19 @@ export default function SuperAdminDashboard() {
                                 placeholder="Search properties..." 
                                 className="sa-search-input"
                                 value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onChange={(e) => {
+                                    setSearchTerm(e.target.value);
+                                    setPropertyPage(1);
+                                }}
                             />
                             <select 
                                 className="sa-search-input" 
                                 style={{width: '150px'}}
                                 value={filterType}
-                                onChange={(e) => setFilterType(e.target.value)}
+                                onChange={(e) => {
+                                    setFilterType(e.target.value);
+                                    setPropertyPage(1);
+                                }}
                             >
                                 <option value="ALL">All Types</option>
                                 {propertyTypes.map(t => (
@@ -837,8 +843,14 @@ export default function SuperAdminDashboard() {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredProperties.slice(0, 50).map(p => {
-                                const img = (Array.isArray(p.photos) ? p.photos[0] : (p.photos ? p.photos.split(',')[0] : '')) || 'https://placehold.co/60x60?text=No+Image';
+                            {(() => {
+                                const totalPropertyPages = Math.ceil(filteredProperties.length / ITEMS_PER_PAGE);
+                                const displayProperties = filteredProperties.slice((propertyPage - 1) * ITEMS_PER_PAGE, propertyPage * ITEMS_PER_PAGE);
+                                
+                                return (
+                                    <>
+                                        {displayProperties.map(p => {
+                                            const img = (Array.isArray(p.photos) ? p.photos[0] : (p.photos ? p.photos.split(',')[0] : '')) || 'https://placehold.co/60x60?text=No+Image';
                                 
                                 let type = p.property_type || p.property_category || "N/A";
                                 if (!p.property_type && !p.property_category && p.meta) {
@@ -892,6 +904,41 @@ export default function SuperAdminDashboard() {
                                     <td colSpan="8" className="sa-empty">No properties found matching criteria.</td>
                                 </tr>
                             )}
+                            {filteredProperties.length > 0 && (
+                                <tr>
+                                    <td colSpan="8" style={{ padding: '12px', background: '#f8fafc' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <div style={{ fontSize: '13px', color: '#64748b' }}>
+                                                Showing {((propertyPage - 1) * ITEMS_PER_PAGE) + 1} to {Math.min(propertyPage * ITEMS_PER_PAGE, filteredProperties.length)} of {filteredProperties.length} properties
+                                            </div>
+                                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                <button 
+                                                    className="sa-btn-secondary" 
+                                                    disabled={propertyPage === 1}
+                                                    onClick={() => setPropertyPage(p => Math.max(1, p - 1))}
+                                                    style={{ padding: '4px 12px', fontSize: '12px' }}
+                                                >
+                                                    Prev
+                                                </button>
+                                                <span style={{ fontSize: '12px', color: '#64748b' }}>
+                                                    {propertyPage} / {totalPropertyPages || 1}
+                                                </span>
+                                                <button 
+                                                    className="sa-btn-secondary" 
+                                                    disabled={propertyPage >= totalPropertyPages}
+                                                    onClick={() => setPropertyPage(p => Math.min(totalPropertyPages, p + 1))}
+                                                    style={{ padding: '4px 12px', fontSize: '12px' }}
+                                                >
+                                                    Next
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )}
+                        </>
+                                );
+                            })()}
                         </tbody>
                      </table>
                 </div>
@@ -1186,7 +1233,10 @@ export default function SuperAdminDashboard() {
                                 className="sa-search-input" 
                                 style={{width: '180px'}}
                                 value={bookingFilter}
-                                onChange={(e) => setBookingFilter(e.target.value)}
+                                onChange={(e) => {
+                                    setBookingFilter(e.target.value);
+                                    setBookingPage(1);
+                                }}
                             >
                                 <option value="ALL">All Status</option>
                                 <option value="pending">Pending</option>
@@ -1211,9 +1261,14 @@ export default function SuperAdminDashboard() {
                             </tr>
                         </thead>
                         <tbody>
-                            {bookings
-                                .filter(b => bookingFilter === 'ALL' || (b.status||'').toLowerCase() === bookingFilter.toLowerCase())
-                                .map(b => {
+                            {(() => {
+                                const filteredBookings = bookings.filter(b => bookingFilter === 'ALL' || (b.status||'').toLowerCase() === bookingFilter.toLowerCase());
+                                const totalBookingPages = Math.ceil(filteredBookings.length / ITEMS_PER_PAGE);
+                                const displayBookings = filteredBookings.slice((bookingPage - 1) * ITEMS_PER_PAGE, bookingPage * ITEMS_PER_PAGE);
+
+                                return (
+                                    <>
+                                        {displayBookings.map(b => {
                                     let propName = b.property_name || b.property?.property_name || b.property?.name || "Unknown Property";
                                     let propCity = b.city || b.property?.city || "";
                                     
@@ -1286,12 +1341,52 @@ export default function SuperAdminDashboard() {
                                         </tr>
                                     );
                                 })}
-                             {bookings.filter(b => bookingFilter === 'ALL' || (b.status||'').toLowerCase() === bookingFilter.toLowerCase()).length === 0 && (
-                                 <tr>
-                                     <td colSpan="7" className="sa-empty">No bookings found for this filter.</td>
-                                 </tr>
-                             )}
-                        </tbody>
+                                {(() => {
+                                    const filteredBookings = bookings.filter(b => bookingFilter === 'ALL' || (b.status||'').toLowerCase() === bookingFilter.toLowerCase());
+                                    if (filteredBookings.length === 0) {
+                                        return (
+                                            <tr>
+                                                <td colSpan="7" className="sa-empty">No bookings found for this filter.</td>
+                                            </tr>
+                                        );
+                                    }
+                                    return (
+                                        <tr>
+                                            <td colSpan="7" style={{ padding: '12px', background: '#f8fafc' }}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <div style={{ fontSize: '13px', color: '#64748b' }}>
+                                                        Showing {((bookingPage - 1) * ITEMS_PER_PAGE) + 1} to {Math.min(bookingPage * ITEMS_PER_PAGE, filteredBookings.length)} of {filteredBookings.length} bookings
+                                                    </div>
+                                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                        <button 
+                                                            className="sa-btn-secondary" 
+                                                            disabled={bookingPage === 1}
+                                                            onClick={() => setBookingPage(p => Math.max(1, p - 1))}
+                                                            style={{ padding: '4px 12px', fontSize: '12px' }}
+                                                        >
+                                                            Prev
+                                                        </button>
+                                                        <span style={{ fontSize: '12px', color: '#64748b' }}>
+                                                            {bookingPage} / {Math.ceil(filteredBookings.length / ITEMS_PER_PAGE) || 1}
+                                                        </span>
+                                                        <button 
+                                                            className="sa-btn-secondary" 
+                                                            disabled={bookingPage >= Math.ceil(filteredBookings.length / ITEMS_PER_PAGE)}
+                                                            onClick={() => setBookingPage(p => Math.min(Math.ceil(filteredBookings.length / ITEMS_PER_PAGE), p + 1))}
+                                                            style={{ padding: '4px 12px', fontSize: '12px' }}
+                                                        >
+                                                            Next
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })()}
+                            </>
+                        );
+                    })()}
+                </tbody>
                      </table>
                 </div>
                 </>
