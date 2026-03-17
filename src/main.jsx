@@ -51,7 +51,11 @@ async function initOneSignal() {
   });
 }
 
-initOneSignal();
+if (window.location.hostname === "www.ovikaliving.com" || window.location.hostname === "ovikaliving.com") {
+  initOneSignal();
+} else {
+  console.log("OneSignal skipped: Not on production domain (" + window.location.hostname + ")");
+}
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

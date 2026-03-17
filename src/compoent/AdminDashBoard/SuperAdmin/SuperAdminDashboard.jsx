@@ -405,12 +405,10 @@ export default function SuperAdminDashboard() {
   const cleanDescription = (desc) => {
     if (!desc || typeof desc !== 'string') return "";
     return desc
-      .split('\n\n--- PG Details ---')[0]
-      .split('\n--- PG Details ---')[0]
       .split('--- PG Details ---')[0]
-      .split('\n\n--- Local Guide ---')[0]
-      .split('\n--- Local Guide ---')[0]
       .split('--- Local Guide ---')[0]
+      .split('Notice Period:')[0]
+      .split('Gate Closing Time:')[0]
       .trim();
   };
 

@@ -2747,6 +2747,7 @@ const PropertyDetailPage = () => {
   const [passportInput, setPassportInput] = useState('');
   const [bookingType, setBookingType] = useState(0);
   const [ownerApprovalStatus, setOwnerApprovalStatus] = useState(null);
+  const [acceptedBookingId, setAcceptedBookingId] = useState(null);
   const [pricingMode, setPricingMode] = useState('daily');
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [rentalType, setRentalType] = useState(() => sessionStorage.getItem('ovika_rental_type') || 'short');
@@ -2939,9 +2940,10 @@ const PropertyDetailPage = () => {
         .then(res => {
           if (res.data.success && Array.isArray(res.data.data)) {
             setUserBookingRequests(res.data.data);
-            const req = res.data.data.find(r => r.property_id === property.id);
+            const req = res.data.data.find(r => String(r.property_id) === String(property.id));
             if (req) {
               setBookingRequestStatus(req.status);
+              setAcceptedBookingId(req.id);
               if (req.status === 'accepted') setOwnerApprovalStatus('accepted');
             }
           }
@@ -2989,11 +2991,14 @@ const PropertyDetailPage = () => {
   const sendAvailabilityRequest = async ({ checkInDate, checkOutDate }) => {
     try {
       setOwnerApprovalStatus('pending');
-      await axios.post('https://www.townmanor.ai/api/booking-request', {
+      const { data } = await axios.post('https://www.townmanor.ai/api/booking-request', {
         property_id: property.id, property_name: property.property_name || property.name,
         city: property.city, username: user?.username || username,
         start_date: checkInDate, end_date: checkOutDate
       });
+      if (data?.id || data?.booking_id) {
+        setAcceptedBookingId(data.id || data.booking_id);
+      }
       showAlert('Request sent to owner for date confirmation.');
       setShowRequestSentPopup(true);
     } catch (err) {
@@ -3125,29 +3130,42 @@ const PropertyDetailPage = () => {
         } catch {}
       }
       const validPropertyId = getValidPropertyId(id);
-      const isOvikaProperty = Number(validPropertyId) >= 200;
-      if (isOvikaProperty) {
-        const ref = 'OVK-' + Date.now();
-        localStorage.setItem('bookingId', ref); localStorage.setItem('property_id', String(validPropertyId));
-        await handleProceedToPayment(ref); return;
-      }
+      const isInstantBooking = Number(property.booking_type) === 0;
+      let newBookingId = (bookingType === 1 || !isInstantBooking) ? acceptedBookingId : null;
+      
       const nights = Math.ceil(Math.abs(new Date(formData.checkOutDate) - new Date(formData.checkInDate)) / (1000 * 60 * 60 * 24));
-      const { data } = await axios.post(BOOKING_REQUEST_API, {
-        property_id: validPropertyId, user_id: userLocal.id || user?.id || 0,
-        property_name: property.property_name || property.name, property_address: property.address,
-        city: property.city, start_date: format(new Date(formData.checkInDate), 'yyyy-MM-dd'),
-        end_date: format(new Date(formData.checkOutDate), 'yyyy-MM-dd'),
-        username: finalUsername, phone_number: userPhone,
-        aadhar_number: aadhaarNumber || passportInput || 'NOT_PROVIDED',
-        user_photo: formData.uploadedPhoto || '', terms_verified: true,
-        email: userEmail, total_price: pricing.total, subtotal: pricing.subtotal,
-        gst_amount: pricing.gst, nights, discount_amount: pricing.discount || 0
-      });
-      const newBookingId = data?.booking?.id || data?.booking_id || data?.id || data?.bookingId;
-      if (!newBookingId) throw new Error('Booking ID not returned');
-      localStorage.setItem('bookingId', String(newBookingId)); localStorage.setItem('property_id', String(validPropertyId));
+      
+      // If we don't have an ID yet (Instant Booking or missing ID), create the booking record
+      if (!newBookingId) {
+        console.log('Creating new booking record (Instant Flow)...');
+        const { data } = await axios.post(BOOKING_REQUEST_API, {
+          property_id: validPropertyId, user_id: userLocal.id || user?.id || 0,
+          property_name: property.property_name || property.name, property_address: property.address,
+          city: property.city, start_date: format(new Date(formData.checkInDate), 'yyyy-MM-dd'),
+          end_date: format(new Date(formData.checkOutDate), 'yyyy-MM-dd'),
+          username: finalUsername, phone_number: userPhone,
+          aadhar_number: aadhaarNumber || passportInput || 'NOT_PROVIDED',
+          user_photo: formData.uploadedPhoto || '', terms_verified: true,
+          email: userEmail, total_price: pricing.total, subtotal: pricing.subtotal,
+          gst_amount: pricing.gst, nights, discount_amount: pricing.discount || 0
+        });
+
+        console.log('Booking Creation API Response:', data);
+        newBookingId = data?.booking?.id || data?.booking_id || data?.id || data?.bookingId || data?.request_id || data?.requestId || data?.data?.id || data?.data?.booking_id;
+      } else {
+        console.log('Using existing accepted booking ID:', newBookingId);
+      }
+      
+      if (!newBookingId) {
+        console.error('CRITICAL: Booking ID could not be determined.', { isInstantBooking, acceptedBookingId });
+        throw new Error('Booking ID missing. Please refresh and try again.');
+      }
+
+      localStorage.setItem('bookingId', String(newBookingId)); 
+      localStorage.setItem('property_id', String(validPropertyId));
       await handleProceedToPayment(newBookingId);
     } catch (error) {
+      console.error('Booking submission error:', error);
       showAlert(`Booking failed: ${error.response?.data?.message || error.message}`);
       setIsSubmitting(false);
     }
@@ -3195,12 +3213,10 @@ const PropertyDetailPage = () => {
   const cleanDescription = (desc) => {
     if (!desc) return "";
     return desc
-      .split('\n\n--- PG Details ---')[0]
-      .split('\n--- PG Details ---')[0]
       .split('--- PG Details ---')[0]
-      .split('\n\n--- Local Guide ---')[0]
-      .split('\n--- Local Guide ---')[0]
       .split('--- Local Guide ---')[0]
+      .split('Notice Period:')[0]
+      .split('Gate Closing Time:')[0]
       .trim();
   };
 

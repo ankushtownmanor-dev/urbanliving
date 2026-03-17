@@ -2157,7 +2157,7 @@ function Payment() {
       
       console.log('Booking API response:', data);
       
-      const newBookingId = data?.booking?.id || data?.booking_id || data?.id || data?.bookingId || data?.request_id || null;
+      const newBookingId = data?.booking?.id || data?.booking_id || data?.id || data?.bookingId || data?.request_id || data?.requestId || null;
 
       if (data?.success && data?.booking) {
         const b = data.booking;
