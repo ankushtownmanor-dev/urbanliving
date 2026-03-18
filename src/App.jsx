@@ -45,6 +45,7 @@ import PrivacyPolicy from "./compoent/PrivacyPolicy/PrivacyPolicy";
 import TermsAndConditions from "./compoent/TermsAndConditions/TermsAndConditions";
 import RefundAndCancellation from "./compoent/RefundAndCancellation/RefundAndCancellation";
 import FAQ from "./compoent/FAQ/FAQ";
+import OvikaVerified from "./compoent/ovikalistingform/OvikaVerified";
 import { useContext } from "react";
 import { Subsriptionmain } from "./compoent/SubsriptionNew/Subsriptionmain";
 import SuperAdminDashboard from './compoent/AdminDashBoard/SuperAdmin/SuperAdminDashboard';
@@ -145,6 +146,7 @@ function App() {
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/refund-cancellation-policy" element={<RefundAndCancellation />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/ovika-verified" element={<OvikaVerified />} />
           <Route path="/career-support" element={<RequireAuth><CareerSupport /></RequireAuth>} />
 
           <Route path="/admindashboard" element={<ProtectedAdminLayout />}>

@@ -1277,7 +1277,7 @@ export default function SignatureStays() {
                         position: 'absolute',
                         top: 10,
                         right: 10,
-                        width: 75,
+                        width: 100,
                         height: 'auto',
                         filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
                         pointerEvents: 'none',

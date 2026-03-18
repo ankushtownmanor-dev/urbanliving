@@ -2525,6 +2525,7 @@ const HoomieFooter = () => {
                   <Link to="/refund-cancellation-policy" style={{ color: '#fff', textDecoration: 'none' }}>Refund and Cancellation Policy</Link>,
                   <Link to="/subsription" style={{ color: '#fff', textDecoration: 'none' }}>Subscription Plan</Link>,
                   <Link to="/career-support" style={{ color: '#fff', textDecoration: 'none' }}>Career Support</Link>,
+                  <Link to="/ovika-verified" style={{ color: '#fff', textDecoration: 'none', fontWeight: '600' }}>OvikaLiving Verified ✓</Link>,
                 ]}
               />
             </div>
@@ -2651,6 +2652,7 @@ const HoomieFooter = () => {
                   <Link to="/refund-cancellation-policy" style={{ color: '#fff', textDecoration: 'none' }}>Refund Policy</Link>,
                   <Link to="/subsription" style={{ color: '#fff', textDecoration: 'none' }}>Subscription</Link>,
                   <Link to="/career-support" style={{ color: '#fff', textDecoration: 'none' }}>Career Support</Link>,
+                  <Link to="/ovika-verified" style={{ color: '#fff', textDecoration: 'none', fontWeight: '600' }}>Verified ✓</Link>,
                 ]}
               />
             </div>

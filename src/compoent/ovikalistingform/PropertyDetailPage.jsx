@@ -3483,9 +3483,9 @@ const PropertyDetailPage = () => {
               alt="Verified" 
               style={{
                 position: 'absolute',
-                top: 25,
-                right: 25,
-                width: 140,
+                top: 0,
+                left: 0,
+                width: 180,
                 height: 'auto',
                 filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))',
                 pointerEvents: 'none',

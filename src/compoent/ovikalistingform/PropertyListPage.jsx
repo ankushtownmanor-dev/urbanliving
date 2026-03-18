@@ -938,7 +938,7 @@ const PropertyCard = ({ property, rentalType }) => {
               position: 'absolute',
               top: 10,
               left: 10,
-              width: 85,
+              width: 110,
               height: 'auto',
               filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
               pointerEvents: 'none',
