@@ -1558,6 +1558,19 @@ export default function VideoShowcase({ videos = SAMPLE_VIDEOS }) {
           <div className="view-spotlight">
             <div className="spotlight-main">
               <div className="spotlight-player" onClick={() => openModal(current)}>
+                <img 
+                  src="/ovikaver.png" 
+                  alt="Verified" 
+                  style={{ 
+                    position: 'absolute', 
+                    top: -15, 
+                    left: -15, 
+                    width: 100, 
+                    zIndex: 20, 
+                    pointerEvents: 'none',
+                    filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.4))'
+                  }} 
+                />
                 <img className="thumb" src={current.thumbnail} alt={current.title} />
                 <div className="spotlight-overlay">
                   <div className="spotlight-info">
@@ -1676,6 +1689,19 @@ export default function VideoShowcase({ videos = SAMPLE_VIDEOS }) {
         <div className="modal-backdrop" onClick={closeModal}>
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
             <div className="modal-video-wrap">
+              <img 
+                src="/ovikaver.png" 
+                alt="Verified" 
+                style={{ 
+                  position: 'absolute', 
+                  top: 20, 
+                  left: 20, 
+                  width: 130, 
+                  zIndex: 110, 
+                  pointerEvents: 'none',
+                  filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.5))'
+                }} 
+              />
               <video ref={videoRef} src={playingVideo.videoUrl} controls autoPlay style={{ width: "100%", height: "100%", display: "block" }} />
               <div className="modal-close" onClick={closeModal}>×</div>
             </div>

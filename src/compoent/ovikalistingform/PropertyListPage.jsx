@@ -936,8 +936,8 @@ const PropertyCard = ({ property, rentalType }) => {
             alt="Verified" 
             style={{
               position: 'absolute',
-              top: 10,
-              left: 10,
+              top: -15,
+              left: -15,
               width: 110,
               height: 'auto',
               filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
@@ -947,14 +947,17 @@ const PropertyCard = ({ property, rentalType }) => {
           />
         )}
 
-        {property.property_category && (
+        {(property.property_category || property.property_name?.toLowerCase().includes('ovika') || property.property_name?.toLowerCase().includes('signature')) && (
           <span style={{
             position: 'absolute', bottom: 10, left: 10,
             background: 'rgba(255,255,255,0.92)', color: '#222',
             padding: '3px 10px', borderRadius: 6, fontSize: 11,
             fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em',
           }}>
-            {property.property_category}
+            { (property.property_name?.toLowerCase().includes('ovika') || property.property_name?.toLowerCase().includes('signature')) 
+              ? 'Premium Stay' 
+              : property.property_category 
+            }
           </span>
         )}
 
@@ -1103,22 +1106,30 @@ const PropertyListPage = () => {
       });
     }
 
-    if (cat) {
-      result = result.filter(p => {
-        if (cat.id === 'PG') return p.property_category === 'PG';
-        if (p.property_category === 'PG') return false;
+        if (cat) {
+          result = result.filter(p => {
+            const isSignature = p.property_name?.toLowerCase().includes('signature');
+            const isOvika = p.property_name?.toLowerCase().includes('ovika');
+            
+            // If it's an Ovika or Signature property, it MUST be in Premium Stay category ONLY
+            if (isSignature || isOvika) {
+              return cat.id === 'Premium Stay';
+            }
 
-        if (isMonthly) {
-          const price = Number(p.price) || 0;
-          if (cat.id === 'Economy Stay') return price >= 8000 && price <= 25000;
-          if (cat.id === 'Premium Stay') return price > 25000;
-        } else {
-          const price = Number(p.price) || 0;
-          return price >= cat.minPrice && price <= cat.maxPrice;
+            if (cat.id === 'PG') return p.property_category === 'PG';
+            if (p.property_category === 'PG') return false;
+
+            if (isMonthly) {
+              const price = Number(p.price) || 0;
+              if (cat.id === 'Economy Stay') return price >= 8000 && price <= 25000;
+              if (cat.id === 'Premium Stay') return price > 25000;
+            } else {
+              const price = Number(p.price) || 0;
+              return price >= cat.minPrice && price <= cat.maxPrice;
+            }
+            return false;
+          });
         }
-        return false;
-      });
-    }
 
     if (q.trim()) {
       const qL = q.toLowerCase();
@@ -1146,7 +1157,17 @@ const PropertyListPage = () => {
   };
 
   useEffect(() => { fetchProperties(); }, []);
-  useEffect(() => { setFiltered(applyFilter(properties, activeCat, search, rentalType)); }, [search, activeCat, properties, rentalType]);
+  useEffect(() => { 
+    const filteredResults = applyFilter(properties, activeCat, search, rentalType);
+    const sortedResults = [...filteredResults].sort((a, b) => {
+      const aIsVerified = a.property_name?.toLowerCase().includes('ovika') || a.property_name?.toLowerCase().includes('signature');
+      const bIsVerified = b.property_name?.toLowerCase().includes('ovika') || b.property_name?.toLowerCase().includes('signature');
+      if (aIsVerified && !bIsVerified) return -1;
+      if (!aIsVerified && bIsVerified) return 1;
+      return 0;
+    });
+    setFiltered(sortedResults); 
+  }, [search, activeCat, properties, rentalType]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -1357,18 +1378,32 @@ const PropertyListPage = () => {
               <>
                 <div
                   onClick={() => setShowRentalPopup(false)}
-                  style={{ position: 'fixed', inset: 0, zIndex: 99, background: 'rgba(0,0,0,0.25)' }}
+                  style={{ 
+                    position: 'fixed', 
+                    inset: 0, 
+                    zIndex: 999, 
+                    background: 'rgba(0,0,0,0.45)', // Slightly darker overlay
+                    backdropFilter: 'blur(4px)'    // Blurring background to prevent overlap confusion
+                  }}
                 />
                 <div style={{
-                  position: 'fixed', top: '50%', left: '50%',
+                  position: 'fixed', 
+                  top: '50%', 
+                  left: '50%',
                   transform: 'translate(-50%, -50%)',
-                  background: '#fff', borderRadius: 24,
-                  boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
+                  background: '#ffffff', // Explicitly white and opaque
+                  backgroundColor: '#ffffff', 
+                  borderRadius: 24,
+                  boxShadow: '0 20px 60px rgba(0,0,0,0.35)',
                   padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '24px 16px' : '36px',
-                  zIndex: 100,
-                  display: 'flex', flexDirection: 'column', gap: 16,
+                  zIndex: 1000, // Higher than any property card or list element
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  gap: 20,
                   width: typeof window !== 'undefined' && window.innerWidth < 480 ? 'calc(100vw - 32px)' : '540px',
-                  maxWidth: '95vw', boxSizing: 'border-box',
+                  maxWidth: '95vw', 
+                  boxSizing: 'border-box',
+                  opacity: 1, // Ensure total opacity
                 }}>
                   <h3 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: '#222', textAlign: 'center' }}>
                     Select Rental Type
@@ -1381,23 +1416,38 @@ const PropertyListPage = () => {
                         setShowRentalPopup(false);
                       }}
                       style={{
-                        flex: 1, padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', borderRadius: 16,
+                        flex: 1, 
+                        padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', 
+                        borderRadius: 20,
                         border: `2px solid ${rentalType === 'short' ? '#C98B3E' : '#e8e8e8'}`,
                         background: rentalType === 'short' ? '#FFF6EE' : '#fafafa',
-                        cursor: 'pointer', fontFamily: 'inherit',
-                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+                        cursor: 'pointer', 
+                        fontFamily: 'inherit',
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'center', 
+                        gap: 12,
                         transition: 'all 0.2s',
+                        position: 'relative', // Scope any child positioning
+                        overflow: 'hidden'    // Contain any potential leaks
                       }}
                     >
                       <div style={{
-                        width: 64, height: 64, borderRadius: '50%',
-                        background: rentalType === 'short' ? '#FFF6EE' : '#f0f4ff',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        width: 72, 
+                        height: 72, 
+                        borderRadius: '50%',
+                        background: rentalType === 'short' ? '#FFE8D1' : '#f0f4ff',
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center',
+                        mb: 4
                       }}>
-                        <FiMoon style={{ fontSize: 30, color: rentalType === 'short' ? '#C98B3E' : '#5B7FFF' }} />
+                        <FiMoon style={{ fontSize: 32, color: rentalType === 'short' ? '#C98B3E' : '#5B7FFF' }} />
                       </div>
-                      <span style={{ fontWeight: 700, fontSize: 17, color: '#222' }}>Nightly Rental</span>
-                      <span style={{ fontSize: 13, color: '#999', textAlign: 'center', lineHeight: 1.5 }}>Short stays, per night pricing</span>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontWeight: 700, fontSize: 18, color: '#222', marginBottom: 4 }}>Nightly Rental</div>
+                        <div style={{ fontSize: 13, color: '#717171', lineHeight: 1.4 }}>Short stays, per night pricing</div>
+                      </div>
                     </button>
 
                     <button
@@ -1407,23 +1457,38 @@ const PropertyListPage = () => {
                         setShowRentalPopup(false);
                       }}
                       style={{
-                        flex: 1, padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', borderRadius: 16,
+                        flex: 1, 
+                        padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', 
+                        borderRadius: 20,
                         border: `2px solid ${rentalType === 'long' ? '#C98B3E' : '#e8e8e8'}`,
                         background: rentalType === 'long' ? '#FFF6EE' : '#fafafa',
-                        cursor: 'pointer', fontFamily: 'inherit',
-                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+                        cursor: 'pointer', 
+                        fontFamily: 'inherit',
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'center', 
+                        gap: 12,
                         transition: 'all 0.2s',
+                        position: 'relative',
+                        overflow: 'hidden'
                       }}
                     >
                       <div style={{
-                        width: 64, height: 64, borderRadius: '50%',
-                        background: rentalType === 'long' ? '#FFF6EE' : '#f0fff4',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        width: 72, 
+                        height: 72, 
+                        borderRadius: '50%',
+                        background: rentalType === 'long' ? '#FFE8D1' : '#f0fff4',
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center',
+                        mb: 4
                       }}>
-                        <FiCalendar style={{ fontSize: 30, color: rentalType === 'long' ? '#C98B3E' : '#22b55a' }} />
+                        <FiCalendar style={{ fontSize: 32, color: rentalType === 'long' ? '#C98B3E' : '#22b55a' }} />
                       </div>
-                      <span style={{ fontWeight: 700, fontSize: 17, color: '#222' }}>Monthly Rental</span>
-                      <span style={{ fontSize: 13, color: '#999', textAlign: 'center', lineHeight: 1.5 }}>Long stays, monthly pricing</span>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontWeight: 700, fontSize: 18, color: '#222', marginBottom: 4 }}>Monthly Rental</div>
+                        <div style={{ fontSize: 13, color: '#717171', lineHeight: 1.4 }}>Long stays, monthly pricing</div>
+                      </div>
                     </button>
                   </div>
                 </div>
