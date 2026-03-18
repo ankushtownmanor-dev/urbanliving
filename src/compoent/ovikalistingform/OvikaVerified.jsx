@@ -81,7 +81,7 @@ const OvikaVerified = () => {
           }}>3</div>
           <div>
             <h3 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '10px' }}>Accurate Details</h3>
-            <p style={{ color: '#666' }}>From the number of bedrooms to the availability of Wi-Fi and power backup, every detail has been checked and confirmed by our verification Teams.</p>
+            <p style={{ color: '#666' }}>From the number of bedrooms to the availability of Wi-Fi and power backup, every detail has been checked and confirmed by our verification Team.</p>
             <div style={{ marginTop: '20px', textAlign: 'center' }}>
               <img 
                 src="/verifyimage.png" 
