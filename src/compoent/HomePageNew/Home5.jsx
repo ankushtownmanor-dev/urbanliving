@@ -1269,6 +1269,22 @@ export default function SignatureStays() {
                       transition: 'transform 0.4s ease',
                     }}
                   />
+                  {p.name?.toLowerCase().includes('signature') && (
+                    <img 
+                      src="/ovikaver.png" 
+                      alt="Verified" 
+                      style={{
+                        position: 'absolute',
+                        top: 10,
+                        right: 10,
+                        width: 75,
+                        height: 'auto',
+                        filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
+                        pointerEvents: 'none',
+                        zIndex: 10
+                      }}
+                    />
+                  )}
                   <div style={{
                     position: 'absolute', inset: 0,
                     background: 'linear-gradient(to top, rgba(20,10,0,0.55) 0%, transparent 55%)',

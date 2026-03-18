@@ -297,7 +297,26 @@ const Home4 = () => {
               cursor: item.btn !== "Coming Soon" ? "pointer" : "default",
             }}
           >
-            <img src={item.img} alt={item.title} className="featured-img" />
+            <div style={{ position: 'relative' }}>
+              <img src={item.img} alt={item.title} className="featured-img" />
+              {item.title?.toLowerCase().includes('signature') && (
+                <img 
+                  src="/ovikaver.png" 
+                  alt="Verified" 
+                  style={{
+                    position: 'absolute',
+                    top: 10,
+                    right: 10,
+                    width: 75,
+                    height: 'auto',
+                    filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
+                    pointerEvents: 'none',
+                    zIndex: 10,
+                    borderRadius: '4px'
+                  }}
+                />
+              )}
+            </div>
             <div className="featured-content">
               <h3 className="featured-title">{item.title}</h3>
               <p className="featured-text">{item.text}</p>

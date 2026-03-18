@@ -3475,8 +3475,24 @@ const PropertyDetailPage = () => {
       </section>
 
       <section className="image-gallery">
-        <div className="main-frame" onClick={handleMainImageClick} style={{ cursor: 'pointer' }}>
+        <div className="main-frame" onClick={handleMainImageClick} style={{ cursor: 'pointer', position: 'relative' }}>
           <img src={getPhotoUrl(photos[activeImg]) || 'https://via.placeholder.com/800x500'} alt="Main Property" />
+          {property.property_name?.toLowerCase().includes('signature') && (
+            <img 
+              src="/ovikaver.png" 
+              alt="Verified" 
+              style={{
+                position: 'absolute',
+                top: 25,
+                right: 25,
+                width: 140,
+                height: 'auto',
+                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))',
+                pointerEvents: 'none',
+                zIndex: 20
+              }}
+            />
+          )}
         </div>
         <div className="thumbnail-strip">
           {photos.map((p, idx) => (

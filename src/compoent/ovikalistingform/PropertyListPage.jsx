@@ -924,10 +924,28 @@ const PropertyCard = ({ property, rentalType }) => {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             cursor: 'pointer', backdropFilter: 'blur(4px)',
             color: fav ? '#e84040' : '#555', fontSize: 15,
+            zIndex: 1,
           }}
         >
           <FiHeart style={{ fill: fav ? '#e84040' : 'none' }} />
         </button>
+
+        {property.property_name?.toLowerCase().includes('signature') && (
+          <img 
+            src="/ovikaver.png" 
+            alt="Verified" 
+            style={{
+              position: 'absolute',
+              top: 10,
+              left: 10,
+              width: 85,
+              height: 'auto',
+              filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
+              pointerEvents: 'none',
+              zIndex: 10
+            }}
+          />
+        )}
 
         {property.property_category && (
           <span style={{
