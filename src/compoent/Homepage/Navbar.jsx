@@ -856,11 +856,19 @@ export default function Navbar() {
                   { icon: "💬", label: "Subscription Plan", sub: "Grow Faster With the Right Plan", action: () => { setHamburgerMenuOpen(false); navigate("/subsription"); } },
                   { icon: "📞", label: "Contact / Support", sub: "Get help and assistance", action: () => { setHamburgerMenuOpen(false); navigate("/contactus"); } },
                   { icon: "💼", label: "Career", sub: "Join our growing team", action: goCareer },
-                  { icon: "✅", label: "OvikaLiving Verified", sub: "Know about our verification", action: goOvikaVerified },
+                  { icon: <img src="/ovikaver.png" alt="ovika-verified" style={{ width: '30px', height: 'auto' }} />, label: "OvikaLiving Verified", sub: "Know about our verification process", action: goOvikaVerified },
                   { icon: "🗺️", label: "Explore Townmanor", sub: "Discover amazing places", action: () => { setHamburgerMenuOpen(false); window.open("https://www.townmanor.ai/", "_blank"); } },
                 ].map((item) => (
                   <button key={item.label} onClick={item.action} style={{ ...panelButtonStyle, padding: "8px 4px" }}>
-                    <span style={{ ...iconBoxStyle, width: 28, height: 28, fontSize: 14 }}>{item.icon}</span>
+                    <span style={{ 
+                      ...iconBoxStyle, 
+                      width: item.label === "OvikaLiving Verified" ? 50 : 28, 
+                      height: item.label === "OvikaLiving Verified" ? 50 : 28, 
+                      borderRadius: item.label === "OvikaLiving Verified" ? '50%' : 12,
+                      fontSize: 14 
+                    }}>
+                      {item.icon}
+                    </span>
                     <div style={{ textAlign: "left" }}>
                       <div style={{ fontSize: 13, fontWeight: 500, color: "#232323" }}>{item.label}</div>
                       <div style={{ fontSize: 11, color: "#8a8a8a" }}>{item.sub}</div>
@@ -902,10 +910,18 @@ export default function Navbar() {
                   { icon: "📊", label: "Profile", sub: "View your bookings & performance", action: goDashboard },
                   { icon: "🛡️", label: "Owner Dashboard", sub: "Access owner controls", action: goOwnerDashboard },
                   { icon: "💼", label: "Career", sub: "Join our growing team", action: goCareer },
-                  { icon: "✅", label: "OvikaLiving Verified", sub: "Know about our verification", action: goOvikaVerified },
+                  { icon: <img src="/ovikaver.png" alt="ovika-verified" style={{ width: '35px', height: 'auto' }} />, label: "OvikaLiving Verified", sub: "Know about our verification process", action: goOvikaVerified },
                 ].map((item) => (
                   <button key={item.label} onClick={item.action} style={{ ...panelButtonStyle, padding: "8px 4px" }}>
-                    <span style={{ ...iconBoxStyle, width: 28, height: 28, fontSize: 14 }}>{item.icon}</span>
+                    <span style={{ 
+                      ...iconBoxStyle, 
+                      width: item.label === "OvikaLiving Verified" ? 50 : 28, 
+                      height: item.label === "OvikaLiving Verified" ? 50 : 28, 
+                      borderRadius: item.label === "OvikaLiving Verified" ? '50%' : 12,
+                      fontSize: 14 
+                    }}>
+                      {item.icon}
+                    </span>
                     <div style={{ textAlign: "left" }}>
                       <div style={{ fontSize: 13, fontWeight: 500, color: "#232323" }}>{item.label}</div>
                       <div style={{ fontSize: 11, color: "#8a8a8a" }}>{item.sub}</div>
@@ -1084,14 +1100,26 @@ export default function Navbar() {
                 { icon: "💬", label: "Subscription Plan", sub: "Grow Faster With the Right Plan", action: () => { setHamburgerMenuOpen(false); navigate("/subsription"); } },
                 { icon: "📞", label: "Contact / Support", sub: "Get help and assistance", action: () => { setHamburgerMenuOpen(false); navigate("/contactus"); } },
                 { icon: "💼", label: "Career", sub: "Join our growing team", action: goCareer },
-                { icon: "✅", label: "OvikaLiving Verified", sub: "Know about our verification", action: goOvikaVerified },
+                { icon: <img src="/ovikaver.png" alt="ovika-verified" style={{ width: '35px', height: 'auto' }} />, label: "OvikaLiving Verified", sub: "Know about our verification process", action: goOvikaVerified },
                 { icon: "🗺️", label: "Explore Townmanor", sub: "Discover amazing places", action: () => { setHamburgerMenuOpen(false); window.open("https://www.townmanor.ai/", "_blank"); } },
               ].map((item) => (
                 <button key={item.label} onClick={item.action} style={{ border: "none", background: "transparent", padding: "7px 4px", display: "flex", alignItems: "center", gap: 10, cursor: "pointer", width: "100%", borderRadius: 8, transition: "background 0.15s" }}
                   onMouseEnter={(e) => { e.currentTarget.style.background = "#fef9f2"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
                 >
-                  <span style={{ width: 28, height: 28, borderRadius: 10, background: "#f4f4f4", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, flexShrink: 0 }}>{item.icon}</span>
+                  <span style={{ 
+                    width: item.label === "OvikaLiving Verified" ? 50 : 28, 
+                    height: item.label === "OvikaLiving Verified" ? 50 : 28, 
+                    borderRadius: item.label === "OvikaLiving Verified" ? '50%' : 10, 
+                    background: "#f4f4f4", 
+                    display: "flex", 
+                    alignItems: "center", 
+                    justifyContent: "center", 
+                    fontSize: 14, 
+                    flexShrink: 0 
+                  }}>
+                    {item.icon}
+                  </span>
                   <div style={{ textAlign: "left" }}>
                     <div style={{ fontSize: 13, fontWeight: 500, color: "#232323" }}>{item.label}</div>
                     <div style={{ fontSize: 10, color: "#8a8a8a" }}>{item.sub}</div>
@@ -1133,10 +1161,17 @@ export default function Navbar() {
                 { icon: "📊", label: "Profile", sub: "View your bookings & performance", action: goDashboard },
                 { icon: "🛡️", label: "Owner Dashboard", sub: "Access owner controls", action: goOwnerDashboard },
                 { icon: "💼", label: "Career", sub: "Join our growing team", action: goCareer },
-                { icon: "✅", label: "OvikaLiving Verified", sub: "Know about our verification", action: goOvikaVerified },
+                { icon: <img src="/ovikaver.png" alt="ovika-verified" style={{ width: '35px', height: 'auto' }} />, label: "OvikaLiving Verified", sub: "Know about our verification process", action: goOvikaVerified },
               ].map((item) => (
                 <button key={item.label} onClick={item.action} style={panelButtonStyle}>
-                  <span style={iconBoxStyle}>{item.icon}</span>
+                  <span style={{ 
+                    ...iconBoxStyle, 
+                    width: item.label === "OvikaLiving Verified" ? 50 : 32, 
+                    height: item.label === "OvikaLiving Verified" ? 50 : 32, 
+                    borderRadius: item.label === "OvikaLiving Verified" ? '50%' : 12 
+                  }}>
+                    {item.icon}
+                  </span>
                   <div style={{ textAlign: "left" }}>
                     <div style={{ fontSize: 14, fontWeight: 500, color: "#232323" }}>{item.label}</div>
                     <div style={{ fontSize: 12, color: "#8a8a8a" }}>{item.sub}</div>
