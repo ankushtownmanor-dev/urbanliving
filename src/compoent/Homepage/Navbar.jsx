@@ -680,6 +680,7 @@ export default function Navbar() {
   const goOwnerDashboard = () => { setSideMenuOpen(false); setHamburgerMenuOpen(false); navigate("/admindashboard"); };
   const handleBecomeHostClick = () => setRentalCategoryPopup(true);
   const goCareer = () => { setSideMenuOpen(false); setHamburgerMenuOpen(false); navigate("/career-support"); };
+  const goOvikaVerified = () => { setSideMenuOpen(false); setHamburgerMenuOpen(false); navigate("/ovika-verified"); };
 
   const handleRentalCategorySelect = (path) => {
     setRentalCategoryPopup(false);
@@ -855,6 +856,7 @@ export default function Navbar() {
                   { icon: "💬", label: "Subscription Plan", sub: "Grow Faster With the Right Plan", action: () => { setHamburgerMenuOpen(false); navigate("/subsription"); } },
                   { icon: "📞", label: "Contact / Support", sub: "Get help and assistance", action: () => { setHamburgerMenuOpen(false); navigate("/contactus"); } },
                   { icon: "💼", label: "Career", sub: "Join our growing team", action: goCareer },
+                  { icon: "✅", label: "OvikaLiving Verified", sub: "Learn about our verification", action: goOvikaVerified },
                   { icon: "🗺️", label: "Explore Townmanor", sub: "Discover amazing places", action: () => { setHamburgerMenuOpen(false); window.open("https://www.townmanor.ai/", "_blank"); } },
                 ].map((item) => (
                   <button key={item.label} onClick={item.action} style={{ ...panelButtonStyle, padding: "8px 4px" }}>
@@ -900,6 +902,7 @@ export default function Navbar() {
                   { icon: "📊", label: "Profile", sub: "View your bookings & performance", action: goDashboard },
                   { icon: "🛡️", label: "Owner Dashboard", sub: "Access owner controls", action: goOwnerDashboard },
                   { icon: "💼", label: "Career", sub: "Join our growing team", action: goCareer },
+                  { icon: "✅", label: "OvikaLiving Verified", sub: "Learn about our verification", action: goOvikaVerified },
                 ].map((item) => (
                   <button key={item.label} onClick={item.action} style={{ ...panelButtonStyle, padding: "8px 4px" }}>
                     <span style={{ ...iconBoxStyle, width: 28, height: 28, fontSize: 14 }}>{item.icon}</span>
@@ -1081,6 +1084,7 @@ export default function Navbar() {
                 { icon: "💬", label: "Subscription Plan", sub: "Grow Faster With the Right Plan", action: () => { setHamburgerMenuOpen(false); navigate("/subsription"); } },
                 { icon: "📞", label: "Contact / Support", sub: "Get help and assistance", action: () => { setHamburgerMenuOpen(false); navigate("/contactus"); } },
                 { icon: "💼", label: "Career", sub: "Join our growing team", action: goCareer },
+                { icon: "✅", label: "OvikaLiving Verified", sub: "Learn about our verification", action: goOvikaVerified },
                 { icon: "🗺️", label: "Explore Townmanor", sub: "Discover amazing places", action: () => { setHamburgerMenuOpen(false); window.open("https://www.townmanor.ai/", "_blank"); } },
               ].map((item) => (
                 <button key={item.label} onClick={item.action} style={{ border: "none", background: "transparent", padding: "7px 4px", display: "flex", alignItems: "center", gap: 10, cursor: "pointer", width: "100%", borderRadius: 8, transition: "background 0.15s" }}
@@ -1129,6 +1133,7 @@ export default function Navbar() {
                 { icon: "📊", label: "Profile", sub: "View your bookings & performance", action: goDashboard },
                 { icon: "🛡️", label: "Owner Dashboard", sub: "Access owner controls", action: goOwnerDashboard },
                 { icon: "💼", label: "Career", sub: "Join our growing team", action: goCareer },
+                { icon: "✅", label: "OvikaLiving Verified", sub: "Learn about our verification", action: goOvikaVerified },
               ].map((item) => (
                 <button key={item.label} onClick={item.action} style={panelButtonStyle}>
                   <span style={iconBoxStyle}>{item.icon}</span>
