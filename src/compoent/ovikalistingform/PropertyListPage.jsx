@@ -1374,126 +1374,7 @@ const PropertyListPage = () => {
             </div>
 
             {/* Rental Type Popup */}
-            {showRentalPopup && (
-              <>
-                <div
-                  onClick={() => setShowRentalPopup(false)}
-                  style={{ 
-                    position: 'fixed', 
-                    inset: 0, 
-                    zIndex: 999, 
-                    background: 'rgba(0,0,0,0.45)', // Slightly darker overlay
-                    backdropFilter: 'blur(4px)'    // Blurring background to prevent overlap confusion
-                  }}
-                />
-                <div style={{
-                  position: 'fixed', 
-                  top: '50%', 
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  background: '#ffffff', // Explicitly white and opaque
-                  backgroundColor: '#ffffff', 
-                  borderRadius: 24,
-                  boxShadow: '0 20px 60px rgba(0,0,0,0.35)',
-                  padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '24px 16px' : '36px',
-                  zIndex: 1000, // Higher than any property card or list element
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  gap: 20,
-                  width: typeof window !== 'undefined' && window.innerWidth < 480 ? 'calc(100vw - 32px)' : '540px',
-                  maxWidth: '95vw', 
-                  boxSizing: 'border-box',
-                  opacity: 1, // Ensure total opacity
-                }}>
-                  <h3 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: '#222', textAlign: 'center' }}>
-                    Select Rental Type
-                  </h3>
-                  <div style={{ display: 'flex', gap: 14, flexDirection: typeof window !== 'undefined' && window.innerWidth < 480 ? 'column' : 'row' }}>
-                    <button
-                      onClick={() => {
-                        setRentalType('short');
-                        sessionStorage.setItem('ovika_rental_type', 'short');
-                        setShowRentalPopup(false);
-                      }}
-                      style={{
-                        flex: 1, 
-                        padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', 
-                        borderRadius: 20,
-                        border: `2px solid ${rentalType === 'short' ? '#C98B3E' : '#e8e8e8'}`,
-                        background: rentalType === 'short' ? '#FFF6EE' : '#fafafa',
-                        cursor: 'pointer', 
-                        fontFamily: 'inherit',
-                        display: 'flex', 
-                        flexDirection: 'column', 
-                        alignItems: 'center', 
-                        gap: 12,
-                        transition: 'all 0.2s',
-                        position: 'relative', // Scope any child positioning
-                        overflow: 'hidden'    // Contain any potential leaks
-                      }}
-                    >
-                      <div style={{
-                        width: 72, 
-                        height: 72, 
-                        borderRadius: '50%',
-                        background: rentalType === 'short' ? '#FFE8D1' : '#f0f4ff',
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        justifyContent: 'center',
-                        mb: 4
-                      }}>
-                        <FiMoon style={{ fontSize: 32, color: rentalType === 'short' ? '#C98B3E' : '#5B7FFF' }} />
-                      </div>
-                      <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontWeight: 700, fontSize: 18, color: '#222', marginBottom: 4 }}>Nightly Rental</div>
-                        <div style={{ fontSize: 13, color: '#717171', lineHeight: 1.4 }}>Short stays, per night pricing</div>
-                      </div>
-                    </button>
 
-                    <button
-                      onClick={() => {
-                        setRentalType('long');
-                        sessionStorage.setItem('ovika_rental_type', 'long');
-                        setShowRentalPopup(false);
-                      }}
-                      style={{
-                        flex: 1, 
-                        padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px 12px' : '32px 20px', 
-                        borderRadius: 20,
-                        border: `2px solid ${rentalType === 'long' ? '#C98B3E' : '#e8e8e8'}`,
-                        background: rentalType === 'long' ? '#FFF6EE' : '#fafafa',
-                        cursor: 'pointer', 
-                        fontFamily: 'inherit',
-                        display: 'flex', 
-                        flexDirection: 'column', 
-                        alignItems: 'center', 
-                        gap: 12,
-                        transition: 'all 0.2s',
-                        position: 'relative',
-                        overflow: 'hidden'
-                      }}
-                    >
-                      <div style={{
-                        width: 72, 
-                        height: 72, 
-                        borderRadius: '50%',
-                        background: rentalType === 'long' ? '#FFE8D1' : '#f0fff4',
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        justifyContent: 'center',
-                        mb: 4
-                      }}>
-                        <FiCalendar style={{ fontSize: 32, color: rentalType === 'long' ? '#C98B3E' : '#22b55a' }} />
-                      </div>
-                      <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontWeight: 700, fontSize: 18, color: '#222', marginBottom: 4 }}>Monthly Rental</div>
-                        <div style={{ fontSize: 13, color: '#717171', lineHeight: 1.4 }}>Long stays, monthly pricing</div>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
           </div>
         </div>
       </div>
@@ -1590,6 +1471,154 @@ const PropertyListPage = () => {
           </div>
         )}
       </div>
+      {/* ── RENTAL TYPE POPUP (Outside restricted stacking contexts) ── */}
+      {showRentalPopup && (
+        <>
+          <div
+            onClick={() => setShowRentalPopup(false)}
+            style={{ 
+              position: 'fixed', 
+              inset: 0, 
+              zIndex: 9999, 
+              background: 'rgba(0,0,0,0.6)', 
+              backdropFilter: 'blur(8px)',
+              transition: 'all 0.3s ease'
+            }}
+          />
+          <div style={{
+            position: 'fixed', 
+            top: '50%', 
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            background: '#ffffff', 
+            borderRadius: 32,
+            boxShadow: '0 30px 90px rgba(0,0,0,0.4)',
+            padding: typeof window !== 'undefined' && window.innerWidth < 480 ? '30px 20px' : '44px',
+            zIndex: 10000, 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: 24,
+            width: typeof window !== 'undefined' && window.innerWidth < 480 ? 'calc(100vw - 32px)' : '580px',
+            maxWidth: '95vw', 
+            boxSizing: 'border-box',
+            animation: 'modalFadeIn 0.3s ease-out'
+          }}>
+            <style>{`
+              @keyframes modalFadeIn {
+                from { opacity: 0; transform: translate(-50%, -48%) scale(0.96); }
+                to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+              }
+            `}</style>
+            
+            <div style={{ textAlign: 'center' }}>
+              <h3 style={{ margin: '0 0 10px', fontSize: 26, fontWeight: 800, color: '#1a1a1a' }}>
+                Select Rental Type
+              </h3>
+              <p style={{ margin: 0, color: '#666', fontSize: 15 }}>Choose how you'd like to book your stay</p>
+            </div>
+
+            <div style={{ display: 'flex', gap: 18, flexDirection: typeof window !== 'undefined' && window.innerWidth < 480 ? 'column' : 'row' }}>
+              <button
+                onClick={() => {
+                  setRentalType('short');
+                  sessionStorage.setItem('ovika_rental_type', 'short');
+                  setShowRentalPopup(false);
+                }}
+                style={{
+                  flex: 1, 
+                  padding: '36px 24px', 
+                  borderRadius: 24,
+                  border: `2px solid ${rentalType === 'short' ? '#C98B3E' : '#f0f0f0'}`,
+                  background: rentalType === 'short' ? '#FFF9F4' : '#ffffff',
+                  cursor: 'pointer', 
+                  fontFamily: 'inherit',
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  alignItems: 'center', 
+                  gap: 16,
+                  transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                  boxShadow: rentalType === 'short' ? '0 12px 24px rgba(201,139,62,0.12)' : '0 4px 12px rgba(0,0,0,0.03)',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}
+              >
+                <div style={{
+                  width: 80, 
+                  height: 80, 
+                  borderRadius: '50%',
+                  background: rentalType === 'short' ? '#FFE8D1' : '#f4f7ff',
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                }}>
+                  <FiMoon style={{ fontSize: 36, color: rentalType === 'short' ? '#C98B3E' : '#4a6cf7' }} />
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontWeight: 700, fontSize: 19, color: '#222', marginBottom: 6 }}>Nightly Rental</div>
+                  <div style={{ fontSize: 14, color: '#717171', lineHeight: 1.5 }}>Perfect for short visits and travel</div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => {
+                  setRentalType('long');
+                  sessionStorage.setItem('ovika_rental_type', 'long');
+                  setShowRentalPopup(false);
+                }}
+                style={{
+                  flex: 1, 
+                  padding: '36px 24px', 
+                  borderRadius: 24,
+                  border: `2px solid ${rentalType === 'long' ? '#C98B3E' : '#f0f0f0'}`,
+                  background: rentalType === 'long' ? '#FFF9F4' : '#ffffff',
+                  cursor: 'pointer', 
+                  fontFamily: 'inherit',
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  alignItems: 'center', 
+                  gap: 16,
+                  transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                  boxShadow: rentalType === 'long' ? '0 12px 24px rgba(201,139,62,0.12)' : '0 4px 12px rgba(0,0,0,0.03)',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}
+              >
+                <div style={{
+                  width: 80, 
+                  height: 80, 
+                  borderRadius: '50%',
+                  background: rentalType === 'long' ? '#FFE8D1' : '#f0fff4',
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                }}>
+                  <FiCalendar style={{ fontSize: 36, color: rentalType === 'long' ? '#C98B3E' : '#10b981' }} />
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontWeight: 700, fontSize: 19, color: '#222', marginBottom: 6 }}>Monthly Rental</div>
+                  <div style={{ fontSize: 14, color: '#717171', lineHeight: 1.5 }}>Ideal for long-term comfortable stays</div>
+                </div>
+              </button>
+            </div>
+            
+            <button 
+              onClick={() => setShowRentalPopup(false)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#999',
+                fontSize: 14,
+                fontWeight: 600,
+                cursor: 'pointer',
+                marginTop: 8,
+                textDecoration: 'underline'
+              }}
+            >
+              Continue with current selection
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
